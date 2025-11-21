@@ -1,6 +1,6 @@
 # ⚔️ DND Clone - Swing  
-![Java](https://img.shields.io/badge/Java-21-orange?logo=java&logoColor=white)
-<p style="text-align:center">![Java](https://img.shields.io/badge/Java-21-orange?logo=java&logoColor=white)</p>
+
+<p align="center"> <img src="https://img.shields.io/badge/Java-21-orange?logo=java&logoColor=white" /> </p>
 
 ---
 
