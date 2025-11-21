@@ -4,6 +4,22 @@
 
 ---
 
+## Saja Boys:
+- Epilan, Gian Cedrick G.
+- Carillo, Samuel B.
+- Despues, Charlz David T.
+- Gerzon, Ythan Erik Jon F.
+- Delos Reyes, Kervin Curt B.
+
+---
+
+## Description
+Our capstone project is a text-based role-playing game inspired by classic fantasy adventures and built using the principles of Object-Oriented Programming. Players control a party of heroes, each represented as its own class with unique attributes and abilities.
+
+The game features a fully designed party system, allowing multiple heroes to fight together against powerful enemies. Each hero can equip weapons, and every weapon has its own attack power that influences damage dealt during combat.
+
+---
+
 ## ✨ Features  
 
 - 👥 **Party System** – Manage multiple heroes in a party.  
