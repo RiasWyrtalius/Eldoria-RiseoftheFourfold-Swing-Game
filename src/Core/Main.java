@@ -16,8 +16,11 @@ public class Main {
         //TEMPORARY HERO SETUP
         Party heroesParty = new Party("The Godslayers");
         FireMage mage_Fire = new FireMage();
+
+        /* Commented out since, there's an image_key in the constructor
         Hero player_1 = new Hero("Rias", 100, 100, 100, mage_Fire);
         heroesParty.addPartyMember(player_1);
+         */
 
         //TEMPORARY ENEMY SETUP
         Party enemiesParty = new Party("Swarm of Goblins");
