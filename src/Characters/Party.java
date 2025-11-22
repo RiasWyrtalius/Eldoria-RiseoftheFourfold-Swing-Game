@@ -1,5 +1,7 @@
 package Characters;
 
+import Core.LogManager;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -21,10 +23,9 @@ public class Party {
     }
 
     public void addPartyMember(Character member) {
-        // TODO: add Logging for character joining the party
         if (member != null) {
             this.partyMembers.add(member);
-            System.out.println(member.getName() + " joined " + partyName + "!");
+            LogManager.log(member.getName() + " joined " + partyName + "!");
         }
     }
 
@@ -33,10 +34,9 @@ public class Party {
     }
 
     public boolean removePartyMember(Character member) {
-        // TODO: add Logging for character getting removed from the party!
         boolean removed = this.partyMembers.remove(member);
         if (removed) {
-            System.out.println(member.getName() + " was removed from " + partyName + "!");
+            LogManager.log(member.getName() + " was removed from " + partyName + "!");
         }
         return removed;
     }

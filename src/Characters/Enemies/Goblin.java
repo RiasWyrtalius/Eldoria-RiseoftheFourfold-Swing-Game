@@ -7,9 +7,8 @@ import java.util.List;
 
 public class Goblin extends Enemy {
     public Goblin() {
-        super("Goblin Grunt", 20, 5, 0, 1, "Goblin", 10);
+        super("Goblin Grunt", 20, 5, 0, 1, "Goblin", 10, "Assets/Images/bstudios.png");
     }
-
 
     @Override
     public void makeAttack(List<Character> targets) {

@@ -12,11 +12,10 @@ public class MainMenu extends JFrame {
     private JButton continueButton;
 
     public MainMenu() {
-        JFrame frame = new JFrame();
-        frame.setContentPane(contentPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+        this.setContentPane(contentPanel);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.pack();
+        this.setVisible(true);
 
         //  TODO: enable continue button only if content save file is available
         continueButton.setEnabled(false);

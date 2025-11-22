@@ -1,6 +1,12 @@
 package UI;
 
+import Abilities.JobClass;
+import Abilities.Jobs.FireMage;
+import Characters.Base.Hero;
+import Characters.Party;
+import Core.BattleController;
 import Core.LogManager;
+import UI.Components.CharacterStatusPanel;
 
 import java.util.List;
 import javax.swing.*;
@@ -14,36 +20,41 @@ public class MainInterface extends JFrame{
     private JTextArea GameLogPanelTextArea;
 
     private JPanel sample;
+    private JPanel heroPartyPanel4;
 
     private List<JPanel> heroPartyPanel;
     private List<JPanel> enemyPartyPanel;
 
+//    sample data
+    JobClass  mageJob = new FireMage();
+    Hero kai = new Hero("Kai", 150, 15, 60, mageJob, "Assets/Images/bstudios.png");
+
     public MainInterface() {
-        JFrame frame = new JFrame();
-        frame.setContentPane(contentPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+        this.setContentPane(contentPanel);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.pack();
+        this.setVisible(true);
         setTitle("DND Swing Clone | Saja Boys");
 
         GameLogPanelTextArea.setEditable(false);
         LogManager.initialize(GameLogPanelTextArea);
 
-        try {
-            ImageIcon originalIcon = new ImageIcon("Assets/Images/bstudios.png");
+        ((CharacterStatusPanel)heroPartyPanel4).setCharacterData(kai);
+    }
 
-            Image img = originalIcon.getImage();
-            Image scaledImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH); // e.g., to 100x100
-            ImageIcon scaledIcon = new ImageIcon(scaledImg);
+    /**
+     * Called by Main.java to give bind BattleController and give UI the party data
+     * @param controller
+     */
+    public void linkController(BattleController controller) {
 
-            JLabel imageLabel = new JLabel(scaledIcon); // Use the icon here
-            sample.add(imageLabel);
-            sample.revalidate();
-            sample.repaint();
+    }
 
-        } catch (Exception e) {
-            LogManager.log("Error loading image: " + e.getMessage());
-        }
+    private void setHeroPartyUI() {
 
+    }
+
+    private void createUIComponents() {
+        heroPartyPanel4 = new CharacterStatusPanel();
     }
 }
