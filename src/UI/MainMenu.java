@@ -1,7 +1,5 @@
 package UI;
 
-import UI.MainInterface.MainInterface;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

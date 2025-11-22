@@ -11,6 +11,7 @@ public abstract class Character {
     protected int baseAtk;
 
     protected int mana;
+
     protected int maxMana;
 
     public Character(String name, int initialHealth, int baseAtk, int maxMana, int level) {
@@ -90,5 +91,8 @@ public abstract class Character {
 
     public int getMana() { return mana; }
 
+    public int getMaxMana() {
+        return maxMana;
+    }
 
 }
