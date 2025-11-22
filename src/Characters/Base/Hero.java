@@ -17,7 +17,10 @@ public class Hero extends Character {
         this.incrementXP = 50;
         this.requiredXP = XP + (incrementXP * (this.level - 1));
         this.job = job;
-        this.job.applyStatModifiers(this);
+
+        // applying stat modifiers
+        this.health += job.getHpBonus();
+        this.mana += job.getManaBonus();
     }
 
     public Hero(String name, int health, int baseAtk, int maxMana, JobClass job) {
@@ -25,7 +28,7 @@ public class Hero extends Character {
     }
 
 
-    protected void gainXP(int amount) {
+    public void gainXP(int amount) {
         XP += amount;
 
         while (XP >= requiredXP) {
@@ -40,9 +43,10 @@ public class Hero extends Character {
         //  TODO: Frontend logging for leveling up
     }
 
+    // TODO: Add Logging for hero specific death logic
     @Override
     protected void onDeath() {
-
+//        System.out.println("Hero " + this.name + " has fallen!");
     }
 
     @Override

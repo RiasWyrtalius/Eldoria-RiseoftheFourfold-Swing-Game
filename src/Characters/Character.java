@@ -43,11 +43,11 @@ public abstract class Character {
     protected abstract void onDeath();
     protected abstract void onDefeat(Character defeatedTarget);
 
-    protected boolean canCast(int manaCost) {
+    public boolean canCast(int manaCost) {
         return this.mana >= manaCost;
     }
 
-    protected boolean spendMana(int manaCost) {
+    public boolean spendMana(int manaCost) {
         // TODO: Front end logging for spending mana here or within in the
         //      subclass method called
         if (canCast(manaCost)) {
