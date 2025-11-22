@@ -13,7 +13,9 @@ public abstract class Character {
     protected int mana;
     protected int maxMana;
 
-    public Character(String name, int initialHealth, int baseAtk, int maxMana, int level) {
+    protected String imageKey;
+
+    public Character(String name, int initialHealth, int baseAtk, int maxMana, int level, String imageKey) {
         this.name = name;
         this.initialHealth = initialHealth;
         this.health = initialHealth;
@@ -21,10 +23,11 @@ public abstract class Character {
         this.maxMana = maxMana;
         this.mana = maxMana;
         this.level = level;
+        this.imageKey = imageKey;
     }
 
-    public Character(String name, int health, int baseAtk, int maxMana) {
-        this(name, health, baseAtk, maxMana, 1);
+    public Character(String name, int health, int baseAtk, int maxMana, String imageKey) {
+        this(name, health, baseAtk, maxMana, 1, imageKey);
     }
 
     public void takeDamage(int damage) {
@@ -90,5 +93,11 @@ public abstract class Character {
 
     public int getMana() { return mana; }
 
+    public int getMaxMana() {
+        return maxMana;
+    }
 
+    public String getImageKey() {
+        return imageKey;
+    }
 }

@@ -10,8 +10,8 @@ public class Hero extends Character {
     protected final int incrementXP;
     protected JobClass job;
 
-    public Hero(String name, int initialHealth, int baseAtk, int maxMana, int level, JobClass job) {
-        super(name, initialHealth, baseAtk, maxMana, level);
+    public Hero(String name, int initialHealth, int baseAtk, int maxMana, int level, JobClass job, String imageKey) {
+        super(name, initialHealth, baseAtk, maxMana, level, imageKey);
         this.XP = 0;
         this.baseXP = 100;
         this.incrementXP = 50;
@@ -23,8 +23,8 @@ public class Hero extends Character {
         this.mana += job.getManaBonus();
     }
 
-    public Hero(String name, int health, int baseAtk, int maxMana, JobClass job) {
-        this(name, health, baseAtk, maxMana, 1, job);
+    public Hero(String name, int health, int baseAtk, int maxMana, JobClass job, String imageKey) {
+        this(name, health, baseAtk, maxMana, 1, job, imageKey);
     }
 
 

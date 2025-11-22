@@ -8,7 +8,7 @@ public class Boss extends Enemy {
     private double healthMultiplier;
 
     public Boss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
-        super(name, initialHealth, baseAtk, maxMana, level, type, rewardXP);
+        super(name, initialHealth, baseAtk, maxMana, level, type, rewardXP, "/Assets/Images/bstudios.png");
         this.healthMultiplier = healthMultiplier;
         int buffedHP = (int) (initialHealth * this.healthMultiplier);
         setHealth(buffedHP);

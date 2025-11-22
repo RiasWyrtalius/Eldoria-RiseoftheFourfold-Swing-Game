@@ -1,5 +1,7 @@
 package Abilities;
 
+import Resource.AssetManager;
+
 import java.util.List;
 
 public abstract class JobClass {
@@ -31,6 +33,7 @@ public abstract class JobClass {
     public int getHpBonus() {
         return hpBonus;
     }
+
 
     public int getManaBonus() {
         return manaBonus;
