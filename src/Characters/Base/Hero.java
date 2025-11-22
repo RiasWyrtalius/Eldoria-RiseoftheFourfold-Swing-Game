@@ -43,6 +43,12 @@ public class Hero extends Character {
         //  TODO: Frontend logging for leveling up
     }
 
+
+    public static void attack(Character target) {
+        //TODO: attack target
+        System.out.println("hero attacks target"); //temporary
+    }
+
     // TODO: Add Logging for hero specific death logic
     @Override
     protected void onDeath() {
