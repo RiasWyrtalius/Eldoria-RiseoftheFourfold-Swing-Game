@@ -33,10 +33,11 @@ public class MainMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
             // TODO: create a new save file in the global context singleton
-                new MainInterface();
                 Window window = SwingUtilities.getWindowAncestor((JButton)e.getSource());
-                if (window != null)
+                if (window != null) {
                     window.dispose();
+                }
+                new MainInterface();
             }
         });
     }
