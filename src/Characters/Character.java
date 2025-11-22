@@ -58,6 +58,9 @@ public abstract class Character {
         }
     }
 
+    //added setter for boss multiplier
+    public void setHealth(int health) { this.health = health; }
+
     // =============== PUBLIC GETTERS FOR UI ===============
     public int getInitialHealth() {
         return initialHealth;
@@ -78,5 +81,7 @@ public abstract class Character {
     public int getLevel() {
         return level;
     }
+
+    public int getMana() { return mana; }
 
 }
