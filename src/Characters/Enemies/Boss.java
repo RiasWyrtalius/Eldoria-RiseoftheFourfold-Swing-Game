@@ -1,9 +1,10 @@
-package Characters.Base;
+package Characters.Enemies;
 
+import Characters.Base.Enemy;
 import Characters.Character;
 import java.util.List;
 
-public class Boss extends Enemy{
+public class Boss extends Enemy {
     private double healthMultiplier;
 
     public Boss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
@@ -13,6 +14,7 @@ public class Boss extends Enemy{
         setHealth(buffedHP);
     }
 
+//        TODO: move to frontend logger
     public void devastatingStrike(List<Character> targets) {
         System.out.println("!!! " + this.name + " unleashes a DEVASTATING STRIKE !!!");
 
@@ -26,12 +28,12 @@ public class Boss extends Enemy{
         }
     }
 
+//        TODO: move to frontend logger
     @Override
     public void makeAttack(List<Character> targets) {
         int manaCost = 50; // Dev. Strike mana cost
 
-        if (this.getMana() >= manaCost) {
-            this.spendMana(manaCost);
+        if(this.spendMana(manaCost)) {
             devastatingStrike(targets);
         } else {
             Character weakTarget = null;
@@ -44,6 +46,7 @@ public class Boss extends Enemy{
                 }
             }
 
+            // Might be good to have this on a separate "Turn"
             if (weakTarget != null) {
                 System.out.println(this.getName() + " focuses on " + weakTarget.getName() + "!");
 
