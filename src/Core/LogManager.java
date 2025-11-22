@@ -15,6 +15,7 @@ public class LogManager {
                 @Override
                 public void run() {
                     logComponent.append(message + "\n");
+                    System.out.println(message); // for terminal logging
                     // auto scroll to the bottom
                     logComponent.setCaretPosition(logComponent.getDocument().getLength());
                 }

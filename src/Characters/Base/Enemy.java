@@ -32,4 +32,11 @@ public abstract class Enemy extends Character {
 
     // =============== PUBLIC GETTERS FOR UI ===============
 
+    public String getType() {
+        return type;
+    }
+
+    public int getRewardXP() {
+        return rewardXP;
+    }
 }

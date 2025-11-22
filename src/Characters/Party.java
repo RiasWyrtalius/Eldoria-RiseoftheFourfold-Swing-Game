@@ -3,11 +3,16 @@ package Characters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class Party {
     private String partyName;
     private List<Character> partyMembers;
     private final Random random;
+
+    public String getPartyName() {
+        return partyName;
+    }
 
     public Party(String partyName) {
         this.partyName = partyName;
@@ -21,6 +26,10 @@ public class Party {
             this.partyMembers.add(member);
             System.out.println(member.getName() + " joined " + partyName + "!");
         }
+    }
+
+    public List<Character> getPartyMembers() {
+        return partyMembers;
     }
 
     public boolean removePartyMember(Character member) {
@@ -40,11 +49,38 @@ public class Party {
         return null;
     }
 
-    public Character getRandomPartyMember() {
+    public Character getRandomAliveMember() {
         if (this.partyMembers.isEmpty())
             return null;
-        int index = random.nextInt(this.partyMembers.size());
-        return this.partyMembers.get(index);
+
+        List<Character> aliveMembers = this.partyMembers.stream()
+                .filter(Character::isAlive)
+                .toList();
+
+        if (aliveMembers.isEmpty())
+            return null;
+
+        int index = random.nextInt(aliveMembers.size());
+        return aliveMembers.get(index);
+    }
+
+    public Character getRandomDeadMember() {
+        if (this.partyMembers.isEmpty())
+            return null;
+
+        List<Character> deadMembers = this.partyMembers.stream()
+                .filter(new Predicate<Character>() {
+                    @Override
+                    public boolean test(Character character) {
+                        return !character.isAlive;
+                    }
+                }).toList();
+
+        if (deadMembers.isEmpty())
+            return null;
+
+        int index = random.nextInt(deadMembers.size());
+        return deadMembers.get(index);
     }
 
 //   TODO: Front end party info display, might not be in this class

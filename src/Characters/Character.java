@@ -5,6 +5,7 @@ public abstract class Character {
 
     protected final int initialHealth;
     protected int health;
+    protected boolean isAlive = true;
 
     protected int level;
     protected int baseAtk;
@@ -35,6 +36,7 @@ public abstract class Character {
 
     public final void die() {
         this.health = 0;
+        this.isAlive = false;
         // TODO: Frontend for death
         onDeath();
     }
@@ -74,6 +76,10 @@ public abstract class Character {
         return health;
     }
 
+    public boolean isAlive() {
+        return isAlive;
+    }
+
     public int getBaseAtk() {
         return baseAtk;
     }
@@ -83,5 +89,6 @@ public abstract class Character {
     }
 
     public int getMana() { return mana; }
+
 
 }
