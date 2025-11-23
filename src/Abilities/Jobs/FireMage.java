@@ -1,10 +1,7 @@
 package Abilities.Jobs;
 
-import Abilities.JobClass;
-import Abilities.Skill;
+import Abilities.*;
 
-import Abilities.SkillAction;
-import Abilities.SkillType;
 import Characters.Character;
 import Core.LogManager;
 
@@ -31,7 +28,7 @@ public class FireMage extends JobClass {
 
         Skill fireball = new Skill(
                 "Fireball", "Single-target fire spell", 25, 30,
-                SkillType.DAMAGE, SkillAction.MAGICAL,
+                SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.SINGLE_ENEMY,
                 fireBallLogic
         );
 

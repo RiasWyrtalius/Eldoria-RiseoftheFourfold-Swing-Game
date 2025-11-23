@@ -12,15 +12,17 @@ public class Skill {
     private int power;
     private SkillType skillType;
     private SkillAction skillAction;
+    private SkillTarget skillTarget;
     private final BiConsumer<Character, Character> executeLogic;
 
-    public Skill(String name, String effect, int manaCost, int power, SkillType skillType, SkillAction skillAction, BiConsumer<Character, Character> executeLogic) {
+    public Skill(String name, String effect, int manaCost, int power, SkillType skillType, SkillAction skillAction, SkillTarget skillTarget, BiConsumer<Character, Character> executeLogic) {
         this.name = name;
         this.effect = effect;
         this.manaCost = manaCost;
         this.power = power;
         this.skillType = skillType;
         this.skillAction = skillAction;
+        this.skillTarget = skillTarget;
         this.executeLogic = executeLogic;
     }
 

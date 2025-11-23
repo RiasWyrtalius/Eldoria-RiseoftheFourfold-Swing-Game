@@ -88,8 +88,6 @@ public class MainInterface extends JFrame{
         boolean shouldEnable = (phase == BattlePhase.HERO_ACTION_WAIT);
 
         endTurnButton.setEnabled(shouldEnable);
-
-//        TODO: Logic for skill buttons, enabling hero selection also goes here
     }
 
     private void setPartyUI(List<Character> party, List<JPanel> setupPanel) {
@@ -187,6 +185,24 @@ public class MainInterface extends JFrame{
     }
 
     private void showSkillSelectionMenu(Hero hero) {
+        JPopupMenu menu = getJPopupMenu(hero);
+
+        CharacterStatusPanel activePanel = null;
+        for (JPanel panel : heroPartyPanels) {
+            CharacterStatusPanel statusPanel = (CharacterStatusPanel)panel;
+             if (statusPanel.getCharacter() == hero) { activePanel = statusPanel; break; }
+        }
+
+        if (activePanel != null) {
+            menu.show(activePanel, 0, 0);
+        } else {
+            menu.show(this, 100, 100);
+        }
+
+        LogManager.log("Skill menu shown for " + hero.getName() + ".");
+    }
+
+    private JPopupMenu getJPopupMenu(Hero hero) {
         JPopupMenu menu = new JPopupMenu();
 
         menu.addPopupMenuListener(new PopupMenuListener() {
@@ -207,20 +223,7 @@ public class MainInterface extends JFrame{
             item.addActionListener(e -> onSkillSelect(skill));
             menu.add(item);
         }
-
-        CharacterStatusPanel activePanel = null;
-        for (JPanel panel : heroPartyPanels) {
-            CharacterStatusPanel statusPanel = (CharacterStatusPanel)panel;
-             if (statusPanel.getCharacter() == hero) { activePanel = statusPanel; break; }
-        }
-
-        if (activePanel != null) {
-            menu.show(activePanel, 0, 0);
-        } else {
-            menu.show(this, 100, 100);
-        }
-
-        LogManager.log("Skill menu shown for " + hero.getName() + ".");
+        return menu;
     }
     // =============== PUBLIC GETTERS FOR UI ===============
 

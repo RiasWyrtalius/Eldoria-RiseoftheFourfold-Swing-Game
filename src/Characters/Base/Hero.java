@@ -42,7 +42,7 @@ public class Hero extends Character {
     protected void levelUp() {
         this.level++;
         this.requiredXP = baseXP + (incrementXP * (level - 1));
-        //  TODO: Frontend logging for leveling up
+        LogManager.log(this.name + " has leveled up to level " + this.level + "!");
     }
 //
 //    public static void attack(Character target) {
