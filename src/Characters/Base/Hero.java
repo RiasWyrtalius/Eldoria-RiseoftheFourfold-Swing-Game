@@ -1,6 +1,7 @@
 package Characters.Base;
 
 import Abilities.JobClass;
+import Abilities.Skill;
 import Characters.Character;
 import Core.LogManager;
 
@@ -42,31 +43,37 @@ public class Hero extends Character {
         this.level++;
         this.requiredXP = baseXP + (incrementXP * (level - 1));
         //  TODO: Frontend logging for leveling up
-        LogManager.log("(HERO) : " + this.name + " has leveled up to " + getLevel() + "!");
     }
+//
+//    public static void attack(Character target) {
+//        //TODO: attack target
+//        System.out.println("hero attacks target"); //temporary
+//    }
 
-
-    @Override
-    public void attack(Character target) {
-        //TODO: attack target
-        LogManager.log("(HERO) : " + this.name + " attacks " + target.getName());
-    }
-
-    // TODO: Add Logging for hero specific death logic
     @Override
     protected void onDeath() {
         LogManager.log("(HERO) : " + this.name + " has died!");
     }
 
     @Override
-    protected void onDefeat(Character defeatedTarget) {
-        LogManager.log("(HERO) : " + this.name + " has slain (ENEMY) : " + defeatedTarget.getName());
+    protected void onDefeat(Character finalAttacker) {
+        LogManager.log("(ENEMY) :" + finalAttacker.getName() + " has slain " + "(HERO) : " + this.name);
     }
 
+    public void useSkill(Skill skill, Character target) {
+        LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on "
+            + target.getName() + ".");
+
+        skill.execute(this, target);
+    }
 
     // =============== PUBLIC GETTERS FOR UI ===============
 
     public int getRequiredXP() {
         return requiredXP;
+    }
+
+    public JobClass getJob() {
+        return job;
     }
 }

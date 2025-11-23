@@ -1,36 +1,49 @@
 package UI.Components;
 
+import Characters.Base.Hero;
 import Characters.Character;
+import Characters.Party;
 import Core.LogManager;
 import Resource.AssetManager;
+import UI.MainInterface;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class CharacterStatusPanel extends JPanel {
+    private Character character;
     private JLabel nameLabel;
     private JProgressBar hpBar;
     private JProgressBar manaBar;
     private JPanel iconPanel;
 
-    // calls internal init components
-    public CharacterStatusPanel() {
+    public CharacterStatusPanel(MainInterface parentInterface) {
         nameLabel = new JLabel("N/A - Lvl 0");
         hpBar = new JProgressBar();
         manaBar = new JProgressBar();
         iconPanel = new JPanel();
+
+        MouseAdapter clickAdapter = attachListener(parentInterface);
+        this.addMouseListener(clickAdapter);
+
+        nameLabel.setOpaque(false);
+        iconPanel.setOpaque(false);
+
+        hpBar.setOpaque(false);
+        manaBar.setOpaque(false);
 
         nameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
         nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         iconPanel.setLayout(new CardLayout());
+        iconPanel.addMouseListener(clickAdapter);
 
-//        nameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        nameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         hpBar.setStringPainted(true);
-        hpBar.setForeground(Color.RED);
         manaBar.setStringPainted(true);
-        manaBar.setForeground(Color.BLUE);
 
         add(nameLabel);
         add(hpBar);
@@ -38,6 +51,16 @@ public class CharacterStatusPanel extends JPanel {
         add(iconPanel);
     }
 
+    private MouseAdapter attachListener(MainInterface parentInterface) {
+        return new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (character != null) {
+                    parentInterface.onCharacterPanelClick(character);
+                }
+            }
+        };
+    }
 
     public void setCharacterData(Character character) {
         if (character == null) {
@@ -45,8 +68,9 @@ public class CharacterStatusPanel extends JPanel {
             return;
         }
 
-        LogManager.log("Setting character data: " + character.getName());
+//        LogManage r.log("Setting character data: " + character.getName());
 
+        this.character = character;
         this.setVisible(true);
         nameLabel.setText("Lvl " + character.getLevel() + " - " + character.getName());
 
@@ -75,6 +99,10 @@ public class CharacterStatusPanel extends JPanel {
         if (percentage >= 0.5) return Color.GREEN;
         else if (percentage > 0.2) return Color.YELLOW;
         else return Color.RED;
+    }
+
+    public Character getCharacter() {
+        return character;
     }
 }
 

@@ -15,6 +15,8 @@ public abstract class Character {
     protected int mana;
     protected int maxMana;
 
+    protected boolean isExhausted = false;
+
     protected String imageKey;
 
     public Character(String name, int initialHealth, int baseAtk, int maxMana, int level, String imageKey) {
@@ -32,10 +34,12 @@ public abstract class Character {
         this(name, health, baseAtk, maxMana, 1, imageKey);
     }
 
-    public void takeDamage(int damage) {
+    public void takeDamage(int damage, Character attacker) {
         this.health -= damage;
-        if (this.health <= 0)
+        if (this.health <= 0) {
             die();
+            onDefeat(attacker);
+        }
         // TODO: Frontend logging for damage taken
     }
 
@@ -48,7 +52,8 @@ public abstract class Character {
 
     // Subclass Hooks
     protected abstract void onDeath();
-    protected abstract void onDefeat(Character defeatedTarget);
+
+    protected abstract void onDefeat(Character finalAttacker);
 
     public boolean canCast(int manaCost) {
         return this.mana >= manaCost;
@@ -97,5 +102,13 @@ public abstract class Character {
     }
     public String getImageKey() {
         return imageKey;
+    }
+
+    public boolean isExhausted() {
+        return isExhausted;
+    }
+
+    public void setExhausted(boolean exhausted) {
+        isExhausted = exhausted;
     }
 }
