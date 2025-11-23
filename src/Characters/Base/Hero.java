@@ -5,6 +5,8 @@ import Abilities.Skill;
 import Characters.Character;
 import Core.LogManager;
 
+import java.util.List;
+
 public class Hero extends Character {
     protected int XP;
     protected int baseXP;
@@ -60,11 +62,23 @@ public class Hero extends Character {
         LogManager.log("(ENEMY) :" + finalAttacker.getName() + " has slain " + "(HERO) : " + this.name);
     }
 
-    public void useSkill(Skill skill, Character target) {
-        LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on "
-            + target.getName() + ".");
+    public void useSkill(Skill skill, List<Character> targets) {
+        if (targets.size() == 1) {
+            LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on "
+                + targets.getFirst().getName() + ".");
+        } else if (targets.size() > 1) {
+            String targetNames = "";
+            for (int i = 0; i < targets.size()-1; i++) {
+                targetNames += targets.get(i).getName();
+                if (i < targets.size() - 1) {
+                    targetNames += ", ";
+                }
+            }
+            LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on " +
+                    targetNames + " and " + targets.getLast().getName());
+        }
 
-        skill.execute(this, target);
+        skill.execute(this, targets);
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============

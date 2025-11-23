@@ -47,13 +47,13 @@ public class BattleController {
 
     // TODO: The UI must now check isExhausted() to enable/disable the hero portrait.
 
-    public void executeActionFromUI(Hero hero, Skill skill, Character target) {
+    public void executeActionFromUI(Hero hero, Skill skill, List<Character> targets) {
         if (!isBattleActive || !hero.isAlive() || hero.isExhausted()) {
             LogManager.log(hero.getName() + " cannot act right now.");
             return;
         }
 
-        hero.useSkill(skill, target);
+        hero.useSkill(skill, targets);
         hero.setExhausted(true);
 
         if (this.mainView != null)

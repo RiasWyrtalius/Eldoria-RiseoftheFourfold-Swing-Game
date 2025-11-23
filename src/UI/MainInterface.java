@@ -1,6 +1,7 @@
 package UI;
 
 import Abilities.Skill;
+import Abilities.SkillTarget;
 import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
@@ -10,11 +11,16 @@ import Core.BattlePhase;
 import Core.LogManager;
 import UI.Components.CharacterStatusPanel;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+
+// TODO: Selected targets also highlight their background
 
 public class MainInterface extends JFrame{
     private BattleController battleController;
@@ -39,9 +45,9 @@ public class MainInterface extends JFrame{
     private BattleUIMode currentMode = BattleUIMode.HERO_SELECT;
     private Hero activeHero = null;
     private Skill selectedSkill = null;
-    private List<Enemy> selectedEnemies;
+    private List<Character> selectedTargets;
 
-    private JPopupMenu skillMenu;
+    private JPopupMenu targetConfirmMenu = new JPopupMenu();
 
     private JButton endTurnButton;
 
@@ -66,6 +72,7 @@ public class MainInterface extends JFrame{
     public void listenerInit() {
         if (endTurnButton != null) {
             endTurnButton.addActionListener(e -> {
+                resetSelectionState();
                 battleController.endHeroPhaseManually();
                 refreshUI();
             });
@@ -131,7 +138,26 @@ public class MainInterface extends JFrame{
                 break;
             case TARGET_SELECT:
                 LogManager.log("SELECT TARGET");
-                onTargetSelect(clickedCharacter);
+                SkillTarget requiredTarget = selectedSkill.getSkillTarget();
+
+                if (!clickedCharacter.isAlive()) {
+                    LogManager.log(clickedCharacter.getName() + " is already knocked out and cannot be targeted.");
+                    return;
+                }
+
+                if (selectedTargets.contains(clickedCharacter)) {
+                    selectedTargets.remove(clickedCharacter);
+                    LogManager.log("Deselected " + clickedCharacter.getName() + ".");
+                } else if (selectedTargets.size() < requiredTarget.getMaxTargets()){
+                    selectedTargets.add(clickedCharacter);
+                    LogManager.log("Selected " + selectedSkill.getName() + " (" +
+                            selectedTargets.size() + "/" + requiredTarget.getMaxTargets() + ")");
+                    showTargetConfirmMenu(clickedCharacter);
+                } else {
+                    LogManager.log("Maximum targets (" + requiredTarget.getMaxTargets() + ") already selected.");
+                }
+
+                refreshUI();
                 break;
             case SKILL_SELECT:
                 LogManager.log("SELECT SKILL");
@@ -139,6 +165,22 @@ public class MainInterface extends JFrame{
                 LogManager.log("IDLE");
                 break;
         }
+    }
+
+    public void onConfirmAction() {
+        if (currentMode != BattleUIMode.TARGET_SELECT) return;
+
+        if (selectedTargets.isEmpty()) {
+            LogManager.log("Cannot confirm: No targets selected.");
+            return;
+        }
+
+        battleController.executeActionFromUI(activeHero, selectedSkill, selectedTargets);
+
+        hideTargetConfirmMenu();
+
+        resetSelectionState();
+        refreshUI();
     }
 
     public void onHeroSelect(Hero clickedHero) {
@@ -166,24 +208,67 @@ public class MainInterface extends JFrame{
         refreshUI();
     }
 
-    public void onTargetSelect(Character target) {
-        if (currentMode != BattleUIMode.TARGET_SELECT) return;
-
-        battleController.executeActionFromUI(activeHero, selectedSkill, target);
-        resetState();
-    }
-
-    private void resetState() {
-        activeHero = null;
-        selectedSkill = null;
-        currentMode = BattleUIMode.HERO_SELECT;
-    }
-
     private void resetSelectionState() {
         this.activeHero = null;
         this.selectedSkill = null;
         this.currentMode = BattleUIMode.HERO_SELECT;
+        selectedTargets = new ArrayList<>();
         refreshUI();
+    }
+
+    private void hideTargetConfirmMenu() {
+        targetConfirmMenu.setVisible(false);
+    }
+
+    private void showTargetConfirmMenu(Character character) {
+        JPopupMenu menu = getJPopUpConfirm();
+
+        CharacterStatusPanel activePanel = null;
+        for (JPanel panel : heroPartyPanels) {
+            CharacterStatusPanel statusPanel = (CharacterStatusPanel)panel;
+            if (statusPanel.getCharacter() == character) { activePanel = statusPanel; break; }
+        }
+        for (JPanel panel : enemyPartyPanels) {
+            CharacterStatusPanel statusPanel = (CharacterStatusPanel)panel;
+            if (statusPanel.getCharacter() == character) { activePanel = statusPanel; break; }
+        }
+
+        if (activePanel != null) {
+            menu.show(activePanel, 0, 0);
+        } else {
+            menu.show(this, 100, 100);
+        }
+    }
+
+    private JPopupMenu getJPopUpConfirm() {
+        JPopupMenu menu = new JPopupMenu();
+
+        menu.addPopupMenuListener(new PopupMenuListener() {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {
+                // prolly will add more targets
+            }
+        });
+
+        JMenuItem confirm = new JMenuItem("Confirm (" +
+                selectedTargets.size() + "/" + selectedSkill.getSkillTarget().getMaxTargets() + ")");
+        confirm.addActionListener(e -> onConfirmAction()); // TODO:
+        JMenuItem cancel = new JMenuItem("Cancel Skill ");
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LogManager.log("Skill selection cancelled");
+                resetSelectionState();
+            }
+        });
+        menu.add(confirm);
+        menu.add(cancel);
+        return menu;
     }
 
     private void showSkillSelectionMenu(Hero hero) {
@@ -221,17 +306,15 @@ public class MainInterface extends JFrame{
         });
 
         for (Skill skill : hero.getJob().getSkills()) {
-            JMenuItem item = new JMenuItem(skill.getName() + "\t(" + skill.getManaCost() + " ) MP");
+            JMenuItem item = new JMenuItem(skill.getName() + "\t(" + skill.getManaCost() + ") MP");
             item.addActionListener(e -> onSkillSelect(skill));
             menu.add(item);
         }
         return menu;
     }
-    // =============== PUBLIC GETTERS FOR UI ===============
 
+    // =============== PUBLIC GETTERS FOR UI ===============
     public JTextArea getGameLogPanelTextArea() {
         return GameLogPanelTextArea;
     }
-
-
 }

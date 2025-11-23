@@ -106,7 +106,7 @@
                     </properties>
                     <border type="none"/>
                     <children>
-                      <grid id="c03f" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="0">
+                      <grid id="c03f" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="0">
                         <margin top="10" left="10" bottom="10" right="10"/>
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="1" use-parent-layout="false"/>
@@ -116,41 +116,31 @@
                         <children>
                           <component id="9d65f" class="UI.Components.CharacterStatusPanel" binding="heroPartyPanel4" custom-create="true">
                             <constraints>
-                              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties/>
                           </component>
                           <component id="76c1f" class="UI.Components.CharacterStatusPanel" binding="heroPartyPanel3" custom-create="true">
                             <constraints>
-                              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties/>
                           </component>
                           <component id="27432" class="UI.Components.CharacterStatusPanel" binding="heroPartyPanel2" custom-create="true">
                             <constraints>
-                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties/>
                           </component>
                           <component id="9fe0f" class="UI.Components.CharacterStatusPanel" binding="heroPartyPanel1" custom-create="true">
                             <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties/>
                           </component>
-                          <hspacer id="ef891">
-                            <constraints>
-                              <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                          </hspacer>
-                          <hspacer id="e6f87">
-                            <constraints>
-                              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                          </hspacer>
                         </children>
                       </grid>
-                      <grid id="384ea" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="0">
+                      <grid id="384ea" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="0">
                         <margin top="10" left="10" bottom="10" right="10"/>
                         <constraints>
                           <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -158,37 +148,27 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <hspacer id="50834">
-                            <constraints>
-                              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                          </hspacer>
-                          <hspacer id="a944f">
-                            <constraints>
-                              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                          </hspacer>
                           <component id="3913" class="UI.Components.CharacterStatusPanel" binding="enemyPartyPanel4" custom-create="true">
                             <constraints>
-                              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties/>
                           </component>
                           <component id="8367a" class="UI.Components.CharacterStatusPanel" binding="enemyPartyPanel3" custom-create="true">
                             <constraints>
-                              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties/>
                           </component>
                           <component id="d4e8e" class="UI.Components.CharacterStatusPanel" binding="enemyPartyPanel2" custom-create="true">
                             <constraints>
-                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties/>
                           </component>
                           <component id="eb080" class="UI.Components.CharacterStatusPanel" binding="enemyPartyPanel1" custom-create="true">
                             <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties/>
                           </component>

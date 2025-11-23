@@ -14,9 +14,9 @@ public class Skill {
     private SkillType skillType;
     private SkillAction skillAction;
     private SkillTarget skillTarget;
-    private final BiConsumer<Character, Character> executeLogic;
+    private final BiConsumer<Character, List<Character>> executeLogic;
 
-    public Skill(String name, String effect, int manaCost, int power, SkillType skillType, SkillAction skillAction, SkillTarget skillTarget, BiConsumer<Character, Character> executeLogic) {
+    public Skill(String name, String effect, int manaCost, int power, SkillType skillType, SkillAction skillAction, SkillTarget skillTarget, BiConsumer<Character, List<Character>> executeLogic) {
         this.name = name;
         this.effect = effect;
         this.manaCost = manaCost;
@@ -27,7 +27,13 @@ public class Skill {
         this.executeLogic = executeLogic;
     }
 
-    public void execute(Character user, Character target) {
+    public void execute(Character user, List<Character> target) {
+        if (user.spendMana(this.manaCost)) {
+            executeLogic.accept(user, target);
+        }
+    }
+
+    public void setExecuteLogic(Character user, List<Character> target) {
         if (user.spendMana(this.manaCost)) {
             executeLogic.accept(user, target);
         }
@@ -58,7 +64,7 @@ public class Skill {
         return skillTarget;
     }
 
-    public BiConsumer<Character, Character> getExecuteLogic() {
+    public BiConsumer<Character, List<Character>> getExecuteLogic() {
         return executeLogic;
     }
 }

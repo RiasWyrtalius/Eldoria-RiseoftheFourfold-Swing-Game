@@ -58,7 +58,21 @@ public class GameManager {
             }
         };
 
+        FireMage fireMage = new FireMage();
+        Character sam = new Hero("Sammie Wammy", 100, 60, 120, 1, fireMage, "Assets/Images/bstudios.png") {
+            @Override
+            protected void onDeath() {
+
+            }
+
+            @Override
+            protected void onDefeat(Character defeatedTarget) {
+
+            }
+        };
+
         heroParty.addPartyMember(charlie);
+        heroParty.addPartyMember(sam);
 
         //TEMPORARY ENEMY SETUP
         enemyParty = new Party("Swarm of Goblins");
