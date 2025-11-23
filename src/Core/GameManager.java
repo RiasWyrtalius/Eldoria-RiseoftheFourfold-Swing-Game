@@ -1,6 +1,7 @@
 package Core;
 
 import Abilities.Jobs.FireMage;
+import Abilities.Jobs.Warrior;
 import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Enemies.Goblin;
@@ -32,11 +33,23 @@ public class GameManager {
     private void createGameModel() {
         //TEMPORARY HERO SETUP
         heroParty = new Party("The Godslayers");
-        FireMage fireMage = new FireMage();
-        Character kai = new Hero("Kai", 100, 50, 100, 1, fireMage, "Assets/Images/bstudios.png") {
+//        FireMage fireMage = new FireMage();
+//        Character kai = new Hero("Kai", 100, 50, 100, 1, fireMage, "Assets/Images/bstudios.png") {
+//            @Override
+//            protected void onDeath() {
+//
+//            }
+//
+//            @Override
+//            protected void onDefeat(Character defeatedTarget) {
+//
+//            }
+//        };
+        Warrior warrior = new Warrior();
+        Character charlie = new Hero("Charlie",150,50,100,1,warrior,"Assets/Images/bstudios.png"){
             @Override
             protected void onDeath() {
-                
+
             }
 
             @Override
@@ -45,7 +58,7 @@ public class GameManager {
             }
         };
 
-        heroParty.addPartyMember(kai);
+        heroParty.addPartyMember(charlie);
 
         //TEMPORARY ENEMY SETUP
         enemyParty = new Party("Swarm of Goblins");
