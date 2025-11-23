@@ -1,5 +1,7 @@
 package Characters;
 
+import Core.LogManager;
+
 public abstract class Character {
     protected String name;
 
@@ -32,10 +34,12 @@ public abstract class Character {
         this(name, health, baseAtk, maxMana, 1, imageKey);
     }
 
-    public void takeDamage(int damage) {
+    public void takeDamage(int damage, Character attacker) {
         this.health -= damage;
-        if (this.health <= 0)
+        if (this.health <= 0) {
             die();
+            onDefeat(attacker);
+        }
         // TODO: Frontend logging for damage taken
     }
 
@@ -47,8 +51,13 @@ public abstract class Character {
     }
 
     // Subclass Hooks
-    protected abstract void onDeath();
-    protected abstract void onDefeat(Character defeatedTarget);
+    protected void onDeath() {
+        LogManager.log(this.name + " has died!");
+    }
+
+    protected void onDefeat(Character finalAttacker) {
+        LogManager.log(finalAttacker.getName() + " has slain " + this.getName());
+    }
 
     public boolean canCast(int manaCost) {
         return this.mana >= manaCost;

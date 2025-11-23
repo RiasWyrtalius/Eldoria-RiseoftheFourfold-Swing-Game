@@ -50,17 +50,15 @@ public class Hero extends Character {
 //        System.out.println("hero attacks target"); //temporary
 //    }
 
-    // TODO: Add Logging for hero specific death logic
     @Override
     protected void onDeath() {
         LogManager.log("(HERO) : " + this.name + " has died!");
     }
 
     @Override
-    protected void onDefeat(Character defeatedTarget) {
-        LogManager.log("(HERO) : " + this.name + " has slain (ENEMY) : " + defeatedTarget.getName());
+    protected void onDefeat(Character finalAttacker) {
+        LogManager.log("(ENEMY) :" + this.name + " has slain " + "(HERO) : " + this.getName());
     }
-
 
     public void useSkill(Skill skill, Character target) {
         LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on "

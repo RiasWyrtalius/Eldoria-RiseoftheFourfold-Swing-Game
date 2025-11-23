@@ -43,7 +43,7 @@ public class CharacterStatusPanel extends JPanel {
             return;
         }
 
-        LogManager.log("Setting character data: " + character.getName());
+//        LogManager.log("Setting character data: " + character.getName());
 
         this.setVisible(true);
         nameLabel.setText("Lvl " + character.getLevel() + " - " + character.getName());

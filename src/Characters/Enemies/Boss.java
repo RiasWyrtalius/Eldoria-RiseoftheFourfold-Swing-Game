@@ -23,7 +23,7 @@ public class Boss extends Enemy {
 
         for (Character target : targets) {
             if (target.getHealth() > 0) {
-                target.takeDamage(AOE_DMG);
+                target.takeDamage(AOE_DMG, this);
                 LogManager.log(this.getName() + " hits " + target.getName() + " for " + AOE_DMG + " damage !");
             }
         }
@@ -50,7 +50,7 @@ public class Boss extends Enemy {
                 LogManager.log(this.getName() + " focuses on " + weakTarget.getName() + "!");
 
                 int dmg = this.getBaseAtk();
-                weakTarget.takeDamage(dmg);
+                weakTarget.takeDamage(dmg, this);
                 LogManager.log(this.getName() + " hits " + weakTarget.getName() + " for " + dmg + "damage!");
             }
         }

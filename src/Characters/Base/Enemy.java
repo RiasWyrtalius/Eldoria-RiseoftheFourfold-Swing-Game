@@ -28,8 +28,8 @@ public abstract class Enemy extends Character {
     }
 
     @Override
-    protected void onDefeat(Character defeatedTarget) {
-        LogManager.log("(ENEMY) : " + this.name + " has slain (HERO) : " + defeatedTarget.getName());
+    protected void onDefeat(Character finalAttacker) {
+        LogManager.log("(HERO) : " + finalAttacker.getName() + " has slain (ENEMY) : " + this.getName());
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============

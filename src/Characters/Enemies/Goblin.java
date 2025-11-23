@@ -12,6 +12,6 @@ public class Goblin extends Enemy {
 
     @Override
     public void makeAttack(List<Character> targets) {
-        targets.getFirst().takeDamage(baseAtk);
+        targets.getFirst().takeDamage(baseAtk, this);
     }
 }

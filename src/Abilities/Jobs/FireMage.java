@@ -6,6 +6,7 @@ import Abilities.Skill;
 import Abilities.SkillAction;
 import Abilities.SkillType;
 import Characters.Character;
+import Core.LogManager;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -22,6 +23,9 @@ public class FireMage extends JobClass {
             @Override
             public void accept(Character user, Character target) {
                 // TODO: Damage calculations and logging
+                int calculateDamage = (user.getBaseAtk() * 2);
+                target.takeDamage(calculateDamage, user);
+                LogManager.log(user.getName() + " casts Fireball on " + target.getName() + " for " + calculateDamage + " damage!");
             }
         };
 
