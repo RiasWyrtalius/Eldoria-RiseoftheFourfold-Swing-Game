@@ -1,6 +1,8 @@
 package Characters.Base;
 
 import Characters.Character;
+import Core.LogManager;
+
 import java.util.List;
 
 // TODO: refine
@@ -22,12 +24,12 @@ public abstract class Enemy extends Character {
 
     @Override
     protected void onDeath() {
-
+        LogManager.log("(ENEMY) : " + this.name + " has died!");
     }
 
     @Override
     protected void onDefeat(Character defeatedTarget) {
-
+        LogManager.log("(ENEMY) : " + this.name + " has slain (HERO) : " + defeatedTarget.getName());
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============
@@ -35,7 +37,6 @@ public abstract class Enemy extends Character {
     public String getType() {
         return type;
     }
-
     public int getRewardXP() {
         return rewardXP;
     }

@@ -70,33 +70,25 @@ public abstract class Character {
     public int getInitialHealth() {
         return initialHealth;
     }
-
     public String getName() {
         return name;
     }
-
     public int getHealth() {
         return health;
     }
-
     public boolean isAlive() {
         return isAlive;
     }
-
     public int getBaseAtk() {
         return baseAtk;
     }
-
     public int getLevel() {
         return level;
     }
-
     public int getMana() { return mana; }
-
     public int getMaxMana() {
         return maxMana;
     }
-
     public String getImageKey() {
         return imageKey;
     }

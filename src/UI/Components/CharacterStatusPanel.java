@@ -67,16 +67,14 @@ public class CharacterStatusPanel extends JPanel {
         this.setBackground(character.isAlive() ? getBackground() : Color.gray);
     }
 
-    private Color barState(int min, int max) {
-        double dmin = (double)min;
-        double dmax = (double)max;
-        if (dmin >= dmax / 0.5) {
-            return Color.green;
-        } else if (dmin <= dmax / 0.2) {
-            return Color.red;
-        } else {
-            return Color.yellow;
-        }
+    private Color barState(int current, int max) {
+        if (max == 0) return Color.GRAY;
+
+        double percentage = (double) current / max;
+
+        if (percentage >= 0.5) return Color.GREEN;
+        else if (percentage > 0.2) return Color.YELLOW;
+        else return Color.RED;
     }
 }
 

@@ -2,6 +2,7 @@ package Characters.Base;
 
 import Abilities.JobClass;
 import Characters.Character;
+import Core.LogManager;
 
 public class Hero extends Character {
     protected int XP;
@@ -52,12 +53,12 @@ public class Hero extends Character {
     // TODO: Add Logging for hero specific death logic
     @Override
     protected void onDeath() {
-//        System.out.println("Hero " + this.name + " has fallen!");
+        LogManager.log("(HERO) : " + this.name + " has died!");
     }
 
     @Override
     protected void onDefeat(Character defeatedTarget) {
-
+        LogManager.log("(HERO) : " + this.name + " has slain (ENEMY) : " + defeatedTarget.getName());
     }
 
 
