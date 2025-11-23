@@ -13,6 +13,8 @@ public abstract class Character {
     protected int mana;
     protected int maxMana;
 
+    protected boolean isExhausted = false;
+
     protected String imageKey;
 
     public Character(String name, int initialHealth, int baseAtk, int maxMana, int level, String imageKey) {
@@ -91,5 +93,13 @@ public abstract class Character {
     }
     public String getImageKey() {
         return imageKey;
+    }
+
+    public boolean isExhausted() {
+        return isExhausted;
+    }
+
+    public void setExhausted(boolean exhausted) {
+        isExhausted = exhausted;
     }
 }

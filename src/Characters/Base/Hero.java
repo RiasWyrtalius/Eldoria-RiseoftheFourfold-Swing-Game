@@ -1,6 +1,7 @@
 package Characters.Base;
 
 import Abilities.JobClass;
+import Abilities.Skill;
 import Characters.Character;
 import Core.LogManager;
 
@@ -43,12 +44,11 @@ public class Hero extends Character {
         this.requiredXP = baseXP + (incrementXP * (level - 1));
         //  TODO: Frontend logging for leveling up
     }
-
-
-    public static void attack(Character target) {
-        //TODO: attack target
-        System.out.println("hero attacks target"); //temporary
-    }
+//
+//    public static void attack(Character target) {
+//        //TODO: attack target
+//        System.out.println("hero attacks target"); //temporary
+//    }
 
     // TODO: Add Logging for hero specific death logic
     @Override
@@ -61,6 +61,13 @@ public class Hero extends Character {
         LogManager.log("(HERO) : " + this.name + " has slain (ENEMY) : " + defeatedTarget.getName());
     }
 
+
+    public void useSkill(Skill skill, Character target) {
+        LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on "
+            + target.getName() + ".");
+
+        skill.execute(this, target);
+    }
 
     // =============== PUBLIC GETTERS FOR UI ===============
 

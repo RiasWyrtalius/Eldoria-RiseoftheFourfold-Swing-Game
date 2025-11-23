@@ -115,6 +115,26 @@ public class Party {
         return deadMembers.get(index);
     }
 
+    public boolean isAllMembersExhausted() {
+        return partyMembers.stream()
+                .filter(Character::isAlive)
+                .allMatch(Character::isExhausted);
+    }
+
+    public boolean isAllMembersAlive() {
+        return partyMembers.stream()
+                .allMatch(Character::isAlive);
+    }
+
+    public boolean isAllMembersDead() {
+        return partyMembers.stream()
+                .noneMatch(Character::isAlive);
+    }
+
+    public void setPartyExhaustion(boolean b) {
+        partyMembers.forEach(c -> c.setExhausted(b));
+    }
+
 //   TODO: Front end party info display, might not be in this class
 //    public void getPartyInfo()
 }

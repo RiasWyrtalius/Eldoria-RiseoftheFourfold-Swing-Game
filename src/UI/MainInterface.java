@@ -1,21 +1,18 @@
 package UI;
 
-import Abilities.JobClass;
-import Abilities.Jobs.FireMage;
-import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Party;
 import Core.BattleController;
-import Core.LogManager;
+import Core.BattlePhase;
 import UI.Components.CharacterStatusPanel;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.*;
-import java.awt.*;
 
 public class MainInterface extends JFrame{
+    private BattleController battleController;
+
     private JPanel contentPanel;
     private JTextArea GameLogPanelTextArea;
 
@@ -32,7 +29,7 @@ public class MainInterface extends JFrame{
     private List<JPanel> heroPartyPanels;
     private List<JPanel> enemyPartyPanels;
 
-    private BattleController battleController;
+    private JButton endTurnButton;
 
     public MainInterface(BattleController battleController) {
         this.battleController = battleController;
@@ -47,8 +44,34 @@ public class MainInterface extends JFrame{
         heroPartyPanels = Arrays.asList(heroPartyPanel1, heroPartyPanel2, heroPartyPanel3, heroPartyPanel4);
         enemyPartyPanels = Arrays.asList(enemyPartyPanel1, enemyPartyPanel2, enemyPartyPanel3, enemyPartyPanel4);
 
+        listenerInit();
+        refreshUI();
+    }
+
+    public void listenerInit() {
+        if (endTurnButton != null) {
+            endTurnButton.addActionListener(e -> {
+                battleController.endHeroPhaseManually();
+                refreshUI();
+            });
+        }
+    }
+
+    public void refreshUI() {
         setPartyUI(battleController.getHeroParty().getPartyMembers(), heroPartyPanels);
         setPartyUI(battleController.getEnemyParty().getPartyMembers(), enemyPartyPanels);
+
+        updateControls();
+    }
+
+    private void updateControls() {
+        BattlePhase phase = battleController.getCurrentPhase();
+
+        boolean shouldEnable = (phase == BattlePhase.HERO_ACTION_WAIT);
+
+        endTurnButton.setEnabled(shouldEnable);
+
+//        TODO: Logic for skill buttons, enabling hero selection also goes here
     }
 
     private void setPartyUI(List<Character> party, List<JPanel> setupPanel) {
