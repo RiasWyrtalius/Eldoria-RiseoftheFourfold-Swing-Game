@@ -2,6 +2,8 @@ package Characters.Enemies;
 
 import Characters.Base.Enemy;
 import Characters.Character;
+import Core.LogManager;
+
 import java.util.List;
 
 public class Boss extends Enemy {
@@ -14,21 +16,19 @@ public class Boss extends Enemy {
         setHealth(buffedHP);
     }
 
-//        TODO: move to frontend logger
     public void devastatingStrike(List<Character> targets) {
-        System.out.println("!!! " + this.name + " unleashes a DEVASTATING STRIKE !!!");
+        LogManager.log("!!! " + this.name + " unleashes a DEVASTATING STRIKE !!!");
 
         int AOE_DMG = (int) (this.getBaseAtk() * 1.5);
 
         for (Character target : targets) {
             if (target.getHealth() > 0) {
                 target.takeDamage(AOE_DMG);
-                System.out.println(this.getName() + " hits " + target.getName() + " for " + AOE_DMG + " damage !");
+                LogManager.log(this.getName() + " hits " + target.getName() + " for " + AOE_DMG + " damage !");
             }
         }
     }
 
-//        TODO: move to frontend logger
     @Override
     public void makeAttack(List<Character> targets) {
         int manaCost = 50; // Dev. Strike mana cost
@@ -46,13 +46,12 @@ public class Boss extends Enemy {
                 }
             }
 
-            // Might be good to have this on a separate "Turn"
             if (weakTarget != null) {
-                System.out.println(this.getName() + " focuses on " + weakTarget.getName() + "!");
+                LogManager.log(this.getName() + " focuses on " + weakTarget.getName() + "!");
 
                 int dmg = this.getBaseAtk();
                 weakTarget.takeDamage(dmg);
-                System.out.println(this.getName() + " hits " + weakTarget.getName() + " for " + dmg + "damage!");
+                LogManager.log(this.getName() + " hits " + weakTarget.getName() + " for " + dmg + "damage!");
             }
         }
     }
