@@ -29,12 +29,9 @@ public abstract class JobClass {
     public List<Skill> getSkills() {
         return skills;
     }
-
     public int getHpBonus() {
         return hpBonus;
     }
-
-
     public int getManaBonus() {
         return manaBonus;
     }

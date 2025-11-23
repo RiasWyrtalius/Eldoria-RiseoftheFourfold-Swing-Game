@@ -4,6 +4,7 @@ import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Party;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -25,20 +26,14 @@ public class BattleController {
     }
 
     public void startConsoleBattle() {
-        while(isBattleActive) {
-            startNextTurn();
-        }
+        while(isBattleActive) { startNextTurn(); }
     }
 
     public boolean checkWin() {
         return enemyParty.getPartyMembers().stream()
                 .noneMatch(Character::isAlive);
     }
-
-    public boolean checkLose() {
-        return heroParty.getPartyMembers().stream()
-                .noneMatch(Character::isAlive);
-    }
+    public boolean checkLose() { return getHeroesAbleToAttack().isEmpty(); }
 
     public boolean isBattleOver() {
         return checkWin() || checkLose();
@@ -70,10 +65,28 @@ public class BattleController {
         executeTurnCleanUp();
     }
 
+    //new :D
+    public List<Character> getHeroesAbleToAttack() {
+        List<Character> readyHeroes = new ArrayList<>();
+
+        // 1. Loop through only the alive members
+        for (Character hero : heroParty.getAliveMembers()) {
+
+            // 2. Check if they are capable of attacking (not stunned, etc.)
+            if (hero.isAlive()) {
+                readyHeroes.add(hero);
+            }
+        }
+
+        return readyHeroes;
+    }
 
     // TODO: UI linkage HEHEHEHEHEH
     private void executeHeroTurn() {
-        for (Character hero : heroParty.getAliveMembers()) {
+
+        List<Character> activeHeroes = getHeroesAbleToAttack();
+
+        for (Character hero : activeHeroes) {
             System.out.println("\nIt is " + hero.getName() + "'s turn!");
             System.out.println("1. Attack\t2. Defend");
 
@@ -106,12 +119,15 @@ public class BattleController {
         LogManager.log("\n+=============+");
 
         for (Character enemy : enemyParty.getAliveMembers()) {
-//            you can just call getAliveHeroes
-            Character randomAliveHero = heroParty.getRandomAliveMember();
 
-            if (randomAliveHero == null) break;
+            List<Character> validTargets = getHeroesAbleToAttack();
 
-            LogManager.log(enemy.getName() + " attacks " + randomAliveHero.getName() + "!");
+            if (validTargets.isEmpty()) break;
+
+            int randomIndex = (int) (Math.random() * validTargets.size());
+            Character target = validTargets.get(randomIndex);
+
+            LogManager.log(enemy.getName() + " attacks " + target.getName() + "!");
 
             //enemy.attack(target);
 

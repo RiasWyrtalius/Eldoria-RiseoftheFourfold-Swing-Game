@@ -34,23 +34,18 @@ public class Skill {
     public String getName() {
         return name;
     }
-
     public String getEffect() {
         return effect;
     }
-
     public int getManaCost() {
         return manaCost;
     }
-
     public int getPower() {
         return power;
     }
-
     public SkillType getSkillType() {
         return skillType;
     }
-
     public BiConsumer<Character, Character> getExecuteLogic() {
         return executeLogic;
     }
