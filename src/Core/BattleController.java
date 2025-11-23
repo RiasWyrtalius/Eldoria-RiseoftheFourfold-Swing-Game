@@ -5,12 +5,15 @@ import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Party;
+import UI.MainInterface;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class BattleController {
+    private MainInterface mainView;
     private final Party heroParty;
     private final Party enemyParty;
     private int turnCounter;
@@ -18,6 +21,7 @@ public class BattleController {
     private BattlePhase currentPhase = BattlePhase.HERO_ACTION_WAIT; // Default state
 
     public BattleController(Party heroParty, Party enemyParty) {
+        this.mainView = null;
         this.heroParty = heroParty;
         this.enemyParty = enemyParty;
         this.turnCounter = 1;
@@ -51,6 +55,10 @@ public class BattleController {
 
         hero.useSkill(skill, target);
         hero.setExhausted(true);
+
+        if (this.mainView != null)
+            this.mainView.refreshUI();
+
         advanceTurnCycle(false);
     }
 
@@ -92,6 +100,9 @@ public class BattleController {
 
             // pause here waiting for hero selection
         }
+
+        if (this.mainView != null)
+            this.mainView.refreshUI();
     }
 
     private void executeEnemyPhase() {
@@ -116,6 +127,9 @@ public class BattleController {
 
             if (checkLose()) return;
         }
+
+        if (this.mainView != null)
+            this.mainView.refreshUI();
     }
 
     private void executeTurnCleanUp() {
@@ -137,7 +151,11 @@ public class BattleController {
         }
     }
 
-    // =============== PUBLIC GETTERS FOR UI ===============
+    // =============== PUBLIC SETTERS AND GETTERS FOR UI ===============
+    public void setMainView(MainInterface mainView) {
+        this.mainView = mainView;
+    }
+
     public Party getHeroParty() {
         return heroParty;
     }

@@ -63,6 +63,7 @@ public class GameManager {
 
         createGameModel();
         battleController = new BattleController(heroParty, enemyParty);
+        battleController.setMainView(mainView);
 
         mainView.linkControllerAndData(battleController);
         LogManager.log("New game started. Battle Initialized");

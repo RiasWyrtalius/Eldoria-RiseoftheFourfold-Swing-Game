@@ -71,8 +71,10 @@ public class MainInterface extends JFrame{
     }
 
     public void refreshUI() {
-        LogManager.log("Active Hero: " + activeHero);
-        LogManager.log("Selected Skill: " + selectedSkill);
+        if (activeHero != null && selectedSkill != null) {
+            LogManager.log("Active Hero: " + activeHero.getName());
+            LogManager.log("Selected Skill: " + selectedSkill.getName());
+        }
 
         setPartyUI(battleController.getHeroParty().getPartyMembers(), heroPartyPanels);
         setPartyUI(battleController.getEnemyParty().getPartyMembers(), enemyPartyPanels);
