@@ -26,11 +26,9 @@ public class CharacterStatusPanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         iconPanel.setLayout(new CardLayout());
 
-//        nameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        nameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         hpBar.setStringPainted(true);
-        hpBar.setForeground(Color.RED);
         manaBar.setStringPainted(true);
-        manaBar.setForeground(Color.BLUE);
 
         add(nameLabel);
         add(hpBar);
