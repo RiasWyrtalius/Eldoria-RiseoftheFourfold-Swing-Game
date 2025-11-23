@@ -2,12 +2,11 @@ package UI;
 
 import Abilities.Skill;
 import Abilities.SkillTarget;
-import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
-import Characters.Party;
 import Core.BattleController;
 import Core.BattlePhase;
+import Core.BattleResult;
 import Core.LogManager;
 import UI.Components.CharacterStatusPanel;
 
@@ -21,6 +20,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 // TODO: Selected targets also highlight their background
+// TODO: DESCEND calls battle controller->game manager for next battle
 
 public class MainInterface extends JFrame{
     private BattleController battleController;
@@ -40,8 +40,11 @@ public class MainInterface extends JFrame{
     private JPanel enemyPartyPanel3;
     private JPanel enemyPartyPanel4;
 
+    private JPanel descendPanel;
+
     private List<JPanel> heroPartyPanels;
     private List<JPanel> enemyPartyPanels;
+    private JLabel battleOutcome;
 
     // STATE MACHINE FIELDS
     private BattleUIMode currentMode = BattleUIMode.HERO_SELECT;
@@ -52,6 +55,7 @@ public class MainInterface extends JFrame{
     private JPopupMenu targetConfirmMenu = new JPopupMenu();
 
     private JButton endTurnButton;
+    private JButton descendButton;
 
     public MainInterface() {
         this.setContentPane(contentPanel);
@@ -59,6 +63,11 @@ public class MainInterface extends JFrame{
         this.pack();
         this.setVisible(true);
         setTitle("DND Swing Clone | Saja Boys");
+
+        // shows when battle ends
+        battleOutcome.setVisible(false);
+        // shows when battle ends and heroes win to
+        descendPanel.setVisible(false);
 
         GameLogPanelTextArea.setEditable(false);
         heroPartyPanels = Arrays.asList(heroPartyPanel1, heroPartyPanel2, heroPartyPanel3, heroPartyPanel4);
@@ -99,10 +108,26 @@ public class MainInterface extends JFrame{
 
     private void updateControls() {
         BattlePhase phase = battleController.getCurrentPhase();
-
-        boolean shouldEnable = (phase == BattlePhase.HERO_ACTION_WAIT);
-
-        endTurnButton.setEnabled(shouldEnable);
+        endTurnButton.setEnabled(phase == BattlePhase.HERO_ACTION_WAIT);
+        if (phase == BattlePhase.BATTLE_ENDED) {
+            // TODO: set battleOutcome JLabel to victory, or tie
+            BattleResult result = battleController.getFinalResult();
+            String resultText = switch (result) {
+                case VICTORY -> "VICTORY! Well Done!";
+                case DEFEAT -> "DEFEAT! Game Over.";
+                case TIE -> "TIE! Game Over. Truly no one wins in the end.";
+                default -> "Battle Ended.";
+            };
+            battleOutcome.setText(resultText);
+            battleOutcome.setVisible(true);
+            endTurnButton.setVisible(false);
+            if (result == BattleResult.VICTORY)
+                descendPanel.setVisible(true);
+        } else {
+            battleOutcome.setVisible(false);
+            endTurnButton.setVisible(true);
+            descendPanel.setVisible(false);
+        }
     }
 
     private void setPartyUI(List<Character> party, List<JPanel> setupPanel) {

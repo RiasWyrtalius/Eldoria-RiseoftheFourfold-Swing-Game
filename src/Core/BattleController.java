@@ -19,6 +19,7 @@ public class BattleController {
     private int turnCounter;
     private boolean isBattleActive;
     private BattlePhase currentPhase = BattlePhase.HERO_ACTION_WAIT; // Default state
+    private BattleResult finalResult = BattleResult.NONE;
 
     public BattleController(Party heroParty, Party enemyParty) {
         this.mainView = null;
@@ -139,15 +140,22 @@ public class BattleController {
     }
 
     public void endBattle() {
-
         isBattleActive = false;
+        currentPhase = BattlePhase.BATTLE_ENDED;
 
         if (checkLose() && checkWin()) {
             LogManager.log("TIE!: Truly everyone is dead and gone.");
+            finalResult = BattleResult.TIE;
         } else if (checkWin()) {
             LogManager.log("VICTORY! " + heroParty.getPartyName() + " is Triumphant!");
+            finalResult = BattleResult.VICTORY;
         } else if (checkLose()) {
             LogManager.log("DEFEAT! " + enemyParty.getPartyName() + " has wiped " + heroParty.getPartyName() + " out!");
+            finalResult = BattleResult.DEFEAT;
+        }
+
+        if (this.mainView != null) {
+            this.mainView.refreshUI();
         }
     }
 
@@ -170,5 +178,9 @@ public class BattleController {
 
     public void setCurrentPhase(BattlePhase currentPhase) {
         this.currentPhase = currentPhase;
+    }
+
+    public BattleResult getFinalResult() {
+        return finalResult;
     }
 }
