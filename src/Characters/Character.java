@@ -1,5 +1,7 @@
 package Characters;
 
+import Core.LogManager;
+
 public abstract class Character {
     protected String name;
 
@@ -61,6 +63,10 @@ public abstract class Character {
         } else {
             return false;
         }
+    }
+
+    public void attack(Character target) {
+        LogManager.log("(CHARACTER) : " + this.name + " attacks " + target.getName());
     }
 
     //added setter for boss multiplier

@@ -42,12 +42,14 @@ public class Hero extends Character {
         this.level++;
         this.requiredXP = baseXP + (incrementXP * (level - 1));
         //  TODO: Frontend logging for leveling up
+        LogManager.log("(HERO) : " + this.name + " has leveled up to " + getLevel() + "!");
     }
 
 
-    public static void attack(Character target) {
+    @Override
+    public void attack(Character target) {
         //TODO: attack target
-        System.out.println("hero attacks target"); //temporary
+        LogManager.log("(HERO) : " + this.name + " attacks " + target.getName());
     }
 
     // TODO: Add Logging for hero specific death logic

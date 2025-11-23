@@ -102,7 +102,7 @@ public class BattleController {
 
                 if (target != null) {
                     LogManager.log(hero.getName() + " attacks " + target.getName() + "!");
-                    Hero.attack(target);
+                    hero.attack(target);
                     target.takeDamage(10);
                 }
             } else {
