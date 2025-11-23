@@ -47,37 +47,16 @@ public class MainInterface extends JFrame{
         heroPartyPanels = Arrays.asList(heroPartyPanel1, heroPartyPanel2, heroPartyPanel3, heroPartyPanel4);
         enemyPartyPanels = Arrays.asList(enemyPartyPanel1, enemyPartyPanel2, enemyPartyPanel3, enemyPartyPanel4);
 
-        setHeroPartyUI();
-        setEnemyPartyUI();
+        setPartyUI(battleController.getHeroParty().getPartyMembers(), heroPartyPanels);
+        setPartyUI(battleController.getEnemyParty().getPartyMembers(), enemyPartyPanels);
     }
 
-    // TODO: Party UI generation
-    private void setHeroPartyUI() {
+    private void setPartyUI(List<Character> party, List<JPanel> setupPanel) {
         // call set character data for each party
-        Party heroParty = battleController.getHeroParty();
-        List<Character> heroes = heroParty.getPartyMembers();
-
-        for (int i = 0; i < heroPartyPanels.size(); i++) {
-            CharacterStatusPanel panel = (CharacterStatusPanel)heroPartyPanels.get(i);
-
-            if (i < heroes.size()) {
-                panel.setCharacterData(heroes.get(i));
-            } else {
-                panel.setCharacterData(null);
-            }
-        }
-    }
-
-    private void setEnemyPartyUI() {
-        // call set character data for each party
-        Party enemyParty = battleController.getEnemyParty();
-        List<Character> heroes = enemyParty.getPartyMembers();
-
-        for (int i = 0; i < enemyPartyPanels.size(); i++) {
-            CharacterStatusPanel panel = (CharacterStatusPanel)enemyPartyPanels.get(i);
-
-            if (i < heroes.size()) {
-                panel.setCharacterData(heroes.get(i));
+        for (int i = 0; i < setupPanel.size(); i++) {
+            CharacterStatusPanel panel = (CharacterStatusPanel)setupPanel.get(i);
+            if (i < party.size()) {
+                panel.setCharacterData(party.get(i));
             } else {
                 panel.setCharacterData(null);
             }
@@ -85,15 +64,6 @@ public class MainInterface extends JFrame{
     }
 
     private void createUIComponents() {
-        // omfg heroparty panels aren't put in a list yet here lol so we
-        // can't even run this
-//        for (int i = 0; i < heroPartyPanels.size(); i++) {
-//            heroPartyPanels.set(i, new CharacterStatusPanel());
-//        }
-//        for (int i = 0; i < enemyPartyPanels.size(); i++) {
-//            enemyPartyPanels.set(i, new CharacterStatusPanel());
-//        }
-//        do it all manually >:P
         heroPartyPanel1 = new CharacterStatusPanel();
         heroPartyPanel2 = new CharacterStatusPanel();
         heroPartyPanel3 = new CharacterStatusPanel();
