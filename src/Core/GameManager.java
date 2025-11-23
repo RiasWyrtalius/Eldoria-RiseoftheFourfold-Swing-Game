@@ -55,11 +55,15 @@ public class GameManager {
     }
 
     public void startNewGame() {
-        createGameModel();
-
-        battleController = new BattleController(heroParty, enemyParty);
-        mainView = new MainInterface(battleController);
+        // dummy view to get the text area for synchronization reasons
+        mainView = new MainInterface();
         LogManager.initialize(mainView.getGameLogPanelTextArea());
+        LogManager.log("Logger initialized with UI component");
+
+        createGameModel();
+        battleController = new BattleController(heroParty, enemyParty);
+
+        mainView.linkControllerAndData(battleController);
         LogManager.log("New game started. Battle Initialized");
     }
 }

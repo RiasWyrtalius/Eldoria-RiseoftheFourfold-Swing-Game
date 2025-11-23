@@ -57,7 +57,7 @@ public class Hero extends Character {
 
     @Override
     protected void onDefeat(Character finalAttacker) {
-        LogManager.log("(ENEMY) :" + this.name + " has slain " + "(HERO) : " + this.getName());
+        LogManager.log("(ENEMY) :" + finalAttacker.getName() + " has slain " + "(HERO) : " + this.name);
     }
 
     public void useSkill(Skill skill, Character target) {
@@ -71,5 +71,9 @@ public class Hero extends Character {
 
     public int getRequiredXP() {
         return requiredXP;
+    }
+
+    public JobClass getJob() {
+        return job;
     }
 }

@@ -51,13 +51,9 @@ public abstract class Character {
     }
 
     // Subclass Hooks
-    protected void onDeath() {
-        LogManager.log(this.name + " has died!");
-    }
+    protected abstract void onDeath();
 
-    protected void onDefeat(Character finalAttacker) {
-        LogManager.log(finalAttacker.getName() + " has slain " + this.getName());
-    }
+    protected abstract void onDefeat(Character finalAttacker);
 
     public boolean canCast(int manaCost) {
         return this.mana >= manaCost;

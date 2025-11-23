@@ -1,9 +1,12 @@
 package UI;
 
+import Abilities.Skill;
+import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Party;
 import Core.BattleController;
 import Core.BattlePhase;
+import Core.LogManager;
 import UI.Components.CharacterStatusPanel;
 
 import java.util.Arrays;
@@ -29,11 +32,16 @@ public class MainInterface extends JFrame{
     private List<JPanel> heroPartyPanels;
     private List<JPanel> enemyPartyPanels;
 
+    // STATE MACHINE FIELDS
+    private BattleUIMode currentMode = BattleUIMode.HERO_SELECT;
+    private Hero activeHero = null;
+    private Skill selectedSkill = null;
+
+    private JPopupMenu skillMenu;
+
     private JButton endTurnButton;
 
-    public MainInterface(BattleController battleController) {
-        this.battleController = battleController;
-
+    public MainInterface() {
         this.setContentPane(contentPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
@@ -43,7 +51,10 @@ public class MainInterface extends JFrame{
         GameLogPanelTextArea.setEditable(false);
         heroPartyPanels = Arrays.asList(heroPartyPanel1, heroPartyPanel2, heroPartyPanel3, heroPartyPanel4);
         enemyPartyPanels = Arrays.asList(enemyPartyPanel1, enemyPartyPanel2, enemyPartyPanel3, enemyPartyPanel4);
+    }
 
+    public void linkControllerAndData(BattleController controller) {
+        this.battleController = controller;
         listenerInit();
         refreshUI();
     }
@@ -87,19 +98,91 @@ public class MainInterface extends JFrame{
     }
 
     private void createUIComponents() {
-        heroPartyPanel1 = new CharacterStatusPanel();
-        heroPartyPanel2 = new CharacterStatusPanel();
-        heroPartyPanel3 = new CharacterStatusPanel();
-        heroPartyPanel4 = new CharacterStatusPanel();
+        heroPartyPanel1 = new CharacterStatusPanel(this);
+        heroPartyPanel2 = new CharacterStatusPanel(this);
+        heroPartyPanel3 = new CharacterStatusPanel(this);
+        heroPartyPanel4 = new CharacterStatusPanel(this);
 
-        enemyPartyPanel1 = new CharacterStatusPanel();
-        enemyPartyPanel2 = new CharacterStatusPanel();
-        enemyPartyPanel3 = new CharacterStatusPanel();
-        enemyPartyPanel4 = new CharacterStatusPanel();
+        enemyPartyPanel1 = new CharacterStatusPanel(this);
+        enemyPartyPanel2 = new CharacterStatusPanel(this);
+        enemyPartyPanel3 = new CharacterStatusPanel(this);
+        enemyPartyPanel4 = new CharacterStatusPanel(this);
     }
+
+    public void onCharacterPanelClick(Character clickedCharacter) {
+        switch (currentMode) {
+            case HERO_SELECT:
+                if (clickedCharacter instanceof Hero) {
+                    Hero hero = (Hero)clickedCharacter;
+                    if (hero.isAlive() && !hero.isExhausted()) {
+                        onHeroSelect(hero);
+                    } else {
+                        LogManager.log(hero.getName() + " cannot start an action now.");
+                    }
+                }
+                break;
+            case TARGET_SELECT:
+                onTargetSelect(clickedCharacter);
+                break;
+            case SKILL_SELECT:
+            case IDLE:
+                break;
+        }
+    }
+
+    public void onHeroSelect(Hero clickedHero) {
+        if (currentMode != BattleUIMode.HERO_SELECT) return;
+
+        if (clickedHero.isAlive() && !clickedHero.isExhausted()) {
+            this.activeHero = clickedHero;
+            this.currentMode = BattleUIMode.SKILL_SELECT;
+
+            showSkillSelectionMenu(clickedHero);
+
+            refreshUI();
+        } else {
+            LogManager.log(clickedHero.getName() + " is unable to act.");
+        }
+    }
+
+    public void onSkillSelect(Skill skill) {
+        if (currentMode != BattleUIMode.SKILL_SELECT) return;
+
+        this.selectedSkill = skill;
+        this.currentMode = BattleUIMode.TARGET_SELECT;
+
+        LogManager.log("Select a target for " + skill.getName());
+        refreshUI();
+    }
+
+    public void onTargetSelect(Character target) {
+        if (currentMode != BattleUIMode.TARGET_SELECT) return;
+
+        battleController.executeActionFromUI(activeHero, selectedSkill, target);
+        resetState();
+    }
+
+    private void resetState() {
+        activeHero = null;
+        selectedSkill = null;
+        currentMode = BattleUIMode.HERO_SELECT;
+    }
+
+    private void showSkillSelectionMenu(Hero hero) {
+        JPopupMenu menu = new JPopupMenu();
+
+        for (Skill skill : hero.getJob().getSkills()) {
+            JMenuItem item = new JMenuItem(skill.getName() + "\t(" + skill.getManaCost() + " ) MP");
+            item.addActionListener(e -> onSkillSelect(skill));
+        }
+
+        LogManager.log("Skill menu shown for " + hero.getName() + ".");
+    }
+    // =============== PUBLIC GETTERS FOR UI ===============
 
     public JTextArea getGameLogPanelTextArea() {
         return GameLogPanelTextArea;
     }
+
 
 }

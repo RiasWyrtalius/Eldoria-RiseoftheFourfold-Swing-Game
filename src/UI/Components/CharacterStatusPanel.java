@@ -1,30 +1,40 @@
 package UI.Components;
 
+import Characters.Base.Hero;
 import Characters.Character;
+import Characters.Party;
 import Core.LogManager;
 import Resource.AssetManager;
+import UI.MainInterface;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class CharacterStatusPanel extends JPanel {
+    private Character character;
     private JLabel nameLabel;
     private JProgressBar hpBar;
     private JProgressBar manaBar;
     private JPanel iconPanel;
 
-    // calls internal init components
-    public CharacterStatusPanel() {
+    // TODO: FIX CHARACTER STATUS PANEL CALLED BEFORE MAIN INTERFACE FINISHES
+    public CharacterStatusPanel(MainInterface parentInterface) {
         nameLabel = new JLabel("N/A - Lvl 0");
         hpBar = new JProgressBar();
         manaBar = new JProgressBar();
         iconPanel = new JPanel();
+
+        MouseAdapter clickAdapter = attachListener(parentInterface);
+        this.addMouseListener(clickAdapter);
 
         nameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
         nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         iconPanel.setLayout(new CardLayout());
+        iconPanel.addMouseListener(clickAdapter);
 
         nameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         hpBar.setStringPainted(true);
@@ -36,6 +46,17 @@ public class CharacterStatusPanel extends JPanel {
         add(iconPanel);
     }
 
+    private MouseAdapter attachListener(MainInterface parentInterface) {
+        return new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (character != null) {
+                    LogManager.log("sfhsuihdf");
+                    parentInterface.onCharacterPanelClick(character);
+                }
+            }
+        };
+    }
 
     public void setCharacterData(Character character) {
         if (character == null) {
