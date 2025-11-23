@@ -33,18 +33,6 @@ public class GameManager {
     private void createGameModel() {
         //TEMPORARY HERO SETUP
         heroParty = new Party("The Godslayers");
-//        FireMage fireMage = new FireMage();
-//        Character kai = new Hero("Kai", 100, 50, 100, 1, fireMage, "Assets/Images/bstudios.png") {
-//            @Override
-//            protected void onDeath() {
-//
-//            }
-//
-//            @Override
-//            protected void onDefeat(Character defeatedTarget) {
-//
-//            }
-//        };
         Warrior warrior = new Warrior();
         Character charlie = new Hero("Charlie",150,50,100,1,warrior,"Assets/Images/bstudios.png"){
             @Override
@@ -93,6 +81,5 @@ public class GameManager {
         battleController.setMainView(mainView);
 
         mainView.linkControllerAndData(battleController);
-        LogManager.log("New game started. Battle Initialized");
     }
 }

@@ -28,11 +28,13 @@ public class MainInterface extends JFrame{
     private JPanel contentPanel;
     private JTextArea GameLogPanelTextArea;
 
+    private JLabel heroPartyLabel;
     private JPanel heroPartyPanel1;
     private JPanel heroPartyPanel2;
     private JPanel heroPartyPanel3;
     private JPanel heroPartyPanel4;
 
+    private JLabel enemyPartyLabel;
     private JPanel enemyPartyPanel1;
     private JPanel enemyPartyPanel2;
     private JPanel enemyPartyPanel3;
@@ -65,6 +67,7 @@ public class MainInterface extends JFrame{
 
     public void linkControllerAndData(BattleController controller) {
         this.battleController = controller;
+
         listenerInit();
         refreshUI();
     }
@@ -80,6 +83,9 @@ public class MainInterface extends JFrame{
     }
 
     public void refreshUI() {
+        heroPartyLabel.setText(battleController.getHeroParty().getPartyName());
+        enemyPartyLabel.setText(battleController.getEnemyParty().getPartyName());
+
         if (activeHero != null && selectedSkill != null) {
             LogManager.log("Active Hero: " + activeHero.getName());
             LogManager.log("Selected Skill: " + selectedSkill.getName());
