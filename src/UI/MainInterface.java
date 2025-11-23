@@ -12,6 +12,8 @@ import UI.Components.CharacterStatusPanel;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 public class MainInterface extends JFrame{
     private BattleController battleController;
@@ -69,6 +71,9 @@ public class MainInterface extends JFrame{
     }
 
     public void refreshUI() {
+        LogManager.log("Active Hero: " + activeHero);
+        LogManager.log("Selected Skill: " + selectedSkill);
+
         setPartyUI(battleController.getHeroParty().getPartyMembers(), heroPartyPanels);
         setPartyUI(battleController.getEnemyParty().getPartyMembers(), enemyPartyPanels);
 
@@ -112,6 +117,7 @@ public class MainInterface extends JFrame{
     public void onCharacterPanelClick(Character clickedCharacter) {
         switch (currentMode) {
             case HERO_SELECT:
+                LogManager.log("SELECT HERO");
                 if (clickedCharacter instanceof Hero) {
                     Hero hero = (Hero)clickedCharacter;
                     if (hero.isAlive() && !hero.isExhausted()) {
@@ -119,13 +125,16 @@ public class MainInterface extends JFrame{
                     } else {
                         LogManager.log(hero.getName() + " cannot start an action now.");
                     }
-                }
+                } else LogManager.log("Enemy is Selected!");
                 break;
             case TARGET_SELECT:
+                LogManager.log("SELECT TARGET");
                 onTargetSelect(clickedCharacter);
                 break;
             case SKILL_SELECT:
+                LogManager.log("SELECT SKILL");
             case IDLE:
+                LogManager.log("IDLE");
                 break;
         }
     }
@@ -168,12 +177,45 @@ public class MainInterface extends JFrame{
         currentMode = BattleUIMode.HERO_SELECT;
     }
 
+    private void resetSelectionState() {
+        this.activeHero = null;
+        this.selectedSkill = null;
+        this.currentMode = BattleUIMode.HERO_SELECT;
+        refreshUI();
+    }
+
     private void showSkillSelectionMenu(Hero hero) {
         JPopupMenu menu = new JPopupMenu();
+
+        menu.addPopupMenuListener(new PopupMenuListener() {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {
+                LogManager.log("Skill selection cancelled");
+                resetSelectionState();
+            }
+        });
 
         for (Skill skill : hero.getJob().getSkills()) {
             JMenuItem item = new JMenuItem(skill.getName() + "\t(" + skill.getManaCost() + " ) MP");
             item.addActionListener(e -> onSkillSelect(skill));
+            menu.add(item);
+        }
+
+        CharacterStatusPanel activePanel = null;
+        for (JPanel panel : heroPartyPanels) {
+            CharacterStatusPanel statusPanel = (CharacterStatusPanel)panel;
+             if (statusPanel.getCharacter() == hero) { activePanel = statusPanel; break; }
+        }
+
+        if (activePanel != null) {
+            menu.show(activePanel, 0, 0);
+        } else {
+            menu.show(this, 100, 100);
         }
 
         LogManager.log("Skill menu shown for " + hero.getName() + ".");

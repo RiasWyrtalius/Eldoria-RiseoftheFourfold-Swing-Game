@@ -7,7 +7,7 @@ import java.util.List;
 public abstract class JobClass {
     private final String name;
     private final String description;
-    private final List<Skill> skills = null;
+    private final List<Skill> skills;
     private final int hpBonus;
     private final int manaBonus;
 
@@ -16,6 +16,7 @@ public abstract class JobClass {
         this.description = description;
         this.hpBonus = hpBonus;
         this.manaBonus = manaBonus;
+        this.skills = createSkills();
     }
 
     public JobClass(String name, String description) {

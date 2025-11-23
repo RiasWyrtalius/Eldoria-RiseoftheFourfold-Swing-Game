@@ -51,6 +51,7 @@ public class BattleController {
 
         hero.useSkill(skill, target);
         hero.setExhausted(true);
+        advanceTurnCycle(false);
     }
 
     public void endHeroPhaseManually() {

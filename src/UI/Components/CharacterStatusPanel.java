@@ -19,7 +19,6 @@ public class CharacterStatusPanel extends JPanel {
     private JProgressBar manaBar;
     private JPanel iconPanel;
 
-    // TODO: FIX CHARACTER STATUS PANEL CALLED BEFORE MAIN INTERFACE FINISHES
     public CharacterStatusPanel(MainInterface parentInterface) {
         nameLabel = new JLabel("N/A - Lvl 0");
         hpBar = new JProgressBar();
@@ -28,6 +27,12 @@ public class CharacterStatusPanel extends JPanel {
 
         MouseAdapter clickAdapter = attachListener(parentInterface);
         this.addMouseListener(clickAdapter);
+
+        nameLabel.setOpaque(false);
+        iconPanel.setOpaque(false);
+
+        hpBar.setOpaque(false);
+        manaBar.setOpaque(false);
 
         nameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
         nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -51,7 +56,6 @@ public class CharacterStatusPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (character != null) {
-                    LogManager.log("sfhsuihdf");
                     parentInterface.onCharacterPanelClick(character);
                 }
             }
@@ -64,8 +68,9 @@ public class CharacterStatusPanel extends JPanel {
             return;
         }
 
-//        LogManager.log("Setting character data: " + character.getName());
+//        LogManage r.log("Setting character data: " + character.getName());
 
+        this.character = character;
         this.setVisible(true);
         nameLabel.setText("Lvl " + character.getLevel() + " - " + character.getName());
 
@@ -94,6 +99,10 @@ public class CharacterStatusPanel extends JPanel {
         if (percentage >= 0.5) return Color.GREEN;
         else if (percentage > 0.2) return Color.YELLOW;
         else return Color.RED;
+    }
+
+    public Character getCharacter() {
+        return character;
     }
 }
 
