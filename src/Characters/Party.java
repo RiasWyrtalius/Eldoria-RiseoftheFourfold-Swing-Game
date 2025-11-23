@@ -49,6 +49,20 @@ public class Party {
         return null;
     }
 
+    public List<Character> getAliveMembers() {
+        if (this.partyMembers.isEmpty())
+            return null;
+
+        List<Character> aliveMembers = this.partyMembers.stream()
+                .filter(Character::isAlive)
+                .toList();
+
+        if (aliveMembers.isEmpty())
+            return null;
+
+        return aliveMembers;
+    }
+
     public Character getRandomAliveMember() {
         if (this.partyMembers.isEmpty())
             return null;
@@ -62,6 +76,24 @@ public class Party {
 
         int index = random.nextInt(aliveMembers.size());
         return aliveMembers.get(index);
+    }
+
+    public List<Character> getDeadMembers() {
+        if (this.partyMembers.isEmpty())
+            return null;
+
+        List<Character> deadMembers = this.partyMembers.stream()
+                .filter(new Predicate<Character>() {
+                    @Override
+                    public boolean test(Character character) {
+                        return !character.isAlive;
+                    }
+                }).toList();
+
+        if (deadMembers.isEmpty())
+            return null;
+
+        return deadMembers;
     }
 
     public Character getRandomDeadMember() {

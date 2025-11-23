@@ -33,6 +33,7 @@ public class CharacterStatusPanel extends JPanel {
         add(iconPanel);
     }
 
+
     public void setCharacterData(Character character) {
         if (character == null) {
             this.setVisible(false);

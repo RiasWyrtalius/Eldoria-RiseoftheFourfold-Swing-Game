@@ -70,13 +70,10 @@ public class BattleController {
         executeTurnCleanUp();
     }
 
+
+    // TODO: UI linkage HEHEHEHEHEH
     private void executeHeroTurn() {
-        List<Character> heroes = heroParty.getPartyMembers();
-        List<Character> enemies = enemyParty.getPartyMembers();
-
-        for (Character hero : heroes) {
-            if (!hero.isAlive()) continue; //skips defeated Heroes
-
+        for (Character hero : heroParty.getAliveMembers()) {
             System.out.println("\nIt is " + hero.getName() + "'s turn!");
             System.out.println("1. Attack\t2. Defend");
 
@@ -88,7 +85,7 @@ public class BattleController {
             }
 
             if (choice == 1) {
-                Character target = selectEnemyTarget(enemies);
+                Character target = selectEnemyTarget(enemyParty.getAliveMembers());
 
                 if (target != null) {
                     LogManager.log(hero.getName() + " attacks " + target.getName() + "!");
@@ -105,22 +102,16 @@ public class BattleController {
 
     private void executeEnemyPhase() {
         LogManager.log("\n+=============+"); //legit unnecessary fanciness..
-        LogManager.log("\n| ENEMY PHASE |");
+        LogManager.log("\n| ENEMY PHASE |"); // the right amount of fanciness :D
         LogManager.log("\n+=============+");
 
-        List<Character> heroes = heroParty.getPartyMembers();
-        List<Character> enemies = enemyParty.getPartyMembers();
+        for (Character enemy : enemyParty.getAliveMembers()) {
+//            you can just call getAliveHeroes
+            Character randomAliveHero = heroParty.getRandomAliveMember();
 
-        for (Character enemy : enemies) {
-            if (!enemy.isAlive()) continue;
+            if (randomAliveHero == null) break;
 
-            List<Character> aliveHeroes = heroes.stream().filter(Character::isAlive).toList();
-
-            if (aliveHeroes.isEmpty()) break;
-
-            Character target = aliveHeroes.get((int)(Math.random() * aliveHeroes.size()));
-
-            LogManager.log(enemy.getName() + " attacks " + target.getName() + "!");
+            LogManager.log(enemy.getName() + " attacks " + randomAliveHero.getName() + "!");
 
             //enemy.attack(target);
 
@@ -130,22 +121,19 @@ public class BattleController {
 
     private Character selectEnemyTarget(List<Character> enemies) {
         System.out.println("Select Target: ");
-        List<Character> aliveEnemies = enemies.stream().filter(Character::isAlive).toList();
-
-
-        for (int i = 0; i < aliveEnemies.size(); i++) {
-            System.out.println((i + 1) + ". " + aliveEnemies.get(i).getName() +
-                    " (HP: " + aliveEnemies.get(i).getHealth() + ")");
+        for (int i = 0; i < enemies.size(); i++) {
+            System.out.println((i + 1) + ". " + enemies.get(i).getName() +
+                    " (HP: " + enemies.get(i).getHealth() + ")");
         }
 
         int targetIndex = -1;
-        while(targetIndex < 0 || targetIndex >= aliveEnemies.size()) {
+        while(targetIndex < 0 || targetIndex >= enemies.size()) {
             System.out.print("Target #: ");
             if (scan.hasNextInt()) targetIndex = scan.nextInt() - 1;
             else scan.next();
         }
 
-        return aliveEnemies.get(targetIndex);
+        return enemies.get(targetIndex);
     }
 
     private void executeTurnCleanUp() {
@@ -166,4 +154,14 @@ public class BattleController {
             LogManager.log("DEFEAT! " + enemyParty.getPartyName() + " has wiped " + heroParty.getPartyName() + " out!");
         }
     }
+
+    // =============== PUBLIC GETTERS FOR UI ===============
+    public Party getHeroParty() {
+        return heroParty;
+    }
+
+    public Party getEnemyParty() {
+        return enemyParty;
+    }
+
 }
