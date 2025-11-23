@@ -3,6 +3,7 @@ package Abilities;
 import Characters.Character;
 
 import java.time.temporal.Temporal;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class Skill {
@@ -48,6 +49,15 @@ public class Skill {
     public SkillType getSkillType() {
         return skillType;
     }
+
+    public SkillAction getSkillAction() {
+        return skillAction;
+    }
+
+    public SkillTarget getSkillTarget() {
+        return skillTarget;
+    }
+
     public BiConsumer<Character, Character> getExecuteLogic() {
         return executeLogic;
     }

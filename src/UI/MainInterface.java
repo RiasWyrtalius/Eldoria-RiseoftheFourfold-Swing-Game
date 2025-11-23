@@ -1,6 +1,7 @@
 package UI;
 
 import Abilities.Skill;
+import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Party;
@@ -38,6 +39,7 @@ public class MainInterface extends JFrame{
     private BattleUIMode currentMode = BattleUIMode.HERO_SELECT;
     private Hero activeHero = null;
     private Skill selectedSkill = null;
+    private List<Enemy> selectedEnemies;
 
     private JPopupMenu skillMenu;
 
