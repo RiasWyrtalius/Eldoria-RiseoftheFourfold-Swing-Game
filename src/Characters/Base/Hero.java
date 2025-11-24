@@ -46,11 +46,6 @@ public class Hero extends Character {
         this.requiredXP = baseXP + (incrementXP * (level - 1));
         LogManager.log(this.name + " has leveled up to level " + this.level + "!");
     }
-//
-//    public static void attack(Character target) {
-//        //TODO: attack target
-//        System.out.println("hero attacks target"); //temporary
-//    }
 
     @Override
     protected void onDeath() {

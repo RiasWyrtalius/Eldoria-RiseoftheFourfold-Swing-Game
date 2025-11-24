@@ -30,9 +30,8 @@ public abstract class Enemy extends Character {
     @Override
     protected void onDefeat(Character finalAttacker) {
         if (finalAttacker instanceof Hero winner) {
+            LogManager.log(winner.getName() + " delivered the final blow to " + this.name + " and gained " + this.getRewardXP() + " XP!");
             winner.gainXP(this.getRewardXP()); // Grant XP to the winner
-
-            LogManager.log(winner.getName() + " delivered the final blow and gained " + this.getRewardXP() + " XP!");
             return;
         }
         LogManager.log("(ENEMY) :" + finalAttacker.getName() + " has slain " + "(ENEMY) : " + this.name + " DAMN!");

@@ -36,17 +36,16 @@ public abstract class Character {
 
     public void takeDamage(int damage, Character attacker) {
         this.health -= damage;
+        LogManager.log(this.name + " took " + damage + " damage from " + attacker.getName());
         if (this.health <= 0) {
-            die();
             onDefeat(attacker);
+            die();
         }
-        // TODO: Frontend logging for damage taken
     }
 
     public final void die() {
         this.health = 0;
         this.isAlive = false;
-        // TODO: Frontend for death
         onDeath();
     }
 

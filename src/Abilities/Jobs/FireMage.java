@@ -43,7 +43,7 @@ public class FireMage extends JobClass {
                         targetNames += ", ";
                     }
                 }
-                LogManager.log(user.getName() + " casts Fire Cyclone on " + targetNames + " and " + targets.getLast().getName() + " for " + calculateDamage + " each!");
+                LogManager.log(user.getName() + " casts Fire Cyclone on " + targetNames + " and " + targets.getLast().getName() + " for " + calculateDamage + " damage!");
             }
         };
 
