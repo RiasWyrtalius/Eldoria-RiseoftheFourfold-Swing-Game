@@ -4,10 +4,10 @@
 
 ---
 
-## Saja Boys:
-- Epilan, Gian Cedrick G.
-- Carillo, Samuel B.
-- Despues, Charlz David T.
+## Saja Boys: (usernames)
+- Epilan, Gian Cedrick G. (gOps132)
+- Carillo, Samuel B. (flurgerburger)
+- Despues, Charlz David T. (RiasWyrtalius)
 - Gerzon, Ythan Erik Jon F.
 - Delos Reyes, Kervin Curt B.
 
