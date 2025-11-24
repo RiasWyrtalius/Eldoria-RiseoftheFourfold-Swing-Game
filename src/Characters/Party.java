@@ -1,7 +1,9 @@
 package Characters;
 
+import Core.LogColor;
 import Core.LogManager;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -25,7 +27,7 @@ public class Party {
     public void addPartyMember(Character member) {
         if (member != null) {
             this.partyMembers.add(member);
-            LogManager.log(member.getName() + " joined " + partyName + "!");
+            LogManager.log(member.getName() + " joined " + partyName + "!", LogColor.PLAYER_JOIN);
         }
     }
 
@@ -36,7 +38,7 @@ public class Party {
     public boolean removePartyMember(Character member) {
         boolean removed = this.partyMembers.remove(member);
         if (removed) {
-            LogManager.log(member.getName() + " was removed from " + partyName + "!");
+            LogManager.log(member.getName() + " was removed from " + partyName + "!", Color.RED);
         }
         return removed;
     }

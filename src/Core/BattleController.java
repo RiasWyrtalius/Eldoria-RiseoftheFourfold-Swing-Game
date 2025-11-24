@@ -9,9 +9,7 @@ import UI.MainInterface;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class BattleController {
     private MainInterface mainView;
@@ -29,7 +27,9 @@ public class BattleController {
         this.turnCounter = 1;
         this.isBattleActive = true;
 
-        LogManager.log("--- BATTLE START ---");
+        LogManager.log("+==============+", LogColor.BATTLE_HEADER);
+        LogManager.log("|   BATTLE START   |", LogColor.BATTLE_HEADER);
+        LogManager.log("+==============+", LogColor.BATTLE_HEADER);
     }
 
     public boolean checkWin() {
@@ -42,7 +42,7 @@ public class BattleController {
     }
 
     private void resetTurnReadiness() {
-        LogManager.log("Turn " + turnCounter);
+        LogManager.log("Turn " + turnCounter, LogColor.TURN_INDICATOR);
         heroParty.setPartyExhaustion(false);
         enemyParty.setPartyExhaustion(false);
     }
@@ -98,7 +98,7 @@ public class BattleController {
             currentPhase = BattlePhase.HERO_ACTION_WAIT;
             turnCounter++;
             LogManager.log("");
-            LogManager.log("TURN " + turnCounter + " BEGINS");
+            LogManager.log("TURN " + turnCounter + " BEGINS", LogColor.TURN_INDICATOR);
 
             // pause here waiting for hero selection
         }
@@ -108,9 +108,9 @@ public class BattleController {
     }
 
     private void executeEnemyPhase() {
-        LogManager.log("+=============+", Color.RED); //legit unnecessary fanciness..
-        LogManager.log("| ENEMY PHASE |", Color.RED); // the right amount of fanciness :D
-        LogManager.log("+=============+", Color.RED);
+        LogManager.log("+=============+", LogColor.TURN_INDICATOR); //legit unnecessary fanciness..
+        LogManager.log("| ENEMY PHASE |", LogColor.TURN_INDICATOR); // the right amount of fanciness :D
+        LogManager.log("+=============+", LogColor.TURN_INDICATOR);
 
         currentPhase = BattlePhase.ENEMY_ACTION;
 
@@ -123,7 +123,7 @@ public class BattleController {
             int randomIndex = (int) (Math.random() * validTargets.size());
             Character target = validTargets.get(randomIndex);
 
-            LogManager.log(enemy.getName() + " attacks " + target.getName() + "!");
+            LogManager.log(enemy.getName() + " attacks " + target.getName() + "!", LogColor.ENEMY_ACTION);
 
             ((Enemy)enemy).makeAttack(validTargets);
 
@@ -136,8 +136,7 @@ public class BattleController {
 
     private void executeTurnCleanUp() {
         // TODO: mana regen, poison, etc.
-        // "will finish tomorrow" - Charlz
-        LogManager.log("Turn Cleanup: Mana Regenerated, Status Effect Ticked.");
+        LogManager.log("Turn Cleanup: Mana Regenerated, Status Effect Ticked.", LogColor.TURN_INDICATOR);
     }
 
     public void endBattle() {
@@ -145,13 +144,13 @@ public class BattleController {
         currentPhase = BattlePhase.BATTLE_ENDED;
 
         if (checkLose() && checkWin()) {
-            LogManager.log("TIE!: Truly everyone is dead and gone.");
+            LogManager.log("TIE!: Truly everyone is dead and gone.", LogColor.TIE);
             finalResult = BattleResult.TIE;
         } else if (checkWin()) {
-            LogManager.log("VICTORY! " + heroParty.getPartyName() + " is Triumphant!", Color.GREEN);
+            LogManager.log("VICTORY! " + heroParty.getPartyName() + " is Triumphant!", LogColor.VICTORY);
             finalResult = BattleResult.VICTORY;
         } else if (checkLose()) {
-            LogManager.log("DEFEAT! " + enemyParty.getPartyName() + " has wiped " + heroParty.getPartyName() + " out!");
+            LogManager.log("DEFEAT! " + enemyParty.getPartyName() + " has wiped " + heroParty.getPartyName() + " out!", LogColor.DEFEAT);
             finalResult = BattleResult.DEFEAT;
         }
 

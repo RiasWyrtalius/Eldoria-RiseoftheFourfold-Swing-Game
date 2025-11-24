@@ -1,8 +1,10 @@
 package Characters.Base;
 
 import Characters.Character;
+import Core.LogColor;
 import Core.LogManager;
 
+import java.awt.*;
 import java.util.List;
 
 // TODO: refine
@@ -24,17 +26,17 @@ public abstract class Enemy extends Character {
 
     @Override
     protected void onDeath() {
-        LogManager.log("(ENEMY) : " + this.name + " has died!");
+        LogManager.log("(ENEMY) : " + this.name + " has died!", LogColor.ENEMY_DEATH);
     }
 
     @Override
     protected void onDefeat(Character finalAttacker) {
         if (finalAttacker instanceof Hero winner) {
-            LogManager.log(winner.getName() + " delivered the final blow to " + this.name + " and gained " + this.getRewardXP() + " XP!");
+            LogManager.log(winner.getName() + " delivered the final blow to " + this.name + " and gained " + this.getRewardXP() + " XP!", Color.CYAN);
             winner.gainXP(this.getRewardXP()); // Grant XP to the winner
             return;
         }
-        LogManager.log("(ENEMY) :" + finalAttacker.getName() + " has slain " + "(ENEMY) : " + this.name + " DAMN!");
+        LogManager.log("(HERO) :" + finalAttacker.getName() + " has slain " + "(ENEMY) : " + this.name + " DAMN!");
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============

@@ -3,6 +3,7 @@ package Abilities.Jobs;
 import Abilities.*;
 
 import Characters.Character;
+import Core.LogColor;
 import Core.LogManager;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class Warrior extends JobClass {
                 int calculateDamage = (user.getBaseAtk() * 2);
                 Character target = targets.getFirst();
                 target.takeDamage(calculateDamage, user);
-                LogManager.log(user.getName() + " Bashes Shield on " + target.getName() + " for " + calculateDamage + " damage!");
+                LogManager.log(user.getName() + " Bashes Shield on " + target.getName() + " for " + calculateDamage + " damage!", LogColor.HERO_ACTION);
             }
         };
 
@@ -33,7 +34,7 @@ public class Warrior extends JobClass {
                 int calculateDamage = (user.getBaseAtk() * 2);
                 Character target = targets.getFirst();
                 target.takeDamage(calculateDamage, user);
-                LogManager.log(user.getName() + " Slashes on " + target.getName() + " for " + calculateDamage + " damage!");
+                LogManager.log(user.getName() + " Slashes on " + target.getName() + " for " + calculateDamage + " damage!", LogColor.HERO_ACTION);
             }
         };
 

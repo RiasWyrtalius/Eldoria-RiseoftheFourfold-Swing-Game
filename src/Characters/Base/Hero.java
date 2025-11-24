@@ -73,7 +73,7 @@ public class Hero extends Character {
                 }
             }
             LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on " +
-                    targetNames + " and " + targets.getLast().getName());
+                    targetNames + " and " + targets.getLast().getName(), Color.GREEN);
         }
 
         skill.execute(this, targets);

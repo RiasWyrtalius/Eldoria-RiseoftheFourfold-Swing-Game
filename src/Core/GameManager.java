@@ -89,7 +89,7 @@ public class GameManager {
         // dummy view to get the text area for synchronization reasons
         mainView = new MainInterface();
         LogManager.initialize(mainView.getGameLogPanelTextPane());
-        LogManager.log("Logger initialized with UI component");
+        LogManager.log("Logger initialized with UI component", LogColor.SYSTEM);
 
         createGameModel();
         battleController = new BattleController(heroParty, enemyParty);

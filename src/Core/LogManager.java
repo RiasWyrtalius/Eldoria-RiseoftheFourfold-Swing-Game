@@ -28,7 +28,7 @@ public class LogManager {
                 @Override
                 public void run() {
                     try {
-                        // Logic to add colored text
+                        //add colored text
                         StyledDocument doc = logComponent.getStyledDocument();
                         SimpleAttributeSet style = new SimpleAttributeSet();
                         StyleConstants.setForeground(style, color);
@@ -36,8 +36,6 @@ public class LogManager {
                         // Insert the message
                         doc.insertString(doc.getLength(), message, style);
 
-                        // Auto scroll
-                        // CORRECT
                         logComponent.setCaretPosition(doc.getLength());;
                     } catch (BadLocationException e) {
                         e.printStackTrace();

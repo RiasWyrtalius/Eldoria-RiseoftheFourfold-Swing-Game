@@ -1,5 +1,6 @@
 package Resource;
 
+import Core.LogColor;
 import Core.LogManager;
 
 import javax.swing.*;
@@ -52,7 +53,7 @@ public class AssetManager {
             Image scaledImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
             scaledIcon = new ImageIcon(scaledImg);
             imageCache.put(cachedKey, scaledIcon);
-            LogManager.log("AssetManager: retrieving cached " + cachedKey);
+            LogManager.log("AssetManager: retrieving cached " + cachedKey, LogColor.SYSTEM);
         } catch (Exception e) {
             LogManager.log("AssetManager ERROR: Failed to load/scale image '" + key + "'. Using fallback Icon");
             scaledIcon = createFallbackIcon(width, height);

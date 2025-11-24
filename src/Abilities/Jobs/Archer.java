@@ -4,6 +4,7 @@ import Abilities.JobClass;
 import Abilities.*;
 
 import Characters.Character;
+import Core.LogColor;
 import Core.LogManager;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class Archer extends JobClass {
                 int calculateDamage = (user.getBaseAtk() * 3);
                 Character target = targets.getFirst();
                 target.takeDamage(calculateDamage, user);
-                LogManager.log(user.getName() + " Unleashes array of Arrows at " + target.getName() + " for " + calculateDamage + " damage!");
+                LogManager.log(user.getName() + " Unleashes array of Arrows at " + target.getName() + " for " + calculateDamage + " damage!", LogColor.HERO_ACTION);
             }
         };
 
@@ -31,7 +32,7 @@ public class Archer extends JobClass {
                 int calculateDamage = (user.getBaseAtk() * 4);
                 Character target = targets.getFirst();
                 target.takeDamage(calculateDamage, user);
-                LogManager.log(user.getName() + " Pulls their Bow the hardest they can to release at " + target.getName() + " for " + calculateDamage + " damage!");
+                LogManager.log(user.getName() + " Pulls their bow the hardest they can to release at " + target.getName() + " for " + calculateDamage + " damage!", LogColor.HERO_ACTION);
             }
         };
 

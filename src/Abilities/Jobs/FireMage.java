@@ -3,6 +3,7 @@ package Abilities.Jobs;
 import Abilities.*;
 
 import Characters.Character;
+import Core.LogColor;
 import Core.LogManager;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class FireMage extends JobClass {
                 int calculateDamage = (user.getBaseAtk() * 2);
                 Character target = targets.getFirst();
                 target.takeDamage(calculateDamage, user);
-                LogManager.log(user.getName() + " casts Fireball on " + target.getName() + " for " + calculateDamage + " damage!");
+                LogManager.log(user.getName() + " casts Fireball on " + target.getName() + " for " + calculateDamage + " damage!", LogColor.HERO_ACTION);
             }
         };
 
@@ -43,7 +44,7 @@ public class FireMage extends JobClass {
                         targetNames += ", ";
                     }
                 }
-                LogManager.log(user.getName() + " casts Fire Cyclone on " + targetNames + " and " + targets.getLast().getName() + " for " + calculateDamage + " damage!");
+                LogManager.log(user.getName() + " casts Fire Cyclone on " + targetNames + " and " + targets.getLast().getName() + " for " + calculateDamage + " damage!", LogColor.HERO_ACTION);
             }
         };
 
