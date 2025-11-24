@@ -12,29 +12,24 @@ import java.util.function.BiConsumer;
 
 
 public class EarthMage extends JobClass {
-    public EarthMage(){super("Earth Mage","Wields stone and earth as its magic",0,0 );}
+    public EarthMage(){
+        super("Earth Mage","Wields stone and earth as its magic",0,0 );
+    }
     public List<Skill> createSkills() {
-
-
         FullExecuteConsumer earthquakeSpellLogic = (skill, user, targets) -> {
-            int calculateDamage = (user.getBaseAtk() * 3);
-            Character target = targets.getFirst();
-
-            LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
-
-            for (Character t : targets) {
+            int calculateDamage = (user.getBaseAtk() * 4);
+            for(Character t : targets) {
                 t.takeDamage(calculateDamage, user);
             }
+
+            LogManager.log(skill.getActionLog(user, "Shakes the earth under", targets, calculateDamage), LogColor.HERO_ACTION);
         };
 
-
-        FullExecuteConsumer stoneHailLogic= (skill, user, targets) -> {
+        FullExecuteConsumer stoneHailLogic = (skill, user, targets) -> {
             int calculateDamage = (user.getBaseAtk() * 2);
             Character target = targets.getFirst();
-
-            LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
-
             target.takeDamage(calculateDamage, user);
+            LogManager.log(skill.getActionLog(user, "Multitudes of earth crumbles down on", targets, calculateDamage), LogColor.HERO_ACTION);
         };
 
 
