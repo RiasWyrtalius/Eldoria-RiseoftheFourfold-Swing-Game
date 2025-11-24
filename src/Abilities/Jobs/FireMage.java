@@ -21,13 +21,21 @@ public class FireMage extends JobClass {
         AssetManager.getInstance().registerAnimation(
                 "MAGE_IDLE",
                 "Assets/Animations/Mage/Idle/sprite_%d.png",
-                5, 100, 100 , 150,
+                5, 100, 100 , 300,
                 AnimationLoopType.INFINITE
+        );
+
+        AssetManager.getInstance().registerAnimation(
+                "FIREBALL",
+                "Assets/Animations/FireBall/sprite_%d.png",
+                6, 100,100, 150,
+                AnimationLoopType.ONE_CYCLE
         );
     }
 
     public List<Skill> createSkills() {
 
+        // TODO: apply VFX on a target using panel overlay
         FullExecuteConsumer fireBallLogic = (skill, user, targets) -> {
             int calculateDamage = (user.getBaseAtk() * 2);
             Character target = targets.getFirst();
@@ -35,6 +43,7 @@ public class FireMage extends JobClass {
             LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
 
             target.takeDamage(calculateDamage, user);
+
         };
 
         FullExecuteConsumer fireCycloneLogic = (skill, user, targets) -> {

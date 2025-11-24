@@ -32,6 +32,7 @@ public class Animation {
         this.loopsCompleted = 0;
         this.isFinishedFlag = false;
     }
+
     // =============== PUBLIC GETTERS ===============
     /**
      * Advances frame and returns the next frame to draw

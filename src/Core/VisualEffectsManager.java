@@ -18,6 +18,7 @@ import java.util.Map;
 public class VisualEffectsManager {
     private static final VisualEffectsManager INSTANCE = new VisualEffectsManager();
     private final Map<JLabel, Timer> activeAnimationTimers = new HashMap<>();
+    private final Map<JLabel, String> runningAnimationIDs = new HashMap<>();
 
     private VisualEffectsManager() {}
 
@@ -55,21 +56,34 @@ public class VisualEffectsManager {
         });
 
         activeAnimationTimers.put(displayLabel, timer);
-        LogManager.log("start timer");
+        runningAnimationIDs.put(displayLabel, animationId);
+
+        LogManager.log("Starting animation: " + animationId);
         timer.start();
     }
 
     // tells if animation is static or not
     public void applyVisual(VisualAsset asset, JLabel displayLabel) {
+        // check if the right animation is already running
+        if (asset.isAnimation() && runningAnimationIDs.containsKey(displayLabel)) {
+            String currentId = runningAnimationIDs.get(displayLabel);
+
+            if (currentId != null && currentId.equals(asset.key())) {
+                return;
+            }
+        }
+
         if (activeAnimationTimers.containsKey(displayLabel)) {
-            LogManager.log("stop remove timer");
-            activeAnimationTimers.get(displayLabel).stop();
+            Timer oldTimer = activeAnimationTimers.get(displayLabel);
+            oldTimer.stop();
             activeAnimationTimers.remove(displayLabel);
+            runningAnimationIDs.remove(displayLabel); // Clean the ID tracker
         }
 
         if (asset.isAnimation()) {
             startSpriteAnimation(asset.key(), displayLabel);
         } else {
+            // Static image logic
             int w = 100;
             int h = 100;
 
@@ -86,6 +100,8 @@ public class VisualEffectsManager {
         }
 
         activeAnimationTimers.clear();
+        runningAnimationIDs.clear();
+
 
         LogManager.log("All active animation timers have been stopped.", java.awt.Color.BLUE);
     }

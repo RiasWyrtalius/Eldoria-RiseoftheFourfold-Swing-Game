@@ -5,6 +5,7 @@ import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Party;
+import Resource.AssetManager;
 import UI.MainInterface;
 
 import javax.swing.*;
@@ -153,6 +154,8 @@ public class BattleController {
             LogManager.log("DEFEAT! " + enemyParty.getPartyName() + " has wiped " + heroParty.getPartyName() + " out!", LogColor.DEFEAT);
             finalResult = BattleResult.DEFEAT;
         }
+
+        VisualEffectsManager.getInstance().stopAllTimers();
 
         if (this.mainView != null) {
             this.mainView.refreshUI();
