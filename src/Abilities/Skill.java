@@ -5,6 +5,7 @@ import Characters.Character;
 import java.time.temporal.Temporal;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public class Skill {
     private String name;
@@ -14,9 +15,9 @@ public class Skill {
     private SkillType skillType;
     private SkillAction skillAction;
     private SkillTarget skillTarget;
-    private final BiConsumer<Character, List<Character>> executeLogic;
+    private final FullExecuteConsumer executeLogic;
 
-    public Skill(String name, String effect, int manaCost, int power, SkillType skillType, SkillAction skillAction, SkillTarget skillTarget, BiConsumer<Character, List<Character>> executeLogic) {
+    public Skill(String name, String effect, int manaCost, int power, SkillType skillType, SkillAction skillAction, SkillTarget skillTarget, FullExecuteConsumer executeLogic) {
         this.name = name;
         this.effect = effect;
         this.manaCost = manaCost;
@@ -29,14 +30,30 @@ public class Skill {
 
     public void execute(Character user, List<Character> target) {
         if (user.spendMana(this.manaCost)) {
-            executeLogic.accept(user, target);
+            executeLogic.accept(this, user, target);
         }
     }
 
-    public void setExecuteLogic(Character user, List<Character> target) {
-        if (user.spendMana(this.manaCost)) {
-            executeLogic.accept(user, target);
-        }
+    public String getActionLog(Character user, String action, List<Character> targets, int damage) {
+        String targetNames = formatTargetList(targets);
+
+        String logMessage = String.format("%s %s %s on %s for %d damage!",
+                user.getName(),
+                action,
+                this.getName(),
+                targetNames,
+                damage
+        );
+
+        return logMessage;
+    }
+
+    String formatTargetList(List<Character> targets) {
+        if (targets.isEmpty()) return "no target";
+
+        return targets.stream()
+                .map(Character::getName)
+                .collect(Collectors.joining(", ", "", ""));
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============
@@ -64,7 +81,7 @@ public class Skill {
         return skillTarget;
     }
 
-    public BiConsumer<Character, List<Character>> getExecuteLogic() {
+    public FullExecuteConsumer getExecuteLogic() {
         return executeLogic;
     }
 }

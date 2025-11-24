@@ -14,26 +14,18 @@ import java.util.function.BiConsumer;
 public class Archer extends JobClass {
     public Archer(){super("Archer","Attacks from a range with their Bow and Arrow",0,0 );}
     public List<Skill> createSkills() {
-        BiConsumer<Character, List<Character>> rapidFireLogic = new BiConsumer<Character, List<Character>>() {
-            @Override
-            public void accept(Character user, List<Character> targets) {
-                // TODO: Damage calculations and logging
-                int calculateDamage = (user.getBaseAtk() * 3);
-                Character target = targets.getFirst();
-                target.takeDamage(calculateDamage, user);
-                LogManager.log(user.getName() + " Unleashes array of Arrows at " + target.getName() + " for " + calculateDamage + " damage!", LogColor.HERO_ACTION);
-            }
+        FullExecuteConsumer rapidFireLogic = (skill, user, targets) -> {
+            int calculateDamage = (user.getBaseAtk() * 3);
+            Character target = targets.getFirst();
+            target.takeDamage(calculateDamage, user);
+            LogManager.log(skill.getActionLog(user, "Unleashes array of Arrows at", targets, calculateDamage), LogColor.HERO_ACTION);
         };
 
-        BiConsumer<Character, List<Character>> heavyArrowLogic = new BiConsumer<Character, List<Character>>() {
-            @Override
-            public void accept(Character user, List<Character> targets) {
-                // TODO: Damage calculations and logging
-                int calculateDamage = (user.getBaseAtk() * 4);
-                Character target = targets.getFirst();
-                target.takeDamage(calculateDamage, user);
-                LogManager.log(user.getName() + " Pulls their bow the hardest they can to release at " + target.getName() + " for " + calculateDamage + " damage!", LogColor.HERO_ACTION);
-            }
+        FullExecuteConsumer heavyArrowLogic = (skill, user, targets) -> {
+            int calculateDamage = (user.getBaseAtk() * 4);
+            Character target = targets.getFirst();
+            target.takeDamage(calculateDamage, user);
+            LogManager.log(skill.getActionLog(user, " Pulls their bow the hardest they can to release at ", targets, calculateDamage), LogColor.HERO_ACTION);
         };
 
 

@@ -2,12 +2,14 @@ package Abilities.Jobs;
 
 import Abilities.*;
 
+import Characters.Base.Hero;
 import Characters.Character;
 import Core.LogColor;
 import Core.LogManager;
 
 import java.util.List;
 import java.util.function.BiConsumer;
+
 
 public class FireMage extends JobClass {
 
@@ -17,34 +19,23 @@ public class FireMage extends JobClass {
     }
 
     public List<Skill> createSkills() {
-        BiConsumer<Character, List<Character>> fireBallLogic = new BiConsumer<Character, List<Character>>() {
-            @Override
-            public void accept(Character user, List<Character> targets) {
-                // TODO: Damage calculations and logging
-                int calculateDamage = (user.getBaseAtk() * 2);
-                Character target = targets.getFirst();
-                target.takeDamage(calculateDamage, user);
-                LogManager.log(user.getName() + " casts Fireball on " + target.getName() + " for " + calculateDamage + " damage!", LogColor.HERO_ACTION);
-            }
+
+        FullExecuteConsumer fireBallLogic = (skill, user, targets) -> {
+            int calculateDamage = (user.getBaseAtk() * 2);
+            Character target = targets.getFirst();
+
+            LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
+
+            target.takeDamage(calculateDamage, user);
         };
 
-        BiConsumer<Character, List<Character>> fireCycloneLogic = new BiConsumer<Character, List<Character>>() {
-            @Override
-            public void accept(Character user, List<Character> targets) {
-                // TODO: Damage calculations and logging
-                int calculateDamage = (user.getBaseAtk() * 2);
-                for(Character t : targets) {
-                    t.takeDamage(calculateDamage, user);
-                }
+        FullExecuteConsumer fireCycloneLogic = (skill, user, targets) -> {
+            int calculateDamage = (user.getBaseAtk() * 2);
 
-                String targetNames = "";
-                for (int i = 0; i < targets.size()-1; i++) {
-                    targetNames += targets.get(i).getName();
-                    if (i < targets.size() - 1) {
-                        targetNames += ", ";
-                    }
-                }
-                LogManager.log(user.getName() + " casts Fire Cyclone on " + targetNames + " and " + targets.getLast().getName() + " for " + calculateDamage + " damage!", LogColor.HERO_ACTION);
+            LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
+
+            for (Character t : targets) {
+                t.takeDamage(calculateDamage, user);
             }
         };
 
@@ -60,7 +51,7 @@ public class FireMage extends JobClass {
                 fireCycloneLogic
         );
 
-        return List.of(fireball,fireCyclone);
+        return List.of(fireball, fireCyclone);
     }
 
 }

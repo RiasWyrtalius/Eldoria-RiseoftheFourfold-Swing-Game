@@ -30,6 +30,14 @@ public abstract class JobClass {
     public List<Skill> getSkills() {
         return skills;
     }
+
+    public Skill getSkill(String skillName) {
+        return this.skills.stream()
+                .filter(skill -> skill.getName().equalsIgnoreCase(skillName))
+                .findFirst()
+                .orElse(null);
+    }
+
     public int getHpBonus() {
         return hpBonus;
     }
@@ -40,4 +48,5 @@ public abstract class JobClass {
     public String getDescription() {
         return description;
     }
+
 }

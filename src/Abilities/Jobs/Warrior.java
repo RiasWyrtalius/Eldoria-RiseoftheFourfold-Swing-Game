@@ -16,26 +16,18 @@ public class Warrior extends JobClass {
     }
 
     public List<Skill> createSkills() {
-        BiConsumer<Character, List<Character>> shieldBashLogic = new BiConsumer<Character, List<Character>>() {
-            @Override
-            public void accept(Character user, List<Character> targets) {
-                // TODO: Damage calculations and logging
-                int calculateDamage = (user.getBaseAtk() * 2);
-                Character target = targets.getFirst();
-                target.takeDamage(calculateDamage, user);
-                LogManager.log(user.getName() + " Bashes Shield on " + target.getName() + " for " + calculateDamage + " damage!", LogColor.HERO_ACTION);
-            }
+        FullExecuteConsumer shieldBashLogic = (skill, user, targets) -> {
+            int calculateDamage = (user.getBaseAtk() * 2);
+            Character target = targets.getFirst();
+            target.takeDamage(calculateDamage, user);
+            LogManager.log(skill.getActionLog(user, " Bashes Shield on ", targets, calculateDamage), LogColor.HERO_ACTION);
         };
 
-        BiConsumer<Character, List<Character>> swordSlashLogic = new BiConsumer<Character, List<Character>>() {
-            @Override
-            public void accept(Character user, List<Character> targets) {
-                // TODO: Damage calculations and logging
-                int calculateDamage = (user.getBaseAtk() * 2);
-                Character target = targets.getFirst();
-                target.takeDamage(calculateDamage, user);
-                LogManager.log(user.getName() + " Slashes on " + target.getName() + " for " + calculateDamage + " damage!", LogColor.HERO_ACTION);
-            }
+        FullExecuteConsumer swordSlashLogic = (skill, user, targets) -> {
+            int calculateDamage = (user.getBaseAtk() * 2);
+            Character target = targets.getFirst();
+            target.takeDamage(calculateDamage, user);
+            LogManager.log(skill.getActionLog(user, " Slashes on ", targets, calculateDamage), LogColor.HERO_ACTION);
         };
 
         Skill ShieldBash = new Skill(
