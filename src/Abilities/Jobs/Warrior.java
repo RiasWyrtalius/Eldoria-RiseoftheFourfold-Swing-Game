@@ -39,13 +39,13 @@ public class Warrior extends JobClass {
         };
 
         Skill ShieldBash = new Skill(
-                "Shield Bash", "Single-target fire spell", 15, 20,
+                "Shield Bash", "Single-target Shield attack", 15, 20,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
                 shieldBashLogic
         );
 
         Skill SwordSlash = new Skill(
-                "Sword Slash", "Single-target fire spell", 20, 30,
+                "Sword Slash", "Single-target Sword Slash", 20, 30,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
                 swordSlashLogic
         );
