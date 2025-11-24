@@ -1,108 +1,123 @@
-package UI.Components;
+    package UI.Components;
 
-import Characters.Base.Hero;
-import Characters.Character;
-import Characters.Party;
-import Core.LogManager;
-import Resource.AssetManager;
-import UI.MainInterface;
+    import Characters.Base.Hero;
+    import Characters.Character;
+    import Characters.Party;
+    import Core.LogManager;
+    import Core.VisualAsset;
+    import Core.VisualEffectsManager;
+    import Resource.AssetManager;
+    import UI.MainInterface;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+    import javax.swing.*;
+    import java.awt.*;
+    import java.awt.event.MouseAdapter;
+    import java.awt.event.MouseEvent;
 
-public class CharacterStatusPanel extends JPanel {
-    private Character character;
-    private JLabel nameLabel;
-    private JProgressBar hpBar;
-    private JProgressBar manaBar;
-    private JPanel iconPanel;
+    public class CharacterStatusPanel extends JPanel {
+        private Character character;
+        private JLabel nameLabel;
+        private JProgressBar hpBar;
+        private JProgressBar manaBar;
+        private final JLabel iconDisplayLabel;
+        private JPanel iconPanel;
 
-    public CharacterStatusPanel(MainInterface parentInterface) {
-        nameLabel = new JLabel("N/A - Lvl 0");
-        hpBar = new JProgressBar();
-        manaBar = new JProgressBar();
-        iconPanel = new JPanel();
 
-        MouseAdapter clickAdapter = attachListener(parentInterface);
-        this.addMouseListener(clickAdapter);
+        public CharacterStatusPanel(MainInterface parentInterface) {
+            nameLabel = new JLabel("N/A - Lvl 0");
+            hpBar = new JProgressBar();
+            manaBar = new JProgressBar();
+            iconDisplayLabel = new JLabel();
+            iconPanel = new JPanel();
 
-        nameLabel.setOpaque(false);
-        iconPanel.setOpaque(false);
 
-        hpBar.setOpaque(false);
-        manaBar.setOpaque(false);
+            MouseAdapter clickAdapter = attachListener(parentInterface);
+            this.addMouseListener(clickAdapter);
 
-        nameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
-        nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            nameLabel.setOpaque(false);
+            iconPanel.setOpaque(false);
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        iconPanel.setLayout(new CardLayout());
-        iconPanel.addMouseListener(clickAdapter);
+            hpBar.setOpaque(false);
+            manaBar.setOpaque(false);
 
-        nameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        hpBar.setStringPainted(true);
-        manaBar.setStringPainted(true);
+            nameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
+            nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
-        add(nameLabel);
-        add(hpBar);
-        add(manaBar);
-        add(iconPanel);
-    }
+            iconDisplayLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-    private MouseAdapter attachListener(MainInterface parentInterface) {
-        return new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (character != null) {
-                    parentInterface.onCharacterPanelClick(character);
-                }
-            }
-        };
-    }
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            iconPanel.setLayout(new CardLayout());
+            iconPanel.add(iconDisplayLabel, "Icon");
+            iconPanel.addMouseListener(clickAdapter);
 
-    public void setCharacterData(Character character) {
-        if (character == null) {
-            this.setVisible(false);
-            return;
+            nameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            hpBar.setStringPainted(true);
+            manaBar.setStringPainted(true);
+
+            add(nameLabel);
+            add(hpBar);
+            add(manaBar);
+            add(iconPanel);
         }
 
-//        LogManage r.log("Setting character data: " + character.getName());
+        private MouseAdapter attachListener(MainInterface parentInterface) {
+            return new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (character != null) {
+                        parentInterface.onCharacterPanelClick(character);
+                    }
+                }
+            };
+        }
 
-        this.character = character;
-        this.setVisible(true);
-        nameLabel.setText("Lvl " + character.getLevel() + " - " + character.getName());
+        public void setCharacterData(Character character) {
+            if (character == null) {
+                this.setVisible(false);
+                VisualEffectsManager.getInstance().stopAllTimers();
+                getIconDisplayLabel().setIcon(null);
+                return;
+            }
 
-        hpBar.setMaximum(character.getInitialHealth());
-        hpBar.setValue(character.getHealth());
-        hpBar.setString(character.getHealth() + "/" + character.getInitialHealth());
-        hpBar.setForeground(barState(character.getHealth(), character.getInitialHealth()));
+            this.character = character;
+            this.setVisible(true);
+            nameLabel.setText("Lvl " + character.getLevel() + " - " + character.getName());
 
-        manaBar.setMaximum(character.getMaxMana());
-        manaBar.setValue(character.getMana());
-        manaBar.setString(character.getMana() + "/" + character.getMaxMana());
-        manaBar.setForeground(barState(character.getMana(), character.getMaxMana()));
+            hpBar.setMaximum(character.getInitialHealth());
+            hpBar.setValue(character.getHealth());
+            hpBar.setString(character.getHealth() + "/" + character.getInitialHealth());
+            hpBar.setForeground(barState(character.getHealth(), character.getInitialHealth()));
 
-        JLabel iconLabel = new JLabel(AssetManager.getInstance().getImage(character.getImageKey(), 100, 100));
-        iconPanel.add(iconLabel);
+            manaBar.setMaximum(character.getMaxMana());
+            manaBar.setValue(character.getMana());
+            manaBar.setString(character.getMana() + "/" + character.getMaxMana());
+            manaBar.setForeground(barState(character.getMana(), character.getMaxMana()));
 
-        // handle dead or alive
-        this.setBackground(character.isAlive() ? getBackground() : Color.gray);
+            String visualId = character.getImageKey();
+            VisualAsset assetData = AssetManager.getInstance().getVisualAssetData(visualId);
+
+            VisualEffectsManager.getInstance().applyVisual(assetData, iconDisplayLabel);
+
+            // handle dead or alive
+            this.setBackground(character.isAlive() ? getBackground() : Color.gray);
+        }
+
+        private Color barState(int current, int max) {
+            if (max == 0) return Color.GRAY;
+
+            double percentage = (double) current / max;
+
+            if (percentage >= 0.5) return Color.GREEN;
+            else if (percentage > 0.2) return Color.YELLOW;
+            else return Color.RED;
+        }
+
+        public Character getCharacter() {
+            return character;
+        }
+
+        public JLabel getIconDisplayLabel() {
+            return iconDisplayLabel;
+        }
     }
-
-    private Color barState(int current, int max) {
-        if (max == 0) return Color.GRAY;
-
-        double percentage = (double) current / max;
-
-        if (percentage >= 0.5) return Color.GREEN;
-        else if (percentage > 0.2) return Color.YELLOW;
-        else return Color.RED;
-    }
-
-    public Character getCharacter() {
-        return character;
-    }
-}
 

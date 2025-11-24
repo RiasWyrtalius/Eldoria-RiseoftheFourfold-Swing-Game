@@ -6,6 +6,8 @@ import Characters.Base.Hero;
 import Characters.Character;
 import Core.LogColor;
 import Core.LogManager;
+import Resource.AnimationLoopType;
+import Resource.AssetManager;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -16,6 +18,12 @@ public class FireMage extends JobClass {
     public FireMage() {
         super("Fire Mage", "Wields fire", 0, 0);
 
+        AssetManager.getInstance().registerAnimation(
+                "MAGE_IDLE",
+                "Assets/Animations/Mage/Idle/sprite_%d.png",
+                5, 100, 100 , 150,
+                AnimationLoopType.INFINITE
+        );
     }
 
     public List<Skill> createSkills() {

@@ -7,6 +7,8 @@ import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Enemies.Goblin;
 import Characters.Party;
+import Resource.AnimationLoopType;
+import Resource.AssetManager;
 import UI.MainInterface;
 import UI.MainMenu;
 
@@ -48,7 +50,7 @@ public class GameManager {
         };
 
         FireMage fireMage = new FireMage();
-        Character sam = new Hero("Sammie Wammy", 100, 60, 120, 1, fireMage, "Assets/Images/bstudios.png") {
+        Character sam = new Hero("Sammie Wammy", 100, 60, 120, 1, fireMage, "MAGE_IDLE") {
             @Override
             protected void onDeath() {
 

@@ -1,7 +1,7 @@
 package Resource;
 
 public enum AnimationLoopType {
-    INFINITE_FOREVER(-1),
+    INFINITE(-1),
     ONE_CYCLE(1),
     TWO_CYCLES(2);
 

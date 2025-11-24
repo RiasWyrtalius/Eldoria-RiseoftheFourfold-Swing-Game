@@ -2,6 +2,7 @@ package Resource;
 
 import Core.LogColor;
 import Core.LogManager;
+import Core.VisualAsset;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,12 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 public class AssetManager {
-    private final Map<String, Animation> animationRepository;
-
     /**
      * Singleton
      */
     private static final AssetManager INSTANCE = new AssetManager();
+    private final Map<String, Animation> animationRepository;
     private final Map<String, ImageIcon> imageCache;
 
     private AssetManager() {
@@ -134,4 +134,17 @@ public class AssetManager {
         return animationRepository.get(animationId);
     }
 
+    public boolean isAnimation(String visualId) {
+        return animationRepository.containsKey(visualId);
+    }
+
+    /**
+     * Retrieves visual data for da given ID.
+     * @param visualId
+     * @return record containing the ID and boolean flag for animation
+     */
+    public VisualAsset getVisualAssetData(String visualId) {
+        boolean isAnimation = animationRepository.containsKey(visualId);
+        return new VisualAsset(visualId, isAnimation);
+    }
 }

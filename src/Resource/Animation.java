@@ -48,14 +48,13 @@ public class Animation {
 
             int requiredLoops = loopType.getLoopCountValue();
 
-            if (requiredLoops != AnimationLoopType.INFINITE_FOREVER.getLoopCountValue() && loopsCompleted >= requiredLoops) {
+            if (requiredLoops != AnimationLoopType.INFINITE.getLoopCountValue() && loopsCompleted >= requiredLoops) {
                 isFinishedFlag = true;
                 // Ensure that the last frame is shown lol
                 return frames.get(totalFrames - 1);
             }
         }
 
-        currentFrameIndex = (currentFrameIndex + 1) % totalFrames;
         return frames.get(currentFrameIndex);
     }
 
