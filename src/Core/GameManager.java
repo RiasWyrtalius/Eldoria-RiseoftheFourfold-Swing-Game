@@ -1,5 +1,6 @@
 package Core;
 
+import Abilities.Jobs.Archer;
 import Abilities.Jobs.FireMage;
 import Abilities.Jobs.Warrior;
 import Characters.Base.Hero;
@@ -59,8 +60,22 @@ public class GameManager {
             }
         };
 
+        Archer archer = new Archer();
+        Character gianmeni = new Hero("Gian Meni",80,70,100,1,archer,"Assets/Images/bstudios.png"){
+            @Override
+            protected void onDeath() {
+
+            }
+
+            @Override
+            protected void onDefeat(Character defeatedTarget) {
+
+            }
+        };
+
         heroParty.addPartyMember(charlie);
         heroParty.addPartyMember(sam);
+        heroParty.addPartyMember(gianmeni);
 
         //TEMPORARY ENEMY SETUP
         enemyParty = new Party("Swarm of Goblins");
