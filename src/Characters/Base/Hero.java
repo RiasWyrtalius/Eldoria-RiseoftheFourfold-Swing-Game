@@ -5,6 +5,7 @@ import Abilities.Skill;
 import Characters.Character;
 import Core.LogManager;
 
+import java.awt.*;
 import java.util.List;
 
 public class Hero extends Character {
@@ -54,12 +55,14 @@ public class Hero extends Character {
 
     @Override
     protected void onDefeat(Character finalAttacker) {
-        LogManager.log("(ENEMY) :" + finalAttacker.getName() + " has slain " + "(HERO) : " + this.name);
+        LogManager.log("(ENEMY) : " + finalAttacker.getName(), Color.RED);
+        LogManager.log(" has slain ", Color.BLACK);
+        LogManager.log("(HERO) : " + this.name, Color.BLUE);
     }
 
     public void useSkill(Skill skill, List<Character> targets) {
         if (targets.size() == 1) {
-            LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on "
+            LogManager.log(this.name + " is attempting to use " + skill.getName() + " on "
                 + targets.getFirst().getName() + ".");
         } else if (targets.size() > 1) {
             String targetNames = "";

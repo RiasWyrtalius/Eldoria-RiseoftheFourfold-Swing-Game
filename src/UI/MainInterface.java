@@ -26,7 +26,7 @@ public class MainInterface extends JFrame{
     private BattleController battleController;
 
     private JPanel contentPanel;
-    private JTextArea GameLogPanelTextArea;
+    private JTextPane GameLogPanelTextPane;
 
     private JLabel heroPartyLabel;
     private JPanel heroPartyPanel1;
@@ -69,7 +69,7 @@ public class MainInterface extends JFrame{
         // shows when battle ends and heroes win to
         descendPanel.setVisible(false);
 
-        GameLogPanelTextArea.setEditable(false);
+        GameLogPanelTextPane.setEditable(false);
         heroPartyPanels = Arrays.asList(heroPartyPanel1, heroPartyPanel2, heroPartyPanel3, heroPartyPanel4);
         enemyPartyPanels = Arrays.asList(enemyPartyPanel1, enemyPartyPanel2, enemyPartyPanel3, enemyPartyPanel4);
     }
@@ -345,7 +345,7 @@ public class MainInterface extends JFrame{
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============
-    public JTextArea getGameLogPanelTextArea() {
-        return GameLogPanelTextArea;
+    public JTextPane getGameLogPanelTextPane() {
+        return GameLogPanelTextPane;
     }
 }

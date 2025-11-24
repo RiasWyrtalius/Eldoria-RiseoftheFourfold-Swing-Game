@@ -308,7 +308,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="cbc4b" class="javax.swing.JTextArea" binding="GameLogPanelTextArea">
+                          <component id="3014b" class="javax.swing.JTextPane" binding="GameLogPanelTextPane">
                             <constraints/>
                             <properties/>
                           </component>

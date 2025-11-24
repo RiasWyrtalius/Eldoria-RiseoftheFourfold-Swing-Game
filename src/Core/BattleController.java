@@ -8,6 +8,7 @@ import Characters.Party;
 import UI.MainInterface;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -107,9 +108,9 @@ public class BattleController {
     }
 
     private void executeEnemyPhase() {
-        LogManager.log("\n+=============+"); //legit unnecessary fanciness..
-        LogManager.log("\n| ENEMY PHASE |"); // the right amount of fanciness :D
-        LogManager.log("\n+=============+");
+        LogManager.log("+=============+", Color.RED); //legit unnecessary fanciness..
+        LogManager.log("| ENEMY PHASE |", Color.RED); // the right amount of fanciness :D
+        LogManager.log("+=============+", Color.RED);
 
         currentPhase = BattlePhase.ENEMY_ACTION;
 
@@ -147,7 +148,7 @@ public class BattleController {
             LogManager.log("TIE!: Truly everyone is dead and gone.");
             finalResult = BattleResult.TIE;
         } else if (checkWin()) {
-            LogManager.log("VICTORY! " + heroParty.getPartyName() + " is Triumphant!");
+            LogManager.log("VICTORY! " + heroParty.getPartyName() + " is Triumphant!", Color.GREEN);
             finalResult = BattleResult.VICTORY;
         } else if (checkLose()) {
             LogManager.log("DEFEAT! " + enemyParty.getPartyName() + " has wiped " + heroParty.getPartyName() + " out!");
