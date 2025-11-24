@@ -55,7 +55,7 @@ public class AssetManager {
             imageCache.put(cachedKey, scaledIcon);
             LogManager.log("AssetManager: retrieving cached " + cachedKey, LogColor.SYSTEM);
         } catch (Exception e) {
-            LogManager.log("AssetManager ERROR: Failed to load/scale image '" + key + "'. Using fallback Icon");
+            LogManager.log("AssetManager ERROR: Failed to load/scale image '" + key + "'. Using fallback Icon", LogColor.SYSTEM);
             scaledIcon = createFallbackIcon(width, height);
             imageCache.put(cachedKey, scaledIcon);
         }
