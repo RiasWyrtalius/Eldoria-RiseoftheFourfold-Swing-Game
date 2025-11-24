@@ -8,14 +8,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Acts as a controller bridge between game state and the view's initialization logic
  */
 public class VisualEffectsManager {
     private static final VisualEffectsManager INSTANCE = new VisualEffectsManager();
-    private final List<Timer> runningTimers = new ArrayList<>();
+    private final Map<JLabel, Timer> activeAnimationTimers = new HashMap<>();
 
     private VisualEffectsManager() {}
 
@@ -35,24 +37,35 @@ public class VisualEffectsManager {
 
         displayLabel.setIcon(animation.getCurrentFrame());
 
-        Timer timer = new Timer(animation.getFrameDurationMs(), e -> {
-            if (animation.isFinished()) {
-                ((Timer)e.getSource()).stop();
-                runningTimers.remove(e.getSource());
-                return;
+        Timer timer = new Timer(animation.getFrameDurationMs(), new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (animation.isFinished()) {
+                    Timer finishedTimer = (Timer)e.getSource();
+                    finishedTimer.stop();
+                    activeAnimationTimers.entrySet().removeIf(entry -> entry.getValue() == finishedTimer);
+
+                    LogManager.log("animation finished");
+                    return;
+                }
+                displayLabel.setIcon(animation.getNextFrame());
+                displayLabel.revalidate();
+                displayLabel.repaint();
             }
-            LogManager.log("nextframe");
-            displayLabel.setIcon(animation.getNextFrame());
-            displayLabel.repaint();
         });
-        runningTimers.add(timer);
+
+        activeAnimationTimers.put(displayLabel, timer);
+        LogManager.log("start timer");
         timer.start();
     }
 
     // tells if animation is static or not
     public void applyVisual(VisualAsset asset, JLabel displayLabel) {
-        // mapping is better for complex apps
-        stopAllTimers();
+        if (activeAnimationTimers.containsKey(displayLabel)) {
+            LogManager.log("stop remove timer");
+            activeAnimationTimers.get(displayLabel).stop();
+            activeAnimationTimers.remove(displayLabel);
+        }
 
         if (asset.isAnimation()) {
             startSpriteAnimation(asset.key(), displayLabel);
@@ -66,9 +79,14 @@ public class VisualEffectsManager {
     }
 
     public void stopAllTimers() {
-        for (Timer timer : runningTimers) {
-            timer.stop();
+        for (Timer timer : activeAnimationTimers.values()) {
+            if (timer != null && timer.isRunning()) {
+                timer.stop();
+            }
         }
-        runningTimers.clear();
+
+        activeAnimationTimers.clear();
+
+        LogManager.log("All active animation timers have been stopped.", java.awt.Color.BLUE);
     }
 }

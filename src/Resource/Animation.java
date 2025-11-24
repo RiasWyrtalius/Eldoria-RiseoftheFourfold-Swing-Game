@@ -1,5 +1,7 @@
 package Resource;
 
+import Core.LogManager;
+
 import javax.swing.*;
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class Animation {
      * resets da animation state so it can be re-executed
      */
     public void reset() {
+        LogManager.log("Reset Animation");
         this.currentFrameIndex = 0;
         this.loopsCompleted = 0;
         this.isFinishedFlag = false;

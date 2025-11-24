@@ -74,7 +74,6 @@
         public void setCharacterData(Character character) {
             if (character == null) {
                 this.setVisible(false);
-                VisualEffectsManager.getInstance().stopAllTimers();
                 getIconDisplayLabel().setIcon(null);
                 return;
             }
