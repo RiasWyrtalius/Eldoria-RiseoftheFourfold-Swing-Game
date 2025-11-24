@@ -30,7 +30,7 @@ public class FireMage extends JobClass {
         };
 
         FullExecuteConsumer fireCycloneLogic = (skill, user, targets) -> {
-            int calculateDamage = (user.getBaseAtk() * 2);
+            int calculateDamage = (user.getBaseAtk() * 3);
 
             LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
 
