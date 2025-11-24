@@ -8,8 +8,8 @@
 - Epilan, Gian Cedrick G. (gOps132)
 - Carillo, Samuel B. (flurgerburger)
 - Despues, Charlz David T. (RiasWyrtalius)
-- Gerzon, Ythan Erik Jon F.
-- Delos Reyes, Kervin Curt B.
+- Gerzon, Ythan Erik Jon F. (ErikJon201)
+- Delos Reyes, Kervin Curt B. (kervincurtdelosreyes)
 
 ---
 
