@@ -2,14 +2,15 @@ package Core;
 
 import Resource.Animation;
 import Resource.AssetManager;
+import UI.Components.CharacterStatusPanel;
+import UI.MainInterface;
 
+import Characters.Character;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,6 +20,7 @@ public class VisualEffectsManager {
     private static final VisualEffectsManager INSTANCE = new VisualEffectsManager();
     private final Map<JLabel, Timer> activeAnimationTimers = new HashMap<>();
     private final Map<JLabel, String> runningAnimationIDs = new HashMap<>();
+    private MainInterface mainView;
 
     private VisualEffectsManager() {}
 
@@ -26,7 +28,8 @@ public class VisualEffectsManager {
         return INSTANCE;
     }
 
-    public void startSpriteAnimation(String animationId, JLabel displayLabel) {
+    // TODO: when animation is finished, delete the frames and refresh
+    public void startSpriteAnimation(String animationId, JLabel displayLabel, Runnable onFinish) {
         Animation animation = AssetManager.getInstance().getAnimation(animationId);
 
         if (animation == null) {
@@ -47,6 +50,9 @@ public class VisualEffectsManager {
                     activeAnimationTimers.entrySet().removeIf(entry -> entry.getValue() == finishedTimer);
 
                     LogManager.log("animation finished");
+
+                    if (onFinish != null)
+                        onFinish.run();
                     return;
                 }
                 displayLabel.setIcon(animation.getNextFrame());
@@ -60,6 +66,40 @@ public class VisualEffectsManager {
 
         LogManager.log("Starting animation: " + animationId);
         timer.start();
+    }
+
+    /**
+     * Public API: Finds the visual component, runs the animation, and executes a callback.
+     * @param animationId The ID of the animation.
+     * @param target The Character whose component should receive the animation.
+     * @param onFinish The Runnable to execute upon animation completion. <<< NEW PARAMETER
+     */
+    public void playAnimationOnCharacter(String animationId, Character target, Runnable onFinish) {
+        JLabel overlay = getOverlayComponent(target);
+
+        if (overlay != null) {
+            startSpriteAnimation(animationId, overlay, onFinish);
+        } else {
+            if (onFinish != null) {
+                onFinish.run();
+            }
+            LogManager.log("Warning: Visual component not found. Executing callback immediately.", java.awt.Color.ORANGE);
+        }
+    }
+
+    public JLabel getOverlayComponent(Character character) {
+        if (mainView == null) {
+            LogManager.log("ERROR: VEM is not linked to MainInterface (mainView is null).", java.awt.Color.RED);
+            return null;
+        }
+
+        CharacterStatusPanel panel = mainView.getCharacterPanel(character);
+        if (panel != null) {
+            return panel.getOverlayDisplayLabel();
+        }
+
+        LogManager.log("Warning: UI Panel not found for character: " + character.getName(), java.awt.Color.ORANGE);
+        return null;
     }
 
     // tells if animation is static or not
@@ -81,7 +121,7 @@ public class VisualEffectsManager {
         }
 
         if (asset.isAnimation()) {
-            startSpriteAnimation(asset.key(), displayLabel);
+            startSpriteAnimation(asset.key(), displayLabel, null);
         } else {
             // Static image logic
             int w = 100;
@@ -104,5 +144,9 @@ public class VisualEffectsManager {
 
 
         LogManager.log("All active animation timers have been stopped.", java.awt.Color.BLUE);
+    }
+
+    public void setMainView(MainInterface mainView) {
+        this.mainView = mainView;
     }
 }

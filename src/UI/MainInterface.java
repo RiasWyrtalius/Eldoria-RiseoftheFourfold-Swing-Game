@@ -12,9 +12,7 @@ import UI.Components.CharacterStatusPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -45,6 +43,8 @@ public class MainInterface extends JFrame{
     private List<JPanel> heroPartyPanels;
     private List<JPanel> enemyPartyPanels;
     private JLabel battleOutcome;
+
+    private final Map<Character, CharacterStatusPanel> characterToPanelMap = new HashMap<>();
 
     // STATE MACHINE FIELDS
     private BattleUIMode currentMode = BattleUIMode.HERO_SELECT;
@@ -136,7 +136,9 @@ public class MainInterface extends JFrame{
         for (int i = 0; i < setupPanel.size(); i++) {
             CharacterStatusPanel panel = (CharacterStatusPanel)setupPanel.get(i);
             if (i < party.size()) {
-                panel.setCharacterData(party.get(i));
+                Character character = party.get(i);
+                characterToPanelMap.put(character, panel);
+                panel.setCharacterData(character);
             } else {
                 panel.setCharacterData(null);
             }
@@ -348,5 +350,9 @@ public class MainInterface extends JFrame{
     // =============== PUBLIC GETTERS FOR UI ===============
     public JTextPane getGameLogPanelTextPane() {
         return GameLogPanelTextPane;
+    }
+
+    public CharacterStatusPanel getCharacterPanel(Character character) {
+        return characterToPanelMap.get(character);
     }
 }

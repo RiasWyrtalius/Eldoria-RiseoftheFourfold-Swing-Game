@@ -19,35 +19,43 @@
         private JLabel nameLabel;
         private JProgressBar hpBar;
         private JProgressBar manaBar;
-        private final JLabel iconDisplayLabel;
-        private JPanel iconPanel;
 
+        private final JLabel overlayDisplayLabel;
+        private final JLabel iconDisplayLabel;
+
+        private JPanel iconPanel;
 
         public CharacterStatusPanel(MainInterface parentInterface) {
             nameLabel = new JLabel("N/A - Lvl 0");
             hpBar = new JProgressBar();
             manaBar = new JProgressBar();
+
+            overlayDisplayLabel = new JLabel();
             iconDisplayLabel = new JLabel();
             iconPanel = new JPanel();
+            iconPanel.setLayout(null); // makes it stack for some reason
 
+            final int ICON_SIZE = 100;
+
+            iconDisplayLabel.setBounds(0, 0, ICON_SIZE, ICON_SIZE);
+            overlayDisplayLabel.setBounds(0, 0, ICON_SIZE, ICON_SIZE);
+
+            iconPanel.setPreferredSize(new Dimension(ICON_SIZE, ICON_SIZE));
 
             MouseAdapter clickAdapter = attachListener(parentInterface);
             this.addMouseListener(clickAdapter);
 
-            nameLabel.setOpaque(false);
-            iconPanel.setOpaque(false);
-
-            hpBar.setOpaque(false);
-            manaBar.setOpaque(false);
-
             nameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
             nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
+            overlayDisplayLabel.setOpaque(false);
+            overlayDisplayLabel.setHorizontalAlignment(SwingConstants.CENTER);
             iconDisplayLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            iconPanel.setLayout(new CardLayout());
-            iconPanel.add(iconDisplayLabel, "Icon");
+
+            iconPanel.add(iconDisplayLabel);
+            iconPanel.add(overlayDisplayLabel);
             iconPanel.addMouseListener(clickAdapter);
 
             nameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -117,6 +125,10 @@
 
         public JLabel getIconDisplayLabel() {
             return iconDisplayLabel;
+        }
+
+        public JLabel getOverlayDisplayLabel() {
+            return overlayDisplayLabel;
         }
     }
 

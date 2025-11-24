@@ -96,6 +96,7 @@ public class GameManager {
         createGameModel();
         battleController = new BattleController(heroParty, enemyParty);
         battleController.setMainView(mainView);
+        VisualEffectsManager.getInstance().setMainView(mainView);
 
         mainView.linkControllerAndData(battleController);
     }

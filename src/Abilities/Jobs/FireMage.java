@@ -6,6 +6,7 @@ import Characters.Base.Hero;
 import Characters.Character;
 import Core.LogColor;
 import Core.LogManager;
+import Core.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
 
@@ -27,7 +28,7 @@ public class FireMage extends JobClass {
 
         AssetManager.getInstance().registerAnimation(
                 "FIREBALL",
-                "Assets/Animations/FireBall/sprite_%d.png",
+                "Assets/Animations/Effects/FireBall/sprite_%d.png",
                 6, 100,100, 150,
                 AnimationLoopType.ONE_CYCLE
         );
@@ -35,15 +36,15 @@ public class FireMage extends JobClass {
 
     public List<Skill> createSkills() {
 
-        // TODO: apply VFX on a target using panel overlay
+        // FIXME: turn doesn't end when animation is finished
         FullExecuteConsumer fireBallLogic = (skill, user, targets) -> {
             int calculateDamage = (user.getBaseAtk() * 2);
             Character target = targets.getFirst();
 
             LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
-
-            target.takeDamage(calculateDamage, user);
-
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
+                target.takeDamage(calculateDamage, user);
+            });
         };
 
         FullExecuteConsumer fireCycloneLogic = (skill, user, targets) -> {
