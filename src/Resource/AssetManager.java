@@ -6,10 +6,15 @@ import Core.LogManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AssetManager {
+    private final Map<String, Animation> animationRepository;
+
     /**
      * Singleton
      */
@@ -18,6 +23,7 @@ public class AssetManager {
 
     private AssetManager() {
         imageCache = new HashMap<>();
+        animationRepository = new HashMap<>();
     }
 
     public static AssetManager getInstance() {
@@ -77,9 +83,55 @@ public class AssetManager {
         return new ImageIcon(image);
     }
 
+    /**
+     * Registered a full animation sequence (loaded frames) under a unique ID.
+     * @param animationId
+     * @param basePath
+     * @param frameCount
+     * @param width
+     * @param height
+     * @param durationMs
+     */
+    public void registerAnimation(String animationId, String basePath, int frameCount, int width, int height, int durationMs, AnimationLoopType loopType) {
+        if (animationRepository.containsKey(animationId)) {
+            LogManager.log("Animation ID: " + animationId + " is already registered.", Color.yellow);
+            return;
+        }
+
+        List<ImageIcon> frames = loadAnimationFrames(basePath, frameCount, width, height);
+
+        Animation newAnimation = new Animation(frames, durationMs, loopType);
+
+        animationRepository.put(animationId, newAnimation);
+        LogManager.log("Registered animation: " + animationId);
+    }
+
+    /**
+     * loads a sequences of images for an animation
+     * @param basePath
+     * @param frameCount
+     * @param width
+     * @param height
+     * @return A list of scaled image icons
+     */
+    public List<ImageIcon> loadAnimationFrames(String basePath, int frameCount, int width, int height) {
+        List<ImageIcon> frames = new ArrayList<>();
+        for (int i = 0; i < frameCount; i++) {
+            // fileformat must follow: "assets/fireball/frame_0.png", "assets/fireball/frame_1.png", etc.
+            String key = String.format(basePath, i);
+            frames.add(getImage(key, width, height));
+        }
+        return frames;
+    }
 
     // TODO: preloading assets, do it after file handling
     public void preLoad() {
         // call getImage() for all known assets
     }
+
+    // =============== PUBLIC GETTERS FOR UI ===============
+    public Animation getAnimation(String  animationId) {
+        return animationRepository.get(animationId);
+    }
+
 }

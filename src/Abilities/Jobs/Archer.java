@@ -38,13 +38,13 @@ public class Archer extends JobClass {
 
 
         Skill RapidFire = new Skill(
-                "Rapid Fire", "Single-target multi-hit spell", 10, 15,
+                "Rapid Fire", "Single-target long ranged attack ", 10, 15,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
                 rapidFireLogic
         );
 
         Skill HeavyArrow = new Skill(
-                "Heavy Arrow", "Single-target fire spell", 30, 40,
+                "Heavy Arrow", "Single-target heavy long ranged attack", 30, 40,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
                 heavyArrowLogic
         );
