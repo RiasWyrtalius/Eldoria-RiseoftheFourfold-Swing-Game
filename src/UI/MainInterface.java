@@ -50,7 +50,7 @@ public class MainInterface extends JFrame{
     private BattleUIMode currentMode = BattleUIMode.HERO_SELECT;
     private Hero activeHero = null;
     private Skill selectedSkill = null;
-    private List<Character> selectedTargets;
+    private List<Character> selectedTargets = new ArrayList<>();
 
     private JPopupMenu targetConfirmMenu = new JPopupMenu();
 
@@ -89,6 +89,7 @@ public class MainInterface extends JFrame{
                 refreshUI();
             });
         }
+        refreshUI();
     }
 
     public void refreshUI() {
