@@ -73,7 +73,6 @@ public abstract class Character {
         LogManager.log("(CHARACTER) : " + this.name + " attacks " + target.getName());
     }
 
-    //added setter for boss multiplier
     public void setHealth(int health) { this.health = health; }
 
     // =============== PUBLIC GETTERS FOR UI ===============
