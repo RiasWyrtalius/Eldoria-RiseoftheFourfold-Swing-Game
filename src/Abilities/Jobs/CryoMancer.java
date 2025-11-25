@@ -16,7 +16,7 @@ public class CryoMancer extends JobClass {
     public List<Skill> createSkills() {
 
         FullExecuteConsumer iceSpikeLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (user.getBaseAtk() * 3);
+            int calculateDamage = (int)(user.getBaseAtk() +(user.getLevel() * 1.38));
             Character target = targets.getFirst();
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
@@ -30,7 +30,7 @@ public class CryoMancer extends JobClass {
 
 
         FullExecuteConsumer frostBiteLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (int)(user.getBaseAtk() * 4);
+            int calculateDamage = (int)(user.getBaseAtk() +(user.getLevel() * 1.4));
             Character target = targets.getFirst();
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);

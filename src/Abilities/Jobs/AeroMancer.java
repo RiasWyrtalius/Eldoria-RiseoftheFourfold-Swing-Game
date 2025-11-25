@@ -16,7 +16,7 @@ public class AeroMancer extends JobClass {
     public List<Skill> createSkills() {
 
         FullExecuteConsumer windBurstLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (user.getBaseAtk() * 3);
+            int calculateDamage = (int)(user.getBaseAtk() +(user.getLevel() * 1.35));
             Character target = targets.getFirst();
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
@@ -30,7 +30,7 @@ public class AeroMancer extends JobClass {
 
 
         FullExecuteConsumer windPierceLogic= (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (int)(user.getBaseAtk() * 2.5);
+            int calculateDamage = (int)(user.getBaseAtk() +(user.getLevel() * 1.4));
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
 

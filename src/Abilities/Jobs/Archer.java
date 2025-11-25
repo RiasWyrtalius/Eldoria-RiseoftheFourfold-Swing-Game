@@ -38,14 +38,14 @@ public class Archer extends JobClass {
         );
         AssetManager.getInstance().registerAnimation(
                 "ARCHER_SHOOT_ARROW-Rapid",
-                "Assets/Animations/Archer/Shoot_Arrow/sprite_%d.png",
+                "Assets/Animations/Archer/Effects/Shoot_Arrow/sprite_%d.png",
                 5, 100, 100 , 70,
                 AnimationLoopType.TWO_CYCLES
         );
     }
     public List<Skill> createSkills() {
         FullExecuteConsumer rapidFireLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (user.getBaseAtk() * 3);
+            int calculateDamage = (int)(user.getBaseAtk() +(user.getLevel() * 1.10));
             Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, "Unleashes array of Arrows", targets, calculateDamage), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW-Rapid", user, () -> {
@@ -57,7 +57,7 @@ public class Archer extends JobClass {
         };
 
         FullExecuteConsumer heavyArrowLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (user.getBaseAtk() * 4);
+            int calculateDamage = (int)(user.getBaseAtk() +(user.getLevel() * 1.6));
             Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, "Pulls their bow the hardest they can to release", targets, calculateDamage), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW", user, () -> {

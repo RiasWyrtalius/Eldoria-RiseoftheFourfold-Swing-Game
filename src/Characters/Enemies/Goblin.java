@@ -16,7 +16,7 @@ import java.util.List;
 public class Goblin extends Enemy {
     public Goblin() {
 
-        super("Goblin Grunt", 300, 5, 0, 1, "Goblin", 10, "GOBLIN_IDLE");
+        super("Goblin Grunt", 1000, 10, 0, 1, "Goblin", 10, "GOBLIN_IDLE");
         AssetManager.getInstance().registerAnimation(
                 "GOBLIN_IDLE",
                 "Assets/Animations/Goblin/Idle/sprite_%d.png",
