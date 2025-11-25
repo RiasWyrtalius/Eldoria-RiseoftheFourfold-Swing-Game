@@ -28,7 +28,7 @@ public class Goblin extends Enemy {
                 "GOBLIN_SWING-ATTACK",
                 "Assets/Animations/Goblin/Effects/Swing_Attack/sprite_%d.png",
                 4, 100, 100 , 300,
-                AnimationLoopType.ONE_CYCLE
+                AnimationLoopType.TWO_CYCLES
         );
         initializeReactions();
     }
@@ -39,13 +39,15 @@ public class Goblin extends Enemy {
             int calculateDamage = user.getBaseAtk();
 
             Character target = Dice.pickRandom(targets);
-
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.ENEMY_ACTION);
-            VisualEffectsManager.getInstance().playAnimation("GOBLIN_SWING-ATTACK", user, () -> {
+            // TODO: panel should be empty during the swinging
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", target, () -> {
+                VisualEffectsManager.getInstance().playAnimation("GOBLIN_SWING-ATTACK", user, () -> {
                 target.takeDamage(calculateDamage, user, self);
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                }
+                    if (onSkillComplete != null) {
+                        onSkillComplete.run();
+                    }
+            }, true);
             }, true);
         };
 
