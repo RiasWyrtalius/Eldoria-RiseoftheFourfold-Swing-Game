@@ -4,15 +4,14 @@ import Abilities.Skill;
 import Abilities.SkillTarget;
 import Characters.Base.Hero;
 import Characters.Character;
-import Core.BattleController;
-import Core.BattlePhase;
-import Core.BattleResult;
-import Core.LogManager;
+import Core.*;
 import UI.Components.CharacterStatusPanel;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -44,6 +43,9 @@ public class MainInterface extends JFrame{
     private List<JPanel> enemyPartyPanels;
     private JLabel battleOutcome;
 
+    private JScrollPane CharacterInspector_JSP;
+    private JTextArea inspectorText;
+
     private final Map<Character, CharacterStatusPanel> characterToPanelMap = new HashMap<>();
 
     // STATE MACHINE FIELDS
@@ -60,6 +62,7 @@ public class MainInterface extends JFrame{
     public MainInterface() {
         this.setContentPane(contentPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setupInspector();
         this.pack();
         this.setVisible(true);
         setTitle("DND Swing Clone | Saja Boys");
@@ -158,6 +161,9 @@ public class MainInterface extends JFrame{
     }
 
     public void onCharacterPanelClick(Character clickedCharacter) {
+
+        updateInspectorPanel(clickedCharacter);
+
         switch (currentMode) {
             case HERO_SELECT:
 //                LogManager.log("SELECT HERO");
@@ -360,6 +366,53 @@ public class MainInterface extends JFrame{
             menu.add(item);
         }
         return menu;
+    }
+
+    private void setupInspector() {
+        inspectorText = new JTextArea();
+        inspectorText.setEditable(false);
+        inspectorText.setLineWrap(true);
+        inspectorText.setWrapStyleWord(true);
+
+        if (CharacterInspector_JSP != null) {
+            CharacterInspector_JSP.setViewportView(inspectorText);
+        }
+    }
+
+    private void updateInspectorPanel(Character c) {
+        if (inspectorText == null) { return; }
+
+        if (c == null) {
+            inspectorText.setText("");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        // --- NAME & CLASS ---
+        sb.append(c.getName().toUpperCase()).append("\n");
+        if (c instanceof Hero) {
+            sb.append(((Hero) c).getJob().getName()).append("\n");
+        }
+        sb.append("----------------\n");
+
+        // --- HP & MANA ---
+        sb.append("HP: ").append(c.getInitialHealth()).append("/").append(c.getHealth()).append("\n");
+        sb.append("MP: ").append(c.getMana()).append("/").append(c.getMaxMana()).append("\n");
+        sb.append("\n");
+
+        // --- SKILLS (Heroes only) ---
+        if (c instanceof Hero) {
+            sb.append("[ SKILLS ]\n");
+            Hero h = (Hero) c;
+            for (Skill s : h.getJob().getSkills()) {
+                sb.append("• ").append(s.getName())
+                        .append(" (").append(s.getManaCost()).append(" MP)\n");
+            }
+        }
+
+        inspectorText.setText(sb.toString());
+        inspectorText.setCaretPosition(0);
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============
