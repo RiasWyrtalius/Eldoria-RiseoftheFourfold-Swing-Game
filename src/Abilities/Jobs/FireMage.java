@@ -38,6 +38,7 @@ public class FireMage extends JobClass {
 
         // FIXME: turn doesn't end when animation is finished
         FullExecuteConsumer fireBallLogic = (self, user, targets, onSkillComplete) -> {
+
             int calculateDamage = (int)(25 + 15 + (user.getLevel() * 1.2) + (25 * (user.getLevel() * 0.05)));
             Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
@@ -47,11 +48,11 @@ public class FireMage extends JobClass {
                     onSkillComplete.run();
                 }
             }, true);
+
         };
 
         FullExecuteConsumer fireCycloneLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = (int)(50 + 30 + (user.getLevel() * 1.2) + (50 * (user.getLevel() * 0.05)));
-
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
 
             for (Character t : targets) {
@@ -74,6 +75,7 @@ public class FireMage extends JobClass {
                 SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.AOE_ALL_TARGETS,
                 fireCycloneLogic
         );
+
 
         return List.of(fireball, fireCyclone);
     }

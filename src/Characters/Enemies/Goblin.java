@@ -42,12 +42,10 @@ public class Goblin extends Enemy {
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.ENEMY_ACTION);
             // TODO: panel should be empty during the swinging
             VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", target, () -> {
-                VisualEffectsManager.getInstance().playAnimation("GOBLIN_SWING-ATTACK", user, () -> {
                 target.takeDamage(calculateDamage, user, self);
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
                     }
-            }, true);
             }, true);
         };
 
