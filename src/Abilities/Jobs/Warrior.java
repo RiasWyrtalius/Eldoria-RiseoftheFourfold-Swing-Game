@@ -55,7 +55,7 @@ public class Warrior extends JobClass {
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, " Slashes on ", targets, calculateDamage), LogColor.HERO_ACTION);
-            VisualEffectsManager.getInstance().playAnimation("WARRIOR_SWORD-SLASH", user, () -> {
+            VisualEffectsManager.getInstance().playAnimation("WARRIOR_SWORD-SLASH", target, () -> {
                 target.takeDamage(calculateDamage, user, self);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
