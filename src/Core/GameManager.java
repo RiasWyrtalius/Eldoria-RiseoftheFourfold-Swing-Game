@@ -63,7 +63,7 @@ public class GameManager {
         };
 
         Archer archer = new Archer();
-        Character gianmeni = new Hero("Gian Meni",80,70,100,1,archer,"MAGE_IDLE"){
+        Character gianmeni = new Hero("Gian Meni",80,70,100,1,archer,"ARCHER_IDLE"){
             @Override
             protected void onDeath() {
 

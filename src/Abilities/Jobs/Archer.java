@@ -6,19 +6,52 @@ import Abilities.*;
 import Characters.Character;
 import Core.LogColor;
 import Core.LogManager;
+import Core.VisualEffectsManager;
+import Resource.AnimationLoopType;
+import Resource.AssetManager;
 
 import java.util.List;
 import java.util.function.BiConsumer;
 
 
 public class Archer extends JobClass {
-    public Archer(){super("Archer","Attacks from a range with their Bow and Arrow",0,0 );}
+    public Archer(){
+        super("Archer","Attacks from a range with their Bow and Arrow",0,0 );
+
+        AssetManager.getInstance().registerAnimation(
+                "ARCHER_IDLE",
+                "Assets/Animations/Archer/Idle/sprite_%d.png",
+                3, 100, 100 , 300,
+                AnimationLoopType.INFINITE
+        );
+        AssetManager.getInstance().registerAnimation(
+                "ARCHER_DODGE",
+                "Assets/Animations/Archer/Effects/Dodge/sprite_%d.png",
+                5, 100, 100 , 300,
+                AnimationLoopType.ONE_CYCLE
+        );
+        AssetManager.getInstance().registerAnimation(
+                "ARCHER_SHOOT_ARROW",
+                "Assets/Animations/Archer/Effects/Shoot_Arrow/sprite_%d.png",
+                5, 100, 100 , 300,
+                AnimationLoopType.ONE_CYCLE
+        );
+        AssetManager.getInstance().registerAnimation(
+                "ARCHER_SHOOT_ARROW-Rapid",
+                "Assets/Animations/Archer/Effects/Shoot_Arrow/sprite_%d.png",
+                5, 100, 100 , 100,
+                AnimationLoopType.ONE_CYCLE
+        );
+    }
     public List<Skill> createSkills() {
         FullExecuteConsumer rapidFireLogic = (skill, user, targets) -> {
             int calculateDamage = (user.getBaseAtk() * 3);
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user);
             LogManager.log(skill.getActionLog(user, "Unleashes array of Arrows at", targets, calculateDamage), LogColor.HERO_ACTION);
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("ARCHER_SHOOT_ARROW-Rapid", user, () -> {
+                target.takeDamage(calculateDamage, user);
+            });
         };
 
         FullExecuteConsumer heavyArrowLogic = (skill, user, targets) -> {
@@ -26,6 +59,9 @@ public class Archer extends JobClass {
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user);
             LogManager.log(skill.getActionLog(user, " Pulls their bow the hardest they can to release at ", targets, calculateDamage), LogColor.HERO_ACTION);
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("ARCHER_SHOOT_ARROW", user, () -> {
+                target.takeDamage(calculateDamage, user);
+            });
         };
 
 
