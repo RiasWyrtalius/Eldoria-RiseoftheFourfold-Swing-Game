@@ -141,8 +141,20 @@ public class BattleController {
     }
 
     private void executeTurnCleanUp() {
-        // TODO: mana regen, poison, etc.
-        LogManager.log("Turn Cleanup: Mana Regenerated, Status Effect Ticked.", LogColor.TURN_INDICATOR);
+        LogManager.log("--- Turn Recovery ---", LogColor.TURN_INDICATOR);
+
+        for (Character member : heroParty.getAliveMembers()) {
+
+            if (member instanceof Hero) {
+                Hero h = (Hero) member;
+
+                String result = h.regenerateTurnResources();
+
+                if (result != null && !result.isEmpty()) { LogManager.log(result); }
+            }
+        }
+
+        if (this.mainView != null) { this.mainView.refreshUI(); }
     }
 
     public void endBattle() {

@@ -1,6 +1,5 @@
 package Characters;
 
-import Abilities.ReactionLogic;
 import Abilities.ReactionSkill;
 import Abilities.Skill;
 import Core.Dice;
@@ -158,4 +157,5 @@ public abstract class Character {
     public void setExhausted(boolean exhausted) {
         isExhausted = exhausted;
     }
+    public void setMana(int mana) { this.mana = mana; }
 }

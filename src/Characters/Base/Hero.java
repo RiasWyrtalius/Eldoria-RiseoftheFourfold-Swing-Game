@@ -3,6 +3,7 @@ package Characters.Base;
 import Abilities.JobClass;
 import Abilities.Skill;
 import Characters.Character;
+import Core.LogColor;
 import Core.LogManager;
 
 import java.awt.*;
@@ -42,6 +43,40 @@ public class Hero extends Character {
         this.level++;
         this.requiredXP = baseXP + (incrementXP * (level - 1));
         LogManager.log(this.name + " has leveled up to level " + this.level + "!");
+    }
+
+    public String regenerateTurnResources() {
+        if (!isAlive) { return null; }
+
+        StringBuilder logMsg = new StringBuilder();
+
+        if (getHealth() < getInitialHealth()) {
+            
+            int passiveHP = (int) (getInitialHealth() * 0.05);
+            if (passiveHP < 1) passiveHP = 1;
+
+            int newHP = getHealth() + passiveHP;
+
+            if (newHP > getInitialHealth()) {
+                newHP = getInitialHealth();
+            }
+
+            setHealth(newHP);
+            logMsg.append(this.name).append(" has healed ").append(passiveHP).append(" HP.\n");
+        }
+
+        if (getMana() < getMaxMana()) {
+            int passiveMana = (int) (getMaxMana() * 0.03); // 3% max MP
+            int newMana = getMana() + passiveMana;
+             if (newMana > getMaxMana()) {
+                 newMana = getMaxMana();
+             }
+
+             setMana(newMana);
+             logMsg.append(this.name).append(" has recovered ").append(passiveMana).append(" mana.\n");
+        }
+
+        return logMsg.toString();
     }
 
     @Override
