@@ -51,7 +51,7 @@ public class AeroMancer extends JobClass {
         );
 
         Skill WindPierce = new Skill(
-                "Stone Hail", "Single-target Earth spell", 15, 20,
+                "Wind Pierce", "Single-target Sharp Wind spell", 15, 20,
                 SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.AOE_TWO_TARGETS,
                 windPierceLogic
         );

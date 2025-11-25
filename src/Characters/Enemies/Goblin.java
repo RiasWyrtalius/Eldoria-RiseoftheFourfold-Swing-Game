@@ -28,7 +28,7 @@ public class Goblin extends Enemy {
                 "GOBLIN_SWING-ATTACK",
                 "Assets/Animations/Goblin/Effects/Swing_Attack/sprite_%d.png",
                 4, 100, 100 , 300,
-                AnimationLoopType.INFINITE
+                AnimationLoopType.ONE_CYCLE
         );
         initializeReactions();
     }
@@ -41,10 +41,12 @@ public class Goblin extends Enemy {
             Character target = Dice.pickRandom(targets);
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.ENEMY_ACTION);
-            target.takeDamage(calculateDamage, user, self);
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
+            VisualEffectsManager.getInstance().playAnimation("GOBLIN_SWING-ATTACK", user, () -> {
+                target.takeDamage(calculateDamage, user, self);
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                }
+            }, true);
         };
 
         Skill skirmish = new Skill(

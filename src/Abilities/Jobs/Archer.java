@@ -82,4 +82,5 @@ public class Archer extends JobClass {
 
         return List.of(RapidFire,HeavyArrow);
     }
+
 }
