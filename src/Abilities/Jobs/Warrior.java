@@ -40,7 +40,7 @@ public class Warrior extends JobClass {
         FullExecuteConsumer shieldBashLogic = (skill, user, targets, onSkillComplete) -> {
             int calculateDamage = (user.getBaseAtk() * 3);
             Character target = targets.getFirst();
-            LogManager.log(skill.getActionLog(user, "Bashes Shield at", targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(skill.getActionLog(user, "Bashes Shield ", targets, calculateDamage), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("WARRIOR_SHIELD-BASH", user, () -> {
                 target.takeDamage(calculateDamage, user);
                 if (onSkillComplete != null) {
@@ -52,7 +52,7 @@ public class Warrior extends JobClass {
         FullExecuteConsumer swordSlashLogic = (skill, user, targets, onSkillComplete) -> {
             int calculateDamage = (user.getBaseAtk() * 3);
             Character target = targets.getFirst();
-            LogManager.log(skill.getActionLog(user, "Slashes Sword at", targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(skill.getActionLog(user, "Slashes Sword ", targets, calculateDamage), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("WARRIOR_SWORD-SLASH", user, () -> {
                 target.takeDamage(calculateDamage, user);
                 if (onSkillComplete != null) {
