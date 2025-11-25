@@ -22,7 +22,7 @@ public class EarthMage extends JobClass {
                 t.takeDamage(calculateDamage, user);
             }
 
-            LogManager.log(skill.getActionLog(user, "Shakes the earth under", targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(skill.getActionLog(user, "Shakes the earth", targets, calculateDamage), LogColor.HERO_ACTION);
 
             if (onSkillComplete != null) {
                 onSkillComplete.run();
@@ -33,7 +33,7 @@ public class EarthMage extends JobClass {
             int calculateDamage = (user.getBaseAtk() * 2);
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user);
-            LogManager.log(skill.getActionLog(user, "Multitudes of earth crumbles down on", targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(skill.getActionLog(user, "Multitudes of earth crumbles down", targets, calculateDamage), LogColor.HERO_ACTION);
 
             if (onSkillComplete != null) {
                 onSkillComplete.run();
