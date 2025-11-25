@@ -6,6 +6,7 @@ import Abilities.*;
 import Characters.Character;
 import Core.LogColor;
 import Core.LogManager;
+import Core.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
 
@@ -22,9 +23,36 @@ public class AeroMancer extends JobClass {
                 5, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
+
+        AssetManager.getInstance().registerAnimation(
+                "WIND_TORNADO",
+                "Assets/Animations/Mage-Wind/Effects/Wind_Tornado/sprite_%d.png",
+                11, 100, 100 , 200,
+                AnimationLoopType.TWO_CYCLES
+        );
     }
     public List<Skill> createSkills() {
 
+        FullExecuteConsumer windTornadoLogic = (self, user, targets, onSkillComplete) -> {
+            int calculateDamage = (int)(40 + 18.5 + (user.getLevel() * 1.2) + (40 * (user.getLevel() * 0.05)));
+            Character target = targets.getFirst();
+
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
+
+            for(Character t : targets) {
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("WIND_TORNADO", t, () -> {
+
+                    t.takeDamage(calculateDamage, user, self);
+
+                    if (onSkillComplete != null) {
+                        onSkillComplete.run();
+                    }
+                }, true);
+            }
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
+        };
         FullExecuteConsumer windBurstLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = (int)(25 + 18.5 + (user.getLevel() * 1.2) + (25 * (user.getLevel() * 0.05)));
             Character target = targets.getFirst();
@@ -65,7 +93,12 @@ public class AeroMancer extends JobClass {
                 SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.AOE_TWO_TARGETS,
                 windPierceLogic
         );
+        Skill WindTornado = new Skill(
+                "Wind Tornado", "Multi-target Wind spell", 40, 40,
+                SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.AOE_ALL_TARGETS,
+                windTornadoLogic
+        );
 
-        return List.of(WindBurst,WindPierce);
+        return List.of(WindTornado,WindBurst,WindPierce);
     }
 }

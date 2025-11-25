@@ -47,6 +47,19 @@ public class GameManager {
             }
         };
 
+        CryoMancer iceMage = new CryoMancer();
+        Character sammy = new Hero("Sammy", 100, 60, 120, 1, iceMage, "MAGE_IDLE") {
+            @Override
+            protected void onDeath() {
+
+            }
+
+            @Override
+            protected void onDefeat(Character defeatedTarget) {
+
+            }
+        };
+
         EarthMage earthMage = new EarthMage();
         Character ythan = new Hero("Ythanny W", 100, 60, 120, 1, earthMage, "MAGE_IDLE") {
             @Override
@@ -78,7 +91,8 @@ public class GameManager {
 
 //        TODO: add max amount of party members
         heroParty.addPartyMember(charlie);
-        heroParty.addPartyMember(ythan);
+//        heroParty.addPartyMember(ythan);
+        heroParty.addPartyMember(sammy);
         heroParty.addPartyMember(gianmeni);
         heroParty.addPartyMember(kervs);
 

@@ -6,13 +6,31 @@ import Abilities.*;
 import Characters.Character;
 import Core.LogColor;
 import Core.LogManager;
+import Core.VisualEffectsManager;
+import Resource.AnimationLoopType;
+import Resource.AssetManager;
 
 import java.util.List;
 import java.util.function.BiConsumer;
 
 
 public class CryoMancer extends JobClass {
-    public CryoMancer(){super("Ice Mage","Wields snow and ice as its magic",0,0 );}
+    public CryoMancer(){
+        super("Ice Mage","Wields snow and ice as its magic",0,0 );
+        AssetManager.getInstance().registerAnimation(
+                "MAGE_IDLE",
+                "Assets/Animations/Mage-Fire/Idle/sprite_%d.png",
+                5, 100, 100 , 300,
+                AnimationLoopType.INFINITE
+        );
+
+        AssetManager.getInstance().registerAnimation(
+                "ICE_SPIKE",
+                "Assets/Animations/Mage-Ice/Effects/Ice_Spike/sprite_%d.png",
+                7, 100, 100 , 200,
+                AnimationLoopType.ONE_CYCLE
+        );
+    }
     public List<Skill> createSkills() {
 
         FullExecuteConsumer iceSpikeLogic = (self, user, targets, onSkillComplete) -> {
@@ -21,7 +39,14 @@ public class CryoMancer extends JobClass {
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
 
-            target.takeDamage(calculateDamage, user, self);
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("ICE_SPIKE", target, () -> {
+
+                target.takeDamage(calculateDamage, user, self);
+
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                }
+            }, true);
 
             if (onSkillComplete != null) {
                 onSkillComplete.run();
