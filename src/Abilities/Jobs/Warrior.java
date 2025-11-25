@@ -16,18 +16,26 @@ public class Warrior extends JobClass {
     }
 
     public List<Skill> createSkills() {
-        FullExecuteConsumer shieldBashLogic = (skill, user, targets) -> {
+        FullExecuteConsumer shieldBashLogic = (skill, user, targets, onSkillComplete) -> {
             int calculateDamage = (user.getBaseAtk() * 2);
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user);
             LogManager.log(skill.getActionLog(user, " Bashes Shield on ", targets, calculateDamage), LogColor.HERO_ACTION);
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
         };
 
-        FullExecuteConsumer swordSlashLogic = (skill, user, targets) -> {
+        FullExecuteConsumer swordSlashLogic = (skill, user, targets, onSkillComplete) -> {
             int calculateDamage = (user.getBaseAtk() * 2);
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user);
             LogManager.log(skill.getActionLog(user, " Slashes on ", targets, calculateDamage), LogColor.HERO_ACTION);
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
         };
 
         Skill ShieldBash = new Skill(

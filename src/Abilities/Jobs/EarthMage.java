@@ -16,20 +16,28 @@ public class EarthMage extends JobClass {
         super("Earth Mage","Wields stone and earth as its magic",0,0 );
     }
     public List<Skill> createSkills() {
-        FullExecuteConsumer earthquakeSpellLogic = (skill, user, targets) -> {
+        FullExecuteConsumer earthquakeSpellLogic = (skill, user, targets, onSkillComplete) -> {
             int calculateDamage = (user.getBaseAtk() * 4);
             for(Character t : targets) {
                 t.takeDamage(calculateDamage, user);
             }
 
             LogManager.log(skill.getActionLog(user, "Shakes the earth under", targets, calculateDamage), LogColor.HERO_ACTION);
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
         };
 
-        FullExecuteConsumer stoneHailLogic = (skill, user, targets) -> {
+        FullExecuteConsumer stoneHailLogic = (skill, user, targets, onSkillComplete) -> {
             int calculateDamage = (user.getBaseAtk() * 2);
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user);
             LogManager.log(skill.getActionLog(user, "Multitudes of earth crumbles down on", targets, calculateDamage), LogColor.HERO_ACTION);
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
         };
 
 

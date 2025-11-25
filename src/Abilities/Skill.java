@@ -29,9 +29,9 @@ public class Skill {
         this.executeLogic = executeLogic;
     }
 
-    public void execute(Character user, List<Character> target) {
+    public void execute(Character user, List<Character> target, Runnable onSkillComplete) {
         if (user.spendMana(this.manaCost)) {
-            executeLogic.accept(this, user, target);
+            executeLogic.accept(this, user, target, onSkillComplete);
         }
     }
 

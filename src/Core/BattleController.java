@@ -57,14 +57,15 @@ public class BattleController {
             return;
         }
 
-        hero.useSkill(skill, targets);
-        LogManager.log("use after skill");
+        Runnable onSkillComplete = () -> {
+            advanceTurnCycle(false);
+        };
+
+        hero.useSkill(skill, targets, onSkillComplete);
         hero.setExhausted(true);
 
         if (this.mainView != null)
             this.mainView.refreshUI();
-
-        advanceTurnCycle(false);
     }
 
     public void endHeroPhaseManually() {

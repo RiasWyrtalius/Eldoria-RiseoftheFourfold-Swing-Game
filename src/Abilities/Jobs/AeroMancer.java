@@ -15,17 +15,21 @@ public class AeroMancer extends JobClass {
     public AeroMancer(){super("Wind Mage","Wields atmosphere and wind as its magic",0,0 );}
     public List<Skill> createSkills() {
 
-        FullExecuteConsumer windBurstLogic = (skill, user, targets) -> {
+        FullExecuteConsumer windBurstLogic = (skill, user, targets, onSkillComplete) -> {
             int calculateDamage = (user.getBaseAtk() * 3);
             Character target = targets.getFirst();
 
             LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
 
             target.takeDamage(calculateDamage, user);
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
         };
 
 
-        FullExecuteConsumer windPierceLogic= (skill, user, targets) -> {
+        FullExecuteConsumer windPierceLogic= (skill, user, targets, onSkillComplete) -> {
             int calculateDamage = (int)(user.getBaseAtk() * 2.5);
             Character target = targets.getFirst();
 
@@ -33,6 +37,10 @@ public class AeroMancer extends JobClass {
 
             for(Character t :targets) {
                 t.takeDamage(calculateDamage, user);
+            }
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
             }
         };
 

@@ -37,22 +37,29 @@ public class FireMage extends JobClass {
     public List<Skill> createSkills() {
 
         // FIXME: turn doesn't end when animation is finished
-        FullExecuteConsumer fireBallLogic = (skill, user, targets) -> {
+        FullExecuteConsumer fireBallLogic = (skill, user, targets, onSkillComplete) -> {
             int calculateDamage = (user.getBaseAtk() * 2);
             Character target = targets.getFirst();
             LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
                 target.takeDamage(calculateDamage, user);
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                }
             }, true);
         };
 
-        FullExecuteConsumer fireCycloneLogic = (skill, user, targets) -> {
+        FullExecuteConsumer fireCycloneLogic = (skill, user, targets, onSkillComplete) -> {
             int calculateDamage = (user.getBaseAtk() * 3);
 
             LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
 
             for (Character t : targets) {
                 t.takeDamage(calculateDamage, user);
+            }
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
             }
         };
 

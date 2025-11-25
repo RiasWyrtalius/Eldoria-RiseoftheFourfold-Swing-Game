@@ -56,10 +56,10 @@ public class Hero extends Character {
         LogManager.log("(HERO) : " + this.name, Color.BLUE);
     }
 
-    public void useSkill(Skill skill, List<Character> targets) {
+    public void useSkill(Skill skill, List<Character> targets, Runnable onSkillComplete) {
         LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on " + Skill.formatTargetList(targets), Color.GREEN);
 
-        skill.execute(this, targets);
+        skill.execute(this, targets, onSkillComplete);
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============

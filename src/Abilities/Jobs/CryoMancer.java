@@ -15,23 +15,31 @@ public class CryoMancer extends JobClass {
     public CryoMancer(){super("Ice Mage","Wields snow and ice as its magic",0,0 );}
     public List<Skill> createSkills() {
 
-        FullExecuteConsumer iceSpikeLogic = (skill, user, targets) -> {
+        FullExecuteConsumer iceSpikeLogic = (skill, user, targets, onSkillComplete) -> {
             int calculateDamage = (user.getBaseAtk() * 3);
             Character target = targets.getFirst();
 
             LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
 
             target.takeDamage(calculateDamage, user);
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
         };
 
 
-        FullExecuteConsumer frostBiteLogic = (skill, user, targets) -> {
+        FullExecuteConsumer frostBiteLogic = (skill, user, targets, onSkillComplete) -> {
             int calculateDamage = (int)(user.getBaseAtk() * 4);
             Character target = targets.getFirst();
 
             LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
 
             target.takeDamage(calculateDamage, user);
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
         };
 
 
