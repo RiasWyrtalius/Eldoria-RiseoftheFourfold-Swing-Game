@@ -26,21 +26,21 @@ public class Archer extends JobClass {
         );
         AssetManager.getInstance().registerAnimation(
                 "ARCHER_DODGE",
-                "Assets/Animations/Archer/Effects/Dodge/sprite_%d.png",
+                "Assets/Animations/Archer/Dodge/sprite_%d.png",
                 5, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );
         AssetManager.getInstance().registerAnimation(
                 "ARCHER_SHOOT_ARROW",
-                "Assets/Animations/Archer/Effects/Shoot_Arrow/sprite_%d.png",
+                "Assets/Animations/Archer/Shoot_Arrow/sprite_%d.png",
                 5, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );
         AssetManager.getInstance().registerAnimation(
                 "ARCHER_SHOOT_ARROW-Rapid",
-                "Assets/Animations/Archer/Effects/Shoot_Arrow/sprite_%d.png",
-                5, 100, 100 , 100,
-                AnimationLoopType.ONE_CYCLE
+                "Assets/Animations/Archer/Shoot_Arrow/sprite_%d.png",
+                5, 100, 100 , 70,
+                AnimationLoopType.TWO_CYCLES
         );
     }
     public List<Skill> createSkills() {
@@ -49,9 +49,9 @@ public class Archer extends JobClass {
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user);
             LogManager.log(skill.getActionLog(user, "Unleashes array of Arrows at", targets, calculateDamage), LogColor.HERO_ACTION);
-            VisualEffectsManager.getInstance().playAnimationOnCharacter("ARCHER_SHOOT_ARROW-Rapid", user, () -> {
+            VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW-Rapid", user, () -> {
                 target.takeDamage(calculateDamage, user);
-            });
+            }, true);
         };
 
         FullExecuteConsumer heavyArrowLogic = (skill, user, targets) -> {
@@ -59,11 +59,10 @@ public class Archer extends JobClass {
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user);
             LogManager.log(skill.getActionLog(user, " Pulls their bow the hardest they can to release at ", targets, calculateDamage), LogColor.HERO_ACTION);
-            VisualEffectsManager.getInstance().playAnimationOnCharacter("ARCHER_SHOOT_ARROW", user, () -> {
+            VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW", user, () -> {
                 target.takeDamage(calculateDamage, user);
-            });
+            }, true);
         };
-
 
         Skill RapidFire = new Skill(
                 "Rapid Fire", "Single-target long ranged attack ", 10, 15,

@@ -144,7 +144,6 @@ public class AssetManager {
      * @return record containing the ID and boolean flag for animation
      */
     public VisualAsset getVisualAssetData(String visualId) {
-        boolean isAnimation = animationRepository.containsKey(visualId);
-        return new VisualAsset(visualId, isAnimation);
+        return new VisualAsset(visualId, isAnimation(visualId));
     }
 }

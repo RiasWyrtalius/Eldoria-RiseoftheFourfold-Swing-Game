@@ -108,7 +108,7 @@
             String visualId = character.getImageKey();
             VisualAsset assetData = AssetManager.getInstance().getVisualAssetData(visualId);
 
-            VisualEffectsManager.getInstance().applyVisual(assetData, iconDisplayLabel);
+            VisualEffectsManager.getInstance().applyVisual(assetData, iconDisplayLabel, false);
 
             // handle dead or alive
             this.setBackground(character.isAlive() ? getBackground() : Color.gray);
