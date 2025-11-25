@@ -105,6 +105,8 @@
             manaBar.setString(character.getMana() + "/" + character.getMaxMana());
             manaBar.setForeground(barState(character.getMana(), character.getMaxMana()));
 
+            manaBar.setForeground(new Color(0, 150, 255));
+
             String visualId = character.getImageKey();
             VisualAsset assetData = AssetManager.getInstance().getVisualAssetData(visualId);
 
