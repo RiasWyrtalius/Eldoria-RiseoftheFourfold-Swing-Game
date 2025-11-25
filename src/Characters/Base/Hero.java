@@ -61,20 +61,7 @@ public class Hero extends Character {
     }
 
     public void useSkill(Skill skill, List<Character> targets) {
-        if (targets.size() == 1) {
-            LogManager.log(this.name + " is attempting to use " + skill.getName() + " on "
-                + targets.getFirst().getName() + ".");
-        } else if (targets.size() > 1) {
-            String targetNames = "";
-            for (int i = 0; i < targets.size()-1; i++) {
-                targetNames += targets.get(i).getName();
-                if (i < targets.size() - 1) {
-                    targetNames += ", ";
-                }
-            }
-            LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on " +
-                    targetNames + " and " + targets.getLast().getName(), Color.GREEN);
-        }
+        LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on " + Skill.formatTargetList(targets), Color.GREEN);
 
         skill.execute(this, targets);
     }

@@ -160,7 +160,7 @@ public class MainInterface extends JFrame{
     public void onCharacterPanelClick(Character clickedCharacter) {
         switch (currentMode) {
             case HERO_SELECT:
-                LogManager.log("SELECT HERO");
+//                LogManager.log("SELECT HERO");
                 if (clickedCharacter instanceof Hero) {
                     Hero hero = (Hero)clickedCharacter;
                     if (hero.isAlive() && !hero.isExhausted()) {
@@ -171,8 +171,11 @@ public class MainInterface extends JFrame{
                 } else LogManager.log("Enemy is Selected!");
                 break;
             case TARGET_SELECT:
-                LogManager.log("SELECT TARGET");
+//                LogManager.log("SELECT TARGET");
                 SkillTarget requiredTarget = selectedSkill.getSkillTarget();
+
+                CharacterStatusPanel panel = getCharacterPanel(clickedCharacter);
+                if (panel == null) return;
 
                 if (!clickedCharacter.isAlive()) {
                     LogManager.log(clickedCharacter.getName() + " is already knocked out and cannot be targeted.");
@@ -181,12 +184,14 @@ public class MainInterface extends JFrame{
 
                 if (selectedTargets.contains(clickedCharacter)) {
                     selectedTargets.remove(clickedCharacter);
+                    panel.setSelectionOverlay(false);
                     LogManager.log("Deselected " + clickedCharacter.getName() + ".");
                 } else if (selectedTargets.size() < requiredTarget.getMaxTargets()){
                     selectedTargets.add(clickedCharacter);
                     LogManager.log("Selected " + selectedSkill.getName() + " (" +
                             selectedTargets.size() + "/" + requiredTarget.getMaxTargets() + ")");
                     showTargetConfirmMenu(clickedCharacter);
+                    panel.setSelectionOverlay(true);
                 } else {
                     LogManager.log("Maximum targets (" + requiredTarget.getMaxTargets() + ") already selected.");
                 }
@@ -194,10 +199,19 @@ public class MainInterface extends JFrame{
                 refreshUI();
                 break;
             case SKILL_SELECT:
-                LogManager.log("SELECT SKILL");
+//                LogManager.log("SELECT SKILL");
             case IDLE:
-                LogManager.log("IDLE");
+//                LogManager.log("IDLE");
                 break;
+        }
+    }
+
+    private void clearAllSelectionOverlays() {
+        for (JPanel panel : heroPartyPanels) {
+            ((CharacterStatusPanel) panel).setSelectionOverlay(false);
+        }
+        for (JPanel panel : enemyPartyPanels) {
+            ((CharacterStatusPanel) panel).setSelectionOverlay(false);
         }
     }
 
@@ -248,6 +262,7 @@ public class MainInterface extends JFrame{
         this.currentMode = BattleUIMode.HERO_SELECT;
         selectedTargets = new ArrayList<>();
         refreshUI();
+        clearAllSelectionOverlays();
     }
 
     private void hideTargetConfirmMenu() {
@@ -320,7 +335,7 @@ public class MainInterface extends JFrame{
             menu.show(this, 100, 100);
         }
 
-        LogManager.log("Skill menu shown for " + hero.getName() + ".");
+//        LogManager.log("Skill menu shown for " + hero.getName() + ".");
     }
 
     private JPopupMenu getJPopupMenu(Hero hero) {

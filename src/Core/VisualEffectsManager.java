@@ -49,10 +49,13 @@ public class VisualEffectsManager {
                     finishedTimer.stop();
                     activeAnimationTimers.entrySet().removeIf(entry -> entry.getValue() == finishedTimer);
 
+                    displayLabel.setIcon(null);
                     LogManager.log("animation finished");
 
-                    if (onFinish != null)
+                    if (onFinish != null) {
                         onFinish.run();
+                        VisualEffectsManager.this.mainView.refreshUI();
+                    }
                     return;
                 }
                 displayLabel.setIcon(animation.getNextFrame());

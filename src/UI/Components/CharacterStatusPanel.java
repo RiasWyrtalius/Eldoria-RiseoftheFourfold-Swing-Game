@@ -3,6 +3,7 @@
     import Characters.Base.Hero;
     import Characters.Character;
     import Characters.Party;
+    import Core.LogColor;
     import Core.LogManager;
     import Core.VisualAsset;
     import Core.VisualEffectsManager;
@@ -10,6 +11,7 @@
     import UI.MainInterface;
 
     import javax.swing.*;
+    import javax.swing.border.Border;
     import java.awt.*;
     import java.awt.event.MouseAdapter;
     import java.awt.event.MouseEvent;
@@ -83,6 +85,9 @@
             if (character == null) {
                 this.setVisible(false);
                 getIconDisplayLabel().setIcon(null);
+
+                this.setToolTipText(null);
+
                 return;
             }
 
@@ -117,6 +122,20 @@
             if (percentage >= 0.5) return Color.GREEN;
             else if (percentage > 0.2) return Color.YELLOW;
             else return Color.RED;
+        }
+
+        public void setSelectionOverlay(boolean isSelected) {
+            if (isSelected) {
+                Color semiTransparentRed = new Color(255, 0, 0, 100);
+                Border lineBorder = BorderFactory.createLineBorder(semiTransparentRed, 1);
+                iconDisplayLabel.setBorder(BorderFactory.createCompoundBorder(
+                        iconDisplayLabel.getBorder(), // Keep existing borders
+                        lineBorder
+                ));
+            } else {
+                iconDisplayLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            }
+            iconDisplayLabel.repaint();
         }
 
         public Character getCharacter() {

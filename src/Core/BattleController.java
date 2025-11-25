@@ -57,6 +57,7 @@ public class BattleController {
         }
 
         hero.useSkill(skill, targets);
+        LogManager.log("use after skill");
         hero.setExhausted(true);
 
         if (this.mainView != null)

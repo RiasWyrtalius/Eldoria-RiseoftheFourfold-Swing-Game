@@ -29,7 +29,7 @@ public class FireMage extends JobClass {
         AssetManager.getInstance().registerAnimation(
                 "FIREBALL",
                 "Assets/Animations/Effects/FireBall/sprite_%d.png",
-                6, 100,100, 150,
+                6, 100,100, 100,
                 AnimationLoopType.ONE_CYCLE
         );
     }
@@ -40,11 +40,11 @@ public class FireMage extends JobClass {
         FullExecuteConsumer fireBallLogic = (skill, user, targets) -> {
             int calculateDamage = (user.getBaseAtk() * 2);
             Character target = targets.getFirst();
-
             LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
                 target.takeDamage(calculateDamage, user);
             });
+
         };
 
         FullExecuteConsumer fireCycloneLogic = (skill, user, targets) -> {

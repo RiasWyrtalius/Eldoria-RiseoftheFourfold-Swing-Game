@@ -1,6 +1,7 @@
 package Abilities;
 
 import Characters.Character;
+import Core.LogManager;
 
 import java.time.temporal.Temporal;
 import java.util.List;
@@ -37,23 +38,28 @@ public class Skill {
     public String getActionLog(Character user, String action, List<Character> targets, int damage) {
         String targetNames = formatTargetList(targets);
 
-        String logMessage = String.format("%s %s %s on %s for %d damage!",
+        String logMessage = String.format("%s %s %s on %s!",
                 user.getName(),
                 action,
                 this.getName(),
-                targetNames,
-                damage
+                targetNames
         );
 
         return logMessage;
     }
 
-    String formatTargetList(List<Character> targets) {
-        if (targets.isEmpty()) return "no target";
+    public static String formatTargetList(List<Character> targets) {
+        if (targets.size() == 1) {
+            return targets.get(0).getName();
+        }
 
-        return targets.stream()
+        String allButLast = targets.subList(0, targets.size() - 1).stream()
                 .map(Character::getName)
-                .collect(Collectors.joining(", ", "", ""));
+                .collect(Collectors.joining(", "));
+
+        String lastName = targets.getLast().getName();
+
+        return allButLast + " and " + lastName;
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============
