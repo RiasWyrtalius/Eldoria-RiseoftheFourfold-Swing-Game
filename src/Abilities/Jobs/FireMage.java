@@ -44,7 +44,8 @@ public class FireMage extends JobClass {
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
                 target.takeDamage(calculateDamage, user);
             });
-
+//           due to callback and it being another thread, lines here execute before the playanimation character will end, this is for non locking reasons. example:
+            LogManager.log("haha i got here first lol");
         };
 
         FullExecuteConsumer fireCycloneLogic = (skill, user, targets) -> {

@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+// FIXME: Turn and game doesn’t end automatically when final blow is from an animation
 public class BattleController {
     private MainInterface mainView;
     private final Party heroParty;

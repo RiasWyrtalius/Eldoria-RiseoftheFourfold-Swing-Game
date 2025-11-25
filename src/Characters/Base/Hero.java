@@ -16,16 +16,12 @@ public class Hero extends Character {
     protected JobClass job;
 
     public Hero(String name, int initialHealth, int baseAtk, int maxMana, int level, JobClass job, String imageKey) {
-        super(name, initialHealth, baseAtk, maxMana, level, imageKey);
+        super(name, initialHealth + job.getHpBonus(), baseAtk, maxMana, level, imageKey);
         this.XP = 0;
         this.baseXP = 100;
         this.incrementXP = 50;
         this.requiredXP = XP + (incrementXP * (this.level - 1));
         this.job = job;
-
-        // applying stat modifiers
-        this.health += job.getHpBonus();
-        this.mana += job.getManaBonus();
     }
 
     public Hero(String name, int health, int baseAtk, int maxMana, JobClass job, String imageKey) {
