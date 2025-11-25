@@ -1,9 +1,6 @@
 package Core;
 
-import Abilities.Jobs.AeroMancer;
-import Abilities.Jobs.Archer;
-import Abilities.Jobs.FireMage;
-import Abilities.Jobs.Warrior;
+import Abilities.Jobs.*;
 import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Enemies.Goblin;
@@ -50,8 +47,8 @@ public class GameManager {
             }
         };
 
-        FireMage fireMage = new FireMage();
-        Character sam = new Hero("Sammie Wammy", 100, 60, 120, 1, fireMage, "MAGE_IDLE") {
+        EarthMage earthMage = new EarthMage();
+        Character ythan = new Hero("Ythanny W", 100, 60, 120, 1, earthMage, "MAGE_IDLE") {
             @Override
             protected void onDeath() {
 
@@ -81,7 +78,7 @@ public class GameManager {
 
 //        TODO: add max amount of party members
         heroParty.addPartyMember(charlie);
-        heroParty.addPartyMember(sam);
+        heroParty.addPartyMember(ythan);
         heroParty.addPartyMember(gianmeni);
         heroParty.addPartyMember(kervs);
 
