@@ -63,6 +63,15 @@ public class FireMage extends JobClass {
                 onSkillComplete.run();
             }
         };
+        FullExecuteConsumer staffAttackLogic = (self, user, targets, onSkillComplete) -> {
+            int calculateDamage = (int)( 10 + 0 + (user.getLevel() * 1.2) + (50 * (user.getLevel() * 0.05)));
+            Character target = targets.getFirst();
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
+            target.takeDamage(calculateDamage, user, self);
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
+        };
 
         Skill fireball = new Skill(
                 "Fireball", "Single-target fire spell", 25, 30,
@@ -76,8 +85,14 @@ public class FireMage extends JobClass {
                 fireCycloneLogic
         );
 
+        Skill staffAttack= new Skill(
+                "Staff Attack", "Single-target spell", 0, 10,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
+                staffAttackLogic
+        );
 
-        return List.of(fireball, fireCyclone);
+
+        return List.of(staffAttack,fireball, fireCyclone);
     }
 
 }

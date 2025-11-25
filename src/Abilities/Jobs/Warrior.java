@@ -42,10 +42,12 @@ public class Warrior extends JobClass {
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, " Bashes Shield on ", targets, calculateDamage), LogColor.HERO_ACTION);
-
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
+            VisualEffectsManager.getInstance().playAnimation("WARRIOR_SHIELD-BASH", user, () -> {
+                target.takeDamage(calculateDamage, user, self);
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                }
+            }, true);
         };
 
         FullExecuteConsumer swordSlashLogic = (self, user, targets, onSkillComplete) -> {
@@ -53,10 +55,12 @@ public class Warrior extends JobClass {
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, " Slashes on ", targets, calculateDamage), LogColor.HERO_ACTION);
-
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
+            VisualEffectsManager.getInstance().playAnimation("WARRIOR_SWORD-SLASH", user, () -> {
+                target.takeDamage(calculateDamage, user, self);
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                }
+            }, true);
         };
 
         Skill ShieldBash = new Skill(
