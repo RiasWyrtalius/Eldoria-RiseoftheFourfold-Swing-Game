@@ -45,7 +45,7 @@ public class Archer extends JobClass {
     }
     public List<Skill> createSkills() {
         FullExecuteConsumer rapidFireLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (int)(user.getBaseAtk() +(user.getLevel() * 1.10));
+            int calculateDamage = (int)(20 + 15 + (user.getLevel() * 1.2) + (20 * (user.getLevel() * 0.05)));
             Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, "Unleashes array of Arrows", targets, calculateDamage), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW-Rapid", user, () -> {
@@ -57,7 +57,7 @@ public class Archer extends JobClass {
         };
 
         FullExecuteConsumer heavyArrowLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (int)(user.getBaseAtk() +(user.getLevel() * 1.6));
+            int calculateDamage = (int)(40 + 20 + (user.getLevel() * 1.2) + (40 * (user.getLevel() * 0.05)));
             Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, "Pulls their bow the hardest they can to release", targets, calculateDamage), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW", user, () -> {
@@ -69,9 +69,10 @@ public class Archer extends JobClass {
         };
 
         Skill RapidFire = new Skill(
-                "Rapid Fire", "Single-target long ranged attack ", 10, 15,
+                "Rapid Fire", "Single-target long ranged attack ", 10, 20,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
                 rapidFireLogic
+
         );
 
         Skill HeavyArrow = new Skill(
