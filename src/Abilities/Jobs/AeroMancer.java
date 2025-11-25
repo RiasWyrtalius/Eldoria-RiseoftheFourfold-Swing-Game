@@ -46,7 +46,7 @@ public class AeroMancer extends JobClass {
 
         Skill WindBurst = new Skill(
                 "Wind Burst", "Unleashes compressed wind", 20, 25,
-                SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.AOE_ALL_TARGETS,
+                SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.SINGLE_TARGET,
                 windBurstLogic
         );
 
