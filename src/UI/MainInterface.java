@@ -397,7 +397,7 @@ public class MainInterface extends JFrame{
         sb.append("----------------\n");
 
         // --- HP & MANA ---
-        sb.append("HP: ").append(c.getInitialHealth()).append("/").append(c.getHealth()).append("\n");
+        sb.append("HP: ").append(c.getHealth()).append("/").append(c.getInitialHealth()).append("\n");
         sb.append("MP: ").append(c.getMana()).append("/").append(c.getMaxMana()).append("\n");
         sb.append("\n");
 

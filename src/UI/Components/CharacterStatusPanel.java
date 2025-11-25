@@ -97,12 +97,12 @@
 
             hpBar.setMaximum(character.getInitialHealth());
             hpBar.setValue(character.getHealth());
-            hpBar.setString(character.getHealth() + "/" + character.getInitialHealth());
+            hpBar.setString("hp " + character.getHealth() + "/" + character.getInitialHealth());
             hpBar.setForeground(barState(character.getHealth(), character.getInitialHealth()));
 
             manaBar.setMaximum(character.getMaxMana());
             manaBar.setValue(character.getMana());
-            manaBar.setString(character.getMana() + "/" + character.getMaxMana());
+            manaBar.setString("mp " + character.getMana() + "/" + character.getMaxMana());
             manaBar.setForeground(barState(character.getMana(), character.getMaxMana()));
 
             manaBar.setForeground(new Color(0, 150, 255));
