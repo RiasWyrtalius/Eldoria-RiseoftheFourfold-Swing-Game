@@ -66,7 +66,7 @@ public class VisualEffectsManager {
                         runningAnimationIDs.remove(displayLabel);
 
                         displayLabel.setIcon(null);
-                        LogManager.log("animation finished: " + animationId);
+//                        LogManager.log("animation finished: " + animationId);
 
                         if (isTemporary) {
                             lockedLabels.remove(displayLabel);
@@ -92,7 +92,7 @@ public class VisualEffectsManager {
             lockedLabels.add(displayLabel);
         }
 
-        LogManager.log("Starting animation: " + animationId);
+//        LogManager.log("Starting animation: " + animationId);
         timer.start();
     }
 

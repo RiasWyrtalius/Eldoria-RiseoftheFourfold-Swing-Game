@@ -129,9 +129,11 @@ public class BattleController {
 
             LogManager.log(enemy.getName() + " attacks " + target.getName() + "!", LogColor.ENEMY_ACTION);
 
-            ((Enemy)enemy).makeAttack(validTargets);
+            Runnable onSkillComplete = () -> {
+                advanceTurnCycle(false);
+            };
 
-            if (checkLose()) return;
+            ((Enemy)enemy).makeAttack(validTargets, onSkillComplete);
         }
 
         if (this.mainView != null)

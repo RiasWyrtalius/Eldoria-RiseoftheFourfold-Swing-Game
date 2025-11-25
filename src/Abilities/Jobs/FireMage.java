@@ -37,25 +37,25 @@ public class FireMage extends JobClass {
     public List<Skill> createSkills() {
 
         // FIXME: turn doesn't end when animation is finished
-        FullExecuteConsumer fireBallLogic = (skill, user, targets, onSkillComplete) -> {
+        FullExecuteConsumer fireBallLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = (int)(user.getBaseAtk()  + (user.getLevel() * 1.15));
             Character target = targets.getFirst();
-            LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
-                target.takeDamage(calculateDamage, user);
+                target.takeDamage(calculateDamage, user, self);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                 }
             }, true);
         };
 
-        FullExecuteConsumer fireCycloneLogic = (skill, user, targets, onSkillComplete) -> {
+        FullExecuteConsumer fireCycloneLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = (user.getBaseAtk() * 3);
 
-            LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
 
             for (Character t : targets) {
-                t.takeDamage(calculateDamage, user);
+                t.takeDamage(calculateDamage, user, self);
             }
 
             if (onSkillComplete != null) {

@@ -1,6 +1,13 @@
 package Characters;
 
+import Abilities.ReactionLogic;
+import Abilities.ReactionSkill;
+import Abilities.Skill;
+import Core.Dice;
 import Core.LogManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Character {
     protected String name;
@@ -16,6 +23,8 @@ public abstract class Character {
     protected int maxMana;
 
     protected boolean isExhausted = false;
+
+    protected List<ReactionSkill> reactions = new ArrayList<>();
 
     protected String imageKey;
 
@@ -34,14 +43,35 @@ public abstract class Character {
         this(name, health, baseAtk, maxMana, 1, imageKey);
     }
 
-    public void takeDamage(int damage, Character attacker) {
-        this.health -= damage;
-        LogManager.log(this.name + " took " + damage + " damage from " + attacker.getName());
+    public void takeDamage(int rawDamage, Character attacker, Skill incomingSkill) {
+        int finalDamage = processReactions(attacker, incomingSkill, rawDamage);
+
+        this.health -= finalDamage;
+
+        if (finalDamage == 0) {
+            LogManager.log(this.name + " took no damage (Mitigated)!");
+        } else {
+            LogManager.log(this.name + " takes " + finalDamage + " damage.");
+        }
+
         if (this.health <= 0) {
-            onDefeat(attacker);
             die();
+            if (attacker != null) {
+                onDefeat(attacker);
+            }
         }
     }
+
+
+    // without reaction
+//    public void takeDamage(int damage, Character attacker) {
+//        this.health -= damage;
+//        LogManager.log(this.name + " took " + damage + " damage from " + attacker.getName());
+//        if (this.health <= 0) {
+//            onDefeat(attacker);
+//            die();
+//        }
+//    }
 
     public final void die() {
         this.health = 0;
@@ -74,6 +104,25 @@ public abstract class Character {
     }
 
     public void setHealth(int health) { this.health = health; }
+
+    public void addReaction(ReactionSkill reaction) {
+        this.reactions.add(reaction);
+    }
+
+    protected int processReactions(Character attacker, Skill incomingSkill, int incomingDamage) {
+        int currentDamage = incomingDamage;
+        // TODO: add process the most fit reaction but this will take a while, just do random
+        if (reactions.isEmpty()) {
+            return currentDamage;
+        }
+
+        ReactionSkill reaction = Dice.pickRandom(reactions);
+        int result = reaction.logic().tryReact(this, attacker, incomingSkill, incomingDamage);
+        if (result != -1) {
+            currentDamage = result;
+        }
+        return currentDamage;
+    }
 
     // =============== PUBLIC GETTERS FOR UI ===============
     public int getInitialHealth() {

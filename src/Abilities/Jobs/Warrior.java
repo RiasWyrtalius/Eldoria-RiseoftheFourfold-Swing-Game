@@ -37,28 +37,26 @@ public class Warrior extends JobClass {
     }
 
     public List<Skill> createSkills() {
-        FullExecuteConsumer shieldBashLogic = (skill, user, targets, onSkillComplete) -> {
+        FullExecuteConsumer shieldBashLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = (user.getBaseAtk() * 3);
             Character target = targets.getFirst();
-            LogManager.log(skill.getActionLog(user, "Bashes Shield ", targets, calculateDamage), LogColor.HERO_ACTION);
-            VisualEffectsManager.getInstance().playAnimation("WARRIOR_SHIELD-BASH", user, () -> {
-                target.takeDamage(calculateDamage, user);
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                }
-            }, true);
+            target.takeDamage(calculateDamage, user, self);
+            LogManager.log(self.getActionLog(user, " Bashes Shield on ", targets, calculateDamage), LogColor.HERO_ACTION);
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
         };
 
-        FullExecuteConsumer swordSlashLogic = (skill, user, targets, onSkillComplete) -> {
+        FullExecuteConsumer swordSlashLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = (user.getBaseAtk() * 3);
             Character target = targets.getFirst();
-            LogManager.log(skill.getActionLog(user, "Slashes Sword ", targets, calculateDamage), LogColor.HERO_ACTION);
-            VisualEffectsManager.getInstance().playAnimation("WARRIOR_SWORD-SLASH", user, () -> {
-                target.takeDamage(calculateDamage, user);
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                }
-            }, true);
+            target.takeDamage(calculateDamage, user, self);
+            LogManager.log(self.getActionLog(user, " Slashes on ", targets, calculateDamage), LogColor.HERO_ACTION);
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
         };
 
         Skill ShieldBash = new Skill(

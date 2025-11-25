@@ -1,5 +1,6 @@
 package Core;
 
+import Abilities.Jobs.AeroMancer;
 import Abilities.Jobs.Archer;
 import Abilities.Jobs.FireMage;
 import Abilities.Jobs.Warrior;
@@ -31,7 +32,7 @@ public class GameManager {
     }
 
     /**
-     * All da setup logic teehee
+     * All da setup logic teehee TODO: move to game loader
      */
     private void createGameModel() {
         //TEMPORARY HERO SETUP
@@ -75,9 +76,14 @@ public class GameManager {
             }
         };
 
+        AeroMancer aeoroMancer = new AeroMancer();
+        Character kervs = new Hero("Kurtis", 100, 60, 120, 1, aeoroMancer, "MAGE_IDLE");
+
+//        TODO: add max amount of party members
         heroParty.addPartyMember(charlie);
         heroParty.addPartyMember(sam);
         heroParty.addPartyMember(gianmeni);
+        heroParty.addPartyMember(kervs);
 
         //TEMPORARY ENEMY SETUP
         enemyParty = new Party("Swarm of Goblins");

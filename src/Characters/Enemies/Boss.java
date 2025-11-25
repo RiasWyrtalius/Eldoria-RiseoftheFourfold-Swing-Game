@@ -1,58 +1,87 @@
 package Characters.Enemies;
 
+import Abilities.*;
 import Characters.Base.Enemy;
 import Characters.Character;
+import Core.LogColor;
 import Core.LogManager;
 
 import java.util.List;
 
 public class Boss extends Enemy {
-    private double healthMultiplier;
-
     public Boss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
-        super(name, initialHealth, baseAtk, maxMana, level, type, rewardXP, "/Assets/Images/bstudios.png");
-        this.healthMultiplier = healthMultiplier;
-        int buffedHP = (int) (initialHealth * this.healthMultiplier);
-        setHealth(buffedHP);
-    }
-
-    public void devastatingStrike(List<Character> targets) {
-        LogManager.log("!!! " + this.name + " unleashes a DEVASTATING STRIKE !!!");
-
-        int AOE_DMG = (int) (this.getBaseAtk() * 1.5);
-
-        for (Character target : targets) {
-            if (target.getHealth() > 0) {
-                target.takeDamage(AOE_DMG, this);
-                LogManager.log(this.getName() + " hits " + target.getName() + " for " + AOE_DMG + " damage !");
-            }
-        }
+        super(name, initialHealth * (int)healthMultiplier, baseAtk, maxMana, level, type, rewardXP, "Assets/Images/bstudios.png");
     }
 
     @Override
-    public void makeAttack(List<Character> targets) {
-        int manaCost = 50; // Dev. Strike mana cost
-
-        if(this.spendMana(manaCost)) {
-            devastatingStrike(targets);
-        } else {
+    protected void initializeSkills() {
+        FullExecuteConsumer basicAttackLogic = (self, user, targets, onSkillComplete) -> {
             Character weakTarget = null;
             int lowHP = Integer.MAX_VALUE;
 
             for (Character c : targets) {
                 if (c.getHealth() > 0 && c.getHealth() < lowHP) {
                     lowHP = c.getHealth();
-                    weakTarget = c;         //lowest hp Hero
+                    weakTarget = c;
                 }
             }
 
-            if (weakTarget != null) {
-                LogManager.log(this.getName() + " focuses on " + weakTarget.getName() + "!");
-
-                int dmg = this.getBaseAtk();
-                weakTarget.takeDamage(dmg, this);
-                LogManager.log(this.getName() + " hits " + weakTarget.getName() + " for " + dmg + "damage!");
+            if (weakTarget == null && !targets.isEmpty()) {
+                weakTarget = targets.get(0);
             }
+
+            if (weakTarget != null) {
+                int calculateDamage = user.getBaseAtk();
+                LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget), calculateDamage), LogColor.HERO_ACTION);
+                weakTarget.takeDamage(calculateDamage, user, self);
+            }
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
+        };
+
+        Skill basicAttack = new Skill(
+                "Cruel Strike", "Attacks the weakest target", 0, 0,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
+                basicAttackLogic
+        );
+
+        FullExecuteConsumer devastatingStrikeLogic = (self, user, targets, onSkillComplete) -> {
+            int calculateDamage = (int) (user.getBaseAtk() * 1.5);
+
+            LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets, calculateDamage), LogColor.HERO_ACTION);
+
+            for (Character target : targets) {
+                if (target.getHealth() > 0) {
+                    target.takeDamage(calculateDamage, user, self);
+                }
+            }
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
+        };
+
+        Skill devastatingStrike = new Skill(
+                "Devastating Strike", "Massive AOE damage", 50, 0,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.AOE_ALL_TARGETS,
+                devastatingStrikeLogic
+        );
+
+        skills.add(basicAttack);
+        skills.add(devastatingStrike);
+    }
+
+    @Override
+    public void makeAttack(List<Character> targets, Runnable onSkillComplete) {
+        Skill basicAttack = skills.get(0);
+        Skill devastatingStrike = skills.get(1);
+
+        if (this.getMana() >= devastatingStrike.getManaCost()) {
+            devastatingStrike.execute(this, targets, onSkillComplete);
+        } else {
+            basicAttack.execute(this, targets, onSkillComplete);
         }
     }
 }

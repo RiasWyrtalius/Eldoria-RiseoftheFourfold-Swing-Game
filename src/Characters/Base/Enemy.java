@@ -1,28 +1,35 @@
 package Characters.Base;
 
+import Abilities.Skill;
 import Characters.Character;
 import Core.LogColor;
 import Core.LogManager;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 // TODO: refine
 public abstract class Enemy extends Character {
     private String type;
     private int rewardXP;
+    protected List<Skill> skills;
 
     public Enemy(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, String imageKey) {
         super(name, initialHealth, baseAtk, maxMana, level, imageKey);
+        this.skills = new ArrayList<>();
         this.type = type;
         this.rewardXP = rewardXP;
+        initializeSkills();
     }
 
     public Enemy(String name, int health, int baseAtk, int maxMana, String type, int rewardXP, String imageKey) {
         this(name, health, baseAtk, maxMana, 1, type, rewardXP, imageKey);
     }
 
-    public abstract void makeAttack(List<Character> targets);
+    protected abstract void initializeSkills();
+
+    public abstract void makeAttack(List<Character> targets, Runnable onSkillComplete);
 
     @Override
     protected void onDeath() {
@@ -46,5 +53,9 @@ public abstract class Enemy extends Character {
     }
     public int getRewardXP() {
         return rewardXP;
+    }
+
+    public List<Skill> getSkills() {
+        return skills;
     }
 }
