@@ -32,6 +32,13 @@ public class FireMage extends JobClass {
                 6, 100,100, 100,
                 AnimationLoopType.ONE_CYCLE
         );
+
+        AssetManager.getInstance().registerAnimation(
+                "FIRE_CYCLONE",
+                "Assets/Animations/Mage-Fire/Effects/FireCyclone/sprite_%d.png",
+                5, 100,100, 300,
+                AnimationLoopType.TWO_CYCLES
+        );
     }
 
     public List<Skill> createSkills() {
@@ -54,10 +61,17 @@ public class FireMage extends JobClass {
         FullExecuteConsumer fireCycloneLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = (int)(50 + 30 + (user.getLevel() * 1.2) + (50 * (user.getLevel() * 0.05)));
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
+            for(Character t : targets) {
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("FIRE_CYCLONE", t, () -> {
 
-            for (Character t : targets) {
-                t.takeDamage(calculateDamage, user, self);
+                        t.takeDamage(calculateDamage, user, self);
+
+                    if (onSkillComplete != null) {
+                        onSkillComplete.run();
+                    }
+                }, true);
             }
+
 
             if (onSkillComplete != null) {
                 onSkillComplete.run();
