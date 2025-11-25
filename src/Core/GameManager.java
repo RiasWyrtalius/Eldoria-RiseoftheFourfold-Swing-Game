@@ -37,7 +37,7 @@ public class GameManager {
         //TEMPORARY HERO SETUP
         heroParty = new Party("The Godslayers");
         Warrior warrior = new Warrior();
-        Character charlie = new Hero("Charlie",150,50,100,1,warrior,"Assets/Images/bstudios.png"){
+        Character charlie = new Hero("Charlie",150,50,100,1,warrior,"WARRIOR_IDLE"){
             @Override
             protected void onDeath() {
 

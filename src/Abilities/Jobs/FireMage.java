@@ -28,7 +28,7 @@ public class FireMage extends JobClass {
 
         AssetManager.getInstance().registerAnimation(
                 "FIREBALL",
-                "Assets/Animations/Effects/FireBall/sprite_%d.png",
+                "Assets/Animations/Mage/Effects/FireBall/sprite_%d.png",
                 6, 100,100, 100,
                 AnimationLoopType.ONE_CYCLE
         );
