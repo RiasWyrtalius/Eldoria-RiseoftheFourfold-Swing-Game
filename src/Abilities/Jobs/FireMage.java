@@ -38,7 +38,7 @@ public class FireMage extends JobClass {
 
         // FIXME: turn doesn't end when animation is finished
         FullExecuteConsumer fireBallLogic = (skill, user, targets, onSkillComplete) -> {
-            int calculateDamage = (user.getBaseAtk() * 2);
+            int calculateDamage = (int)(user.getBaseAtk()  + (user.getLevel() * 1.15));
             Character target = targets.getFirst();
             LogManager.log(skill.getActionLog(user, skill.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
