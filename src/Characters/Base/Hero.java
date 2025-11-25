@@ -50,12 +50,13 @@ public class Hero extends Character {
 
         StringBuilder logMsg = new StringBuilder();
 
-        int passiveHP = (int) (getInitialHealth() * 0.05); // 5% max HP
-
-        if (passiveHP < 1) passiveHP = 1;
-
         if (getHealth() < getInitialHealth()) {
-            int newHP = getInitialHealth() + passiveHP;
+            
+            int passiveHP = (int) (getInitialHealth() * 0.05);
+            if (passiveHP < 1) passiveHP = 1;
+
+            int newHP = getHealth() + passiveHP;
+
             if (newHP > getInitialHealth()) {
                 newHP = getInitialHealth();
             }
