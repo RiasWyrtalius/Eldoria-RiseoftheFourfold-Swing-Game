@@ -21,14 +21,14 @@ public class FireMage extends JobClass {
 
         AssetManager.getInstance().registerAnimation(
                 "MAGE_IDLE",
-                "Assets/Animations/Mage/Idle/sprite_%d.png",
+                "Assets/Animations/Mage-Fire/Idle/sprite_%d.png",
                 5, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
 
         AssetManager.getInstance().registerAnimation(
                 "FIREBALL",
-                "Assets/Animations/Mage/Effects/FireBall/sprite_%d.png",
+                "Assets/Animations/Mage-Fire/Effects/FireBall/sprite_%d.png",
                 6, 100,100, 100,
                 AnimationLoopType.ONE_CYCLE
         );
@@ -50,7 +50,7 @@ public class FireMage extends JobClass {
         };
 
         FullExecuteConsumer fireCycloneLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (user.getBaseAtk() * 3);
+            int calculateDamage = (int)(user.getBaseAtk() +(user.getLevel() * 1.5));
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
 

@@ -26,13 +26,13 @@ public class Archer extends JobClass {
         );
         AssetManager.getInstance().registerAnimation(
                 "ARCHER_DODGE",
-                "Assets/Animations/Archer/Dodge/sprite_%d.png",
+                "Assets/Animations/Archer/Effects/Dodge/sprite_%d.png",
                 5, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );
         AssetManager.getInstance().registerAnimation(
                 "ARCHER_SHOOT_ARROW",
-                "Assets/Animations/Archer/Shoot_Arrow/sprite_%d.png",
+                "Assets/Animations/Archer/Effects/Shoot_Arrow/sprite_%d.png",
                 5, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );

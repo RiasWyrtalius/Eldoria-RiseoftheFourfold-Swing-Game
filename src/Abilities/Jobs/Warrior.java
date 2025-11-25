@@ -38,7 +38,7 @@ public class Warrior extends JobClass {
 
     public List<Skill> createSkills() {
         FullExecuteConsumer shieldBashLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (user.getBaseAtk() * 3);
+            int calculateDamage = (int)(user.getBaseAtk() +(user.getLevel() * 1.2));
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, " Bashes Shield on ", targets, calculateDamage), LogColor.HERO_ACTION);
@@ -49,7 +49,7 @@ public class Warrior extends JobClass {
         };
 
         FullExecuteConsumer swordSlashLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (user.getBaseAtk() * 3);
+            int calculateDamage = (int)(user.getBaseAtk() +(user.getLevel() * 1.2));
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, " Slashes on ", targets, calculateDamage), LogColor.HERO_ACTION);
