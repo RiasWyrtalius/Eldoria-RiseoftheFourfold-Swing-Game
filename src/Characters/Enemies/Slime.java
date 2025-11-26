@@ -20,7 +20,7 @@ public class Slime extends Enemy {
         AssetManager.getInstance().registerAnimation(
                 "SLIME_IDLE",
                 "Assets/Animations/Enemies/Slime/Idle/sprite_%d.png",
-                3, 100, 100 , 300,
+                3, 100, 100 , 280,
                 AnimationLoopType.INFINITE
         );
 

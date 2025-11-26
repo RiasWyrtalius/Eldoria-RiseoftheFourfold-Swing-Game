@@ -3,6 +3,7 @@ package Core;
 import Abilities.Jobs.*;
 import Characters.Base.Hero;
 import Characters.Character;
+import Characters.Enemies.Boss;
 import Characters.Enemies.Goblin;
 import Characters.Enemies.Slime;
 import Characters.Party;
@@ -100,10 +101,10 @@ public class GameManager {
         //TEMPORARY ENEMY SETUP
         enemyParty = new Party("Swarm of Goblins");
         Goblin goblin_1 = new Goblin();
-        Goblin goblin_2 = new Goblin();
+        Boss boss = new Boss("Serato The Destroyer" , 250,40,200,1,"Boss",200,3);
         Slime slime_1 = new Slime();
         enemyParty.addPartyMember(goblin_1);
-        enemyParty.addPartyMember(goblin_2);
+        enemyParty.addPartyMember(boss);
         enemyParty.addPartyMember(slime_1);
     }
 
