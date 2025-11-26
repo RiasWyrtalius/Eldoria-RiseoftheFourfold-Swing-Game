@@ -5,6 +5,7 @@ import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Party;
+import Core.Utils.Dice;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
@@ -122,10 +123,9 @@ public class BattleController {
 
             List<Character> validTargets = heroParty.getAliveMembers();
 
-            if (validTargets.isEmpty()) break;
+            if (validTargets == null || validTargets.isEmpty()) break;
 
-            int randomIndex = (int) (Math.random() * validTargets.size());
-            Character target = validTargets.get(randomIndex);
+            Character target = Dice.pickRandom(validTargets);
 
             LogManager.log(enemy.getName() + " attacks " + target.getName() + "!", LogColor.ENEMY_ACTION);
 
@@ -143,7 +143,14 @@ public class BattleController {
     private void executeTurnCleanUp() {
         LogManager.log("--- Turn Recovery ---", LogColor.TURN_INDICATOR);
 
-        for (Character member : heroParty.getAliveMembers()) {
+        List<Character> aliveMembers = heroParty.getPartyMembers();
+
+        if (aliveMembers == null) {
+            if (this.mainView != null) { this.mainView.refreshUI(); }
+            return;
+        }
+
+        for (Character member : aliveMembers) {
 
             if (member instanceof Hero) {
                 Hero h = (Hero) member;

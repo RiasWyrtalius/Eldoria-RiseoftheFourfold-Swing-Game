@@ -1,5 +1,6 @@
 package Core.Visuals;
 
+import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Resource.Animation;
 import Resource.AssetManager;
@@ -21,9 +22,12 @@ import java.util.List;
  */
 public class VisualEffectsManager {
     private static final VisualEffectsManager INSTANCE = new VisualEffectsManager();
+
     private final Map<JLabel, Timer> activeAnimationTimers = new HashMap<>();
     private final Map<JLabel, String> runningAnimationIDs = new HashMap<>();
     private final List<JLabel> lockedLabels = new ArrayList<>();
+    private final List<JLabel> hiddenLabels = new ArrayList<>();
+
     private MainInterface mainView;
 
     private VisualEffectsManager() {}
@@ -34,16 +38,9 @@ public class VisualEffectsManager {
 
     // TODO: when animation is finished, delete the frames and refresh
     public void startSpriteAnimation(String animationId, JLabel displayLabel, Runnable onFinish, boolean isTemporary) {
-        // check if any existing animations are playing on displayLabel then stop it
-        if (activeAnimationTimers.containsKey(displayLabel)) {
-            Timer oldTimer = activeAnimationTimers.get(displayLabel);
-            if (oldTimer.isRunning()) {
-                oldTimer.stop();
-            }
-            // Clean up the maps so we start fresh
-            activeAnimationTimers.remove(displayLabel);
-            runningAnimationIDs.remove(displayLabel);
-        }
+        if (hiddenLabels.contains(displayLabel)) return;
+
+        stopAnimationOnComponent(displayLabel);
 
         Animation animation = AssetManager.getInstance().getAnimation(animationId);
 
@@ -57,34 +54,35 @@ public class VisualEffectsManager {
         animation.reset();
         displayLabel.setIcon(animation.getCurrentFrame());
 
-            Timer timer = new Timer(animation.getFrameDurationMs(), new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (animation.isFinished()) {
-                        Timer finishedTimer = (Timer)e.getSource();
-                        finishedTimer.stop();
-                        activeAnimationTimers.entrySet().removeIf(entry -> entry.getValue() == finishedTimer);
-                        runningAnimationIDs.remove(displayLabel);
+        Timer timer = new Timer(animation.getFrameDurationMs(), new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (animation.isFinished()) {
+                    Timer finishedTimer = (Timer)e.getSource();
+                    finishedTimer.stop();
+                    activeAnimationTimers.entrySet().removeIf(entry -> entry.getValue() == finishedTimer);
+                    runningAnimationIDs.remove(displayLabel);
 
-                        displayLabel.setIcon(null);
-//                        LogManager.log("animation finished: " + animationId);
+                    displayLabel.setIcon(null);
+//                  LogManager.log("animation finished: " + animationId);
 
-                        if (isTemporary) {
-                            lockedLabels.remove(displayLabel);
-                            if (mainView != null) mainView.refreshUI();
-                        }
-
-                        if (onFinish != null) {
-                            onFinish.run();
-                            if (mainView != null) mainView.refreshUI();
-                        }
-                        return;
+                    // only unclock if its temporary and dont touch hidden labels
+                    if (isTemporary) {
+                        lockedLabels.remove(displayLabel);
+                        if (mainView != null) mainView.refreshUI();
                     }
-                    displayLabel.setIcon(animation.getNextFrame());
-                    displayLabel.revalidate();
-                    displayLabel.repaint();
+
+                    if (onFinish != null) {
+                        onFinish.run();
+                        if (mainView != null) mainView.refreshUI();
+                    }
+                    return;
                 }
-            });
+                displayLabel.setIcon(animation.getNextFrame());
+                displayLabel.revalidate();
+                displayLabel.repaint();
+            }
+        });
 
         activeAnimationTimers.put(displayLabel, timer);
         runningAnimationIDs.put(displayLabel, animationId);
@@ -97,7 +95,11 @@ public class VisualEffectsManager {
         timer.start();
     }
 
-    public void stopAnimationById(String animationId) {
+    /**
+     * Stops every instance of an animation
+     * @param animationId
+     */
+    public void stopAllAnimationsById(String animationId) {
         List<JLabel> labelsToStop = new ArrayList<>();
         for (Map.Entry<JLabel, String> entry : runningAnimationIDs.entrySet()) {
             if (entry.getValue().equals(animationId)) {
@@ -113,6 +115,27 @@ public class VisualEffectsManager {
             runningAnimationIDs.remove(label);
             lockedLabels.remove(label);
         }
+    }
+
+    /**
+     * Stops any active animation timer running on the specific JLabel
+     * and cleans up da maps and temp locks and stuff idk
+     * @param displayLabel
+     */
+    public void stopAnimationOnComponent(JLabel displayLabel) {
+        if (activeAnimationTimers.containsKey(displayLabel)) {
+            Timer timer = activeAnimationTimers.get(displayLabel);
+
+            if (timer != null && timer.isRunning()) {
+                timer.stop();
+            }
+
+            activeAnimationTimers.remove(displayLabel);
+            runningAnimationIDs.remove(displayLabel);
+        }
+
+        // release so updates can take over
+        lockedLabels.remove(displayLabel);
     }
 
     /**
@@ -147,6 +170,18 @@ public class VisualEffectsManager {
         }
     }
 
+    public void hideCharacterVisual(Character character) {
+//        LogManager.log("Hiding character: " + character.getName(), LogColor.SYSTEM);
+        JLabel display = getDisplayComponent(character);
+        hideVisual(display);
+    }
+
+    public void restoreCharacterVisual(Character character) {
+//        LogManager.log("Showing character: " + character.getName(), LogColor.SYSTEM);
+        JLabel display = getDisplayComponent(character);
+        restoreVisual(display);
+    }
+
     public JLabel getDisplayComponent(Character character) {
         if (mainView == null) {
             LogManager.log("ERROR: VEM is not linked to MainInterface (mainView is null).", java.awt.Color.RED);
@@ -179,10 +214,16 @@ public class VisualEffectsManager {
 
     // tells if animation is static or not
     public void applyVisual(VisualAsset asset, JLabel displayLabel, boolean isTemporary) {
-        if (lockedLabels.contains(displayLabel) && !isTemporary) {
+        // check if its hidden
+        if (hiddenLabels.contains(displayLabel)) {
+            displayLabel.setIcon(null);
             return;
         }
 
+        // checking for temporary lock
+        if (lockedLabels.contains(displayLabel) && !isTemporary) {
+            return;
+        }
 
         // check if the right animation is already running
         if (asset.isAnimation() && runningAnimationIDs.containsKey(displayLabel)) {
@@ -193,13 +234,8 @@ public class VisualEffectsManager {
             }
         }
 
-        // stop old timer
-        if (activeAnimationTimers.containsKey(displayLabel)) {
-            Timer oldTimer = activeAnimationTimers.get(displayLabel);
-            oldTimer.stop();
-            activeAnimationTimers.remove(displayLabel);
-            runningAnimationIDs.remove(displayLabel);
-        }
+        // clean up old timers
+        stopAnimationOnComponent(displayLabel);
 
         if (asset.isAnimation()) {
             startSpriteAnimation(asset.key(), displayLabel, null, isTemporary);
@@ -212,6 +248,25 @@ public class VisualEffectsManager {
                 displayLabel.setIcon(staticIcon);
             }
         }
+    }
+
+    public void hideVisual(JLabel displayLabel) {
+        if (displayLabel  == null) return;
+
+        stopAnimationOnComponent(displayLabel);
+
+        displayLabel.setIcon(null);
+        displayLabel.repaint();
+
+        if (!hiddenLabels.contains(displayLabel)) {
+            hiddenLabels.add(displayLabel);
+        }
+    }
+
+    public void restoreVisual(JLabel displayLabel) {
+        if (displayLabel == null) return;
+        hiddenLabels.remove(displayLabel);
+        if (mainView != null) mainView.refreshUI();
     }
 
     public void stopAllTimers() {

@@ -126,12 +126,9 @@
             if (isSelected) {
                 Color semiTransparentRed = new Color(255, 0, 0, 100);
                 Border lineBorder = BorderFactory.createLineBorder(semiTransparentRed, 1);
-                iconDisplayLabel.setBorder(BorderFactory.createCompoundBorder(
-                        iconDisplayLabel.getBorder(), // Keep existing borders
-                        lineBorder
-                ));
+                iconDisplayLabel.setBorder(lineBorder);
             } else {
-                iconDisplayLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+                iconDisplayLabel.setBorder(null);
             }
             iconDisplayLabel.repaint();
         }

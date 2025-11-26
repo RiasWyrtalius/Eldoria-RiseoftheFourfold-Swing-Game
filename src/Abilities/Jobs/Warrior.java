@@ -41,10 +41,12 @@ public class Warrior extends JobClass {
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, " Bashes Shield on ", targets, calculateDamage), LogColor.HERO_ACTION);
-            VisualEffectsManager.getInstance().playAnimation("WARRIOR_SHIELD-BASH", user, () -> {
+            VisualEffectsManager.getInstance().hideCharacterVisual(user);
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("WARRIOR_SHIELD-BASH", target, () -> {
                 target.takeDamage(calculateDamage, user, self);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
+                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                 }
             }, true);
         };
@@ -54,7 +56,7 @@ public class Warrior extends JobClass {
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, " Slashes on ", targets, calculateDamage), LogColor.HERO_ACTION);
-            VisualEffectsManager.getInstance().playAnimation("WARRIOR_SWORD-SLASH", target, () -> {
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("WARRIOR_SWORD-SLASH", target, () -> {
                 target.takeDamage(calculateDamage, user, self);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
