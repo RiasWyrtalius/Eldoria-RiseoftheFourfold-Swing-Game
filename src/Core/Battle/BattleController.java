@@ -93,19 +93,6 @@ public class BattleController {
             LogManager.log(heroParty.getPartyName() + "'s turn has ended.");
 
             executeEnemyPhase();
-            resetTurnReadiness();
-            executeTurnCleanUp();
-
-            if (isBattleOver()) {
-                endBattle();
-                return;
-            }
-            currentPhase = BattlePhase.HERO_ACTION_WAIT;
-            turnCounter++;
-            LogManager.log("");
-            LogManager.log("TURN " + turnCounter + " BEGINS", LogColor.TURN_INDICATOR);
-
-            // pause here waiting for hero selection
         }
 
         if (this.mainView != null)
@@ -119,25 +106,64 @@ public class BattleController {
 
         currentPhase = BattlePhase.ENEMY_ACTION;
 
-        for (Character enemy : enemyParty.getAliveMembers()) {
+        List<Character> enemies = enemyParty.getAliveMembers();
+        processNextEnemy(enemies, 0); // starting from first
+    }
 
-            List<Character> validTargets = heroParty.getAliveMembers();
-
-            if (validTargets == null || validTargets.isEmpty()) break;
-
-//            Character target = Dice.pickRandom(validTargets);
-
-//            LogManager.log(enemy.getName() + " attacks " + target.getName() + "!", LogColor.ENEMY_ACTION);
-
-            Runnable onSkillComplete = () -> {
-                advanceTurnCycle(false);
-            };
-
-            ((Enemy)enemy).makeAttack(validTargets, onSkillComplete);
+    /**
+     * TODO: find a way to make this randomized
+     * Recursive helper in order to handle enemy ai one by one instead of all at once
+     * @param enemies
+     * @param index
+     */
+    private void processNextEnemy(List<Character> enemies, int index) {
+        if (checkLose()) {
+            endBattle();
         }
 
-        if (this.mainView != null)
-            this.mainView.refreshUI();
+        if (index >= enemies.size()) {
+            onEnemyPhaseComplete();
+            return;
+        }
+
+        Character enemyChar = enemies.get(index);
+
+        Runnable onCurrentEnemyFinished = () -> {
+            processNextEnemy(enemies, index + 1);
+        };
+
+        // execute the attack
+        List<Character> validTargets = heroParty.getAliveMembers();
+        if (validTargets == null || validTargets.isEmpty()) {
+            onEnemyPhaseComplete(); // no targets left oop
+            return;
+        }
+
+        if (enemyChar instanceof Enemy) {
+            ((Enemy) enemyChar).makeAttack(validTargets, onCurrentEnemyFinished);
+        } else {
+            onCurrentEnemyFinished.run();
+        }
+
+        if (this.mainView != null) this.mainView.refreshUI();
+    }
+
+    private void onEnemyPhaseComplete() {
+        executeTurnCleanUp();
+        resetTurnReadiness();
+
+        turnCounter++;
+
+        if(isBattleOver()) {
+            endBattle();
+            return;
+        }
+
+        currentPhase = BattlePhase.HERO_ACTION_WAIT;
+        LogManager.log("");
+        LogManager.log("TURN " + turnCounter + " BEGINS", LogColor.TURN_INDICATOR);
+
+        if (this.mainView != null) this.mainView.refreshUI();
     }
 
     private void executeTurnCleanUp() {
