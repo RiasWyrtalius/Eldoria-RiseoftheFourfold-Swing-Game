@@ -4,6 +4,7 @@ import Abilities.JobClass;
 import Abilities.*;
 
 import Characters.Character;
+import Core.Utils.CombatMath;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
@@ -33,7 +34,7 @@ public class CryoMancer extends JobClass {
     public List<Skill> createSkills() {
 
         FullExecuteConsumer iceSpikeLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (int)(30 + 15 + (user.getLevel() * 1.2) + (30 * (user.getLevel() * 0.05)));
+            int calculateDamage = CombatMath.calculateDamage(user,30,15,1.2,0.05);
             Character target = targets.getFirst();
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
@@ -56,7 +57,7 @@ public class CryoMancer extends JobClass {
 
 
         FullExecuteConsumer frostBiteLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (int)(15 + 15 + (user.getLevel() * 1.2) + (15 * (user.getLevel() * 0.05)));
+            int calculateDamage = CombatMath.calculateDamage(user,15,15,1.2,0.05);
             Character target = targets.getFirst();
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);

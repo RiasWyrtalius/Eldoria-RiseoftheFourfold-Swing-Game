@@ -40,12 +40,30 @@ public class Goblin extends Enemy {
             Character target = Dice.pickRandom(targets);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.ENEMY_ACTION);
             // TODO: panel should be empty during the swinging
+            VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", target, () -> {
                 target.takeDamage(calculateDamage, user, self);
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
+                        VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                     }
             }, true);
+        };
+
+        FullExecuteConsumer throwCoinsLogic = (self, user, targets, onSkillComplete) -> {
+            int calculateDamage = user.getBaseAtk();
+
+            Character target = Dice.pickRandom(targets);
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.ENEMY_ACTION);
+            // TODO: panel should be empty during the swinging
+//            VisualEffectsManager.getInstance().hideCharacterVisual(user);
+//            VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", target, () -> {
+                 target.takeDamage(calculateDamage, user, self);
+//                if (onSkillComplete != null) {
+//                    onSkillComplete.run();
+//                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+//                }
+//            }, true);
         };
 
         Skill skirmish = new Skill(
@@ -53,8 +71,14 @@ public class Goblin extends Enemy {
                 SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
                 skirmishLogic
         );
+        Skill ThrowCoin = new Skill(
+                "Coin Throw", "Fling Coins",0, 10,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
+                throwCoinsLogic
+        );
 
         skills.add(skirmish);
+        skills.add(ThrowCoin);
     }
 
 //    TODO: replace this with randomly use skill function

@@ -3,6 +3,7 @@ package Abilities.Jobs;
 import Abilities.*;
 
 import Characters.Character;
+import Core.Utils.CombatMath;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
@@ -44,7 +45,7 @@ public class FireMage extends JobClass {
         // FIXME: turn doesn't end when animation is finished
         FullExecuteConsumer fireBallLogic = (self, user, targets, onSkillComplete) -> {
 
-            int calculateDamage = (int)(25 + 15 + (user.getLevel() * 1.2) + (25 * (user.getLevel() * 0.05)));
+            int calculateDamage = CombatMath.calculateDamage(user,25,15,1.2,0.05);
             Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
@@ -57,7 +58,7 @@ public class FireMage extends JobClass {
         };
 
         FullExecuteConsumer fireCycloneLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (int)(50 + 30 + (user.getLevel() * 1.2) + (50 * (user.getLevel() * 0.05)));
+            int calculateDamage = CombatMath.calculateDamage(user,50,30,1.2,0.05);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
             for(Character t : targets) {
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("FIRE_CYCLONE", t, () -> {
@@ -76,7 +77,7 @@ public class FireMage extends JobClass {
             }
         };
         FullExecuteConsumer staffAttackLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (int)( 10 + 0 + (user.getLevel() * 1.2) + (50 * (user.getLevel() * 0.05)));
+            int calculateDamage = CombatMath.calculateDamage(user,10,0,1.2,0.05);
             Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
             target.takeDamage(calculateDamage, user, self);

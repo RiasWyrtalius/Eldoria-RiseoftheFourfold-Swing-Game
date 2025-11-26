@@ -3,6 +3,7 @@ package Abilities.Jobs;
 import Abilities.*;
 
 import Characters.Character;
+import Core.Utils.CombatMath;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
@@ -37,7 +38,7 @@ public class Warrior extends JobClass {
 
     public List<Skill> createSkills() {
         FullExecuteConsumer shieldBashLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (int)(20 + 10 + (user.getLevel() * 1.2) + (20 * (user.getLevel() * 0.05)));
+            int calculateDamage = CombatMath.calculateDamage(user,20,10,1.2,0.05);
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, " Bashes Shield on ", targets, calculateDamage), LogColor.HERO_ACTION);
@@ -52,10 +53,11 @@ public class Warrior extends JobClass {
         };
 
         FullExecuteConsumer swordSlashLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (int)(30 + 15 + (user.getLevel() * 1.2) + (30 * (user.getLevel() * 0.05)));
+            int calculateDamage = CombatMath.calculateDamage(user,30,15,1.2,0.05);
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, " Slashes on ", targets, calculateDamage), LogColor.HERO_ACTION);
+            VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("WARRIOR_SWORD-SLASH", target, () -> {
                 target.takeDamage(calculateDamage, user, self);
                 if (onSkillComplete != null) {
