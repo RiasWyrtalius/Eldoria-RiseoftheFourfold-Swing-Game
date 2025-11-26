@@ -11,6 +11,7 @@ import Core.Battle.BattleController;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
+import Resource.AssetManager;
 import UI.Views.MainInterface;
 import UI.Views.MainMenu;
 
@@ -36,6 +37,8 @@ public class GameManager {
      * All da setup logic teehee TODO: move to game loader
      */
     private void createGameModel() {
+        mainView.setBattleBackground("Assets/Images/Backgrounds/sample.jpg");
+
         //TEMPORARY HERO SETUP
         heroParty = new Party("The Godslayers");
         Warrior warrior = new Warrior();

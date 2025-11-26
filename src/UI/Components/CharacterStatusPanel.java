@@ -24,14 +24,17 @@
         private JPanel iconPanel;
 
         public CharacterStatusPanel(MainInterface parentInterface) {
+            this.setOpaque(false);
             nameLabel = new JLabel("N/A - Lvl 0");
             hpBar = new JProgressBar();
             manaBar = new JProgressBar();
 
             overlayDisplayLabel = new JLabel();
             iconDisplayLabel = new JLabel();
+
             iconPanel = new JPanel();
             iconPanel.setLayout(null); // makes it stack for some reason
+            iconPanel.setOpaque(false);
 
             final int ICON_SIZE = 100;
 

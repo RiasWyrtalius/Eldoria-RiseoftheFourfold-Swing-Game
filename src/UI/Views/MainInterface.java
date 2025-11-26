@@ -2,13 +2,13 @@ package UI.Views;
 
 import Abilities.Skill;
 import Abilities.SkillTarget;
-import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
 import Core.Battle.BattleController;
 import Core.Battle.BattlePhase;
 import Core.Battle.BattleResult;
 import Core.Utils.LogManager;
+import UI.Components.BackgroundPanel;
 import UI.Components.CharacterStatusPanel;
 
 import java.awt.event.ActionEvent;
@@ -19,13 +19,12 @@ import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-// TODO: Selected targets also highlight their background
 // TODO: DESCEND calls battle controller->game manager for next battle
-
 public class MainInterface extends JFrame{
     private BattleController battleController;
 
     private JPanel contentPanel;
+    private JPanel battlePanel;
     private JTextPane GameLogPanelTextPane;
 
     private JLabel heroPartyLabel;
@@ -61,6 +60,9 @@ public class MainInterface extends JFrame{
 
     private JButton endTurnButton;
     private JButton descendButton;
+    private JPanel heroPanel;
+    private JPanel infoPanel;
+    private JPanel enemyPanel;
 
     public MainInterface() {
         this.setContentPane(contentPanel);
@@ -152,6 +154,8 @@ public class MainInterface extends JFrame{
     }
 
     private void createUIComponents() {
+        battlePanel = new BackgroundPanel();
+
         heroPartyPanel1 = new CharacterStatusPanel(this);
         heroPartyPanel2 = new CharacterStatusPanel(this);
         heroPartyPanel3 = new CharacterStatusPanel(this);
@@ -423,12 +427,18 @@ public class MainInterface extends JFrame{
         inspectorText.setCaretPosition(0);
     }
 
-    // =============== PUBLIC GETTERS FOR UI ===============
+    // =============== PUBLIC GETTERS AND SETTERS FOR UI ===============
     public JTextPane getGameLogPanelTextPane() {
         return GameLogPanelTextPane;
     }
 
     public CharacterStatusPanel getCharacterPanel(Character character) {
         return characterToPanelMap.get(character);
+    }
+
+    public void setBattleBackground(String imageKey) {
+        if (battlePanel != null) {
+            ((BackgroundPanel)battlePanel).setBackgroundImage(imageKey);
+        }
     }
 }
