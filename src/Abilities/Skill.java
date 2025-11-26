@@ -1,11 +1,8 @@
 package Abilities;
 
 import Characters.Character;
-import Core.LogManager;
 
-import java.time.temporal.Temporal;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 public class Skill {

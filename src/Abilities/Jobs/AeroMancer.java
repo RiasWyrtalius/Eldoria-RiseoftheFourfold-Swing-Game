@@ -4,14 +4,13 @@ import Abilities.JobClass;
 import Abilities.*;
 
 import Characters.Character;
-import Core.LogColor;
-import Core.LogManager;
-import Core.VisualEffectsManager;
+import Core.Utils.LogColor;
+import Core.Utils.LogManager;
+import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 
 
 public class AeroMancer extends JobClass {
@@ -49,9 +48,9 @@ public class AeroMancer extends JobClass {
                     }
                 }, true);
             }
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
+//            if (onSkillComplete != null) {
+//                onSkillComplete.run();
+//            }
         };
         FullExecuteConsumer windBurstLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = (int)(25 + 18.5 + (user.getLevel() * 1.2) + (25 * (user.getLevel() * 0.05)));

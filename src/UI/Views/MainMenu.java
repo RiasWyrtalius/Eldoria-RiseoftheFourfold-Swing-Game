@@ -1,4 +1,4 @@
-package UI;
+package UI.Views;
 
 import Core.GameManager;
 

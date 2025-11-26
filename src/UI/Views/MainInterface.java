@@ -1,13 +1,15 @@
-package UI;
+package UI.Views;
 
 import Abilities.Skill;
 import Abilities.SkillTarget;
 import Characters.Base.Hero;
 import Characters.Character;
-import Core.*;
+import Core.Battle.BattleController;
+import Core.Battle.BattlePhase;
+import Core.Battle.BattleResult;
+import Core.Utils.LogManager;
 import UI.Components.CharacterStatusPanel;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;

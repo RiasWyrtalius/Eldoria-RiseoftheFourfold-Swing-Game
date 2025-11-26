@@ -3,8 +3,8 @@ package Characters.Enemies;
 import Abilities.*;
 import Characters.Base.Enemy;
 import Characters.Character;
-import Core.LogColor;
-import Core.LogManager;
+import Core.Utils.LogColor;
+import Core.Utils.LogManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
 

@@ -2,8 +2,8 @@ package Characters;
 
 import Abilities.ReactionSkill;
 import Abilities.Skill;
-import Core.Dice;
-import Core.LogManager;
+import Core.Utils.Dice;
+import Core.Utils.LogManager;
 
 import java.util.ArrayList;
 import java.util.List;

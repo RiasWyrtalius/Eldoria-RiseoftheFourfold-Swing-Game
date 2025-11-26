@@ -1,14 +1,10 @@
     package UI.Components;
 
-    import Characters.Base.Hero;
     import Characters.Character;
-    import Characters.Party;
-    import Core.LogColor;
-    import Core.LogManager;
-    import Core.VisualAsset;
-    import Core.VisualEffectsManager;
+    import Core.Visuals.VisualAsset;
+    import Core.Visuals.VisualEffectsManager;
     import Resource.AssetManager;
-    import UI.MainInterface;
+    import UI.Views.MainInterface;
 
     import javax.swing.*;
     import javax.swing.border.Border;

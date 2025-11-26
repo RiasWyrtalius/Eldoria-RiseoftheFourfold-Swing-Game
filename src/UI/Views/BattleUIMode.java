@@ -1,4 +1,4 @@
-package UI;
+package UI.Views;
 
 public enum BattleUIMode {
     IDLE,                   // Waiting for turn to begin

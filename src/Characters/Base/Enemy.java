@@ -2,8 +2,8 @@ package Characters.Base;
 
 import Abilities.Skill;
 import Characters.Character;
-import Core.LogColor;
-import Core.LogManager;
+import Core.Utils.LogColor;
+import Core.Utils.LogManager;
 
 import java.awt.*;
 import java.util.ArrayList;

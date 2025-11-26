@@ -1,4 +1,4 @@
-package Core;
+package Core.Visuals;
 
 /**
  * first time using a record, its an implicit way its a transparent holder for data

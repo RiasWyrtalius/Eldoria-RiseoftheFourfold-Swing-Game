@@ -1,7 +1,5 @@
 package Resource;
 
-import Core.LogManager;
-
 import javax.swing.*;
 import java.util.List;
 

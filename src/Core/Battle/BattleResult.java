@@ -1,4 +1,4 @@
-package Core;
+package Core.Battle;
 
 public enum BattleResult {
     VICTORY,

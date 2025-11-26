@@ -1,14 +1,13 @@
 package Resource;
 
-import Core.LogColor;
-import Core.LogManager;
-import Core.VisualAsset;
+import Core.Utils.LogColor;
+import Core.Utils.LogManager;
+import Core.Visuals.VisualAsset;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

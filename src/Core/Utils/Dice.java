@@ -1,10 +1,13 @@
-package Core;
+package Core.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.util.List;
 
+/**
+ * pure math utility for probabilities and stufffff
+ */
 public class Dice {
     private static final Random random = new Random();
 

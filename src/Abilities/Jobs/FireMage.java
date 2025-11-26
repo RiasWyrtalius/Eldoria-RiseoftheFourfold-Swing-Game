@@ -2,16 +2,14 @@ package Abilities.Jobs;
 
 import Abilities.*;
 
-import Characters.Base.Hero;
 import Characters.Character;
-import Core.LogColor;
-import Core.LogManager;
-import Core.VisualEffectsManager;
+import Core.Utils.LogColor;
+import Core.Utils.LogManager;
+import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 
 
 public class FireMage extends JobClass {

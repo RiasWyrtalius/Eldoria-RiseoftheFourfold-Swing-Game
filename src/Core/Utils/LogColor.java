@@ -1,4 +1,4 @@
-package Core;
+package Core.Utils;
 
 import java.awt.*;
 

@@ -1,15 +1,15 @@
-package Core;
+package Core.Battle;
 
 import Abilities.Skill;
 import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Party;
-import Resource.AssetManager;
-import UI.MainInterface;
+import Core.Utils.LogColor;
+import Core.Utils.LogManager;
+import Core.Visuals.VisualEffectsManager;
+import UI.Views.MainInterface;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.List;
 
 // FIXME: Turn and game doesn’t end automatically when final blow is from an animation

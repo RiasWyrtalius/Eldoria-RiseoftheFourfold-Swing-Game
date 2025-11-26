@@ -3,11 +3,10 @@ package Characters.Enemies;
 import Abilities.*;
 import Characters.Base.Enemy;
 import Characters.Character;
-import Core.Dice;
-import Core.LogColor;
-import Core.LogManager;
-import Core.VisualEffectsManager;
-import Core.VisualEffectsManager;
+import Core.Utils.Dice;
+import Core.Utils.LogColor;
+import Core.Utils.LogManager;
+import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
 

@@ -1,9 +1,10 @@
-package Core;
+package Core.Visuals;
 
+import Core.Utils.LogManager;
 import Resource.Animation;
 import Resource.AssetManager;
 import UI.Components.CharacterStatusPanel;
-import UI.MainInterface;
+import UI.Views.MainInterface;
 
 import Characters.Character;
 import javax.swing.*;

@@ -7,10 +7,12 @@ import Characters.Enemies.Boss;
 import Characters.Enemies.Goblin;
 import Characters.Enemies.Slime;
 import Characters.Party;
-import Resource.AnimationLoopType;
-import Resource.AssetManager;
-import UI.MainInterface;
-import UI.MainMenu;
+import Core.Battle.BattleController;
+import Core.Utils.LogColor;
+import Core.Utils.LogManager;
+import Core.Visuals.VisualEffectsManager;
+import UI.Views.MainInterface;
+import UI.Views.MainMenu;
 
 import javax.swing.*;
 

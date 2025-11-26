@@ -3,8 +3,7 @@ package Characters.Base;
 import Abilities.JobClass;
 import Abilities.Skill;
 import Characters.Character;
-import Core.LogColor;
-import Core.LogManager;
+import Core.Utils.LogManager;
 
 import java.awt.*;
 import java.util.List;

@@ -4,14 +4,13 @@ import Abilities.JobClass;
 import Abilities.*;
 
 import Characters.Character;
-import Core.LogColor;
-import Core.LogManager;
-import Core.VisualEffectsManager;
+import Core.Utils.LogColor;
+import Core.Utils.LogManager;
+import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 
 
 public class CryoMancer extends JobClass {
@@ -48,9 +47,11 @@ public class CryoMancer extends JobClass {
                 }
             }, true);
 
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
+//            make sure this is only called once within the function or callback
+//            signifies the absolute end of the skill usage
+//            if (onSkillComplete != null) {
+//                onSkillComplete.run();
+//            }
         };
 
 
