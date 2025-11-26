@@ -37,7 +37,7 @@ public class CryoMancer extends JobClass {
             int calculateDamage = CombatMath.calculateDamage(user,30,15,1.2,0.05);
             Character target = targets.getFirst();
 
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 
             VisualEffectsManager.getInstance().playAnimationOnCharacter("ICE_SPIKE", target, () -> {
 
@@ -60,7 +60,7 @@ public class CryoMancer extends JobClass {
             int calculateDamage = CombatMath.calculateDamage(user,15,15,1.2,0.05);
             Character target = targets.getFirst();
 
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 
             target.takeDamage(calculateDamage, user, self);
 

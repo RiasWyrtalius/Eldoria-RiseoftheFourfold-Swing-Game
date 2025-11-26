@@ -36,7 +36,7 @@ public class AeroMancer extends JobClass {
             int calculateDamage = CombatMath.calculateDamage(user,40,(int)18.5,1.2,0.05);
             Character target = targets.getFirst();
 
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 
             for(Character t : targets) {
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("WIND_TORNADO", t, () -> {
@@ -56,7 +56,7 @@ public class AeroMancer extends JobClass {
             int calculateDamage = CombatMath.calculateDamage(user,30,(int)18.5,1.2,0.05);
             Character target = targets.getFirst();
 
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 
             target.takeDamage(calculateDamage, user, self);
 
@@ -69,7 +69,7 @@ public class AeroMancer extends JobClass {
         FullExecuteConsumer windPierceLogic= (self, user, targets, onSkillComplete) -> {
             int calculateDamage = CombatMath.calculateDamage(user,20,15,1.2,0.05);
 
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 
             for(Character t : targets) {
                 t.takeDamage(calculateDamage, user, self);

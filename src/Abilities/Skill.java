@@ -32,10 +32,10 @@ public class Skill {
         }
     }
 
-    public String getActionLog(Character user, String action, List<Character> targets, int damage) {
+    public String getActionLog(Character user, String action, List<Character> targets) {
         String targetNames = formatTargetList(targets);
 
-        String logMessage = String.format("%s %s %s on %s!",
+        String logMessage = String.format("%s %s with %s on %s!",
                 user.getName(),
                 action,
                 this.getName(),

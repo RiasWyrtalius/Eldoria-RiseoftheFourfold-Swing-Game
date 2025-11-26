@@ -6,6 +6,7 @@ import Characters.Character;
 import Core.Utils.Dice;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
+import Core.Visuals.VisualAsset;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
@@ -38,10 +39,11 @@ public class Slime extends Enemy {
             int calculateDamage = user.getBaseAtk();
 
             Character target = Dice.pickRandom(targets);
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.ENEMY_ACTION);
-            // TODO: panel should be empty during the swinging
+            LogManager.log(self.getActionLog(user, "uses", targets), LogColor.ENEMY_ACTION);
+            VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("SLIME_ACIDIC-SLAM", target, () -> {
                 target.takeDamage(calculateDamage, user, self);
+                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                 }

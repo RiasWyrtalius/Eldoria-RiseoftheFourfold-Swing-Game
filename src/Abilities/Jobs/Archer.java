@@ -47,7 +47,7 @@ public class Archer extends JobClass {
         FullExecuteConsumer rapidFireLogic = (self, user, targets, onSkillComplete) -> {
             int dmg = CombatMath.calculateDamage(user, 20, 15, 1.2, 0.05);
             Character target = targets.getFirst();
-            LogManager.log(self.getActionLog(user, "Unleashes array of Arrows", targets, dmg), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "Unleashes array of Arrows", targets), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW-Rapid", user, () -> {
                 target.takeDamage(dmg, user, self);
                 if (onSkillComplete != null) {
@@ -59,7 +59,7 @@ public class Archer extends JobClass {
         FullExecuteConsumer heavyArrowLogic = (self, user, targets, onSkillComplete) -> {
             int dmg = CombatMath.calculateDamage(user, 40, 20, 1.2, 0.05);
             Character target = targets.getFirst();
-            LogManager.log(self.getActionLog(user, "Pulls their bow the hardest they can to release", targets, dmg), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "Pulls their bow the hardest they can to release", targets), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW", user, () -> {
                 target.takeDamage(dmg, user, self);
                 if (onSkillComplete != null) {

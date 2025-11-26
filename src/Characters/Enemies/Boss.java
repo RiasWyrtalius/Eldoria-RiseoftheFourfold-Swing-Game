@@ -41,7 +41,7 @@ public class Boss extends Enemy {
 
             if (weakTarget != null) {
                 int calculateDamage = user.getBaseAtk();
-                LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget), calculateDamage), LogColor.HERO_ACTION);
+                LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget)), LogColor.ENEMY_ACTION);
                 weakTarget.takeDamage(calculateDamage, user, self);
             }
 
@@ -59,7 +59,7 @@ public class Boss extends Enemy {
         FullExecuteConsumer devastatingStrikeLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = (int) (user.getBaseAtk() * 1.5);
 
-            LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogColor.ENEMY_ACTION);
 
             for (Character target : targets) {
                 if (target.getHealth() > 0) {

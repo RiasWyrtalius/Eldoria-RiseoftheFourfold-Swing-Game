@@ -38,15 +38,15 @@ public class Goblin extends Enemy {
             int calculateDamage = user.getBaseAtk();
 
             Character target = Dice.pickRandom(targets);
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets, calculateDamage), LogColor.ENEMY_ACTION);
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.ENEMY_ACTION);
             // TODO: panel should be empty during the swinging
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", target, () -> {
                 target.takeDamage(calculateDamage, user, self);
-                    if (onSkillComplete != null) {
-                        onSkillComplete.run();
-                        VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                    }
+                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                }
             }, true);
         };
 

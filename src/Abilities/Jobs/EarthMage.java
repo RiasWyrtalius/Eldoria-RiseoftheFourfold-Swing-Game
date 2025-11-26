@@ -43,7 +43,7 @@ public class EarthMage extends JobClass {
         FullExecuteConsumer earthAttackLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = CombatMath.calculateDamage(user,50,28,1.2,0.05);
 
-            LogManager.log(self.getActionLog(user, "Shakes the earth", targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "Shakes the earth", targets), LogColor.HERO_ACTION);
             for(Character t : targets) {
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("EARTH_ATTACK", t, () -> {
 
@@ -65,7 +65,7 @@ public class EarthMage extends JobClass {
         FullExecuteConsumer earthquakeSpellLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = CombatMath.calculateDamage(user,55,(int)23.5,1.2,0.05);
 
-            LogManager.log(self.getActionLog(user, "Shakes the earth", targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "Shakes the earth", targets), LogColor.HERO_ACTION);
             for(Character t : targets) {
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("EARTHQUAKE", t, () -> {
 
@@ -85,7 +85,7 @@ public class EarthMage extends JobClass {
             int calculateDamage = CombatMath.calculateDamage(user,20,10,1.2,0.05);
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
-            LogManager.log(self.getActionLog(user, "Multitudes of earth crumbles down", targets, calculateDamage), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "Multitudes of earth crumbles down", targets), LogColor.HERO_ACTION);
 
             if (onSkillComplete != null) {
                 onSkillComplete.run();

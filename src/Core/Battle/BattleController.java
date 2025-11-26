@@ -125,9 +125,9 @@ public class BattleController {
 
             if (validTargets == null || validTargets.isEmpty()) break;
 
-            Character target = Dice.pickRandom(validTargets);
+//            Character target = Dice.pickRandom(validTargets);
 
-            LogManager.log(enemy.getName() + " attacks " + target.getName() + "!", LogColor.ENEMY_ACTION);
+//            LogManager.log(enemy.getName() + " attacks " + target.getName() + "!", LogColor.ENEMY_ACTION);
 
             Runnable onSkillComplete = () -> {
                 advanceTurnCycle(false);

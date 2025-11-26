@@ -308,7 +308,10 @@
                         <children>
                           <component id="3014b" class="javax.swing.JTextPane" binding="GameLogPanelTextPane">
                             <constraints/>
-                            <properties/>
+                            <properties>
+                              <font/>
+                              <opaque value="false"/>
+                            </properties>
                           </component>
                         </children>
                       </scrollpane>
