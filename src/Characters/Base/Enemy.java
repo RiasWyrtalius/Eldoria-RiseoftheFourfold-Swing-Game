@@ -2,8 +2,10 @@ package Characters.Base;
 
 import Abilities.Skill;
 import Characters.Character;
+import Characters.Enemies.Slime;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
+import jdk.jfr.Description;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -14,8 +16,9 @@ public abstract class Enemy extends Character {
     private String type;
     private int rewardXP;
     protected List<Skill> skills;
+    protected String description;
 
-    public Enemy(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, String imageKey) {
+    public Enemy(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, String imageKey, String description) {
         super(name, initialHealth, baseAtk, maxMana, level, imageKey);
         this.skills = new ArrayList<>();
         this.type = type;
@@ -23,8 +26,8 @@ public abstract class Enemy extends Character {
         initializeSkills();
     }
 
-    public Enemy(String name, int health, int baseAtk, int maxMana, String type, int rewardXP, String imageKey) {
-        this(name, health, baseAtk, maxMana, 1, type, rewardXP, imageKey);
+    public Enemy(String name, int health, int baseAtk, int maxMana, String type, int rewardXP, String imageKey, String description) {
+        this(name, health, baseAtk, maxMana, 1, type, rewardXP, imageKey, description);
     }
 
     protected abstract void initializeSkills();
@@ -48,6 +51,16 @@ public abstract class Enemy extends Character {
 
     // =============== PUBLIC GETTERS FOR UI ===============
 
+    @Override
+    public List<Skill> getSkills() {
+        return this.skills;
+    }
+
+    @Override
+    public String getDescription() {
+        return this.description;
+    }
+
     public String getType() {
         return type;
     }
@@ -55,7 +68,4 @@ public abstract class Enemy extends Character {
         return rewardXP;
     }
 
-    public List<Skill> getSkills() {
-        return skills;
-    }
 }

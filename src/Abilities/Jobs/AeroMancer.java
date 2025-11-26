@@ -31,7 +31,6 @@ public class AeroMancer extends JobClass {
         );
     }
     public List<Skill> createSkills() {
-
         FullExecuteConsumer windTornadoLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = (int)(40 + 18.5 + (user.getLevel() * 1.2) + (40 * (user.getLevel() * 0.05)));
             Character target = targets.getFirst();

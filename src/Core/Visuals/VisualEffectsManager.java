@@ -139,10 +139,10 @@ public class VisualEffectsManager {
     }
 
     /**
-     * Public API: Finds the visual component, runs the animation, and executes a callback.
+     * Finds the visual component, runs the animation, and executes a callback.
      * @param animationId The ID of the animation.
      * @param target The Character whose component should receive the animation.
-     * @param onFinish The Runnable to execute upon animation completion. <<< NEW PARAMETER
+     * @param onFinish The Runnable to execute upon animation completion.
      */
     public void playAnimationOnCharacter(String animationId, Character target, Runnable onFinish, boolean isTemporary) {
         JLabel overlay = getOverlayComponent(target);
@@ -212,6 +212,7 @@ public class VisualEffectsManager {
         return null;
     }
 
+    // TODO: due to the usage, i should prolly rename this to apply idle or something
     // tells if animation is static or not
     public void applyVisual(VisualAsset asset, JLabel displayLabel, boolean isTemporary) {
         // check if its hidden

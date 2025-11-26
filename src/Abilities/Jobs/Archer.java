@@ -72,7 +72,6 @@ public class Archer extends JobClass {
                 "Rapid Fire", "Single-target long ranged attack ", 10, 20,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
                 rapidFireLogic
-
         );
 
         Skill HeavyArrow = new Skill(

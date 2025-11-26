@@ -3,6 +3,7 @@ package Characters.Base;
 import Abilities.JobClass;
 import Abilities.Skill;
 import Characters.Character;
+import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 
 import java.awt.*;
@@ -17,11 +18,12 @@ public class Hero extends Character {
 
     public Hero(String name, int initialHealth, int baseAtk, int maxMana, int level, JobClass job, String imageKey) {
         super(name, initialHealth + job.getHpBonus(), baseAtk, maxMana, level, imageKey);
+        this.job = job;
         this.XP = 0;
         this.baseXP = 100;
         this.incrementXP = 50;
-        this.requiredXP = XP + (incrementXP * (this.level - 1));
-        this.job = job;
+        // lvl 1 needs 100, level 2 needs 150, level 3 needs 200. etc......
+        this.requiredXP = baseXP + (incrementXP * (this.level - 1));
     }
 
     public Hero(String name, int health, int baseAtk, int maxMana, JobClass job, String imageKey) {
@@ -30,6 +32,7 @@ public class Hero extends Character {
 
 
     public void gainXP(int amount) {
+        LogManager.log(getName() + " Gains " + amount + "XP!", LogColor.XP_GAIN);
         XP += amount;
 
         while (XP >= requiredXP) {
@@ -90,6 +93,16 @@ public class Hero extends Character {
         LogManager.log("(HERO) : " + this.name, Color.BLUE);
     }
 
+    @Override
+    public List<Skill> getSkills() {
+        return job.getSkills();
+    }
+
+    @Override
+    public String getDescription() {
+        return job.getDescription();
+    }
+
     public void useSkill(Skill skill, List<Character> targets, Runnable onSkillComplete) {
         LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on " + Skill.formatTargetList(targets), Color.GREEN);
 
@@ -97,6 +110,9 @@ public class Hero extends Character {
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============
+    public int getXP() {
+        return XP;
+    }
 
     public int getRequiredXP() {
         return requiredXP;

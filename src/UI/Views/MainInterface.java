@@ -2,6 +2,7 @@ package UI.Views;
 
 import Abilities.Skill;
 import Abilities.SkillTarget;
+import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
 import Core.Battle.BattleController;
@@ -398,20 +399,25 @@ public class MainInterface extends JFrame{
         }
         sb.append("----------------\n");
 
+        sb.append("LVL: " + c.getLevel()).append("\n");
+        if (c instanceof Hero) {
+            Hero h = (Hero)c;
+            sb.append("XP: ").append(h.getXP()).append("/").append(h.getRequiredXP()).append("\n");
+        }
         // --- HP & MANA ---
         sb.append("HP: ").append(c.getHealth()).append("/").append(c.getInitialHealth()).append("\n");
         sb.append("MP: ").append(c.getMana()).append("/").append(c.getMaxMana()).append("\n");
         sb.append("\n");
 
-        // --- SKILLS (Heroes only) ---
-        if (c instanceof Hero) {
-            sb.append("[ SKILLS ]\n");
-            Hero h = (Hero) c;
-            for (Skill s : h.getJob().getSkills()) {
-                sb.append("• ").append(s.getName())
-                        .append(" (").append(s.getManaCost()).append(" MP)\n");
-            }
+        sb.append("[ SKILLS ]\n");
+        // --- SKILLS
+        for (Skill s : c.getSkills()) {
+            sb.append("• ").append(s.getName())
+                    .append(" (").append(s.getManaCost()).append(" MP)\n");
         }
+
+        sb.append("----------------\n");
+        sb.append(c.getDescription());
 
         inspectorText.setText(sb.toString());
         inspectorText.setCaretPosition(0);

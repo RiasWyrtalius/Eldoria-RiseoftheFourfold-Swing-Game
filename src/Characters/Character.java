@@ -158,4 +158,6 @@ public abstract class Character {
         isExhausted = exhausted;
     }
     public void setMana(int mana) { this.mana = mana; }
+    public abstract List<Skill> getSkills();
+    public abstract String getDescription();
 }

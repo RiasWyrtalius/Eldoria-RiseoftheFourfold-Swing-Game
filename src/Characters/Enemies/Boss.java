@@ -11,8 +11,9 @@ import Resource.AssetManager;
 import java.util.List;
 
 public class Boss extends Enemy {
+
     public Boss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
-        super(name, initialHealth * (int)healthMultiplier, baseAtk, maxMana, level, type, rewardXP, "BOSS_IDLE");
+        super(name, initialHealth * (int)healthMultiplier, baseAtk, maxMana, level, type, rewardXP, "BOSS_IDLE", "boss of the level");
         AssetManager.getInstance().registerAnimation(
                 "BOSS_IDLE",
                 "Assets/Animations/Enemies/BOSS/Idle/sprite_%d.png",
