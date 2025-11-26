@@ -18,19 +18,19 @@ public class Warrior extends JobClass {
         super("Warrior", "Wields Sword and Shield", 10, 0);
         AssetManager.getInstance().registerAnimation(
                 "WARRIOR_IDLE",
-                "Assets/Animations/Warrior/Idle/sprite_%d.png",
+                "Assets/Animations/Heroes/Warrior/Idle/sprite_%d.png",
                 3, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
         AssetManager.getInstance().registerAnimation(
                 "WARRIOR_SWORD-SLASH",
-                "Assets/Animations/Warrior/Effects/Sword_Slash/sprite_%d.png",
+                "Assets/Animations/Heroes/Warrior/Effects/Sword_Slash/sprite_%d.png",
                 4, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );
         AssetManager.getInstance().registerAnimation(
                 "WARRIOR_SHIELD-BASH",
-                "Assets/Animations/Warrior/Effects/Shield_Bash/sprite_%d.png",
+                "Assets/Animations/Heroes/Warrior/Effects/Shield_Bash/sprite_%d.png",
                 3, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );

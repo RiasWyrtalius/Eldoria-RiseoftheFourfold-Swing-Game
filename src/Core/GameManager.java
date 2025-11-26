@@ -4,6 +4,7 @@ import Abilities.Jobs.*;
 import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Enemies.Goblin;
+import Characters.Enemies.Slime;
 import Characters.Party;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
@@ -100,8 +101,10 @@ public class GameManager {
         enemyParty = new Party("Swarm of Goblins");
         Goblin goblin_1 = new Goblin();
         Goblin goblin_2 = new Goblin();
+        Slime slime_1 = new Slime();
         enemyParty.addPartyMember(goblin_1);
         enemyParty.addPartyMember(goblin_2);
+        enemyParty.addPartyMember(slime_1);
     }
 
     public void startNewGame() {

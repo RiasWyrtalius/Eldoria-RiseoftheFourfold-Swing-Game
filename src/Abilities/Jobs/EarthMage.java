@@ -20,20 +20,20 @@ public class EarthMage extends JobClass {
 
         AssetManager.getInstance().registerAnimation(
                 "MAGE_IDLE",
-                "Assets/Animations/Mage-Fire/Idle/sprite_%d.png",
+                "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png",
                 5, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
 
         AssetManager.getInstance().registerAnimation(
                 "EARTH_ATTACK",
-                "Assets/Animations/Mage-Earth/Effects/Earth_Attack/sprite_%d.png",
+                "Assets/Animations/Heroes/Mage-Earth/Effects/Earth_Attack/sprite_%d.png",
                 8, 100, 100 , 200,
                 AnimationLoopType.ONE_CYCLE
         );
         AssetManager.getInstance().registerAnimation(
                 "EARTHQUAKE",
-                "Assets/Animations/Mage-Earth/Effects/Earthquake/sprite_%d.png",
+                "Assets/Animations/Heroes/Mage-Earth/Effects/Earthquake/sprite_%d.png",
                 13, 100, 100 , 100,
                 AnimationLoopType.TWO_CYCLES
         );

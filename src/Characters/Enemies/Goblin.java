@@ -19,16 +19,16 @@ public class Goblin extends Enemy {
         super("Goblin Grunt", 500, 10, 0, 1, "Goblin", 10, "GOBLIN_IDLE");
         AssetManager.getInstance().registerAnimation(
                 "GOBLIN_IDLE",
-                "Assets/Animations/Goblin/Idle/sprite_%d.png",
+                "Assets/Animations/Enemies/Goblin/Idle/sprite_%d.png",
                 4, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
 
         AssetManager.getInstance().registerAnimation(
                 "GOBLIN_SWING-ATTACK",
-                "Assets/Animations/Goblin/Effects/Swing_Attack/sprite_%d.png",
-                4, 100, 100 , 300,
-                AnimationLoopType.TWO_CYCLES
+                "Assets/Animations/Enemies/Goblin/Effects/Swing_Attack/sprite_%d.png",
+                5, 100, 100 , 300,
+                AnimationLoopType.ONE_CYCLE
         );
         initializeReactions();
     }

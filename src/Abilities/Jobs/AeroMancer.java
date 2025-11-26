@@ -19,14 +19,14 @@ public class AeroMancer extends JobClass {
         super("Wind Mage","Wields atmosphere and wind as its magic",0,0 );
         AssetManager.getInstance().registerAnimation(
                 "MAGE_IDLE",
-                "Assets/Animations/Mage-Fire/Idle/sprite_%d.png",
+                "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png",
                 5, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
 
         AssetManager.getInstance().registerAnimation(
                 "WIND_TORNADO",
-                "Assets/Animations/Mage-Wind/Effects/Wind_Tornado/sprite_%d.png",
+                "Assets/Animations/Heroes/Mage-Wind/Effects/Wind_Tornado/sprite_%d.png",
                 11, 100, 100 , 200,
                 AnimationLoopType.TWO_CYCLES
         );
