@@ -57,6 +57,7 @@ public class VisualEffectsManager {
         Timer timer = new Timer(animation.getFrameDurationMs(), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // assume if animation is paused then animation is not finished
                 if (animation.isFinished()) {
                     Timer finishedTimer = (Timer)e.getSource();
                     finishedTimer.stop();
@@ -78,6 +79,7 @@ public class VisualEffectsManager {
                     }
                     return;
                 }
+                if (animation.isPausedFlag()) return;
                 displayLabel.setIcon(animation.getNextFrame());
                 displayLabel.revalidate();
                 displayLabel.repaint();
@@ -167,6 +169,26 @@ public class VisualEffectsManager {
                 onFinish.run();
             }
             LogManager.log("Warning: Visual component not found. Executing callback immediately.", java.awt.Color.ORANGE);
+        }
+    }
+
+    public void pauseAnimation(String animationId) {
+        // check if animation is playing
+        Animation animation = AssetManager.getInstance().getAnimation(animationId);
+        if (animation != null) {
+            animation.pauseAnimation();
+        } else {
+            LogManager.log("Animation " + animationId + " does not exist!", LogColor.SYSTEM);
+        }
+    }
+
+    public void playAnimation(String animationId) {
+        // check if animation is playing
+        Animation animation = AssetManager.getInstance().getAnimation(animationId);
+        if (animation != null) {
+            animation.continueAnimation();
+        } else {
+            LogManager.log("Animation " + animationId + " does not exist!", LogColor.SYSTEM);
         }
     }
 

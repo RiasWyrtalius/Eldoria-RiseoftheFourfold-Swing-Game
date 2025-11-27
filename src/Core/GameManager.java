@@ -106,7 +106,7 @@ public class GameManager {
         //TEMPORARY ENEMY SETUP
         enemyParty = new Party("Swarm of Goblins");
         Goblin goblin_1 = new Goblin();
-        Boss boss = new Boss("Serato The Destroyer" , 250,40,200,1,"Boss",200,3);
+        Boss boss = new Boss("Serato The Destroyer" , 20,40,200,1,"Boss",200,3);
         Slime slime_1 = new Slime();
         enemyParty.addPartyMember(goblin_1);
         enemyParty.addPartyMember(boss);

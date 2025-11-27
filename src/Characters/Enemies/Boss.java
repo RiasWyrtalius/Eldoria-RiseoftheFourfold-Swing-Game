@@ -5,6 +5,7 @@ import Characters.Base.Enemy;
 import Characters.Character;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
+import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
 
@@ -80,6 +81,14 @@ public class Boss extends Enemy {
 
         skills.add(basicAttack);
         skills.add(devastatingStrike);
+    }
+
+    // TODO: character death animationN
+    @Override
+    protected void onDeath() {
+        super.onDeath();
+        VisualEffectsManager.getInstance().pauseAnimation("BOSS_IDLE");
+//        VisualEffectsManager.getInstance().hideCharacterVisual(this);
     }
 
     @Override

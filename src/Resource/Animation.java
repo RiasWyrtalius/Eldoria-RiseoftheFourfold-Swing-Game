@@ -3,6 +3,9 @@ package Resource;
 import javax.swing.*;
 import java.util.List;
 
+/**
+ * TODO: revamp the SOC because some methods that may belong on the visualeffects manager belongs in here
+ */
 public class Animation {
     private final List<ImageIcon> frames;
     private int currentFrameIndex;
@@ -12,6 +15,7 @@ public class Animation {
     private int loopsCompleted = 0;
     private final int frameDurationMs;
     private boolean isFinishedFlag = false;
+    private boolean isPausedFlag = false;
 
     public Animation(List<ImageIcon> frames, int frameDurationMs, AnimationLoopType loopType) {
         this.frames = frames;
@@ -40,6 +44,8 @@ public class Animation {
         if (isFinishedFlag) {
             return frames.get(totalFrames - 1);
         }
+
+        if (isPausedFlag) return frames.get(currentFrameIndex);
 
         currentFrameIndex++;
 
@@ -83,5 +89,18 @@ public class Animation {
     public boolean isFinished() {
         return isFinishedFlag;
     }
+
+    public boolean isPausedFlag() {
+        return isPausedFlag;
+    }
+
+    public void pauseAnimation() {
+        this.isPausedFlag = true;
+    }
+
+    public void continueAnimation() {
+        this.isPausedFlag = false;
+    }
+
     // TODO: add logic to check if animation is finished
 }
