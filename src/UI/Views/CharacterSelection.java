@@ -2,6 +2,11 @@ package UI.Views;
 
 import javax.swing.*;
 import javax.swing.border.*;
+
+import Abilities.JobClass;
+import Abilities.Jobs.Warrior;
+import Resource.AnimationLoopType;
+import Resource.AssetManager;
 import UI.Components.BackgroundPanel;
 import java.awt.*;
 import java.util.ArrayList;
@@ -83,11 +88,12 @@ public class CharacterSelection extends JFrame {
         characterList = new ArrayList<>();
         // Add characters here.
         characterList.add(new CharacterDisplayData("Warrior", "Assets/Animations/Heroes/Warrior/Idle/sprite_0.png"));
-        characterList.add(new CharacterDisplayData("Mage Wind", "Assets/Animations/Heroes/Mage-Wind/Idle/sprite_0.png"));
+        characterList.add(new CharacterDisplayData("Archer", "Assets/Animations/Heroes/Archer/Idle/sprite_0.png"));
+        characterList.add(new CharacterDisplayData("AeroMancer", "Assets/Animations/Heroes/Mage-Wind/Idle/sprite_0.png"));
         characterList.add(new CharacterDisplayData("Mage Earth", "Assets/Animations/Heroes/Mage-Earth/Idle/sprite_0.png"));
         characterList.add(new CharacterDisplayData("Mage Fire", "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_0.png"));
-        characterList.add(new CharacterDisplayData("Mage Ice", "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_0.png"));
-        characterList.add(new CharacterDisplayData("Archer", "Assets/Animations/Heroes/Archer/Idle/sprite_0.png"));
+        characterList.add(new CharacterDisplayData("CryoMancer", "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_0.png"));
+        characterList.add(new CharacterDisplayData("Cleric", "Assets/Animations/Heroes/Cleric/Idle/sprite_0.png"));
     }
 
     private void setupListeners() {
@@ -139,7 +145,8 @@ public class CharacterSelection extends JFrame {
         String name;
         String imagePath;
 
-        public CharacterDisplayData(String name, String imagePath) {
+
+        public CharacterDisplayData(String name,String imagePath) {
             this.name = name;
             this.imagePath = imagePath;
         }
