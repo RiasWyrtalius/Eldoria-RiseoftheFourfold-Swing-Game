@@ -20,7 +20,7 @@ public class BattleController {
     private final Party enemyParty;
     private int turnCounter;
     private boolean isBattleActive;
-    private BattlePhase currentPhase = BattlePhase.HERO_ACTION_WAIT; // Default state
+    private BattlePhase currentPhase = BattlePhase.IDLE; // Default state
     private BattleResult finalResult = BattleResult.NONE;
 
     public BattleController(Party heroParty, Party enemyParty) {
@@ -50,6 +50,8 @@ public class BattleController {
                 LogManager.log("+==============+", LogColor.BATTLE_HEADER);
 
                 VisualEffectsManager.getInstance().resumeAllAnimations();
+
+                currentPhase = BattlePhase.HERO_ACTION_WAIT;
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -225,9 +227,18 @@ public class BattleController {
         }
         BattleResult result = getFinalResult();
         switch (result) {
-            case VICTORY -> LogManager.logHighlight("VICTORY! Well Done!", LogColor.VICTORY, 40);
-            case DEFEAT -> LogManager.logHighlight("DEFEAT! Game Over.", LogColor.DEFEAT, 40);
-            case TIE -> LogManager.logHighlight("TIE! Game Over. Truly no one wins in the end.", LogColor.TIE, 40);
+            case VICTORY -> {
+                LogManager.log("VICTORY! " + heroParty.getPartyName() + " is Triumphant!", LogColor.VICTORY);
+                LogManager.logHighlight("VICTORY! Well Done!", LogColor.VICTORY, 40);
+            }
+            case DEFEAT -> {
+                LogManager.log("DEFEAT! " + enemyParty.getPartyName() + " has wiped " + heroParty.getPartyName() + " out!", LogColor.DEFEAT);
+                LogManager.logHighlight("DEFEAT! Game Over.", LogColor.DEFEAT, 40);
+            }
+            case TIE -> {
+                LogManager.log("TIE!: Truly everyone is dead and gone.", LogColor.TIE);
+                LogManager.logHighlight("TIE! Game Over. Truly no one wins in the end.", LogColor.TIE, 40);
+            }
             default -> LogManager.logHighlight("Battle Ended.", LogColor.VICTORY, 40);
         };
 
