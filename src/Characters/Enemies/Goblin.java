@@ -34,7 +34,7 @@ public class Goblin extends Enemy {
 
     @Override
     protected void initializeSkills() {
-        FullExecuteConsumer skirmishLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer skirmishLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = user.getBaseAtk();
 
             Character target = Dice.pickRandom(targets);
@@ -50,7 +50,7 @@ public class Goblin extends Enemy {
             }, true);
         };
 
-        FullExecuteConsumer throwCoinsLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer throwCoinsLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = user.getBaseAtk();
 
             Character target = Dice.pickRandom(targets);

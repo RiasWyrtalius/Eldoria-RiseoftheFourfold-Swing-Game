@@ -40,7 +40,7 @@ public class EarthMage extends JobClass {
 
     }
     public List<Skill> createSkills() {
-        FullExecuteConsumer earthAttackLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer earthAttackLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = CombatMath.calculateDamage(user,50,28,1.2,0.05);
 
             LogManager.log(self.getActionLog(user, "Shakes the earth", targets), LogColor.HERO_ACTION);
@@ -62,7 +62,7 @@ public class EarthMage extends JobClass {
 
         };
 
-        FullExecuteConsumer earthquakeSpellLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer earthquakeSpellLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = CombatMath.calculateDamage(user,55,(int)23.5,1.2,0.05);
 
             LogManager.log(self.getActionLog(user, "Shakes the earth", targets), LogColor.HERO_ACTION);
@@ -81,7 +81,7 @@ public class EarthMage extends JobClass {
             }
         };
 
-        FullExecuteConsumer stoneHailLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer stoneHailLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = CombatMath.calculateDamage(user,20,10,1.2,0.05);
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);

@@ -33,7 +33,7 @@ public class CryoMancer extends JobClass {
     }
     public List<Skill> createSkills() {
 
-        FullExecuteConsumer iceSpikeLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer iceSpikeLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = CombatMath.calculateDamage(user,30,15,1.2,0.05);
             Character target = targets.getFirst();
 
@@ -56,7 +56,7 @@ public class CryoMancer extends JobClass {
         };
 
 
-        FullExecuteConsumer frostBiteLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer frostBiteLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = CombatMath.calculateDamage(user,15,15,1.2,0.05);
             Character target = targets.getFirst();
 

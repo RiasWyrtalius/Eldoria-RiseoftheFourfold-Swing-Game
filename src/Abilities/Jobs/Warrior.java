@@ -37,7 +37,7 @@ public class Warrior extends JobClass {
     }
 
     public List<Skill> createSkills() {
-        FullExecuteConsumer shieldBashLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer shieldBashLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = CombatMath.calculateDamage(user,20,10,1.2,0.05);
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
@@ -52,7 +52,7 @@ public class Warrior extends JobClass {
             }, true);
         };
 
-        FullExecuteConsumer swordSlashLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer swordSlashLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = CombatMath.calculateDamage(user,30,15,1.2,0.05);
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
