@@ -1,6 +1,7 @@
 package Core;
 
 import Abilities.Jobs.*;
+import Core.Battle.TargetType;
 import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Enemies.Boss;
@@ -11,8 +12,10 @@ import Core.Battle.BattleController;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
-import Resource.AssetManager;
-import UI.Views.MainInterface;
+import Items.Item;
+import Items.Rarity;
+import Items.ResourceItem;
+import UI.Views.BattleInterface;
 import UI.Views.MainMenu;
 
 import javax.swing.*;
@@ -21,7 +24,7 @@ public class GameManager {
     private BattleController battleController;
     private Party heroParty;
     private Party enemyParty;
-    private MainInterface mainView;
+    private BattleInterface mainView;
 
     public void startApplication() {
         // run all UI initialization safely on the swing thread
@@ -140,10 +143,24 @@ public class GameManager {
         enemyParty.addPartyMember(boss);
         enemyParty.addPartyMember(slime_1);
     }
+    private void createStartingItems() {
+        Item smallPotion = new ResourceItem(
+                "Small Potion",
+                "Restores 50 HP to a selected target",
+                null,
+                Rarity.COMMON,
+                50,0,
+                TargetType.SINGLE_TARGET
+        );
+
+        heroParty.getInventory().addItem(smallPotion, 3);
+
+    }
+
 
     public void startNewGame() {
         // dummy view to get the text area for synchronization reasons
-        mainView = new MainInterface();
+        mainView = new BattleInterface();
         LogManager.initialize(mainView.getGameLogPanelTextPane(), mainView.getGameLogHighlightPanelTextPane());
         LogManager.log("Logger initialized with UI component", LogColor.SYSTEM);
 

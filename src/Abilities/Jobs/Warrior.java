@@ -3,6 +3,8 @@ package Abilities.Jobs;
 import Abilities.*;
 
 import Characters.Character;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 import Core.Utils.ScalingLogic;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
@@ -69,13 +71,13 @@ public class Warrior extends JobClass {
 
         Skill ShieldBash = new Skill(
                 "Shield Bash", "Single-target Shield attack", 15, 20,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 shieldBashLogic
         );
 
         Skill SwordSlash = new Skill(
                 "Sword Slash", "Single-target Sword Slash", 20, 30,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 swordSlashLogic
         );
         return List.of(ShieldBash,SwordSlash);

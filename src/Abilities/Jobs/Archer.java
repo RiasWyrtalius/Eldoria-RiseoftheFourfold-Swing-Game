@@ -4,6 +4,8 @@ import Abilities.JobClass;
 import Abilities.*;
 
 import Characters.Character;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 import Core.Utils.ScalingLogic;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
@@ -70,13 +72,13 @@ public class Archer extends JobClass {
 
         Skill RapidFire = new Skill(
                 "Rapid Fire", "Single-target long ranged attack ", 10, 20,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 rapidFireLogic
         );
 
         Skill HeavyArrow = new Skill(
                 "Heavy Arrow", "Single-target heavy long ranged attack", 30, 40,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 heavyArrowLogic
         );
 

@@ -1,6 +1,8 @@
 package Abilities;
 
 import Characters.Character;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,17 +14,19 @@ public class Skill {
     private int power;
     private SkillType skillType;
     private SkillAction skillAction;
-    private SkillTarget skillTarget;
+    private TargetType targetType;
+    private TargetCondition targetCondition;
     private final SkillLogicConsumer executeLogic;
 
-    public Skill(String name, String effect, int manaCost, int power, SkillType skillType, SkillAction skillAction, SkillTarget skillTarget, SkillLogicConsumer executeLogic) {
+    public Skill(String name, String effect, int manaCost, int power, SkillType skillType, SkillAction skillAction, TargetType targetType, TargetCondition targetCondition, SkillLogicConsumer executeLogic) {
         this.name = name;
         this.effect = effect;
         this.manaCost = manaCost;
         this.power = power;
         this.skillType = skillType;
         this.skillAction = skillAction;
-        this.skillTarget = skillTarget;
+        this.targetCondition = targetCondition;
+        this.targetType = targetType;
         this.executeLogic = executeLogic;
     }
 
@@ -80,8 +84,12 @@ public class Skill {
         return skillAction;
     }
 
-    public SkillTarget getSkillTarget() {
-        return skillTarget;
+    public TargetType getTargetType() {
+        return targetType;
+    }
+
+    public TargetCondition getTargetCondition() {
+        return targetCondition;
     }
 
     public SkillLogicConsumer getExecuteLogic() {

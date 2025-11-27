@@ -5,7 +5,7 @@ import Core.Utils.LogManager;
 import Resource.Animation;
 import Resource.AssetManager;
 import UI.Components.CharacterStatusPanel;
-import UI.Views.MainInterface;
+import UI.Views.BattleInterface;
 
 import Characters.Character;
 import javax.swing.*;
@@ -30,7 +30,7 @@ public class VisualEffectsManager {
 
     private boolean isGlobalPaused = false;
 
-    private MainInterface mainView;
+    private BattleInterface mainView;
 
     private VisualEffectsManager() {}
 
@@ -222,7 +222,7 @@ public class VisualEffectsManager {
 
     public JLabel getDisplayComponent(Character character) {
         if (mainView == null) {
-            LogManager.log("ERROR: VEM is not linked to MainInterface (mainView is null).", java.awt.Color.RED);
+            LogManager.log("ERROR: VEM is not linked to BattleInterface (mainView is null).", java.awt.Color.RED);
             return null;
         }
 
@@ -237,7 +237,7 @@ public class VisualEffectsManager {
 
     public JLabel getOverlayComponent(Character character) {
         if (mainView == null) {
-            LogManager.log("ERROR: VEM is not linked to MainInterface (mainView is null).", java.awt.Color.RED);
+            LogManager.log("ERROR: VEM is not linked to BattleInterface (mainView is null).", java.awt.Color.RED);
             return null;
         }
 
@@ -322,7 +322,7 @@ public class VisualEffectsManager {
         LogManager.log("All active animation timers have been stopped.", java.awt.Color.BLUE);
     }
 
-    public void setMainView(MainInterface mainView) {
+    public void setMainView(BattleInterface mainView) {
         this.mainView = mainView;
     }
 }

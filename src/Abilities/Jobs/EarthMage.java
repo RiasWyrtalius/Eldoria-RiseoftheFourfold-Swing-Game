@@ -4,6 +4,8 @@ import Abilities.JobClass;
 import Abilities.*;
 
 import Characters.Character;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 import Core.Utils.ScalingLogic;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
@@ -104,19 +106,19 @@ public class EarthMage extends JobClass {
 
         Skill EarthAttack = new Skill(
                 "Earth Attack", "Multi-target Earth spell", 60, 50,
-                SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.AOE_ALL_TARGETS,
+                SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
                 earthAttackLogic
         );
 
         Skill EarthquakeSpell = new Skill(
                 "Earthquake Spell", "Multi-targeted Earth spell", 50, 55,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.AOE_ALL_TARGETS,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
                 earthquakeSpellLogic
         );
 
         Skill StoneHail = new Skill(
                 "Stone Hail", "Single-target Earth spell", 15, 20,
-                SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 stoneHailLogic
         );
 

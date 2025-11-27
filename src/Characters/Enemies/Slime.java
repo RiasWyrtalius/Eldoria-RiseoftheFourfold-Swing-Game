@@ -3,6 +3,8 @@ package Characters.Enemies;
 import Abilities.*;
 import Characters.Base.Enemy;
 import Characters.Character;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 import Core.Utils.Dice;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
@@ -51,7 +53,7 @@ public class Slime extends Enemy {
 
         Skill AcidicSlam = new Skill(
                 "Acidic Slam", "Bashes its own body",0, 20,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 acidicSlamLogic
         );
 

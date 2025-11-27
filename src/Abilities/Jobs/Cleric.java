@@ -3,6 +3,8 @@ package Abilities.Jobs;
 import Abilities.*;
 
 import Characters.Character;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 import Core.Utils.ScalingLogic;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
@@ -85,17 +87,17 @@ public class Cleric extends JobClass {
 
         Skill HealSelf = new Skill(
                 "Self Heal", "Healing themself", 15, 20,
-                SkillType.HEAL, SkillAction.MAGICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 healSelfLogic
         );
         Skill HealGroup = new Skill(
                 "Group Heal", "Healing their teammate", 40, 20,
-                SkillType.HEAL, SkillAction.MAGICAL, SkillTarget.AOE_ALL_TARGETS,
+                SkillType.HEAL, SkillAction.MAGICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
                 healGroupLogic
         );
         Skill BashStaff = new Skill(
                 "Bash Staff", "Healing their teammate", 10, 20,
-                SkillType.HEAL, SkillAction.MAGICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 BashLogic
         );
 

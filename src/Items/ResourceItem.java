@@ -2,7 +2,8 @@ package Items;
 
 import Characters.Character;
 
-import Abilities.SkillTarget;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 import Core.Utils.LogManager;
 
 import java.util.List;
@@ -14,9 +15,9 @@ public class ResourceItem extends Item {
     private final int hpAmount;
     private final int mpAmount;
 
-    public ResourceItem(String name, String description, ItemConsumer executeLogic, Rarity rarity, int hpAmount, int mpAmount, SkillTarget targetType) {
+    public ResourceItem(String name, String description, ItemConsumer executeLogic, Rarity rarity, int hpAmount, int mpAmount, TargetType targetType) {
 
-        super(name, description, targetType, executeLogic, rarity);
+        super(name, description, targetType, TargetCondition.ALIVE, executeLogic, rarity);
         this.hpAmount = hpAmount;
         this.mpAmount = mpAmount;
     }

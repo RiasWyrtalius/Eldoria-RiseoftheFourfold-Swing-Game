@@ -1,5 +1,8 @@
 package Items;
 
+import Core.Utils.LogColor;
+import Core.Utils.LogManager;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +17,7 @@ public class Inventory {
         itemRegistry.putIfAbsent(item.getName(), item);
         // uses existing count or default of 0 and add the amount. super cool dawg
         itemCounts.put(item.getName(), itemCounts.getOrDefault(item.getName(), 0) + amount);
+        LogManager.log("Added " + amount + " " + item.getName() + " to inventory", LogColor.TURN_INDICATOR);
     }
 
     /**
@@ -41,7 +45,12 @@ public class Inventory {
         return itemCounts.getOrDefault(itemName, 0) > 0;
     }
 
-    public List<Item> getItems() {
+    public List<Item> getAllItems() {
         return new ArrayList<>(itemRegistry.values());
     }
+
+    public int getItemCount(String item) {
+        return itemCounts.get(item);
+    }
+
 }

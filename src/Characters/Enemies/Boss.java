@@ -3,6 +3,8 @@ package Characters.Enemies;
 import Abilities.*;
 import Characters.Base.Enemy;
 import Characters.Character;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
@@ -53,7 +55,7 @@ public class Boss extends Enemy {
 
         Skill basicAttack = new Skill(
                 "Cruel Strike", "Attacks the weakest target", 0, 0,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 basicAttackLogic
         );
 
@@ -75,7 +77,7 @@ public class Boss extends Enemy {
 
         Skill devastatingStrike = new Skill(
                 "Devastating Strike", "Massive AOE damage", 50, 0,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.AOE_ALL_TARGETS,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
                 devastatingStrikeLogic
         );
 

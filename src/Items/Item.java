@@ -1,6 +1,7 @@
 package Items;
 
-import Abilities.SkillTarget;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 import Characters.Character;
 
 import java.util.List;
@@ -8,14 +9,16 @@ import java.util.List;
 public class Item {
     private final String name;
     private final String description;
-    private final SkillTarget targetType;
+    private final TargetType targetType;
+    private final TargetCondition targetCondition;
     private final Rarity rarity;
     private final ItemConsumer executeLogic;
 
-    public Item(String name, String description, SkillTarget targetType, ItemConsumer executeLogic, Rarity rarity) {
+    public Item(String name, String description, TargetType targetType, TargetCondition targetCondition, ItemConsumer executeLogic, Rarity rarity) {
         this.name = name;
         this.description = description;
         this.targetType = targetType;
+        this.targetCondition = targetCondition;
         this.executeLogic = executeLogic;
         this.rarity = rarity;
     }
@@ -34,8 +37,12 @@ public class Item {
         return description;
     }
 
-    public SkillTarget getTargetType() {
+    public TargetType getTargetType() {
         return targetType;
+    }
+
+    public TargetCondition getTargetCondition() {
+        return targetCondition;
     }
 
     public Rarity getRarity() {

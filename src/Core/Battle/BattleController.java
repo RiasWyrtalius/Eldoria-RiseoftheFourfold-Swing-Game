@@ -8,14 +8,13 @@ import Characters.Party;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
-import UI.Views.MainInterface;
+import UI.Views.BattleInterface;
 
-import java.awt.*;
 import java.util.List;
 
 // FIXME: Turn and game doesn’t end automatically when final blow is from an animation
 public class BattleController {
-    private MainInterface mainView;
+    private BattleInterface mainView;
     private final Party heroParty;
     private final Party enemyParty;
     private int turnCounter;
@@ -250,7 +249,7 @@ public class BattleController {
     }
 
     // =============== PUBLIC SETTERS AND GETTERS FOR UI ===============
-    public void setMainView(MainInterface mainView) {
+    public void setMainView(BattleInterface mainView) {
         this.mainView = mainView;
     }
 

@@ -3,6 +3,8 @@ package Characters.Enemies;
 import Abilities.*;
 import Characters.Base.Enemy;
 import Characters.Character;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 import Core.Utils.Dice;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
@@ -68,12 +70,12 @@ public class Goblin extends Enemy {
 
         Skill skirmish = new Skill(
                 "Skirmish", "something something",0, 15,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 skirmishLogic
         );
         Skill ThrowCoin = new Skill(
                 "Coin Throw", "Fling Coins",0, 10,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 throwCoinsLogic
         );
 

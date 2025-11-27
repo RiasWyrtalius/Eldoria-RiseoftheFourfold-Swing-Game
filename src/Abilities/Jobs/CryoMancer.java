@@ -4,6 +4,8 @@ import Abilities.JobClass;
 import Abilities.*;
 
 import Characters.Character;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 import Core.Utils.ScalingLogic;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
@@ -85,13 +87,13 @@ public class CryoMancer extends JobClass {
 
         Skill IceSpike = new Skill(
                 "Ice Spike", "Unleashes spikes from the ground", 25, 30,
-                SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 iceSpikeLogic
         );
 
         Skill FrostBite = new Skill(
                 "Frost Bite", "Unleashes cold Air to enemy", 10, 15,
-                SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 frostBiteLogic
         );
 

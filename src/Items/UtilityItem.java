@@ -1,6 +1,7 @@
 package Items;
 
-import Abilities.SkillTarget;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 import Characters.Character;
 
 import java.util.List;
@@ -11,8 +12,9 @@ import java.util.List;
 public class UtilityItem extends Item{
     private final ItemConsumer logic;
 
-    public UtilityItem(String name, String description, SkillTarget targetType, ItemConsumer executeLogic, Rarity rarity, ItemConsumer logic) {
-        super(name, description, targetType, executeLogic, rarity);
+    public UtilityItem(String name, String description, TargetType targetType,
+                       TargetCondition condition, ItemConsumer executeLogic, Rarity rarity, ItemConsumer logic) {
+        super(name, description, targetType, condition, executeLogic, rarity);
         this.logic = logic;
     }
 

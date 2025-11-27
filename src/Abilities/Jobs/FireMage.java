@@ -3,6 +3,8 @@ package Abilities.Jobs;
 import Abilities.*;
 
 import Characters.Character;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 import Core.Utils.ScalingLogic;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
@@ -88,19 +90,19 @@ public class FireMage extends JobClass {
 
         Skill fireball = new Skill(
                 "Fireball", "Single-target fire spell", 25, 30,
-                SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 fireBallLogic
         );
 
         Skill fireCyclone = new Skill(
                 "Fire Cyclone", "Multi-target fire spell", 50, 55,
-                SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.AOE_ALL_TARGETS,
+                SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
                 fireCycloneLogic
         );
 
         Skill staffAttack= new Skill(
                 "Staff Attack", "Single-target spell", 0, 10,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 staffAttackLogic
         );
 

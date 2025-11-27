@@ -4,7 +4,7 @@
     import Core.Visuals.VisualAsset;
     import Core.Visuals.VisualEffectsManager;
     import Resource.AssetManager;
-    import UI.Views.MainInterface;
+    import UI.Views.BattleInterface;
 
     import javax.swing.*;
     import javax.swing.border.Border;
@@ -24,7 +24,7 @@
 
         private JPanel iconPanel;
 
-        public CharacterStatusPanel(MainInterface parentInterface) {
+        public CharacterStatusPanel(BattleInterface parentInterface) {
             this.setOpaque(false);
             nameLabel = new JLabel("N/A - Lvl 0");
             hpBar = new JProgressBar();
@@ -72,7 +72,7 @@
             add(iconPanel);
         }
 
-        private MouseAdapter attachListener(MainInterface parentInterface) {
+        private MouseAdapter attachListener(BattleInterface parentInterface) {
             return new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {

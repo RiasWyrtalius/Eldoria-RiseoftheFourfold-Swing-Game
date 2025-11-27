@@ -4,6 +4,8 @@ import Abilities.JobClass;
 import Abilities.*;
 
 import Characters.Character;
+import Core.Battle.TargetCondition;
+import Core.Battle.TargetType;
 import Core.Utils.ScalingLogic;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
@@ -102,18 +104,18 @@ public class AeroMancer extends JobClass {
 
         Skill WindSlash = new Skill(
                 "Wind Slash", "A slash compressed wind", 20, 25,
-                SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.SINGLE_TARGET,
+                SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 windSlashLogic
         );
 
         Skill WindPierce = new Skill(
                 "Wind Pierce", "Single-target Sharp Wind spell", 15, 20,
-                SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.AOE_TWO_TARGETS,
+                SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.AOE_TWO_TARGETS, TargetCondition.ALIVE,
                 windPierceLogic
         );
         Skill WindTornado = new Skill(
                 "Wind Tornado", "Multi-target Wind spell", 40, 40,
-                SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.AOE_ALL_TARGETS,
+                SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
                 windTornadoLogic
         );
 
