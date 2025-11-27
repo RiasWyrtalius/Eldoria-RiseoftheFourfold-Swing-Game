@@ -4,7 +4,7 @@ import Abilities.JobClass;
 import Abilities.*;
 
 import Characters.Character;
-import Core.Utils.CombatMath;
+import Core.Utils.ScalingLogic;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
@@ -40,8 +40,8 @@ public class EarthMage extends JobClass {
 
     }
     public List<Skill> createSkills() {
-        FullExecuteConsumer earthAttackLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = CombatMath.calculateDamage(user,50,28,1.2,0.05);
+        SkillLogicConsumer earthAttackLogic = (self, user, targets, onSkillComplete) -> {
+            int calculateDamage = ScalingLogic.calculateDamage(user,50,28,1.2,0.05);
 
             LogManager.log(self.getActionLog(user, "Shakes the earth", targets), LogColor.HERO_ACTION);
             for(Character t : targets) {
@@ -62,8 +62,8 @@ public class EarthMage extends JobClass {
 
         };
 
-        FullExecuteConsumer earthquakeSpellLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = CombatMath.calculateDamage(user,55,(int)23.5,1.2,0.05);
+        SkillLogicConsumer earthquakeSpellLogic = (self, user, targets, onSkillComplete) -> {
+            int calculateDamage = ScalingLogic.calculateDamage(user,55,(int)23.5,1.2,0.05);
 
             LogManager.log(self.getActionLog(user, "Shakes the earth", targets), LogColor.HERO_ACTION);
             for(Character t : targets) {
@@ -81,8 +81,8 @@ public class EarthMage extends JobClass {
             }
         };
 
-        FullExecuteConsumer stoneHailLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = CombatMath.calculateDamage(user,20,10,1.2,0.05);
+        SkillLogicConsumer stoneHailLogic = (self, user, targets, onSkillComplete) -> {
+            int calculateDamage = ScalingLogic.calculateDamage(user,20,10,1.2,0.05);
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, "Multitudes of earth crumbles down", targets), LogColor.HERO_ACTION);

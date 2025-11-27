@@ -13,9 +13,9 @@ public class Skill {
     private SkillType skillType;
     private SkillAction skillAction;
     private SkillTarget skillTarget;
-    private final FullExecuteConsumer executeLogic;
+    private final SkillLogicConsumer executeLogic;
 
-    public Skill(String name, String effect, int manaCost, int power, SkillType skillType, SkillAction skillAction, SkillTarget skillTarget, FullExecuteConsumer executeLogic) {
+    public Skill(String name, String effect, int manaCost, int power, SkillType skillType, SkillAction skillAction, SkillTarget skillTarget, SkillLogicConsumer executeLogic) {
         this.name = name;
         this.effect = effect;
         this.manaCost = manaCost;
@@ -84,7 +84,7 @@ public class Skill {
         return skillTarget;
     }
 
-    public FullExecuteConsumer getExecuteLogic() {
+    public SkillLogicConsumer getExecuteLogic() {
         return executeLogic;
     }
 }

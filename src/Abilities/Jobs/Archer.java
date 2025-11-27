@@ -4,7 +4,7 @@ import Abilities.JobClass;
 import Abilities.*;
 
 import Characters.Character;
-import Core.Utils.CombatMath;
+import Core.Utils.ScalingLogic;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
@@ -44,8 +44,8 @@ public class Archer extends JobClass {
         );
     }
     public List<Skill> createSkills() {
-        FullExecuteConsumer rapidFireLogic = (self, user, targets, onSkillComplete) -> {
-            int dmg = CombatMath.calculateDamage(user, 20, 15, 1.2, 0.05);
+        SkillLogicConsumer rapidFireLogic = (self, user, targets, onSkillComplete) -> {
+            int dmg = ScalingLogic.calculateDamage(user, 20, 15, 1.2, 0.05);
             Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, "Unleashes array of Arrows", targets), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW-Rapid", user, () -> {
@@ -56,8 +56,8 @@ public class Archer extends JobClass {
             }, true);
         };
 
-        FullExecuteConsumer heavyArrowLogic = (self, user, targets, onSkillComplete) -> {
-            int dmg = CombatMath.calculateDamage(user, 40, 20, 1.2, 0.05);
+        SkillLogicConsumer heavyArrowLogic = (self, user, targets, onSkillComplete) -> {
+            int dmg = ScalingLogic.calculateDamage(user, 40, 20, 1.2, 0.05);
             Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, "Pulls their bow the hardest they can to release", targets), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW", user, () -> {

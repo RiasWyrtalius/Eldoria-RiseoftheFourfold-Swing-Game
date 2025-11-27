@@ -25,7 +25,7 @@ public class Boss extends Enemy {
 
     @Override
     protected void initializeSkills() {
-        FullExecuteConsumer basicAttackLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer basicAttackLogic = (self, user, targets, onSkillComplete) -> {
             Character weakTarget = null;
             int lowHP = Integer.MAX_VALUE;
 
@@ -57,7 +57,7 @@ public class Boss extends Enemy {
                 basicAttackLogic
         );
 
-        FullExecuteConsumer devastatingStrikeLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer devastatingStrikeLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = (int) (user.getBaseAtk() * 1.5);
 
             LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogColor.ENEMY_ACTION);

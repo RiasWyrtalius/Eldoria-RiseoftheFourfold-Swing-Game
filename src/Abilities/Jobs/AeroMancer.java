@@ -4,7 +4,7 @@ import Abilities.JobClass;
 import Abilities.*;
 
 import Characters.Character;
-import Core.Utils.CombatMath;
+import Core.Utils.ScalingLogic;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
@@ -32,8 +32,8 @@ public class AeroMancer extends JobClass {
         );
     }
     public List<Skill> createSkills() {
-        FullExecuteConsumer windTornadoLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = CombatMath.calculateDamage(user,40,(int)18.5,1.2,0.05);
+        SkillLogicConsumer windTornadoLogic = (self, user, targets, onSkillComplete) -> {
+            int calculateDamage = ScalingLogic.calculateDamage(user,40,(int)18.5,1.2,0.05);
             Character target = targets.getFirst();
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
@@ -52,8 +52,8 @@ public class AeroMancer extends JobClass {
 //                onSkillComplete.run();
 //            }
         };
-        FullExecuteConsumer windBurstLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = CombatMath.calculateDamage(user,30,(int)18.5,1.2,0.05);
+        SkillLogicConsumer windBurstLogic = (self, user, targets, onSkillComplete) -> {
+            int calculateDamage = ScalingLogic.calculateDamage(user,30,(int)18.5,1.2,0.05);
             Character target = targets.getFirst();
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
@@ -66,8 +66,8 @@ public class AeroMancer extends JobClass {
         };
 
 
-        FullExecuteConsumer windPierceLogic= (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = CombatMath.calculateDamage(user,20,15,1.2,0.05);
+        SkillLogicConsumer windPierceLogic= (self, user, targets, onSkillComplete) -> {
+            int calculateDamage = ScalingLogic.calculateDamage(user,20,15,1.2,0.05);
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 

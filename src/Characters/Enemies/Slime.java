@@ -6,7 +6,6 @@ import Characters.Character;
 import Core.Utils.Dice;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
-import Core.Visuals.VisualAsset;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
@@ -35,7 +34,7 @@ public class Slime extends Enemy {
 
     @Override
     protected void initializeSkills() {
-        FullExecuteConsumer acidicSlamLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer acidicSlamLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = user.getBaseAtk();
 
             Character target = Dice.pickRandom(targets);
