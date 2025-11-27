@@ -93,6 +93,19 @@ public class GameManager {
             }
         };
 
+        Cleric cleric = new Cleric();
+        Character erick = new Hero("Erick the cleric", 100, 60, 120, 1, cleric, "CLERIC_IDLE") {
+            @Override
+            protected void onDeath() {
+
+            }
+
+            @Override
+            protected void onDefeat(Character defeatedTarget) {
+
+            }
+        };
+
         Archer archer = new Archer();
         Character gianmeni = new Hero("Gian Meni",80,70,100,1,archer,"ARCHER_IDLE"){
             @Override
@@ -111,7 +124,8 @@ public class GameManager {
 
 //        TODO: add max amount of party members
 //        heroParty.addPartyMember(charlie);
-        heroParty.addPartyMember(ythan);
+//        heroParty.addPartyMember(ythan);
+        heroParty.addPartyMember(erick);
         heroParty.addPartyMember(sammy);
 //        heroParty.addPartyMember(gianmeni);
         heroParty.addPartyMember(kervs);
@@ -120,7 +134,7 @@ public class GameManager {
         //TEMPORARY ENEMY SETUP
         enemyParty = new Party("Swarm of Goblins");
         Goblin goblin_1 = new Goblin();
-        Boss boss = new Boss("Serato The Destroyer" , 20,0,200,1,"Boss",200,3);
+        Boss boss = new Boss("Serato The Destroyer" , 20,10,200,1,"Boss",200,3);
         Slime slime_1 = new Slime();
         enemyParty.addPartyMember(goblin_1);
         enemyParty.addPartyMember(boss);

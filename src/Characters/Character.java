@@ -102,7 +102,12 @@ public abstract class Character {
         LogManager.log("(CHARACTER) : " + this.name + " attacks " + target.getName());
     }
 
-    public void setHealth(int health) { this.health = health; }
+    public void setHealth(int health) {
+        if(health > initialHealth){
+            health = initialHealth;
+        }
+        this.health = health;
+    }
     public void setInitialHealth(int initialHealth){this.initialHealth = initialHealth;}
 
 
