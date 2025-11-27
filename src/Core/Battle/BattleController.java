@@ -8,8 +8,11 @@ import Characters.Party;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
+import Items.Inventory;
+import Items.Item;
 import UI.Views.BattleInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // FIXME: Turn and game doesn’t end automatically when final blow is from an animation
@@ -89,6 +92,41 @@ public class BattleController {
 
         if (this.mainView != null)
             this.mainView.refreshUI();
+    }
+
+
+    public void executeItemActionFromUI(Item item, List<Character> targets) {
+        LogManager.log("sfsufhufh");
+        if (!isBattleActive) return;
+
+        Inventory inventory = heroParty.getInventory();
+
+        if (!inventory.consumeItem(item.getName())) {
+            LogManager.log("You have no " + item.getName() + " left!", LogColor.ENEMY_ACTION);
+        }
+
+        List<Character> finalTargets = (targets == null) ? new ArrayList<>() : new ArrayList<>(targets);
+
+//        if (finalTargets.isEmpty() && item.getTargetType().getMaxTargets() > 1) {
+//            TargetCondition condition = item.getTargetCondition();
+//
+//            heroParty.getPartyMembers().stream().filter(condition::isValid).forEach(finalTargets::add);
+//            enemyParty.getPartyMembers().stream().filter(condition::isValid).forEach(finalTargets::add);
+//        }
+
+        // Fallback: If still empty (e.g. "Use on Self" but no user specified), pick first hero for visuals
+//        if (finalTargets.isEmpty()) {
+//            finalTargets.add(heroParty.getAliveMembers().get(0));
+//        }
+
+        // 3. Callback: End turn after item logic finishes
+        Runnable onItemComplete = () -> {
+            LogManager.log("Item used. Turn Cycle Advancing...");
+            advanceTurnCycle(true); // Manual override to force phase change
+        };
+
+        LogManager.log("Party used " + item.getName() + "!", LogColor.PLAYER_JOIN);
+        item.use(null, finalTargets, onItemComplete);
     }
 
     public void endHeroPhaseManually() {

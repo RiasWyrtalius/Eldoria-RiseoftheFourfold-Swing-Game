@@ -142,6 +142,8 @@ public class GameManager {
         enemyParty.addPartyMember(goblin_1);
         enemyParty.addPartyMember(boss);
         enemyParty.addPartyMember(slime_1);
+
+        createStartingItems();
     }
     private void createStartingItems() {
         Item smallPotion = new ResourceItem(
@@ -154,7 +156,6 @@ public class GameManager {
         );
 
         heroParty.getInventory().addItem(smallPotion, 3);
-
     }
 
 

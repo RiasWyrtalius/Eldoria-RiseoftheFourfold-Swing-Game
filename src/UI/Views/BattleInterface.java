@@ -5,6 +5,7 @@ import Core.Battle.*;
 import Characters.Base.Hero;
 import Characters.Character;
 import Core.Utils.LogManager;
+import Items.Inventory;
 import Items.Item;
 import UI.Components.BackgroundPanel;
 import UI.Components.BattleUIMode;
@@ -94,7 +95,7 @@ public class BattleInterface extends JFrame{
     public void listenerInit() {
         if (endTurnButton != null) {
             endTurnButton.addActionListener(e -> {
-                resetSelectionState();
+//                resetSelectionState();
                 battleController.endHeroPhaseManually();
                 refreshUI();
             });
@@ -114,12 +115,27 @@ public class BattleInterface extends JFrame{
         setPartyUI(battleController.getHeroParty().getPartyMembers(), heroPartyPanels);
         setPartyUI(battleController.getEnemyParty().getPartyMembers(), enemyPartyPanels);
 
+        if (inventoryPanel != null && battleController != null) {
+            Inventory inv = battleController.getHeroParty().getInventory();
+
+//            LogManager.log("DEBUG: Loading Inventory. Item Count: " + inv.getAllItems().size());
+
+            ((InventoryPanel) inventoryPanel).loadInventory(inv);
+        }
+
         updateControls();
     }
 
     private void updateControls() {
         BattlePhase phase = battleController.getCurrentPhase();
-        endTurnButton.setEnabled(phase == BattlePhase.HERO_ACTION_WAIT);
+        boolean isPlayerTurn = (phase == BattlePhase.HERO_ACTION_WAIT);
+        endTurnButton.setEnabled(isPlayerTurn);
+        boolean canUseItems = isPlayerTurn && (currentMode == BattleUIMode.HERO_SELECT);
+
+        if (inventoryPanel != null) {
+            inventoryPanel.setEnabled(canUseItems);
+        }
+
         if (phase == BattlePhase.BATTLE_ENDED) {
             // TODO: set battleOutcome JLabel to victory, or tie
             BattleResult result = battleController.getFinalResult();
@@ -150,9 +166,7 @@ public class BattleInterface extends JFrame{
         battlePanel = new BackgroundPanel();
         inventoryPanel = new InventoryPanel();
 
-        ((InventoryPanel)inventoryPanel).setOnItemSelected(item -> {
-
-        });
+        ((InventoryPanel)inventoryPanel).setOnItemSelected(this::onItemSelect);
 
         heroPartyPanel1 = new CharacterStatusPanel(this);
         heroPartyPanel2 = new CharacterStatusPanel(this);
@@ -172,7 +186,7 @@ public class BattleInterface extends JFrame{
 
         switch (currentMode) {
             case HERO_SELECT:
-//                LogManager.log("SELECT HERO");
+                LogManager.log("SELECT HERO");
                 if (clickedCharacter instanceof Hero) {
                     Hero hero = (Hero)clickedCharacter;
                     if (hero.isAlive() && !hero.isExhausted()) {
@@ -182,8 +196,9 @@ public class BattleInterface extends JFrame{
                     }
                 } else LogManager.log("Enemy is Selected!");
                 break;
+
             case TARGET_SELECT:
-//                LogManager.log("SELECT TARGET");
+                LogManager.log("SELECT TARGET");
 
                 TargetType typeRule = null;
                 TargetCondition conditionRule = null;
@@ -253,19 +268,70 @@ public class BattleInterface extends JFrame{
     }
 
     public void onConfirmAction() {
-        if (currentMode != BattleUIMode.TARGET_SELECT) return;
+        boolean requiresTargets = (selectedSkill != null && selectedSkill.getTargetType().getMaxTargets() > 0) ||
+                (selectedItem != null && selectedItem.getTargetType().getMaxTargets() > 0);
 
-        if (selectedTargets.isEmpty()) {
+        boolean isAutoTarget = (selectedSkill != null && selectedSkill.getTargetType() == TargetType.AOE_ALL_TARGETS) ||
+                (selectedItem != null && selectedItem.getTargetType() == TargetType.AOE_ALL_TARGETS);
+
+        if (requiresTargets && !isAutoTarget && selectedTargets.isEmpty()) {
             LogManager.log("Cannot confirm: No targets selected.");
             return;
         }
 
-        battleController.executeActionFromUI(activeHero, selectedSkill, selectedTargets);
+        if (selectedSkill != null) {
+            battleController.executeActionFromUI(activeHero, selectedSkill, selectedTargets);
+        }
+        else if (selectedItem != null) {
+            battleController.executeItemActionFromUI(selectedItem, selectedTargets);
+        }
 
         hideTargetConfirmMenu();
-
         resetSelectionState();
         refreshUI();
+
+//        if (currentMode != BattleUIMode.TARGET_SELECT) return;
+//
+//        // TODO: sometimes items or skills require no targets
+//
+//        if (selectedTargets.isEmpty()) {
+//            LogManager.log("Cannot confirm: No targets selected.");
+//            return;
+//        }
+//        if (currentMode == BattleUIMode.ITEM_SELECT) {
+//            battleController.executeItemActionFromUI(selectedItem, selectedTargets);
+//        } else {
+//            battleController.executeActionFromUI(activeHero, selectedSkill, selectedTargets);
+//        }
+//
+//        hideTargetConfirmMenu();
+//
+//        resetSelectionState();
+//        refreshUI();
+
+//        TargetType type = null;
+//        if (selectedSkill != null) type = selectedSkill.getTargetType();
+//        else if (selectedItem != null) type = selectedItem.getTargetType();
+//
+//        // Only block empty selection if the type REQUIRES targets
+//        boolean requiresSelection = (type == TargetType.SINGLE_TARGET ||
+//                type == TargetType.AOE_TWO_TARGETS ||
+//                type == TargetType.AOE_THREE_TARGETS);
+//
+//        if (requiresSelection && selectedTargets.isEmpty()) {
+//            LogManager.log("Cannot confirm: No targets selected.");
+//            return;
+//        }
+//
+//        if (selectedSkill != null) {
+//            battleController.executeActionFromUI(activeHero, selectedSkill, selectedTargets);
+//        } else if (selectedItem != null) {
+//            battleController.executeItemActionFromUI(selectedItem, selectedTargets);
+//        }
+//
+//        hideTargetConfirmMenu();
+////        resetSelectionState();
+//        refreshUI();
     }
 
     public void onHeroSelect(Hero clickedHero) {
@@ -288,23 +354,51 @@ public class BattleInterface extends JFrame{
 
         this.selectedSkill = skill;
         this.currentMode = BattleUIMode.TARGET_SELECT;
+        TargetType type = skill.getTargetType();
+
+        if (type == TargetType.NO_TARGETS) {
+            onConfirmAction();
+            return;
+        }
 
         LogManager.log("Select a target for " + skill.getName());
         refreshUI();
     }
 
     public void onItemSelect(Item item) {
-        this.resetSelectionState();
+        LogManager.log("ITEM SELECTED: " + item.getName());
+        this.currentMode = BattleUIMode.ITEM_SELECT;
 
         this.selectedSkill = null;
         this.selectedItem = item;
-
         this.selectedTargets.clear();
 
-        this.maxTargetsAllowed = item.getTargetType().getMaxTargets();
         TargetType type = item.getTargetType();
 
+        if (type == TargetType.NO_TARGETS) {
+//            if (activeHero != null) {
+//                selectedTargets.add(activeHero);
+//            } else {
+//                selectedTargets.add(battleController.getHeroParty().getPartyMembers().get(0));
+//            }
+            onConfirmAction();
+            return;
+        }
 
+//        else if (type == TargetType.AOE_ALL_TARGETS) {
+////            executeItemActionFromUI(activeHero, item, null);
+//
+//            // manual clean up since we skipped onconfirmed action and stuff
+//            hideTargetConfirmMenu();
+//            resetSelectionState();
+//            return;
+//        }
+
+        // manual targetting
+        this.currentMode = BattleUIMode.TARGET_SELECT;
+
+        LogManager.log("Select up to " + type.getMaxTargets() + " target(s).");
+        refreshUI();
     }
 
     private void resetSelectionState() {
@@ -354,21 +448,35 @@ public class BattleInterface extends JFrame{
 
             @Override
             public void popupMenuCanceled(PopupMenuEvent e) {
-                // prolly will add more targets
             }
         });
 
+        int maxTargets = 0;
+        String actionType = "Action";
+
+        if (selectedSkill != null) {
+            maxTargets = selectedSkill.getTargetType().getMaxTargets();
+            actionType = "Skill";
+        } else if (selectedItem != null) {
+            maxTargets = selectedItem.getTargetType().getMaxTargets();
+            actionType = "Item";
+        }
+
         JMenuItem confirm = new JMenuItem("Confirm (" +
-                selectedTargets.size() + "/" + selectedSkill.getTargetType().getMaxTargets() + ")");
-        confirm.addActionListener(e -> onConfirmAction()); // TODO:
-        JMenuItem cancel = new JMenuItem("Cancel Skill ");
+                selectedTargets.size() + "/" + maxTargets + ")");
+        confirm.addActionListener(e -> onConfirmAction());
+
+        JMenuItem cancel = new JMenuItem("Cancel " + actionType);
+
+        String finalActionType = actionType;
         cancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LogManager.log("Skill selection cancelled");
+                LogManager.log(finalActionType + " selection cancelled");
                 resetSelectionState();
             }
         });
+
         menu.add(confirm);
         menu.add(cancel);
         return menu;
@@ -404,7 +512,7 @@ public class BattleInterface extends JFrame{
             @Override
             public void popupMenuCanceled(PopupMenuEvent e) {
                 LogManager.log("Skill selection cancelled");
-                resetSelectionState();
+//                resetSelectionState();
             }
         });
 
@@ -461,8 +569,11 @@ public class BattleInterface extends JFrame{
                     .append(" (").append(s.getManaCost()).append(" MP)\n");
         }
 
-        sb.append("----------------\n");
-        sb.append(c.getDescription());
+        String description = c.getDescription();
+        if (description != null) {
+            sb.append("----------------\n");
+            sb.append(c.getDescription());
+        }
 
         inspectorText.setText(sb.toString());
         inspectorText.setCaretPosition(0);
