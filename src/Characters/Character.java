@@ -164,7 +164,13 @@ public abstract class Character {
     public void setExhausted(boolean exhausted) {
         isExhausted = exhausted;
     }
-    public void setMana(int mana) { this.mana = mana; }
+    public void setMana(int mana) {
+        if (mana > maxMana) {
+            this.mana = maxMana;
+            return;
+        }
+        this.mana = mana;
+    }
     public abstract List<Skill> getSkills();
     public abstract String getDescription();
 }
