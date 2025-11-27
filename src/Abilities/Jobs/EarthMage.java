@@ -21,7 +21,7 @@ public class EarthMage extends JobClass {
         AssetManager.getInstance().registerAnimation(
                 "MAGE_EARTH-IDLE",
                 "Assets/Animations/Heroes/Mage-Earth/Idle/sprite_%d.png",
-                5, 100, 100 , 300,
+                3, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
 
@@ -35,6 +35,12 @@ public class EarthMage extends JobClass {
                 "EARTHQUAKE",
                 "Assets/Animations/Heroes/Mage-Earth/Effects/Earthquake/sprite_%d.png",
                 13, 100, 100 , 100,
+                AnimationLoopType.TWO_CYCLES
+        );
+        AssetManager.getInstance().registerAnimation(
+                "STONE_HAIL",
+                "Assets/Animations/Heroes/Mage-Earth/Effects/Stone_Hail/sprite_%d.png",
+                7, 100, 100 , 100,
                 AnimationLoopType.TWO_CYCLES
         );
 
@@ -86,10 +92,14 @@ public class EarthMage extends JobClass {
             Character target = targets.getFirst();
             target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, "Multitudes of earth crumbles down", targets), LogColor.HERO_ACTION);
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("STONE_HAIL", target, () -> {
+                target.takeDamage(calculateDamage, user, self);
 
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                }
+            }, true);
+
         };
 
         Skill EarthAttack = new Skill(

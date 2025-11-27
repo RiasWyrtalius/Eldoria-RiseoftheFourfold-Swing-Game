@@ -124,8 +124,8 @@ public class GameManager {
 
 //        TODO: add max amount of party members
 //        heroParty.addPartyMember(charlie);
-//        heroParty.addPartyMember(ythan);
-        heroParty.addPartyMember(erick);
+        heroParty.addPartyMember(ythan);
+//        heroParty.addPartyMember(erick);
         heroParty.addPartyMember(sammy);
 //        heroParty.addPartyMember(gianmeni);
         heroParty.addPartyMember(kervs);

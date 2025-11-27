@@ -27,14 +27,14 @@ public class FireMage extends JobClass {
 
         AssetManager.getInstance().registerAnimation(
                 "FIREBALL",
-                "Assets/Animations/Mage-Fire/Effects/FireBall/sprite_%d.png",
+                "Assets/Animations/Heroes/Mage-Fire/Effects/FireBall/sprite_%d.png",
                 6, 100,100, 100,
                 AnimationLoopType.ONE_CYCLE
         );
 
         AssetManager.getInstance().registerAnimation(
                 "FIRE_CYCLONE",
-                "Assets/Animations/Mage-Fire/Effects/FireCyclone/sprite_%d.png",
+                "Assets/Animations/Heroes/Mage-Fire/Effects/FireCyclone/sprite_%d.png",
                 5, 100,100, 300,
                 AnimationLoopType.TWO_CYCLES
         );

@@ -30,6 +30,12 @@ public class CryoMancer extends JobClass {
                 7, 100, 100 , 200,
                 AnimationLoopType.ONE_CYCLE
         );
+        AssetManager.getInstance().registerAnimation(
+                "FROSTBITE",
+                "Assets/Animations/Heroes/Mage-Ice/Effects/Frostbite/sprite_%d.png",
+                5, 100, 100 , 200,
+                AnimationLoopType.ONE_CYCLE
+        );
     }
     public List<Skill> createSkills() {
 
@@ -62,7 +68,14 @@ public class CryoMancer extends JobClass {
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 
-            target.takeDamage(calculateDamage, user, self);
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("FROSTBITE", target, () -> {
+
+                target.takeDamage(calculateDamage, user, self);
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                }
+            }, true);
+
 
             if (onSkillComplete != null) {
                 onSkillComplete.run();

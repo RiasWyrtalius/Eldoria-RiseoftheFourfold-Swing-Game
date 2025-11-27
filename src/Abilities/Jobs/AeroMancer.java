@@ -30,6 +30,18 @@ public class AeroMancer extends JobClass {
                 11, 100, 100 , 200,
                 AnimationLoopType.TWO_CYCLES
         );
+        AssetManager.getInstance().registerAnimation(
+                "WIND_PIERCE",
+                "Assets/Animations/Heroes/Mage-Wind/Effects/Wind_Pierce/sprite_%d.png",
+                4, 100, 100 , 200,
+                AnimationLoopType.TWO_CYCLES
+        );
+        AssetManager.getInstance().registerAnimation(
+                "WIND_SLASH",
+                "Assets/Animations/Heroes/Mage-Wind/Effects/Wind_Slash/sprite_%d.png",
+                4, 100, 100 , 200,
+                AnimationLoopType.TWO_CYCLES
+        );
     }
     public List<Skill> createSkills() {
         SkillLogicConsumer windTornadoLogic = (self, user, targets, onSkillComplete) -> {
@@ -52,17 +64,20 @@ public class AeroMancer extends JobClass {
 //                onSkillComplete.run();
 //            }
         };
-        SkillLogicConsumer windBurstLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer windSlashLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,30,(int)18.5,1.2,0.05);
             Character target = targets.getFirst();
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("WIND_SLASH", target, () -> {
 
-            target.takeDamage(calculateDamage, user, self);
+                target.takeDamage(calculateDamage, user, self);
 
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                }
+            }, true);
+
         };
 
 
@@ -72,19 +87,23 @@ public class AeroMancer extends JobClass {
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 
             for(Character t : targets) {
-                t.takeDamage(calculateDamage, user, self);
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("WIND_PIERCE", t, () -> {
+
+                    t.takeDamage(calculateDamage, user, self);
+
+                    if (onSkillComplete != null) {
+                        onSkillComplete.run();
+                    }
+                }, true);
             }
 
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
         };
 
 
-        Skill WindBurst = new Skill(
-                "Wind Burst", "Unleashes compressed wind", 20, 25,
+        Skill WindSlash = new Skill(
+                "Wind Slash", "A slash compressed wind", 20, 25,
                 SkillType.DAMAGE, SkillAction.MAGICAL, SkillTarget.SINGLE_TARGET,
-                windBurstLogic
+                windSlashLogic
         );
 
         Skill WindPierce = new Skill(
@@ -98,6 +117,6 @@ public class AeroMancer extends JobClass {
                 windTornadoLogic
         );
 
-        return List.of(WindTornado,WindBurst,WindPierce);
+        return List.of(WindTornado,WindSlash,WindPierce);
     }
 }
