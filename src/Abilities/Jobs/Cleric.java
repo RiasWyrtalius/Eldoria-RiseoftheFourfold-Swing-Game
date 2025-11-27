@@ -95,7 +95,7 @@ public class Cleric extends JobClass {
         );
         Skill BashStaff = new Skill(
                 "Bash Staff", "Healing their teammate", 10, 20,
-                SkillType.HEAL, SkillAction.MAGICAL, SkillTarget.AOE_ALL_TARGETS,
+                SkillType.HEAL, SkillAction.MAGICAL, SkillTarget.SINGLE_TARGET,
                 BashLogic
         );
 
