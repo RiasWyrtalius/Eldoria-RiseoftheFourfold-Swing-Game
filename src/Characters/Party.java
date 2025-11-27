@@ -1,5 +1,6 @@
 package Characters;
 
+import Items.Inventory;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 
@@ -13,6 +14,7 @@ public class Party {
     private String partyName;
     private List<Character> partyMembers;
     private final Random random;
+    private final Inventory inventory;
 
     public String getPartyName() {
         return partyName;
@@ -22,6 +24,7 @@ public class Party {
         this.partyName = partyName;
         this.partyMembers = new ArrayList<>();
         this.random = new Random();
+        this.inventory = new Inventory();
     }
 
     public void addPartyMember(Character member) {
@@ -137,6 +140,7 @@ public class Party {
         partyMembers.forEach(c -> c.setExhausted(b));
     }
 
-//   TODO: Front end party info display, might not be in this class
-//    public void getPartyInfo()
+    public Inventory getInventory() {
+        return inventory;
+    }
 }
