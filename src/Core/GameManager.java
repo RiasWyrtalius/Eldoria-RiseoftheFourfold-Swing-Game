@@ -116,7 +116,7 @@ public class GameManager {
     public void startNewGame() {
         // dummy view to get the text area for synchronization reasons
         mainView = new MainInterface();
-        LogManager.initialize(mainView.getGameLogPanelTextPane());
+        LogManager.initialize(mainView.getGameLogPanelTextPane(), mainView.getGameLogHighlightPanelTextPane());
         LogManager.log("Logger initialized with UI component", LogColor.SYSTEM);
 
         createGameModel();

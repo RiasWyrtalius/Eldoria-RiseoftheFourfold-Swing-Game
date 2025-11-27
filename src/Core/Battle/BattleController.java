@@ -5,12 +5,12 @@ import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Party;
-import Core.Utils.Dice;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import UI.Views.MainInterface;
 
+import java.awt.*;
 import java.util.List;
 
 // FIXME: Turn and game doesn’t end automatically when final blow is from an animation
@@ -30,9 +30,30 @@ public class BattleController {
         this.turnCounter = 1;
         this.isBattleActive = true;
 
-        LogManager.log("+==============+", LogColor.BATTLE_HEADER);
-        LogManager.log("|   BATTLE START   |", LogColor.BATTLE_HEADER);
-        LogManager.log("+==============+", LogColor.BATTLE_HEADER);
+        VisualEffectsManager.getInstance().pauseAllAnimations();
+        runBattleIntro();
+    }
+
+    public void runBattleIntro() {
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                LogManager.logHighlight("BATTLE", LogColor.BATTLE_HEADER, 60);
+                Thread.sleep(500);
+                LogManager.clearHighlight();
+                LogManager.logHighlight("START!!", LogColor.BATTLE_HEADER, 60);
+                Thread.sleep(500);
+                LogManager.clearHighlight();
+
+                LogManager.log("+==============+", LogColor.BATTLE_HEADER);
+                LogManager.log("|   BATTLE START   |", LogColor.BATTLE_HEADER);
+                LogManager.log("+==============+", LogColor.BATTLE_HEADER);
+
+                VisualEffectsManager.getInstance().resumeAllAnimations();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
     }
 
     public boolean checkWin() {
@@ -191,19 +212,24 @@ public class BattleController {
     }
 
     public void endBattle() {
+        if (!isBattleActive) return; // additional safety check
+
         isBattleActive = false;
         currentPhase = BattlePhase.BATTLE_ENDED;
-
         if (checkLose() && checkWin()) {
-            LogManager.log("TIE!: Truly everyone is dead and gone.", LogColor.TIE);
             finalResult = BattleResult.TIE;
         } else if (checkWin()) {
-            LogManager.log("VICTORY! " + heroParty.getPartyName() + " is Triumphant!", LogColor.VICTORY);
             finalResult = BattleResult.VICTORY;
         } else if (checkLose()) {
-            LogManager.log("DEFEAT! " + enemyParty.getPartyName() + " has wiped " + heroParty.getPartyName() + " out!", LogColor.DEFEAT);
             finalResult = BattleResult.DEFEAT;
         }
+        BattleResult result = getFinalResult();
+        switch (result) {
+            case VICTORY -> LogManager.logHighlight("VICTORY! Well Done!", LogColor.VICTORY, 40);
+            case DEFEAT -> LogManager.logHighlight("DEFEAT! Game Over.", LogColor.DEFEAT, 40);
+            case TIE -> LogManager.logHighlight("TIE! Game Over. Truly no one wins in the end.", LogColor.TIE, 40);
+            default -> LogManager.logHighlight("Battle Ended.", LogColor.VICTORY, 40);
+        };
 
         VisualEffectsManager.getInstance().stopAllTimers();
 

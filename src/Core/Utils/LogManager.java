@@ -9,9 +9,11 @@ import java.awt.*;
 
 public class LogManager {
     private static JTextPane logComponent;
+    private static JTextPane logHighlightComponent;
 
-    public static void initialize(JTextPane component) {
+    public static void initialize(JTextPane component, JTextPane highlightComponent) {
         logComponent = component;
+        logHighlightComponent = highlightComponent;
     }
 
     public static void log(String message) { //STANDARD LOG
@@ -19,27 +21,57 @@ public class LogManager {
     }
 
     public static void log(String message, Color color) { // COLORED LOGS
-        append(message + "\n", color);
+        appendToPane(logComponent, message + "\n", color, false, 10);
     }
 
-    public static void append(final String message, final Color color) {
-        if (logComponent != null) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        //add colored text
-                        StyledDocument doc = logComponent.getStyledDocument();
-                        SimpleAttributeSet style = new SimpleAttributeSet();
-                        StyleConstants.setForeground(style, color);
+    public static void logHighlight(String message) {
+        logHighlight(message, Color.BLACK);
+    }
 
-                        // Insert the message
-                        doc.insertString(doc.getLength(), message, style);
+    public static void logHighlight(String message, Color color) {
+        clearHighlight();
+        appendToPane(logHighlightComponent, message, color, true, 20);
+    }
 
-                        logComponent.setCaretPosition(doc.getLength());;
-                    } catch (BadLocationException e) {
-                        e.printStackTrace();
+    public static void logHighlight(String message, Color color, int fontSize) {
+        appendToPane(logHighlightComponent, message, color, true, fontSize);
+    }
+
+    // clear the highlight box should use this to start new turns or attacks AND EVERYTHINGGG
+    public static void clearHighlight() {
+        if (logHighlightComponent != null) {
+            SwingUtilities.invokeLater(() -> {
+                logHighlightComponent.setText("");
+            });
+        }
+    }
+
+    public static void appendToPane(JTextPane pane, String message, Color color, boolean isCentered, int fontSize) {
+        if (logComponent != null || logHighlightComponent != null) {
+            SwingUtilities.invokeLater(() -> {
+                try {
+                    StyledDocument doc = pane.getStyledDocument();
+
+                    SimpleAttributeSet charStyle = new SimpleAttributeSet();
+                    StyleConstants.setForeground(charStyle, color);
+                    StyleConstants.setFontSize(charStyle, fontSize);
+
+                    int lengthBefore = doc.getLength();
+                    doc.insertString(lengthBefore, message, charStyle);
+
+                    if (isCentered) {
+                        SimpleAttributeSet paraStyle = new SimpleAttributeSet();
+                        StyleConstants.setAlignment(paraStyle, StyleConstants.ALIGN_CENTER);
+
+                        doc.setParagraphAttributes(lengthBefore, message.length(), paraStyle, false);
+                    } else {
+                        SimpleAttributeSet leftStyle = new SimpleAttributeSet();
+                        StyleConstants.setAlignment(leftStyle, StyleConstants.ALIGN_LEFT);
+                        doc.setParagraphAttributes(lengthBefore, message.length(), leftStyle, false);
                     }
+                    pane.setCaretPosition(doc.getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
                 }
             });
         } else {

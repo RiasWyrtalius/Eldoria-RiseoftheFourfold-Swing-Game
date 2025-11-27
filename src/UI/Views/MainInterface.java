@@ -26,6 +26,7 @@ public class MainInterface extends JFrame{
     private JPanel contentPanel;
     private JPanel battlePanel;
     private JTextPane GameLogPanelTextPane;
+    private JTextPane GameLogHighlightPanelTextPane;
 
     private JLabel heroPartyLabel;
     private JPanel heroPartyPanel1;
@@ -43,7 +44,6 @@ public class MainInterface extends JFrame{
 
     private List<JPanel> heroPartyPanels;
     private List<JPanel> enemyPartyPanels;
-    private JLabel battleOutcome;
 
     private JScrollPane CharacterInspector_JSP;
     private JTextArea inspectorText;
@@ -72,12 +72,11 @@ public class MainInterface extends JFrame{
         this.setVisible(true);
         setTitle("DND Swing Clone | Saja Boys");
 
-        // shows when battle ends
-        battleOutcome.setVisible(false);
         // shows when battle ends and heroes win to
         descendPanel.setVisible(false);
 
         GameLogPanelTextPane.setEditable(false);
+        GameLogHighlightPanelTextPane.setEditable(false);
         heroPartyPanels = Arrays.asList(heroPartyPanel1, heroPartyPanel2, heroPartyPanel3, heroPartyPanel4);
         enemyPartyPanels = Arrays.asList(enemyPartyPanel1, enemyPartyPanel2, enemyPartyPanel3, enemyPartyPanel4);
     }
@@ -121,19 +120,10 @@ public class MainInterface extends JFrame{
         if (phase == BattlePhase.BATTLE_ENDED) {
             // TODO: set battleOutcome JLabel to victory, or tie
             BattleResult result = battleController.getFinalResult();
-            String resultText = switch (result) {
-                case VICTORY -> "VICTORY! Well Done!";
-                case DEFEAT -> "DEFEAT! Game Over.";
-                case TIE -> "TIE! Game Over. Truly no one wins in the end.";
-                default -> "Battle Ended.";
-            };
-            battleOutcome.setText(resultText);
-            battleOutcome.setVisible(true);
             endTurnButton.setVisible(false);
             if (result == BattleResult.VICTORY)
                 descendPanel.setVisible(true);
         } else {
-            battleOutcome.setVisible(false);
             endTurnButton.setVisible(true);
             descendPanel.setVisible(false);
         }
@@ -430,6 +420,10 @@ public class MainInterface extends JFrame{
     // =============== PUBLIC GETTERS AND SETTERS FOR UI ===============
     public JTextPane getGameLogPanelTextPane() {
         return GameLogPanelTextPane;
+    }
+
+    public JTextPane getGameLogHighlightPanelTextPane() {
+        return GameLogHighlightPanelTextPane;
     }
 
     public CharacterStatusPanel getCharacterPanel(Character character) {

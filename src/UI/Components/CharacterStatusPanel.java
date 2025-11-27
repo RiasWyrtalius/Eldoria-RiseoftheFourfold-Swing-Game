@@ -8,6 +8,7 @@
 
     import javax.swing.*;
     import javax.swing.border.Border;
+    import javax.swing.plaf.basic.BasicProgressBarUI;
     import java.awt.*;
     import java.awt.event.MouseAdapter;
     import java.awt.event.MouseEvent;
@@ -28,6 +29,9 @@
             nameLabel = new JLabel("N/A - Lvl 0");
             hpBar = new JProgressBar();
             manaBar = new JProgressBar();
+
+            hpBar.setUI(new BasicProgressBarUI());
+            manaBar.setUI(new BasicProgressBarUI());
 
             overlayDisplayLabel = new JLabel();
             iconDisplayLabel = new JLabel();

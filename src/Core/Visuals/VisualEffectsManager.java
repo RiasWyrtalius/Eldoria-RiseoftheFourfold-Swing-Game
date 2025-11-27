@@ -28,6 +28,8 @@ public class VisualEffectsManager {
     private final List<JLabel> lockedLabels = new ArrayList<>();
     private final List<JLabel> hiddenLabels = new ArrayList<>();
 
+    private boolean isGlobalPaused = false;
+
     private MainInterface mainView;
 
     private VisualEffectsManager() {}
@@ -39,11 +41,9 @@ public class VisualEffectsManager {
     // TODO: when animation is finished, delete the frames and refresh
     public void startSpriteAnimation(String animationId, JLabel displayLabel, Runnable onFinish, boolean isTemporary) {
         if (hiddenLabels.contains(displayLabel)) return;
-
         stopAnimationOnComponent(displayLabel);
 
         Animation animation = AssetManager.getInstance().getAnimation(animationId);
-
         if (animation == null) {
             LogManager.log("Error: Animation ID not found: " + animationId, Color.RED);
             // Ensure callback runs even if error, to prevent soft-lock
@@ -58,6 +58,8 @@ public class VisualEffectsManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // assume if animation is paused then animation is not finished
+                if (isGlobalPaused) return;
+
                 if (animation.isFinished()) {
                     Timer finishedTimer = (Timer)e.getSource();
                     finishedTimer.stop();
@@ -93,8 +95,11 @@ public class VisualEffectsManager {
             lockedLabels.add(displayLabel);
         }
 
-//        LogManager.log("Starting animation: " + animationId);
-        timer.start();
+        if (isGlobalPaused) {
+            LogManager.log("Animation queued (System Paused): " + animationId);
+        } else {
+            timer.start();
+        }
     }
 
     /**
@@ -182,14 +187,25 @@ public class VisualEffectsManager {
         }
     }
 
-    public void playAnimation(String animationId) {
-        // check if animation is playing
-        Animation animation = AssetManager.getInstance().getAnimation(animationId);
-        if (animation != null) {
-            animation.continueAnimation();
-        } else {
-            LogManager.log("Animation " + animationId + " does not exist!", LogColor.SYSTEM);
+    public void pauseAllAnimations() {
+        isGlobalPaused = true;
+
+        for (Timer timer : activeAnimationTimers.values()) {
+            if (timer.isRunning()) {
+                timer.stop();
+            }
         }
+        LogManager.log("System: All visuals PAUSED.", java.awt.Color.YELLOW);
+    }
+
+    public void resumeAllAnimations() {
+        isGlobalPaused = false;
+
+        for (Timer timer : activeAnimationTimers.values()) {
+            // Restart the timer (it continues from current state)
+            timer.start();
+        }
+        LogManager.log("System: All visuals RESUMED.", java.awt.Color.YELLOW);
     }
 
     public void hideCharacterVisual(Character character) {
