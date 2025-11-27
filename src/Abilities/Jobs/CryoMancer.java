@@ -18,9 +18,9 @@ public class CryoMancer extends JobClass {
     public CryoMancer(){
         super("Ice Mage","Wields snow and ice as its magic",0,0 );
         AssetManager.getInstance().registerAnimation(
-                "MAGE_IDLE",
-                "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png",
-                5, 100, 100 , 300,
+                "MAGE_ICE-IDLE",
+                "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png",
+                3, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
 

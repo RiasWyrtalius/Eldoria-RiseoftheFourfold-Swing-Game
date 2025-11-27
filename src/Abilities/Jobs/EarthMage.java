@@ -19,8 +19,8 @@ public class EarthMage extends JobClass {
         super("Earth Mage","Wields stone and earth as its magic",0,0 );
 
         AssetManager.getInstance().registerAnimation(
-                "MAGE_IDLE",
-                "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png",
+                "MAGE_EARTH-IDLE",
+                "Assets/Animations/Heroes/Mage-Earth/Idle/sprite_%d.png",
                 5, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );

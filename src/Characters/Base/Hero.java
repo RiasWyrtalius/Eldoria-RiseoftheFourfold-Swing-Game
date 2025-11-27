@@ -1,6 +1,7 @@
 package Characters.Base;
 
 import Abilities.JobClass;
+import Abilities.Jobs.AeroMancer;
 import Abilities.Skill;
 import Characters.Character;
 import Core.Utils.LogColor;
@@ -44,7 +45,11 @@ public class Hero extends Character {
     protected void levelUp() {
         this.level++;
         this.requiredXP = baseXP + (incrementXP * (level - 1));
+        int new_health = (int)(initialHealth + ((this.level) * 4) + (initialHealth * 0.05 * (this.level - 1)));
+        super.setInitialHealth(new_health);
+
         LogManager.log(this.name + " has leveled up to level " + this.level + "!");
+        LogManager.log(this.name + " Increase their health by " + getHealth() + "!");
     }
 
     public String regenerateTurnResources() {

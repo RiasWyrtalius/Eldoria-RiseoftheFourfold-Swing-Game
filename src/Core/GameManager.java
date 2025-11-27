@@ -54,8 +54,21 @@ public class GameManager {
             }
         };
 
+        FireMage fireMage = new FireMage();
+        Character chaniy = new Hero("Chaniy the doubter",100,60,120,1,fireMage,"MAGE_IDLE"){
+            @Override
+            protected void onDeath() {
+
+            }
+
+            @Override
+            protected void onDefeat(Character defeatedTarget) {
+
+            }
+        };
+
         CryoMancer iceMage = new CryoMancer();
-        Character sammy = new Hero("Sammy", 100, 60, 120, 1, iceMage, "MAGE_IDLE") {
+        Character sammy = new Hero("Sammy", 100, 60, 120, 1, iceMage, "MAGE_ICE-IDLE") {
             @Override
             protected void onDeath() {
 
@@ -68,7 +81,7 @@ public class GameManager {
         };
 
         EarthMage earthMage = new EarthMage();
-        Character ythan = new Hero("Ythanny W", 100, 60, 120, 1, earthMage, "MAGE_IDLE") {
+        Character ythan = new Hero("Ythanny W", 100, 60, 120, 1, earthMage, "MAGE_EARTH-IDLE") {
             @Override
             protected void onDeath() {
 
@@ -94,19 +107,20 @@ public class GameManager {
         };
 
         AeroMancer aeoroMancer = new AeroMancer();
-        Character kervs = new Hero("Kurtis", 100, 60, 120, 1, aeoroMancer, "MAGE_IDLE");
+        Character kervs = new Hero("Kurtis", 100, 60, 120, 1, aeoroMancer, "MAGE_WIND-IDLE");
 
 //        TODO: add max amount of party members
-        heroParty.addPartyMember(charlie);
+//        heroParty.addPartyMember(charlie);
         heroParty.addPartyMember(ythan);
-//        heroParty.addPartyMember(sammy);
-        heroParty.addPartyMember(gianmeni);
+        heroParty.addPartyMember(sammy);
+//        heroParty.addPartyMember(gianmeni);
         heroParty.addPartyMember(kervs);
+        heroParty.addPartyMember(chaniy);
 
         //TEMPORARY ENEMY SETUP
         enemyParty = new Party("Swarm of Goblins");
         Goblin goblin_1 = new Goblin();
-        Boss boss = new Boss("Serato The Destroyer" , 20,40,200,1,"Boss",200,3);
+        Boss boss = new Boss("Serato The Destroyer" , 20,0,200,1,"Boss",200,3);
         Slime slime_1 = new Slime();
         enemyParty.addPartyMember(goblin_1);
         enemyParty.addPartyMember(boss);

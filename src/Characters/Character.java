@@ -11,7 +11,7 @@ import java.util.List;
 public abstract class Character {
     protected String name;
 
-    protected final int initialHealth;
+    protected int initialHealth;
     protected int health;
     protected boolean isAlive = true;
 
@@ -103,6 +103,8 @@ public abstract class Character {
     }
 
     public void setHealth(int health) { this.health = health; }
+    public void setInitialHealth(int initialHealth){this.initialHealth = initialHealth;}
+
 
     public void addReaction(ReactionSkill reaction) {
         this.reactions.add(reaction);

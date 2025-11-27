@@ -21,7 +21,7 @@ public class FireMage extends JobClass {
         AssetManager.getInstance().registerAnimation(
                 "MAGE_IDLE",
                 "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png",
-                5, 100, 100 , 300,
+                3, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
 
