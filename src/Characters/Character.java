@@ -61,6 +61,17 @@ public abstract class Character {
         }
     }
 
+
+    // without reaction
+    public void takeDamage(int damage, Character attacker) {
+        this.health -= damage;
+        LogManager.log(this.name + " took " + damage + " damage from " + attacker.getName());
+        if (this.health <= 0) {
+            onDefeat(attacker);
+            die();
+        }
+    }
+
     public final void die() {
         this.health = 0;
         this.isAlive = false;
@@ -98,6 +109,7 @@ public abstract class Character {
         this.health = health;
     }
     public void setInitialHealth(int initialHealth){this.initialHealth = initialHealth;}
+    public void setMaxMana(int maxMana){this.maxMana = maxMana;}
 
     public void addReaction(ReactionSkill reaction) {
         this.reactions.add(reaction);
@@ -110,10 +122,6 @@ public abstract class Character {
             return currentDamage;
         }
 
-        // TODO:
-        // -1 reaction fails to execute
-        // 0 user takes no damage
-        // x > 0, final damage
         ReactionSkill reaction = Dice.pickRandom(reactions);
         int result = reaction.logic().tryReact(this, attacker, incomingSkill, incomingDamage);
         if (result != -1) {
@@ -156,13 +164,7 @@ public abstract class Character {
     public void setExhausted(boolean exhausted) {
         isExhausted = exhausted;
     }
-    public void setMana(int mana) {
-        if (mana > maxMana) {
-            this.mana = maxMana;
-            return;
-        }
-        this.mana = mana;
-    }
+    public void setMana(int mana) { this.mana = mana; }
     public abstract List<Skill> getSkills();
     public abstract String getDescription();
 }

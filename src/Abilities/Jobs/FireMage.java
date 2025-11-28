@@ -78,10 +78,6 @@ public class FireMage extends JobClass {
                 }, true);
             }
 
-
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
         };
         SkillLogicConsumer staffAttackLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,10,0,1.2,0.05);
