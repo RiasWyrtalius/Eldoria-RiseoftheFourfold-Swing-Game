@@ -58,9 +58,9 @@ public class Skill {
                 .map(Character::getName)
                 .collect(Collectors.joining(", "));
 
-        String lastName = targets.getLast().getName();
+        String lastName = targets.get(targets.size()-1).getName();
 
-        return allButLast + " and " + lastName;
+        return allButLast + " and " + lastName ;
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============

@@ -43,7 +43,7 @@ public class CryoMancer extends JobClass {
 
         SkillLogicConsumer iceSpikeLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,30,15,1.2,0.05);
-            Character target = targets.getFirst();
+            Character target = targets.get(0);
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 
@@ -66,7 +66,7 @@ public class CryoMancer extends JobClass {
 
         SkillLogicConsumer frostBiteLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,15,15,1.2,0.05);
-            Character target = targets.getFirst();
+            Character target = targets.get(0);
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 

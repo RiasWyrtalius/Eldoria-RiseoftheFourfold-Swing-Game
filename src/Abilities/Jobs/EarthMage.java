@@ -91,7 +91,7 @@ public class EarthMage extends JobClass {
 
         SkillLogicConsumer stoneHailLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,20,10,1.2,0.05);
-            Character target = targets.getFirst();
+            Character target = targets.get(0);
             target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, "Multitudes of earth crumbles down", targets), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("STONE_HAIL", target, () -> {

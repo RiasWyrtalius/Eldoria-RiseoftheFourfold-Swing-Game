@@ -71,7 +71,7 @@ public class Cleric extends JobClass {
         };
 
         SkillLogicConsumer BashLogic = (self, user, targets, onSkillComplete) -> {
-            Character target = targets.getFirst();
+            Character target = targets.get(0);
 
             int calculateDamage = ScalingLogic.calculateDamage(user,20,20,0.02,0.005);
 

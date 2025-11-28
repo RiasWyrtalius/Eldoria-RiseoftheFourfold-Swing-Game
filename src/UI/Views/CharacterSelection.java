@@ -2,11 +2,9 @@ package UI.Views;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.text.StyledDocument;
 
-import Abilities.JobClass;
-import Abilities.Jobs.Warrior;
-import Resource.AnimationLoopType;
-import Resource.AssetManager;
+
 import UI.Components.BackgroundPanel;
 import java.awt.*;
 import java.util.ArrayList;
@@ -20,10 +18,14 @@ public class CharacterSelection extends JFrame {
     private JPanel infoPanel;
     private JButton nextButton;
     private JButton previousButton;
+    private JTextField textField1;
+    private JTextField textField2;
+    private JTextArea statsTA;
 
     //for dynamic character
     private JLabel characterImageLabel;
     private JTextArea infoTextArea;
+
 
     //data holder & logic
     private List<CharacterDisplayData> characterList;
@@ -54,13 +56,17 @@ public class CharacterSelection extends JFrame {
         characterImageLabel = new JLabel();
         CharacterPreview.add(characterImageLabel);
 
-        // Add text area to info panel
-        infoPanel.setLayout(new BorderLayout());
+        JScrollPane scrollPane = new JScrollPane(infoTextArea);
+        JPanel parentPanel = new JPanel(new BorderLayout());
+        parentPanel.add(scrollPane, BorderLayout.PAGE_END);
+
         infoTextArea = new JTextArea();
         infoTextArea.setOpaque(false);
         infoTextArea.setEditable(false);
         infoTextArea.setForeground(Color.BLACK);
-        infoPanel.add(infoTextArea, BorderLayout.CENTER);
+
+        //TODO: IMPLEMENT JUSTIFY CONTENT
+        //infoTextArea.add(infoTextArea, BorderLayout.CENTER);
 
         setupListeners(); //buttons
         updateView();
@@ -87,14 +93,21 @@ public class CharacterSelection extends JFrame {
     private void initCharacterData() {
         characterList = new ArrayList<>();
         // Add characters here.
-        characterList.add(new CharacterDisplayData("Warrior", "Assets/Animations/Heroes/Warrior/Idle/sprite_0.png"));
-        characterList.add(new CharacterDisplayData("Archer", "Assets/Animations/Heroes/Archer/Idle/sprite_0.png"));
-        characterList.add(new CharacterDisplayData("AeroMancer", "Assets/Animations/Heroes/Mage-Wind/Idle/sprite_0.png"));
-        characterList.add(new CharacterDisplayData("Mage Earth", "Assets/Animations/Heroes/Mage-Earth/Idle/sprite_0.png"));
-        characterList.add(new CharacterDisplayData("Mage Fire", "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_0.png"));
-        characterList.add(new CharacterDisplayData("CryoMancer", "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_0.png"));
-        characterList.add(new CharacterDisplayData("Cleric", "Assets/Animations/Heroes/Cleric/Idle/sprite_0.png"));
+        characterList.add(new CharacterDisplayData("Warrior",
+                "Assets/Animations/Heroes/Warrior/Idle/sprite_0.png",
+                120,
+                100,
+                "A battle-hardened fighter clad in steel, the Warrior thrives on the frontlines. With unmatched strength and resilience, " +
+                        "he shields allies from harm while delivering crushing blows to enemies. His loyalty and courage make him the backbone of any party."
+        ));
+        characterList.add(new CharacterDisplayData("Archer", "Assets/Animations/Heroes/Archer/Idle/sprite_0.png", 80, 100, "Agile and precise, the Archer strikes from afar with deadly accuracy. Her keen eyesight and swift reflexes allow her to rain arrows upon foes before they can close the distance. She embodies speed, cunning, and tactical finesse."));
+        characterList.add(new CharacterDisplayData("AeroMancer", "Assets/Animations/Heroes/Mage-Wind/Idle/sprite_0.png", 100, 120, "Master of the skies, the AeroMancer bends the wind to her will. She summons gales to scatter enemies, rides currents to evade danger, and unleashes razor-sharp blasts of air. Her magic is swift, elusive, and devastating."));
+        characterList.add(new CharacterDisplayData("Mage Earth", "Assets/Animations/Heroes/Mage-Earth/Idle/sprite_0.png", 100, 120, "A stalwart spellcaster who channels the raw power of stone and soil. The Mage Earth conjures barriers, summons tremors, and hardens allies’ defenses. Steadfast and immovable, she is the embodiment of endurance and stability."));
+        characterList.add(new CharacterDisplayData("Mage Fire", "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_0.png", 100, 120, "Fierce and unpredictable, the Mage Fire wields flames with destructive passion. She incinerates her foes with fireballs, engulfs battlefields in blazing infernos, and thrives on chaos. Her magic is as dangerous as it is mesmerizing."));
+        characterList.add(new CharacterDisplayData("CryoMancer", "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_0.png", 100, 120, "Cold and calculating, the CryoMancer freezes enemies in their tracks. She conjures blizzards, sharp ice shards, and chilling prisons to sap the strength of her foes. Her frosty power brings control and precision to the battlefield."));
+        characterList.add(new CharacterDisplayData("Cleric", "Assets/Animations/Heroes/Cleric/Idle/sprite_0.png", 100, 120, "A devoted healer and protector, the Cleric channels divine energy to restore allies and banish darkness. Her blessings strengthen companions, while her radiant light wards off evil. Compassionate yet formidable, she is the heart of the party."));
     }
+
 
     private void setupListeners() {
         nextButton.addActionListener(e -> {
@@ -111,6 +124,7 @@ public class CharacterSelection extends JFrame {
                 currentIndex = characterList.size() - 1;
             }
             updateView();
+
         });
 
         selectCharacterButton.addActionListener(e -> {
@@ -120,13 +134,15 @@ public class CharacterSelection extends JFrame {
         });
     }
 
+
+
     private void updateView() {
         if (characterList.isEmpty()) return;
 
         CharacterDisplayData data = characterList.get(currentIndex);
 
         // Update Text
-        infoTextArea.setText("Name: " + data.name + "\n\n");
+        statsTA.setText("Name: " + data.name + "\n" + "Base HP: " + data.baseHP + "\n" + "Base MP: " + data.baseMP + "\n" + data.desc);
 
         // this updates the image
         ImageIcon icon = new ImageIcon(data.imagePath);
@@ -144,11 +160,16 @@ public class CharacterSelection extends JFrame {
     private static class CharacterDisplayData {
         String name;
         String imagePath;
+        int baseHP;
+        int baseMP;
+        String desc;
 
-
-        public CharacterDisplayData(String name,String imagePath) {
+        public CharacterDisplayData(String name,String imagePath, int baseHP, int baseMP, String desc) {
             this.name = name;
             this.imagePath = imagePath;
+            this.baseHP = baseHP;
+            this.baseMP = baseMP;
+            this.desc = desc;
         }
     }
 
