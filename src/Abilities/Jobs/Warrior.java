@@ -17,7 +17,7 @@ import java.util.List;
 public class Warrior extends JobClass {
 
     public Warrior() {
-        super("Warrior", "Wields Sword and Shield", 10, 0);
+        super("Warrior", "Wields Sword and Shield", 20, 0);
         AssetManager.getInstance().registerAnimation(
                 "WARRIOR_IDLE",
                 "Assets/Animations/Heroes/Warrior/Idle/sprite_%d.png",

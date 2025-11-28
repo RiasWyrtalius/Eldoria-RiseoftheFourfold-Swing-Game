@@ -18,7 +18,7 @@ import java.util.List;
 public class FireMage extends JobClass {
 
     public FireMage() {
-        super("Fire Mage", "Wields fire", 0, 0);
+        super("Fire Mage", "Wields fire", 0, 60);
 
         AssetManager.getInstance().registerAnimation(
                 "MAGE_IDLE",
@@ -53,7 +53,7 @@ public class FireMage extends JobClass {
         SkillLogicConsumer fireBallLogic = (self, user, targets, onSkillComplete) -> {
 
             int calculateDamage = ScalingLogic.calculateDamage(user,25,15,1.2,0.05);
-            Character target = targets.get(0);
+            Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
                 target.takeDamage(calculateDamage, user, self);
@@ -81,7 +81,7 @@ public class FireMage extends JobClass {
         };
         SkillLogicConsumer staffAttackLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,10,0,1.2,0.05);
-            Character target = targets.get(0);
+            Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
             target.takeDamage(calculateDamage, user, self);
             if (onSkillComplete != null) {

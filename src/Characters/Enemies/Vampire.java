@@ -14,20 +14,20 @@ import Resource.AssetManager;
 
 import java.util.List;
 
-public class Slime extends Enemy {
-    public Slime() {
+public class Vampire extends Enemy {
+    public Vampire() {
 
-        super("Demon Slime", 500, 30, 0, 1, "Slime", 10, "SLIME_IDLE", "Slimes around");
+        super("Vampire", 500, 30, 0, 1, "Vampire", 10, "VAMPIRE_IDLE", "Blood Thirsty");
         AssetManager.getInstance().registerAnimation(
-                "SLIME_IDLE",
-                "Assets/Animations/Enemies/Slime/Idle/sprite_%d.png",
+                "VAMPIRE_IDLE",
+                "Assets/Animations/Enemies/Vampire/Idle/sprite_%d.png",
                 3, 100, 100 , 280,
                 AnimationLoopType.INFINITE
         );
 
         AssetManager.getInstance().registerAnimation(
-                "SLIME_ACIDIC-SLAM",
-                "Assets/Animations/Enemies/Slime/Effects/Acidic_Slam/sprite_%d.png",
+                "VAMPIRE_ATTACK",
+                "Assets/Animations/Enemies/Vampire/Effects/Attack/sprite_%d.png",
                 4, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );
@@ -36,13 +36,13 @@ public class Slime extends Enemy {
 
     @Override
     protected void initializeSkills() {
-        SkillLogicConsumer acidicSlamLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer vampAttackLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = user.getBaseAtk();
 
             Character target = Dice.pickRandom(targets);
-            LogManager.log(self.getActionLog(user, "uses", targets), LogColor.ENEMY_ACTION);
+            LogManager.log(self.getActionLog(user, "Attacks", targets), LogColor.ENEMY_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
-            VisualEffectsManager.getInstance().playAnimationOnCharacter("SLIME_ACIDIC-SLAM", target, () -> {
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("VAMPIRE_ATTACK", target, () -> {
                 target.takeDamage(calculateDamage, user, self);
                 VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                 if (onSkillComplete != null) {
@@ -51,13 +51,13 @@ public class Slime extends Enemy {
             }, true);
         };
 
-        Skill AcidicSlam = new Skill(
-                "Acidic Slam", "Bashes its own body",0, 20,
+        Skill VampAttack = new Skill(
+                "Vampire Attack", "Attacks enemy",0, 20,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
-                acidicSlamLogic
+                vampAttackLogic
         );
 
-        skills.add(AcidicSlam);
+        skills.add(VampAttack);
     }
 
     //    TODO: replace this with randomly use skill function

@@ -4,6 +4,7 @@ import Abilities.*;
 import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
+import Core.Utils.Dice;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Utils.ScalingLogic;
@@ -17,7 +18,7 @@ public class Rogue extends JobClass{
 
 
         public Rogue() {
-            super("Rogue", "Wields Knife and the shadows", 0, 0);
+            super("Rogue", "Wields Knife and the shadows", -20, 0);
 
             AssetManager.getInstance().registerAnimation(
                     "MAGE_IDLE",
@@ -29,7 +30,21 @@ public class Rogue extends JobClass{
         }
         @Override
         public List<ReactionSkill> createReactions() {
-            return List.of();
+            ReactionLogic dodgeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+                double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
+                if (Dice.chance(0.55) && hp_percent < 0.98) {
+//                    VisualEffectsManager.getInstance().playAnimation("ARCHER_DODGE", defender, () -> {
+                        LogManager.log(defender.getName() + " Skillfully dodges the attack!", LogColor.ENEMY_ACTION);
+
+//                    }, true);
+                    return 0;
+                }
+                return -1;
+            };
+
+            ReactionSkill dodge = new ReactionSkill("Dodge", dodgeLogic);
+
+            return List.of(dodge);
         }
 
         public List<Skill> createSkills() {

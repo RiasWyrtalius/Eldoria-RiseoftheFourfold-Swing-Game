@@ -54,7 +54,7 @@ public class Archer extends JobClass {
     public List<ReactionSkill> createReactions() {
         ReactionLogic dodgeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
             double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
-            if (Dice.chance(0.5) && hp_percent < 0.80) {
+            if (Dice.chance(0.5) && hp_percent < 0.60) {
                 VisualEffectsManager.getInstance().playAnimation("ARCHER_DODGE", defender, () -> {
                     LogManager.log(defender.getName() + " swiftly dodges the attack!", LogColor.ENEMY_ACTION);
 
@@ -72,7 +72,7 @@ public class Archer extends JobClass {
     public List<Skill> createSkills() {
         SkillLogicConsumer rapidFireLogic = (self, user, targets, onSkillComplete) -> {
             int dmg = ScalingLogic.calculateDamage(user, 20, 15, 1.2, 0.05);
-            Character target = targets.get(0);
+            Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, "Unleashes array of Arrows", targets), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW-Rapid", user, () -> {
                 target.takeDamage(dmg, user, self);

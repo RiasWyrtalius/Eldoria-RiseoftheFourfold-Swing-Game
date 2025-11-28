@@ -18,7 +18,7 @@ import java.util.List;
 
 public class AeroMancer extends JobClass {
     public AeroMancer(){
-        super("Wind Mage","Wields atmosphere and wind as its magic",0,0 );
+        super("Wind Mage","Wields atmosphere and wind as its magic",0,60 );
         AssetManager.getInstance().registerAnimation(
                 "MAGE_WIND-IDLE",
                 "Assets/Animations/Heroes/Mage-Wind/Idle/sprite_%d.png",
@@ -54,7 +54,7 @@ public class AeroMancer extends JobClass {
     public List<Skill> createSkills() {
         SkillLogicConsumer windTornadoLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,40,(int)18.5,1.2,0.05);
-            Character target = targets.get(0);
+            Character target = targets.getFirst();
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 
