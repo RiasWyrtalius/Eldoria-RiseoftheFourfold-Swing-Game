@@ -20,7 +20,6 @@ public class EarthMage extends JobClass {
 
     public static final String description = "A stalwart spellcaster who channels the raw power of stone and soil. The Mage Earth conjures barriers, summons tremors, and hardens allies’ defenses. Steadfast and immovable, she is the embodiment of endurance and stability.";
     public static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Earth/Idle/sprite_%d.png";
-    //TODO: figure out a way to make it idle
 
     public EarthMage(){
         super("Earth Mage", description,0,0);

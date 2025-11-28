@@ -18,7 +18,6 @@ public class Warrior extends JobClass {
 
     public static final String description = "A battle-hardened fighter clad in steel, the Warrior thrives on the frontlines. With unmatched strength and resilience, he shields allies from harm while delivering crushing blows to enemies. His loyalty and courage make him the backbone of any party.";
     public static final String IDLE_PATH = "Assets/Animations/Heroes/Warrior/Idle/sprite_%d.png";
-    //TODO: figure out a way to make it idle
 
     public Warrior() {
         super("Warrior", description, 10, 0);

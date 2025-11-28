@@ -18,7 +18,6 @@ public class Cleric extends JobClass {
 
     public static final String description = "A devoted healer and protector, the Cleric channels divine energy to restore allies and banish darkness. Her blessings strengthen companions, while her radiant light wards off evil. Compassionate yet formidable, she is the heart of the party.";
     private static final String IDLE_PATH = "Assets/Animations/Heroes/Cleric/Idle/sprite_%d.png";
-    //TODO: figure out a way to make it idle
 
     public Cleric() {
         super("Cleric", description, 10, 0);

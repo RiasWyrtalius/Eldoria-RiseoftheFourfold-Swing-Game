@@ -20,7 +20,6 @@ public class CryoMancer extends JobClass {
 
     public static final String description = "Cold and calculating, the CryoMancer freezes enemies in their tracks. She conjures blizzards, sharp ice shards, and chilling prisons to sap the strength of her foes. Her frosty power brings control and precision to the battlefield.";
     private static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png";
-    //TODO: figure out a way to make it idle
 
     public CryoMancer(){
         super("Ice Mage", description, 0, 0 );

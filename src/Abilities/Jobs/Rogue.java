@@ -15,11 +15,11 @@ import Resource.AssetManager;
 import java.util.List;
 
 public class Rogue extends JobClass{
-
+        //TODO: add to Class: CharacterSelection, IDLE_PATH, DESC, WAITING ON ANIMATIONS
 
         public Rogue() {
             super("Rogue", "Wields Knife and the shadows", -20, 0);
-
+            
             AssetManager.getInstance().registerAnimation(
                     "MAGE_IDLE",
                     "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png",

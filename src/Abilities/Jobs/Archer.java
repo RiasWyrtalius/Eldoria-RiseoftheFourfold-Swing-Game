@@ -22,7 +22,6 @@ public class Archer extends JobClass {
 
     private static final String description = "Agile and precise, the Archer strikes from afar with deadly accuracy. Her keen eyesight and swift reflexes allow her to rain arrows upon foes before they can close the distance. She embodies speed, cunning, and tactical finesse.";
     private static final String IDLE_PATH = "Assets/Animations/Heroes/Archer/Idle/sprite_%d.png";
-    //TODO: figure out a way to make it idle
 
     public Archer(){
         super("Archer", description, 0, 0 );

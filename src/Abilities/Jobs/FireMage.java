@@ -19,7 +19,6 @@ public class FireMage extends JobClass {
 
     public static final String description = "Fierce and unpredictable, the Mage Fire wields flames with destructive passion. She incinerates her foes with fireballs, engulfs battlefields in blazing infernos, and thrives on chaos. Her magic is as dangerous as it is mesmerizing.";
     public static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png";
-    //TODO: figure out a way to make it idle
 
     public FireMage() {
         super("Fire Mage", description, 0, 0);

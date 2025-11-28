@@ -20,7 +20,6 @@ public class AeroMancer extends JobClass {
 
     private static final String description = "Master of the skies, the AeroMancer bends the wind to her will. She summons gales to scatter enemies, rides currents to evade danger, and unleashes razor-sharp blasts of air. Her magic is swift, elusive, and devastating.";
     private static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Wind/Idle/sprite_%d.png";
-    //TODO: figure out a way to make it idle
 
     public AeroMancer(){
         super("Wind Mage", description,0,0 );
