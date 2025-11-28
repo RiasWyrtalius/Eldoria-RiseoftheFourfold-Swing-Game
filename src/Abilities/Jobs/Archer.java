@@ -59,10 +59,8 @@ public class Archer extends JobClass {
         ReactionLogic dodgeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
             double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
             if (Dice.chance(0.5) && hp_percent < 0.60) {
-                VisualEffectsManager.getInstance().playAnimation("ARCHER_DODGE", defender, () -> {
-                    LogManager.log(defender.getName() + " swiftly dodges the attack!", LogColor.ENEMY_ACTION);
-
-                }, true);
+                LogManager.log(defender.getName() + " swiftly dodges the attack!", LogColor.ENEMY_ACTION);
+                VisualEffectsManager.getInstance().playAnimation("ARCHER_DODGE", defender, null, true);
                 return 0;
             }
             return -1;
