@@ -9,6 +9,8 @@ import Characters.Enemies.Goblin;
 import Characters.Enemies.Slime;
 import Characters.Party;
 import Core.Battle.BattleController;
+import Core.GameFlow.GameLoader;
+import Core.GameFlow.Level;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
@@ -22,6 +24,7 @@ import javax.swing.*;
 
 public class GameManager {
     private BattleController battleController;
+    private GameLoader gameLoader;
     private Party heroParty;
     private Party enemyParty;
     private BattleInterface mainView;
@@ -34,6 +37,25 @@ public class GameManager {
 
     private void initializeApplication() {
         new MainMenu(this);
+    }
+
+    public void loadNextLevel() {
+        Level nextLevel = gameLoader.loadNextLevel();
+
+        if (nextLevel == null) {
+            gameLoader.finishCampaign();
+            return;
+        }
+
+        LogManager.log("");
+        LogManager.log("Entering Level " + nextLevel.levelNumber(), LogColor.SYSTEM);
+
+//      TODO: battle controller keep main
+        Party enemyParty = nextLevel.createEnemyParty();
+        this.battleController = new BattleController(heroParty, enemyParty);
+
+        battleController.setMainView(mainView);
+        mainView.linkControllerAndData(battleController);
     }
 
     /**
@@ -127,12 +149,12 @@ public class GameManager {
 
 //        TODO: add max amount of party members
 //        heroParty.addPartyMember(charlie);
-        heroParty.addPartyMember(ythan);
+//        heroParty.addPartyMember(ythan);
 //        heroParty.addPartyMember(erick);
-        heroParty.addPartyMember(sammy);
-//        heroParty.addPartyMember(gianmeni);
-        heroParty.addPartyMember(kervs);
-        heroParty.addPartyMember(chaniy);
+//        heroParty.addPartyMember(sammy);
+        heroParty.addPartyMember(gianmeni);
+//        heroParty.addPartyMember(kervs);
+//        heroParty.addPartyMember(chaniy);
 
         //TEMPORARY ENEMY SETUP
         enemyParty = new Party("Swarm of Goblins");
@@ -145,6 +167,7 @@ public class GameManager {
 
         createStartingItems();
     }
+
     private void createStartingItems() {
         Item smallPotion = new ResourceItem(
                 "Small Potion",
@@ -157,7 +180,6 @@ public class GameManager {
 
         heroParty.getInventory().addItem(smallPotion, 3);
     }
-
 
     public void startNewGame() {
         // dummy view to get the text area for synchronization reasons

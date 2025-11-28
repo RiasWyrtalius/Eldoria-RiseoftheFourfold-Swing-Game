@@ -39,6 +39,12 @@ public class CryoMancer extends JobClass {
                 AnimationLoopType.ONE_CYCLE
         );
     }
+
+    @Override
+    public List<ReactionSkill> createReactions() {
+        return List.of();
+    }
+
     public List<Skill> createSkills() {
 
         SkillLogicConsumer iceSpikeLogic = (self, user, targets, onSkillComplete) -> {

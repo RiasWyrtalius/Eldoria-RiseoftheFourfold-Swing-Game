@@ -1,3 +1,3 @@
 package Abilities;
 
-public record ReactionSkill(String name, double baseChance, ReactionLogic logic) {}
+public record ReactionSkill(String name, ReactionLogic logic) {}

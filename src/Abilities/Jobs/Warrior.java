@@ -38,6 +38,11 @@ public class Warrior extends JobClass {
         );
     }
 
+    @Override
+    public List<ReactionSkill> createReactions() {
+        return List.of();
+    }
+
     public List<Skill> createSkills() {
         SkillLogicConsumer shieldBashLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,20,10,1.2,0.05);

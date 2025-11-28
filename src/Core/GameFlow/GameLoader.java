@@ -1,5 +1,8 @@
 package Core.GameFlow;
 
+import Core.Utils.LogColor;
+import Core.Utils.LogManager;
+
 import javax.management.QueryEval;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +22,13 @@ public class GameLoader {
         this.campaignQueue = new LinkedList<>();
     }
 
+//    public void initializeInfiniteRun(long seed) {
+//        this.seed = seed;
+//        this.rng = new Random(seed);
+//        this.currentLevelIndex = 0;
+//    }
+
+    // TODO: File handling stuff here
     public void saveGame() {
         // write to json or object buffer
         // save level completed
@@ -36,4 +46,8 @@ public class GameLoader {
     }
 
     // TODO: end level
+    public void finishCampaign() {
+        LogManager.logHighlight("CAMPAIGN COMPLETE!", LogColor.VICTORY, 30);
+        LogManager.log("You have cleared all stages!", LogColor.VICTORY);
+    }
 }

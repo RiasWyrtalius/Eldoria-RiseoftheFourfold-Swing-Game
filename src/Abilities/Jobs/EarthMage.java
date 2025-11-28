@@ -47,6 +47,12 @@ public class EarthMage extends JobClass {
         );
 
     }
+
+    @Override
+    public List<ReactionSkill> createReactions() {
+        return List.of();
+    }
+
     public List<Skill> createSkills() {
         SkillLogicConsumer earthAttackLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,50,28,1.2,0.05);

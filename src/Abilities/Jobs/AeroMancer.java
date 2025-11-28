@@ -45,6 +45,12 @@ public class AeroMancer extends JobClass {
                 AnimationLoopType.TWO_CYCLES
         );
     }
+
+    @Override
+    public List<ReactionSkill> createReactions() {
+        return List.of();
+    }
+
     public List<Skill> createSkills() {
         SkillLogicConsumer windTornadoLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,40,(int)18.5,1.2,0.05);

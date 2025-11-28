@@ -110,6 +110,6 @@ public class Goblin extends Enemy {
             return -1;
         };
 
-        this.addReaction(new ReactionSkill("Cowardice", 0.30, cowardiceLogic));
+        this.addReaction(new ReactionSkill("Cowardice", cowardiceLogic));
     }
 }

@@ -21,7 +21,7 @@ public class LogManager {
     }
 
     public static void log(String message, Color color) { // COLORED LOGS
-        appendToPane(logComponent, message + "\n", color, false, 10);
+        appendToPane(logComponent, message + "\n", color, false, 13);
     }
 
     public static void logHighlight(String message) {

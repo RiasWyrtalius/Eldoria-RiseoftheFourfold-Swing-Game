@@ -6,9 +6,11 @@ import Abilities.*;
 import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
+import Core.Utils.Dice;
 import Core.Utils.ScalingLogic;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
+import Core.Visuals.VisualAsset;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
@@ -45,6 +47,28 @@ public class Archer extends JobClass {
                 AnimationLoopType.TWO_CYCLES
         );
     }
+
+    // dodges if less than 80 percent of health
+    // TODO: account for animation completion
+    @Override
+    public List<ReactionSkill> createReactions() {
+        ReactionLogic dodgeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+            double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
+            if (Dice.chance(0.5) && hp_percent < 0.80) {
+                VisualEffectsManager.getInstance().playAnimation("ARCHER_DODGE", defender, () -> {
+                    LogManager.log(defender.getName() + " swiftly dodges the attack!", LogColor.ENEMY_ACTION);
+
+                }, true);
+                return 0;
+            }
+            return -1;
+        };
+
+        ReactionSkill dodge = new ReactionSkill("Dodge", dodgeLogic);
+
+        return List.of(dodge);
+    }
+
     public List<Skill> createSkills() {
         SkillLogicConsumer rapidFireLogic = (self, user, targets, onSkillComplete) -> {
             int dmg = ScalingLogic.calculateDamage(user, 20, 15, 1.2, 0.05);

@@ -2,12 +2,14 @@ package Abilities;
 
 import Resource.AssetManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class JobClass {
     private final String name;
     private final String description;
     private final List<Skill> skills;
+    private List<ReactionSkill> reactions;
     private final int hpBonus;
     private final int manaBonus;
 
@@ -23,6 +25,7 @@ public abstract class JobClass {
         this(name, description, 0, 0);
     }
 
+    public abstract List<ReactionSkill> createReactions();
     public abstract List<Skill> createSkills();
 
     // =============== PUBLIC GETTERS FOR UI ===============

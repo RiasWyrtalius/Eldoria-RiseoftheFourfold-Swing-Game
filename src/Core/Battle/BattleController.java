@@ -21,7 +21,7 @@ public class BattleController {
     private final Party enemyParty;
     private int turnCounter;
     private boolean isBattleActive;
-    private BattlePhase currentPhase = BattlePhase.IDLE; // Default state
+    private BattlePhase currentPhase = BattlePhase.IDLE; // Default stat)e
     private BattleResult finalResult = BattleResult.NONE;
 
     public BattleController(Party heroParty, Party enemyParty) {
@@ -52,7 +52,7 @@ public class BattleController {
 
                 VisualEffectsManager.getInstance().resumeAllAnimations();
 
-                currentPhase = BattlePhase.HERO_ACTION_WAIT;
+                setCurrentPhase(BattlePhase.HERO_ACTION_WAIT);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -104,21 +104,9 @@ public class BattleController {
 
         List<Character> finalTargets = (targets == null) ? new ArrayList<>() : new ArrayList<>(targets);
 
-//        if (finalTargets.isEmpty() && item.getTargetType().getMaxTargets() > 1) {
-//            TargetCondition condition = item.getTargetCondition();
-//
-//            heroParty.getPartyMembers().stream().filter(condition::isValid).forEach(finalTargets::add);
-//            enemyParty.getPartyMembers().stream().filter(condition::isValid).forEach(finalTargets::add);
-//        }
-
-        // Fallback: If still empty (e.g. "Use on Self" but no user specified), pick first hero for visuals
-//        if (finalTargets.isEmpty()) {
-//            finalTargets.add(heroParty.getAliveMembers().get(0));
-//        }
-
-        // 3. Callback: End turn after item logic finishes
         Runnable onItemComplete = () -> {
             LogManager.log("Item used. Turn Cycle Advancing...");
+            mainView.refreshUI();
             advanceTurnCycle(true); // Manual override to force phase change
         };
 
@@ -161,7 +149,7 @@ public class BattleController {
         LogManager.log("| ENEMY PHASE |", LogColor.TURN_INDICATOR); // the right amount of fanciness :D
         LogManager.log("+=============+", LogColor.TURN_INDICATOR);
 
-        currentPhase = BattlePhase.ENEMY_ACTION;
+        setCurrentPhase(BattlePhase.ENEMY_ACTION);
 
         List<Character> enemies = enemyParty.getAliveMembers();
         processNextEnemy(enemies, 0); // starting from first
@@ -216,7 +204,7 @@ public class BattleController {
             return;
         }
 
-        currentPhase = BattlePhase.HERO_ACTION_WAIT;
+        setCurrentPhase(BattlePhase.HERO_ACTION_WAIT);
         LogManager.log("");
         LogManager.log("TURN " + turnCounter + " BEGINS", LogColor.TURN_INDICATOR);
 
@@ -251,7 +239,7 @@ public class BattleController {
         if (!isBattleActive) return; // additional safety check
 
         isBattleActive = false;
-        currentPhase = BattlePhase.BATTLE_ENDED;
+        setCurrentPhase(BattlePhase.BATTLE_ENDED);
         if (checkLose() && checkWin()) {
             finalResult = BattleResult.TIE;
         } else if (checkWin()) {

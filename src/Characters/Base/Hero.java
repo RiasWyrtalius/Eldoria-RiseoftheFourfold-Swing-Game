@@ -2,6 +2,7 @@ package Characters.Base;
 
 import Abilities.JobClass;
 import Abilities.Jobs.AeroMancer;
+import Abilities.ReactionSkill;
 import Abilities.Skill;
 import Characters.Character;
 import Core.Utils.LogColor;
@@ -25,12 +26,13 @@ public class Hero extends Character {
         this.incrementXP = 50;
         // lvl 1 needs 100, level 2 needs 150, level 3 needs 200. etc......
         this.requiredXP = baseXP + (incrementXP * (this.level - 1));
+
+        reactions = job.createReactions();
     }
 
     public Hero(String name, int health, int baseAtk, int maxMana, JobClass job, String imageKey) {
         this(name, health, baseAtk, maxMana, 1, job, imageKey);
     }
-
 
     public void gainXP(int amount) {
         LogManager.log(getName() + " Gains " + amount + "XP!", LogColor.XP_GAIN);

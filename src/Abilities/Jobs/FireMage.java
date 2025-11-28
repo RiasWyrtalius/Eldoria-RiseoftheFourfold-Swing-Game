@@ -42,6 +42,11 @@ public class FireMage extends JobClass {
         );
     }
 
+    @Override
+    public List<ReactionSkill> createReactions() {
+        return List.of();
+    }
+
     public List<Skill> createSkills() {
 
         // FIXME: turn doesn't end when animation is finished

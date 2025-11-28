@@ -33,6 +33,11 @@ public class Cleric extends JobClass {
 
     }
 
+    @Override
+    public List<ReactionSkill> createReactions() {
+        return List.of();
+    }
+
     public List<Skill> createSkills() {
         SkillLogicConsumer healSelfLogic = (self, user, targets, onSkillComplete) -> {
             Character target = user;
