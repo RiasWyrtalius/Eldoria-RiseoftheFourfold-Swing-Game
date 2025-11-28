@@ -17,8 +17,13 @@ import java.util.List;
 
 
 public class EarthMage extends JobClass {
+
+    public static final String description = "A stalwart spellcaster who channels the raw power of stone and soil. The Mage Earth conjures barriers, summons tremors, and hardens allies’ defenses. Steadfast and immovable, she is the embodiment of endurance and stability.";
+    public static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Earth/Idle/sprite_%d.png";
+    //TODO: figure out a way to make it idle
+
     public EarthMage(){
-        super("Earth Mage","Wields stone and earth as its magic",0,60 );
+        super("Earth Mage", description,0,0);
 
         AssetManager.getInstance().registerAnimation(
                 "MAGE_EARTH-IDLE",
@@ -97,7 +102,7 @@ public class EarthMage extends JobClass {
 
         SkillLogicConsumer stoneHailLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,20,10,1.2,0.05);
-            Character target = targets.getFirst();
+            Character target = targets.get(0);
             target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, "Multitudes of earth crumbles down", targets), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("STONE_HAIL", target, () -> {
@@ -130,4 +135,5 @@ public class EarthMage extends JobClass {
 
         return List.of(EarthquakeSpell,EarthAttack,StoneHail);
     }
+    @Override public String getPreviewImagePath() { return IDLE_PATH; }
 }

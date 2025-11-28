@@ -1,7 +1,6 @@
 package Core;
 
 import Abilities.Jobs.*;
-import Characters.Enemies.Vampire;
 import Core.Battle.TargetType;
 import Characters.Base.Hero;
 import Characters.Character;
@@ -69,19 +68,6 @@ public class GameManager {
         heroParty = new Party("The Godslayers");
         Warrior warrior = new Warrior();
         Character charlie = new Hero("Charlie",150,50,100,1,warrior,"WARRIOR_IDLE"){
-            @Override
-            protected void onDeath() {
-
-            }
-
-            @Override
-            protected void onDefeat(Character defeatedTarget) {
-
-            }
-        };
-        //TODO: ADD image key for rouge
-        Rogue rogue = new Rogue();
-        Character elyi = new Hero("Elyi",80,50,100,1,rogue,"WARRIOR_IDLE"){
             @Override
             protected void onDeath() {
 
@@ -164,11 +150,10 @@ public class GameManager {
 //        TODO: add max amount of party members
 //        heroParty.addPartyMember(charlie);
 //        heroParty.addPartyMember(ythan);
-        heroParty.addPartyMember(erick);
+//        heroParty.addPartyMember(erick);
 //        heroParty.addPartyMember(sammy);
-        heroParty.addPartyMember(gianmeni);
-        heroParty.addPartyMember(elyi);
-//        heroParty.addPartyMember(kervs);
+//        heroParty.addPartyMember(gianmeni);
+        heroParty.addPartyMember(kervs);
 //        heroParty.addPartyMember(chaniy);
 
         //TEMPORARY ENEMY SETUP
@@ -176,11 +161,9 @@ public class GameManager {
         Goblin goblin_1 = new Goblin();
         Boss boss = new Boss("Serato The Destroyer" , 20,10,200,1,"Boss",200,3);
         Slime slime_1 = new Slime();
-        Vampire vamp = new Vampire();
         enemyParty.addPartyMember(goblin_1);
         enemyParty.addPartyMember(boss);
         enemyParty.addPartyMember(slime_1);
-        enemyParty.addPartyMember(vamp);
 
         createStartingItems();
     }

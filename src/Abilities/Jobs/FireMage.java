@@ -17,8 +17,12 @@ import java.util.List;
 
 public class FireMage extends JobClass {
 
+    public static final String description = "Fierce and unpredictable, the Mage Fire wields flames with destructive passion. She incinerates her foes with fireballs, engulfs battlefields in blazing infernos, and thrives on chaos. Her magic is as dangerous as it is mesmerizing.";
+    public static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png";
+    //TODO: figure out a way to make it idle
+
     public FireMage() {
-        super("Fire Mage", "Wields fire", 0, 60);
+        super("Fire Mage", description, 0, 0);
 
         AssetManager.getInstance().registerAnimation(
                 "MAGE_IDLE",
@@ -53,7 +57,7 @@ public class FireMage extends JobClass {
         SkillLogicConsumer fireBallLogic = (self, user, targets, onSkillComplete) -> {
 
             int calculateDamage = ScalingLogic.calculateDamage(user,25,15,1.2,0.05);
-            Character target = targets.getFirst();
+            Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
                 target.takeDamage(calculateDamage, user, self);
@@ -78,10 +82,14 @@ public class FireMage extends JobClass {
                 }, true);
             }
 
+
+            if (onSkillComplete != null) {
+                onSkillComplete.run();
+            }
         };
         SkillLogicConsumer staffAttackLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,10,0,1.2,0.05);
-            Character target = targets.getFirst();
+            Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
             target.takeDamage(calculateDamage, user, self);
             if (onSkillComplete != null) {
@@ -110,5 +118,5 @@ public class FireMage extends JobClass {
 
         return List.of(staffAttack,fireball, fireCyclone);
     }
-
+    @Override public String getPreviewImagePath() { return IDLE_PATH; }
 }

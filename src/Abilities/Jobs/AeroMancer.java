@@ -17,11 +17,16 @@ import java.util.List;
 
 
 public class AeroMancer extends JobClass {
+
+    private static final String description = "Master of the skies, the AeroMancer bends the wind to her will. She summons gales to scatter enemies, rides currents to evade danger, and unleashes razor-sharp blasts of air. Her magic is swift, elusive, and devastating.";
+    private static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Wind/Idle/sprite_%d.png";
+    //TODO: figure out a way to make it idle
+
     public AeroMancer(){
-        super("Wind Mage","Wields atmosphere and wind as its magic",0,60 );
+        super("Wind Mage", description,0,0 );
         AssetManager.getInstance().registerAnimation(
                 "MAGE_WIND-IDLE",
-                "Assets/Animations/Heroes/Mage-Wind/Idle/sprite_%d.png",
+                IDLE_PATH,
                 3, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
@@ -54,7 +59,7 @@ public class AeroMancer extends JobClass {
     public List<Skill> createSkills() {
         SkillLogicConsumer windTornadoLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,40,(int)18.5,1.2,0.05);
-            Character target = targets.getFirst();
+            Character target = targets.get(0);
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 
@@ -127,4 +132,6 @@ public class AeroMancer extends JobClass {
 
         return List.of(WindTornado,WindSlash,WindPierce);
     }
+
+    @Override public String getPreviewImagePath() { return IDLE_PATH; }
 }

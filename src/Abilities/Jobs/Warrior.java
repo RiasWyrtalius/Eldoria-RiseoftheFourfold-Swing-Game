@@ -16,11 +16,15 @@ import java.util.List;
 
 public class Warrior extends JobClass {
 
+    public static final String description = "A battle-hardened fighter clad in steel, the Warrior thrives on the frontlines. With unmatched strength and resilience, he shields allies from harm while delivering crushing blows to enemies. His loyalty and courage make him the backbone of any party.";
+    public static final String IDLE_PATH = "Assets/Animations/Heroes/Warrior/Idle/sprite_%d.png";
+    //TODO: figure out a way to make it idle
+
     public Warrior() {
-        super("Warrior", "Wields Sword and Shield", 20, 0);
+        super("Warrior", description, 10, 0);
         AssetManager.getInstance().registerAnimation(
                 "WARRIOR_IDLE",
-                "Assets/Animations/Heroes/Warrior/Idle/sprite_%d.png",
+                IDLE_PATH,
                 3, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
@@ -87,4 +91,5 @@ public class Warrior extends JobClass {
         );
         return List.of(ShieldBash,SwordSlash);
     }
+    @Override public String getPreviewImagePath() { return IDLE_PATH; }
 }

@@ -130,11 +130,9 @@ public class Hero extends Character {
     public int getXP() {
         return XP;
     }
-
     public int getRequiredXP() {
         return requiredXP;
     }
-
     public JobClass getJob() {
         return job;
     }

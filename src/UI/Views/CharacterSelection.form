@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="CharacterSelection" layout-manager="GridLayoutManager" row-count="2" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="680" height="400"/>
+      <xy x="20" y="20" width="708" height="400"/>
     </constraints>
     <properties>
       <background color="-661820"/>
@@ -31,7 +31,9 @@
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <font name="Segoe UI Light" size="16"/>
+            </properties>
           </component>
           <component id="49612" class="javax.swing.JLabel">
             <constraints>
@@ -56,6 +58,7 @@
               </grid>
             </constraints>
             <properties>
+              <font name="Segoe UI Light" size="16"/>
               <text value=""/>
             </properties>
           </component>
@@ -67,16 +70,15 @@
               <text value="Stats:"/>
             </properties>
           </component>
-          <component id="cf8cc" class="javax.swing.JTextArea" binding="statsTA">
+          <component id="63e0d" class="javax.swing.JTextPane" binding="statsTA">
             <constraints>
               <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="50"/>
               </grid>
             </constraints>
             <properties>
-              <editable value="false"/>
-              <lineWrap value="true"/>
-              <wrapStyleWord value="true"/>
+              <font name="Segoe UI Light" size="16"/>
+              <text value=""/>
             </properties>
           </component>
         </children>

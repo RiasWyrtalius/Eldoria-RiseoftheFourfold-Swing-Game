@@ -16,8 +16,12 @@ import java.util.List;
 
 public class Cleric extends JobClass {
 
+    public static final String description = "A devoted healer and protector, the Cleric channels divine energy to restore allies and banish darkness. Her blessings strengthen companions, while her radiant light wards off evil. Compassionate yet formidable, she is the heart of the party.";
+    private static final String IDLE_PATH = "Assets/Animations/Heroes/Cleric/Idle/sprite_%d.png";
+    //TODO: figure out a way to make it idle
+
     public Cleric() {
-        super("Cleric", "Wields Healing and love", 0, 60);
+        super("Cleric", description, 10, 0);
         AssetManager.getInstance().registerAnimation(
                 "CLERIC_IDLE",
                 "Assets/Animations/Heroes/Cleric/Idle/sprite_%d.png",
@@ -56,22 +60,6 @@ public class Cleric extends JobClass {
             }, true);
         };
 
-        SkillLogicConsumer reviveLogic = (self, user, targets, onSkillComplete) -> {
-            Character target = targets.getFirst();
-            LogManager.log(self.getActionLog(user, "Revives", targets), LogColor.HERO_ACTION);
-
-            int revive_health= (int)(target.getInitialHealth() * .20);
-
-//            VisualEffectsManager.getInstance().hideCharacterVisual(user);
-            VisualEffectsManager.getInstance().playAnimation("CLERIC_HEAL", user, () -> {
-                target.setHealth(revive_health);
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-//                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                }
-            }, true);
-        };
-
         SkillLogicConsumer healGroupLogic = (self, user, targets, onSkillComplete) -> {
 
 
@@ -92,7 +80,7 @@ public class Cleric extends JobClass {
         };
 
         SkillLogicConsumer BashLogic = (self, user, targets, onSkillComplete) -> {
-            Character target = targets.getFirst();
+            Character target = targets.get(0);
 
             int calculateDamage = ScalingLogic.calculateDamage(user,20,20,0.02,0.005);
 
@@ -116,17 +104,14 @@ public class Cleric extends JobClass {
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
                 healGroupLogic
         );
-        Skill Revive = new Skill(
-                "Revive", "Revive a teammate", 50, 0,
-                SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.DEAD,
-                reviveLogic
-        );
         Skill BashStaff = new Skill(
                 "Bash Staff", "Healing their teammate", 10, 20,
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 BashLogic
         );
 
-        return List.of(HealSelf,HealGroup,BashStaff,Revive);
+        return List.of(HealSelf,HealGroup,BashStaff);
     }
+
+    @Override public String getPreviewImagePath() { return IDLE_PATH; }
 }

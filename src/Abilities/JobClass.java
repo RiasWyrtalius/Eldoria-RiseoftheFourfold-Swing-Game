@@ -52,4 +52,6 @@ public abstract class JobClass {
         return description;
     }
 
+    //TEMPORARY GETTERS FOR CHARACTER DISPLAY
+    public String getPreviewImagePath() { return ""; }
 }

@@ -17,8 +17,13 @@ import java.util.List;
 
 
 public class CryoMancer extends JobClass {
+
+    public static final String description = "Cold and calculating, the CryoMancer freezes enemies in their tracks. She conjures blizzards, sharp ice shards, and chilling prisons to sap the strength of her foes. Her frosty power brings control and precision to the battlefield.";
+    private static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png";
+    //TODO: figure out a way to make it idle
+
     public CryoMancer(){
-        super("Ice Mage","Wields snow and ice as its magic",0,60 );
+        super("Ice Mage", description, 0, 0 );
         AssetManager.getInstance().registerAnimation(
                 "MAGE_ICE-IDLE",
                 "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png",
@@ -49,7 +54,7 @@ public class CryoMancer extends JobClass {
 
         SkillLogicConsumer iceSpikeLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,30,15,1.2,0.05);
-            Character target = targets.getFirst();
+            Character target = targets.get(0);
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 
@@ -72,7 +77,7 @@ public class CryoMancer extends JobClass {
 
         SkillLogicConsumer frostBiteLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,15,15,1.2,0.05);
-            Character target = targets.getFirst();
+            Character target = targets.get(0);
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
 
@@ -105,6 +110,8 @@ public class CryoMancer extends JobClass {
 
         return List.of(IceSpike,FrostBite);
     }
+
+    @Override public String getPreviewImagePath() { return IDLE_PATH; }
 }
 
 
