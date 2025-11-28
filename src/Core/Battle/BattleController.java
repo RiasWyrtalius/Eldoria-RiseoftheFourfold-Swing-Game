@@ -15,7 +15,6 @@ import UI.Views.BattleInterface;
 import java.util.ArrayList;
 import java.util.List;
 
-// FIXME: Turn and game doesn’t end automatically when final blow is from an animation
 public class BattleController {
     private BattleInterface mainView;
     private final Party heroParty;
@@ -74,8 +73,6 @@ public class BattleController {
         heroParty.setPartyExhaustion(false);
         enemyParty.setPartyExhaustion(false);
     }
-
-    // TODO: The UI must now check isExhausted() to enable/disable the hero portrait.
 
     public void executeActionFromUI(Hero hero, Skill skill, List<Character> targets) {
         if (!isBattleActive || !hero.isAlive() || hero.isExhausted()) {
