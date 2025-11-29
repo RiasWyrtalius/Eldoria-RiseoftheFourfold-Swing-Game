@@ -93,10 +93,26 @@
                 return;
             }
             if (!character.isAlive()) {
-                remove(hpBar);
-                if (character.getMaxMana() > 0)
-                    remove(manaBar);
+                hpBar.setVisible(false);
+                manaBar.setVisible(false);
                 return;
+            } else {
+                hpBar.setVisible(true);
+                manaBar.setVisible(true);
+            }
+            if (character.getMaxMana() <= 0)
+                manaBar.setVisible(false);
+            else {
+                manaBar.setVisible(true);
+
+                manaBar.setStringPainted(true);
+
+                manaBar.setMaximum(character.getMaxMana());
+                manaBar.setValue(character.getMana());
+                manaBar.setString("mp " + character.getMana() + "/" + character.getMaxMana());
+                manaBar.setForeground(barState(character.getMana(), character.getMaxMana()));
+
+                manaBar.setForeground(new Color(0, 150, 255));
             }
 
             this.character = character;
@@ -107,19 +123,6 @@
             hpBar.setValue(character.getHealth());
             hpBar.setString("hp " + character.getHealth() + "/" + character.getInitialHealth());
             hpBar.setForeground(barState(character.getHealth(), character.getInitialHealth()));
-
-            if (character.getMaxMana() <= 0)
-                remove(manaBar);
-            else {
-                manaBar.setStringPainted(true);
-
-                manaBar.setMaximum(character.getMaxMana());
-                manaBar.setValue(character.getMana());
-                manaBar.setString("mp " + character.getMana() + "/" + character.getMaxMana());
-                manaBar.setForeground(barState(character.getMana(), character.getMaxMana()));
-
-                manaBar.setForeground(new Color(0, 150, 255));
-            }
 
             String visualId = character.getImageKey();
             VisualAsset assetData = AssetManager.getInstance().getVisualAssetData(visualId);

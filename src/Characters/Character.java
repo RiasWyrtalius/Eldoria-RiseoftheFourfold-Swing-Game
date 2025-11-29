@@ -3,6 +3,7 @@ package Characters;
 import Abilities.ReactionSkill;
 import Abilities.Skill;
 import Core.Utils.Dice;
+import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 
 import java.util.ArrayList;
@@ -45,7 +46,9 @@ public abstract class Character {
     public void takeDamage(int rawDamage, Character attacker, Skill incomingSkill) {
         int finalDamage = processReactions(attacker, incomingSkill, rawDamage);
 
-        this.health -= finalDamage;
+        boolean wasAlive = this.isAlive;
+
+        setHealth(this.health - finalDamage);
 
         if (finalDamage == 0) {
             LogManager.log(this.name + " took no damage (Mitigated)!");
@@ -53,45 +56,38 @@ public abstract class Character {
             LogManager.log(this.name + " takes " + finalDamage + " damage.");
         }
 
-        if (this.health <= 0) {
-            die();
-            if (attacker != null) {
-                onDefeat(attacker);
-            }
-        }
-    }
-
-
-    // without reaction
-    public void takeDamage(int damage, Character attacker) {
-        this.health -= damage;
-        LogManager.log(this.name + " took " + damage + " damage from " + attacker.getName());
-        if (this.health <= 0) {
+        if (wasAlive && !this.isAlive && attacker != null) {
             onDefeat(attacker);
-            die();
         }
     }
 
     public final void die() {
         this.health = 0;
         this.isAlive = false;
+        setMana(0);
         onDeath();
     }
 
     // Subclass Hooks
     protected abstract void onDeath();
 
-    protected abstract void onDefeat(Character finalAttacker);
+    protected void onDefeat(Character attacker) {
+        LogManager.log(this.name + " is killed by " + attacker.getName() + "!", LogColor.ENEMY_ACTION);
+    };
 
     public boolean canCast(int manaCost) {
         return this.mana >= manaCost;
+    }
+
+    public void gainMana(int amount) {
+        setMana(this.mana + amount);
     }
 
     public boolean spendMana(int manaCost) {
         // TODO: Front end logging for spending mana here or within in the
         //      subclass method called
         if (canCast(manaCost)) {
-            this.mana -= manaCost;
+            setMana(this.maxMana - manaCost);
             return true;
         } else {
             return false;
@@ -102,12 +98,27 @@ public abstract class Character {
         LogManager.log("(CHARACTER) : " + this.name + " attacks " + target.getName());
     }
 
-    public void setHealth(int health) {
-        if(health > initialHealth){
-            health = initialHealth;
+    public void setHealth(int newHealth) {
+        if(newHealth > initialHealth){
+            newHealth = initialHealth;
         }
-        this.health = health;
+        if (newHealth < 0) {
+            newHealth = 0;
+        }
+        this.health = newHealth;
+        if (this.health == 0 && this.isAlive) {
+            die();
+        }
+        else if (this.health > 0 && !this.isAlive) {
+            reviveState();
+        }
     }
+
+    private void reviveState() {
+        this.isAlive = true;
+        LogManager.log(this.name + " has been revived!");
+    }
+
     public void setInitialHealth(int initialHealth){this.initialHealth = initialHealth;}
     public void setMaxMana(int maxMana){this.maxMana = maxMana;}
 
@@ -156,7 +167,6 @@ public abstract class Character {
     public String getImageKey() {
         return imageKey;
     }
-
     public boolean isExhausted() {
         return isExhausted;
     }
@@ -164,7 +174,15 @@ public abstract class Character {
     public void setExhausted(boolean exhausted) {
         isExhausted = exhausted;
     }
-    public void setMana(int mana) { this.mana = mana; }
+    public void setMana(int newMana) {
+        if (newMana > maxMana) {
+            newMana = maxMana;
+        }
+        if (newMana < 0) {
+            newMana = 0;
+        }
+        this.mana = newMana;
+    }
     public abstract List<Skill> getSkills();
     public abstract String getDescription();
 }
