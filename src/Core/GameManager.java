@@ -173,9 +173,9 @@ public class GameManager {
 //        heroParty.addPartyMember(charlie);
 //        heroParty.addPartyMember(ythan);
         heroParty.addPartyMember(erick);
-//        heroParty.addPartyMember(sammy);
+        heroParty.addPartyMember(sammy);
         heroParty.addPartyMember(gianmeni);
-//        heroParty.addPartyMember(kervs);
+        heroParty.addPartyMember(kervs);
 //        heroParty.addPartyMember(chaniy);
         heroParty.addPartyMember(elyi);
 
