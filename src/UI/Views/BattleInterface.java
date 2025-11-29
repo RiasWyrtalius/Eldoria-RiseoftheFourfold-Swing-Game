@@ -12,6 +12,7 @@ import UI.Components.BattleUIMode;
 import UI.Components.CharacterStatusPanel;
 import UI.Components.InventoryPanel;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -66,6 +67,7 @@ public class BattleInterface extends JFrame{
     private JPanel heroPanel;
     private JPanel infoPanel;
     private JPanel enemyPanel;
+    private JLabel floorLabel;
 
     public BattleInterface() {
         this.setContentPane(contentPanel);
@@ -99,10 +101,21 @@ public class BattleInterface extends JFrame{
                 refreshUI();
             });
         }
+        if (descendButton != null) {
+            descendButton.addActionListener(e -> {
+                resetSelectionState();
+                descendPanel.setVisible(false);
+                Core.GameManager.getInstance().loadNextLevel();
+            });
+        }
         refreshUI();
     }
 
     public void refreshUI() {
+        // TODO: floor label text should change color when going deeper
+        floorLabel.setText("Floor " + battleController.getLevelNumber());
+        floorLabel.setForeground(Color.red);
+
         heroPartyLabel.setText(battleController.getHeroParty().getPartyName());
         enemyPartyLabel.setText(battleController.getEnemyParty().getPartyName());
 

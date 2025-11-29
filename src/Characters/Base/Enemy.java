@@ -23,12 +23,15 @@ public abstract class Enemy extends Character {
         this.skills = new ArrayList<>();
         this.type = type;
         this.rewardXP = rewardXP;
+        registerAssets();
         initializeSkills();
     }
 
     public Enemy(String name, int health, int baseAtk, int maxMana, String type, int rewardXP, String imageKey, String description) {
         this(name, health, baseAtk, maxMana, 1, type, rewardXP, imageKey, description);
     }
+
+    protected abstract void registerAssets();
 
     protected abstract void initializeSkills();
 

@@ -8,6 +8,7 @@ import Core.Battle.TargetType;
 import Core.Utils.Dice;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
+import Core.Utils.ScalingLogic;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
@@ -16,22 +17,18 @@ import java.util.List;
 
 public class Slime extends Enemy {
     public Slime() {
+        this(1);
+    }
 
-        super("Demon Slime", 500, 30, 0, 1, "Slime", 30, "SLIME_IDLE", "Slimes around");
-        AssetManager.getInstance().registerAnimation(
-                "SLIME_IDLE",
-                "Assets/Animations/Enemies/Slime/Idle/sprite_%d.png",
-                3, 100, 100 , 280,
-                AnimationLoopType.INFINITE
-        );
-
-        AssetManager.getInstance().registerAnimation(
-                "SLIME_ACIDIC-SLAM",
-                "Assets/Animations/Enemies/Slime/Effects/Acidic_Slam/sprite_%d.png",
-                4, 100, 100 , 300,
-                AnimationLoopType.ONE_CYCLE
-        );
-//        initializeReactions();
+    public Slime(int level) {
+        super(
+                "Demon Slime",
+                ScalingLogic.calculateStat(level,40, 5, 0.1),
+                ScalingLogic.calculateStat(level,30, 2, 0.2),
+                0,
+                "Slime",
+                10 * level,
+                "SLIME_IDLE", "Slimes around");
     }
 
     @Override
@@ -39,7 +36,7 @@ public class Slime extends Enemy {
         SkillLogicConsumer acidicSlamLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = user.getBaseAtk();
 
-            Character target = Dice.pickRandom(targets);
+            Character target = Dice.getInstance().pickRandom(targets);
             LogManager.log(self.getActionLog(user, "uses", targets), LogColor.ENEMY_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("SLIME_ACIDIC-SLAM", target, () -> {
@@ -65,8 +62,25 @@ public class Slime extends Enemy {
     public void makeAttack(List<Character> targets, Runnable onSkillComplete) {
         // TODO: randomly select skill
         // TODO: add AI that checks if skill has enough mana or not
-        Skill skill = Dice.pickRandom(skills);
+        Skill skill = Dice.getInstance().pickRandom(skills);
         skill.execute(this, targets, onSkillComplete);
+    }
+
+    @Override
+    protected void registerAssets() {
+        AssetManager.getInstance().registerAnimation(
+                "SLIME_IDLE",
+                "Assets/Animations/Enemies/Slime/Idle/sprite_%d.png",
+                3, 100, 100 , 280,
+                AnimationLoopType.INFINITE
+        );
+
+        AssetManager.getInstance().registerAnimation(
+                "SLIME_ACIDIC-SLAM",
+                "Assets/Animations/Enemies/Slime/Effects/Acidic_Slam/sprite_%d.png",
+                4, 100, 100 , 300,
+                AnimationLoopType.ONE_CYCLE
+        );
     }
 
 }

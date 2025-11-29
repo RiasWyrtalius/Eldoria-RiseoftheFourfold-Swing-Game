@@ -1,61 +1,44 @@
 package Core.GameFlow;
 
+import Characters.Base.Enemy;
 import Characters.Party;
+import Core.Utils.Dice;
 import Items.Item;
 
 import java.util.List;
+import java.util.Random;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-public record Level(int levelNumber, Party enemyParty, List<Item> itemDrops, int XPDrop, String battleBackground) {
-    public Party createEnemyParty() {
-        // random create enemy party function
-        return null;
-    }
+public record Level(
+        int levelNumber,
+        String levelName,
+        String introduction,
+        String battleBackground,
+
+        List<Function<Integer, Enemy>> enemyGenerators,
+        int minEnemies, int maxEnemies,
+
+        List<Item> possibleItemDrops,
+        int xpReward,
+        long levelSeed) {
+
+        public Party createEnemyParty() {
+            Party party = new Party(levelName + " Enemies");
+
+            Random localRng = new Random(levelSeed);
+            int count = Dice.getInstance().roll(minEnemies, maxEnemies);
+
+            // TODO: deal with this cast
+            for (int i = 0; i < count; i++) {
+                Function<Integer, Enemy> spawner = Dice.getInstance().pickRandom(enemyGenerators);
+
+                if (spawner != null) {
+                    Enemy enemy = spawner.apply(this.levelNumber);
+                    party.addPartyMember(enemy);
+                }
+            }
+
+            return party;
+        }
 }
-
-//public class Level {
-//    private int levelNumber;
-//    private Party enemyParty;
-//    private List<Item> itemDrops;
-//    private int XPDrop;
-//    private String battleBackground;
-//
-//    public Level(int levelNumber, Party enemyParty, List<Item> itemDrops, int XPDrop, String battleBackground) {
-//        this.levelNumber = levelNumber;
-//        this.enemyParty = enemyParty;
-//        this.itemDrops = itemDrops;
-//        this.XPDrop = XPDrop;
-//        this.battleBackground = battleBackground;
-//    }
-//
-//    public int getLevelNumber() {
-//        return levelNumber;
-//    }
-//
-//    public void setLevelNumber(int levelNumber) {
-//        this.levelNumber = levelNumber;
-//    }
-//
-//    public Party getEnemyParty() {
-//        return enemyParty;
-//    }
-//
-//    public void setEnemyParty(Party enemyParty) {
-//        this.enemyParty = enemyParty;
-//    }
-//
-//    public List<Item> getItemDrops() {
-//        return itemDrops;
-//    }
-//
-//    public void setItemDrops(List<Item> itemDrops) {
-//        this.itemDrops = itemDrops;
-//    }
-//
-//    public int getXPDrop() {
-//        return XPDrop;
-//    }
-//
-//    public void setXPDrop(int XPDrop) {
-//        this.XPDrop = XPDrop;
-//    }
-//}

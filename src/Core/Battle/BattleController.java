@@ -5,6 +5,7 @@ import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Party;
+import Core.GameFlow.Level;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
@@ -23,13 +24,16 @@ public class BattleController {
     private boolean isBattleActive;
     private BattlePhase currentPhase = BattlePhase.IDLE; // Default stat)e
     private BattleResult finalResult = BattleResult.NONE;
+    private final Level currentLevel;
 
-    public BattleController(Party heroParty, Party enemyParty) {
+
+    public BattleController(Party heroParty, Party enemyParty, Level currentLevel) {
         this.mainView = null;
         this.heroParty = heroParty;
         this.enemyParty = enemyParty;
         this.turnCounter = 1;
         this.isBattleActive = true;
+        this.currentLevel = currentLevel;
 
         VisualEffectsManager.getInstance().pauseAllAnimations();
         runBattleIntro();
@@ -243,6 +247,7 @@ public class BattleController {
             finalResult = BattleResult.TIE;
         } else if (checkWin()) {
             finalResult = BattleResult.VICTORY;
+            processVictoryRewards();
         } else if (checkLose()) {
             finalResult = BattleResult.DEFEAT;
         }
@@ -270,6 +275,32 @@ public class BattleController {
         }
     }
 
+    private void processVictoryRewards() {
+        LogManager.log("--- STAGE CLEAR REWARDS ---", LogColor.VICTORY);
+
+        int xpBonus = currentLevel.xpReward();
+        if (xpBonus > 0) {
+            LogManager.log("Party gained " + xpBonus + " XP!");
+
+            for (Character hero : heroParty.getPartyMembers()) {
+                if (hero instanceof Hero) {
+                    ((Hero) hero).gainXP(xpBonus);
+                }
+            }
+        }
+
+        List<Item> loot = currentLevel.possibleItemDrops();
+        if (!loot.isEmpty()) {
+            LogManager.log("Loot found!");
+            for (Item item : loot) {
+                heroParty.getInventory().addItem(item, 1);
+                LogManager.log(" - " + item.getName(), LogColor.PLAYER_JOIN);
+            }
+        } else {
+            LogManager.log("No items found.");
+        }
+    }
+
     // =============== PUBLIC SETTERS AND GETTERS FOR UI ===============
     public void setMainView(BattleInterface mainView) {
         this.mainView = mainView;
@@ -293,5 +324,9 @@ public class BattleController {
 
     public BattleResult getFinalResult() {
         return finalResult;
+    }
+
+    public int getLevelNumber() {
+        return currentLevel.levelNumber();
     }
 }

@@ -54,7 +54,7 @@ public class Paladin extends JobClass {
             }
             int revive_health= (int)(defender.getInitialHealth() * 0.30);
             int reset_mana= (int)(defender.getMaxMana() * 0.50);
-            if (Dice.chance(0.75) && hp_percent <= 0 && !hasRevived) {
+            if (Dice.getInstance().chance(0.75) && hp_percent <= 0 && !hasRevived) {
                 defender.setHealth(revive_health);
                 defender.setMana(reset_mana);
                 hasRevived = true;

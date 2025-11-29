@@ -3,7 +3,6 @@ package Characters;
 import Abilities.ReactionSkill;
 import Abilities.ReactionTrigger;
 import Abilities.Skill;
-import Core.Utils.Dice;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;

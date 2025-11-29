@@ -9,6 +9,7 @@ import Core.Utils.Dice;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Utils.ScalingLogic;
+import Core.Utils.ScalingLogic;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
@@ -17,8 +18,28 @@ import java.util.List;
 
 public class Goblin extends Enemy {
     public Goblin() {
+        this(1);
+    }
 
-        super("Goblin Grunt", 500, 30, 0, 1, "Goblin", 50, "GOBLIN_IDLE", "Steals stuff and kills stuff.");
+    public Goblin(int level) {
+        super(
+                "Goblin Grunt",
+                ScalingLogic.calculateStat(level, 60, 5, 0.10),
+                ScalingLogic.calculateStat(level, 10, 2, 0.05),
+                0,
+                level,
+                "Goblin",
+                15 * level,
+                "GOBLIN_IDLE",
+                "Steals stuff and kills stuff."
+                );
+
+        registerAssets();
+        initializeReactions();
+    }
+
+    @Override
+    protected void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "GOBLIN_IDLE",
                 "Assets/Animations/Enemies/Goblin/Idle/sprite_%d.png",
@@ -32,7 +53,6 @@ public class Goblin extends Enemy {
                 5, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );
-        initializeReactions();
     }
 
     @Override
@@ -40,7 +60,7 @@ public class Goblin extends Enemy {
         SkillLogicConsumer skirmishLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,baseAtk,0.2,0.1);
 
-            Character target = Dice.pickRandom(targets);
+            Character target = Dice.getInstance().pickRandom(targets);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.ENEMY_ACTION);
             // TODO: panel should be empty during the swinging
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
@@ -54,10 +74,10 @@ public class Goblin extends Enemy {
         };
 
         SkillLogicConsumer throwCoinsLogic = (self, user, targets, onSkillComplete) -> {
-            int coins = Dice.roll(1,5);
+            int coins = Dice.getInstance().roll(1,5);
             int calculateDamage = ScalingLogic.calculateDamage(user,baseAtk,0.2,0.1) * coins;
 
-            Character target = Dice.pickRandom(targets);
+            Character target = Dice.getInstance().pickRandom(targets);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.ENEMY_ACTION);
             // TODO: panel should be empty during the swinging
 //            VisualEffectsManager.getInstance().hideCharacterVisual(user);
@@ -90,7 +110,7 @@ public class Goblin extends Enemy {
     public void makeAttack(List<Character> targets, Runnable onSkillComplete) {
         // TODO: randomly select skill
         // TODO: add AI that checks if skill has enough mana or not
-        Skill skill = Dice.pickRandom(skills);
+        Skill skill = Dice.getInstance().pickRandom(skills);
         skill.execute(this, targets, onSkillComplete);
     }
 
@@ -102,7 +122,7 @@ public class Goblin extends Enemy {
                 return -1;
             }
 
-            if (Dice.chance(0.30)) {
+            if (Dice.getInstance().chance(0.30)) {
                 LogManager.log(defender.getName() + " panics and dodges the attack!", LogColor.ENEMY_ACTION);
 
 //                TODO: Trigger pop up or sound or something

@@ -1,6 +1,7 @@
 package Characters.Enemies;
 
 import Abilities.*;
+import Characters.Base.Boss;
 import Characters.Base.Enemy;
 import Characters.Character;
 import Core.Battle.TargetCondition;
@@ -13,10 +14,13 @@ import Resource.AssetManager;
 
 import java.util.List;
 
-public class GolemBoss extends Enemy {
-
+public class GolemBoss extends Boss {
     public GolemBoss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
-        super(name, initialHealth * (int)healthMultiplier, baseAtk, maxMana, level, type, rewardXP, "GOLEM_BOSS-IDLE", "boss of the level");
+        super(name, initialHealth, baseAtk, maxMana, level, type, rewardXP, healthMultiplier, "GOLEM_BOSS-IDLE", "boss of the level");
+    }
+
+    @Override
+    protected void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "GOLEM_BOSS-IDLE",
                 "Assets/Animations/Enemies/Boss/Golem/Idle/sprite_%d.png",

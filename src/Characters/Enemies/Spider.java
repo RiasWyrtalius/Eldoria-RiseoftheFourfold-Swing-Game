@@ -16,8 +16,16 @@ import java.util.List;
 
 public class Spider extends Enemy {
     public Spider() {
+        this(1);
+    }
 
+    public Spider(int level) {
         super("Demon Spider", 500, 30, 0, 1, "Slime", 10, "SPIDER_IDLE", "Best web designer around");
+    }
+
+
+    @Override
+    protected void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "SPIDER_IDLE",
                 "Assets/Animations/Enemies/Spider/Idle/sprite_%d.png",
@@ -31,7 +39,6 @@ public class Spider extends Enemy {
                 4, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );
-//        initializeReactions();
     }
 
     @Override
@@ -39,7 +46,7 @@ public class Spider extends Enemy {
         SkillLogicConsumer spiderVenomLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = user.getBaseAtk();
 
-            Character target = Dice.pickRandom(targets);
+            Character target = Dice.getInstance().pickRandom(targets);
             LogManager.log(self.getActionLog(user, "uses", targets), LogColor.ENEMY_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("SPIDER_VENOM", target, () -> {
@@ -65,7 +72,7 @@ public class Spider extends Enemy {
     public void makeAttack(List<Character> targets, Runnable onSkillComplete) {
         // TODO: randomly select skill
         // TODO: add AI that checks if skill has enough mana or not
-        Skill skill = Dice.pickRandom(skills);
+        Skill skill = Dice.getInstance().pickRandom(skills);
         skill.execute(this, targets, onSkillComplete);
     }
 

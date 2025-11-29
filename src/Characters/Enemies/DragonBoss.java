@@ -1,6 +1,7 @@
 package Characters.Enemies;
 
 import Abilities.*;
+import Characters.Base.Boss;
 import Characters.Base.Enemy;
 import Characters.Character;
 import Core.Battle.TargetCondition;
@@ -14,10 +15,15 @@ import Resource.AssetManager;
 
 import java.util.List;
 
-public class DragonBoss extends Enemy {
+public class DragonBoss extends Boss {
 
     public DragonBoss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
-        super(name, initialHealth * (int)healthMultiplier, baseAtk, maxMana, level, type, rewardXP, "DRAGON_BOSS-IDLE", "boss of the level");
+        super(
+                name, initialHealth, baseAtk, maxMana, level, type, rewardXP,  healthMultiplier, "DRAGON_BOSS-IDLE", "boss of the level");
+    }
+
+    @Override
+    protected void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "DRAGON_BOSS-IDLE",
                 "Assets/Animations/Enemies/Boss/Dragon/Idle/sprite_%d.png",
