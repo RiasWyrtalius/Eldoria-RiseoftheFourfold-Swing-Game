@@ -6,6 +6,7 @@ import Abilities.Skill;
 import Core.Utils.Dice;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
+import Core.Visuals.VisualEffectsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ public abstract class Character {
     }
 
     public void takeDamage(int rawDamage, Character attacker, Skill incomingSkill) {
+//        VisualEffectsManager.getInstance().flashDamage(this);
         int finalDamage = processDamageReactions(attacker, incomingSkill, rawDamage);
 
         setHealth(this.health - finalDamage);
@@ -55,14 +57,10 @@ public abstract class Character {
             LogManager.log(this.name + " takes " + finalDamage + " damage.");
         }
 
-        // PHASE 2: Check for Death or Revival
         if (this.health <= 0) {
-            // Before we call die(), check if a reaction saves us!
             boolean wasSaved = processFatalReactions(attacker, incomingSkill);
 
-            // If NOT saved, then proceed to die
             if (!wasSaved) {
-                die();
                 if (attacker != null) {
                     onDefeat(attacker);
                 }

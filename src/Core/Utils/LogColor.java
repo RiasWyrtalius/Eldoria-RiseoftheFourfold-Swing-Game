@@ -34,4 +34,13 @@ public class LogColor {
     public static final Color VICTORY = new Color(255, 215, 0); // #FFD700
     public static final Color DEFEAT = new Color(66, 66, 66);
     public static final Color TIE = new Color(192, 192, 192);
+
+    public static final int ICON_SIZE = 100;
+    public static final Color HP_LOW = Color.RED;
+    public static final Color HP_MID = Color.YELLOW;
+    public static final Color HP_HIGH = Color.GREEN;
+    public static final Color MP = new Color(0, 150, 255);
+    public static final Color DEAD = Color.GRAY;
+    public static final Color OVERLAY_VALID = new Color(0, 255, 0, 50);
+    public static final Color OVERLAY_INVALID = new Color(0, 0, 0, 150);
 }

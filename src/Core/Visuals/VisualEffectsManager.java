@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
+import static Core.Utils.ImageUtils.tintImage;
+
 /**
  * Acts as a controller bridge between game state and the view's initialization logic
  */
@@ -320,6 +322,45 @@ public class VisualEffectsManager {
 
 
         LogManager.log("All active animation timers have been stopped.", java.awt.Color.BLUE);
+    }
+
+    public void applyStatusTint(JLabel displayLabel, String animationId, Color tintColor) {
+        Icon currentIcon = displayLabel.getIcon();
+
+        if (currentIcon instanceof ImageIcon) {
+            ImageIcon original = (ImageIcon) currentIcon;
+
+            Color transparentTint = new Color(
+                    tintColor.getRed(),
+                    tintColor.getGreen(),
+                    tintColor.getBlue(),
+                    120
+            );
+
+            ImageIcon tinted = tintImage(original, transparentTint);
+
+            displayLabel.setIcon(tinted);
+            displayLabel.repaint();
+        }
+    }
+
+    public void flashDamage(Character character) {
+        JLabel displayLabel = getDisplayComponent(character);
+        Icon original = displayLabel.getIcon();
+
+        Color damageColor = new Color(255, 0, 0, 200);
+        ImageIcon redIcon = tintImage((ImageIcon)original, damageColor);
+
+        displayLabel.setIcon(redIcon);
+        displayLabel.repaint();
+
+        Timer t = new Timer(100, e -> {
+            displayLabel.setIcon(original);
+            displayLabel.repaint();
+            ((Timer)e.getSource()).stop();
+        });
+        t.setRepeats(false);
+        t.start();
     }
 
     public void setMainView(BattleInterface mainView) {

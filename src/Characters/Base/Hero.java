@@ -50,18 +50,18 @@ public class Hero extends Character {
         int prev_mana = getMaxMana();
 
         int new_health = (int)(initialHealth + ((this.level) * 4) + (initialHealth * 0.05 * (this.level - 1)));
-        int new_mana = (int)(maxMana + ((this.level) * 2) + (maxMana * 0.009 * (this.level - 1)));
 
-        super.setInitialHealth(new_health);
-        super.setMaxMana(new_mana);
         // increase logs
         LogManager.log(this.name + " has leveled up to level " + this.level + "!");
-        LogManager.log(this.name + " Increase their health by " + getInitialHealth() + "!");
+        LogManager.log(this.name + " increased their health from " + getInitialHealth() + " to " + new_health + "!");
+        super.setInitialHealth(new_health);
         //if it stayed the same its redundant ignore
-        if(prev_mana ==  getMaxMana()){
+        int new_mana = (int)(maxMana + ((this.level) * 2) + (maxMana * 0.009 * (this.level - 1)));
+        if(prev_mana == new_mana){
             return;
         }
-        LogManager.log(this.name + " Increase their Mana by " + getMaxMana() + "!");
+        LogManager.log(this.name + " increased their Mana from " + getMaxMana() + " to " + new_mana + "!");
+        super.setMaxMana(new_mana);
     }
 
     public String regenerateTurnResources() {

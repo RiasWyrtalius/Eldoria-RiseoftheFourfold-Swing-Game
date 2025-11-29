@@ -2,6 +2,7 @@ package Core;
 
 import Abilities.Jobs.*;
 import Characters.Enemies.GolemBoss;
+import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Characters.Base.Hero;
 import Characters.Character;
@@ -15,13 +16,12 @@ import Core.GameFlow.Level;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
-import Items.Item;
-import Items.Rarity;
-import Items.ResourceItem;
+import Items.*;
 import UI.Views.BattleInterface;
 import UI.Views.MainMenu;
 
 import javax.swing.*;
+import java.util.List;
 
 public class GameManager {
     private BattleController battleController;
@@ -187,9 +187,9 @@ public class GameManager {
 //        heroParty.addPartyMember(ythan);
 //        heroParty.addPartyMember(erick);
 //        heroParty.addPartyMember(sammy);
-//        heroParty.addPartyMember(gianmeni);
-//        heroParty.addPartyMember(kervs);
-//        heroParty.addPartyMember(chaniy);
+        heroParty.addPartyMember(gianmeni);
+        heroParty.addPartyMember(kervs);
+        heroParty.addPartyMember(chaniy);
 //        heroParty.addPartyMember(elyi);
         heroParty.addPartyMember(antot);
 
@@ -217,6 +217,20 @@ public class GameManager {
                 TargetType.SINGLE_TARGET
         );
 
+        Item revivePotion = new UtilityItem(
+                "Revive Potion",
+                "Revive and restore 20HP to a selected target",
+                TargetType.SINGLE_TARGET,
+                TargetCondition.DEAD,
+                null,
+                Rarity.RARE,
+                (item, user, targets, onItemComplete) -> {
+                    user.setHealth(20);
+                }
+        );
+
+
+        heroParty.getInventory().addItem(revivePotion, 1);
         heroParty.getInventory().addItem(smallPotion, 3);
     }
 

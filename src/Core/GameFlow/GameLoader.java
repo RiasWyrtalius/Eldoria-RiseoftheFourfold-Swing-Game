@@ -47,7 +47,7 @@ public class GameLoader {
 
     // TODO: end level
     public void finishCampaign() {
-        LogManager.logHighlight("CAMPAIGN COMPLETE!", LogColor.VICTORY, 30);
+        LogManager.logHighlight("CAMPAIGN COMPLETE!", LogColor.VICTORY, 30, true);
         LogManager.log("You have cleared all stages!", LogColor.VICTORY);
     }
 }

@@ -39,10 +39,10 @@ public class BattleController {
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
-                LogManager.logHighlight("BATTLE", LogColor.BATTLE_HEADER, 60);
+                LogManager.logHighlight("BATTLE", LogColor.BATTLE_HEADER, 60, false);
                 Thread.sleep(500);
                 LogManager.clearHighlight();
-                LogManager.logHighlight("START!!", LogColor.BATTLE_HEADER, 60);
+                LogManager.logHighlight("START!!", LogColor.BATTLE_HEADER, 60, false);
                 Thread.sleep(500);
                 LogManager.clearHighlight();
 
@@ -250,17 +250,17 @@ public class BattleController {
         switch (result) {
             case VICTORY -> {
                 LogManager.log("VICTORY! " + heroParty.getPartyName() + " is Triumphant!", LogColor.VICTORY);
-                LogManager.logHighlight("VICTORY! Well Done!", LogColor.VICTORY, 40);
+                LogManager.logHighlight("VICTORY! Well Done!", LogColor.VICTORY, 40, true);
             }
             case DEFEAT -> {
                 LogManager.log("DEFEAT! " + enemyParty.getPartyName() + " has wiped " + heroParty.getPartyName() + " out!", LogColor.DEFEAT);
-                LogManager.logHighlight("DEFEAT! Game Over.", LogColor.DEFEAT, 40);
+                LogManager.logHighlight("DEFEAT! Game Over.", LogColor.DEFEAT, 40, true);
             }
             case TIE -> {
                 LogManager.log("TIE!: Truly everyone is dead and gone.", LogColor.TIE);
-                LogManager.logHighlight("TIE! Game Over. Truly no one wins in the end.", LogColor.TIE, 40);
+                LogManager.logHighlight("TIE! Game Over. Truly no one wins in the end.", LogColor.TIE, 40, true);
             }
-            default -> LogManager.logHighlight("Battle Ended.", LogColor.VICTORY, 40);
+            default -> LogManager.logHighlight("Battle Ended.", LogColor.VICTORY, 40, true);
         };
 
         VisualEffectsManager.getInstance().stopAllTimers();

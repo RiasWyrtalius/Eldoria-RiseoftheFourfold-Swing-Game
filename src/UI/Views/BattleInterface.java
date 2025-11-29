@@ -58,7 +58,6 @@ public class BattleInterface extends JFrame{
     private Skill selectedSkill = null;
     private List<Character> selectedTargets = new ArrayList<>();
     private Item selectedItem = null;
-    private int maxTargetsAllowed;
 
     private JPopupMenu targetConfirmMenu = new JPopupMenu();
 
@@ -179,6 +178,34 @@ public class BattleInterface extends JFrame{
         enemyPartyPanel4 = new CharacterStatusPanel(this);
     }
 
+    private void updateTargetHighlights(TargetCondition condition) {
+        processHighlightLoop(heroPartyPanels, condition);
+        processHighlightLoop(enemyPartyPanels, condition);
+    }
+
+    private void processHighlightLoop(List<JPanel> panels, TargetCondition condition) {
+        for (JPanel p : panels) {
+            CharacterStatusPanel panel = (CharacterStatusPanel) p;
+            Character c = panel.getCharacter();
+
+            if (c != null) {
+                boolean isValid = condition.isValid(c);
+                panel.setTargetAvailability(true, isValid);
+            } else {
+                // empty slot :))
+                panel.setTargetAvailability(true, false);
+            }
+        }
+    }
+
+    private void clearTargetHighlights() {
+        for (JPanel p : heroPartyPanels) {
+            ((CharacterStatusPanel) p).setTargetAvailability(false, false);
+        }
+        for (JPanel p : enemyPartyPanels) {
+            ((CharacterStatusPanel) p).setTargetAvailability(false, false);
+        }
+    }
 
     public void onCharacterPanelClick(Character clickedCharacter) {
 
@@ -186,19 +213,20 @@ public class BattleInterface extends JFrame{
 
         switch (currentMode) {
             case HERO_SELECT:
-                LogManager.log("SELECT HERO");
+//                LogManager.log("SELECT HERO");
                 if (clickedCharacter instanceof Hero) {
                     Hero hero = (Hero)clickedCharacter;
                     if (hero.isAlive() && !hero.isExhausted()) {
                         onHeroSelect(hero);
                     } else {
-                        LogManager.log(hero.getName() + " cannot start an action now.");
+                        LogManager.logHighlight(hero.getName() + " is exhausted", false);
                     }
-                } else LogManager.log("Enemy is Selected!");
+                }
+//                else LogManager.log("Enemy is Selected!");
                 break;
 
             case TARGET_SELECT:
-                LogManager.log("SELECT TARGET");
+//                LogManager.log("SELECT TARGET");
 
                 TargetType typeRule = null;
                 TargetCondition conditionRule = null;
@@ -227,7 +255,7 @@ public class BattleInterface extends JFrame{
                 if (selectedTargets.contains(clickedCharacter)) {
                     selectedTargets.remove(clickedCharacter);
                     panel.setSelectionOverlay(false);
-                    LogManager.log("Deselected " + clickedCharacter.getName());
+//                    LogManager.log("Deselected " + clickedCharacter.getName());
                 }
                 else {
                     // check selection limit
@@ -237,7 +265,7 @@ public class BattleInterface extends JFrame{
                                 " (" + selectedTargets.size() + "/" + typeRule.getMaxTargets() + ")");
                         panel.setSelectionOverlay(true);
                     } else {
-                        LogManager.log("Maximum targets reached (" + typeRule.getMaxTargets() + ").");
+                        LogManager.logHighlight("Maximum targets reached (" + typeRule.getMaxTargets() + ").", false);
                         // TODO: REPLACE FUNCTION?!!!
                     }
                 }
@@ -352,6 +380,8 @@ public class BattleInterface extends JFrame{
     public void onSkillSelect(Skill skill) {
         if (currentMode != BattleUIMode.SKILL_SELECT) return;
 
+        updateTargetHighlights(skill.getTargetCondition());
+
         this.selectedSkill = skill;
         this.currentMode = BattleUIMode.TARGET_SELECT;
         TargetType type = skill.getTargetType();
@@ -374,6 +404,8 @@ public class BattleInterface extends JFrame{
         this.selectedTargets.clear();
 
         TargetType type = item.getTargetType();
+
+        updateTargetHighlights(item.getTargetCondition());
 
         if (type == TargetType.NO_TARGETS) {
 //            if (activeHero != null) {
@@ -410,6 +442,7 @@ public class BattleInterface extends JFrame{
 
         hideTargetConfirmMenu();
         refreshUI();
+        clearTargetHighlights();
         clearAllSelectionOverlays();
     }
 

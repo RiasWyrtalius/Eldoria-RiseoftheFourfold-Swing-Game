@@ -52,7 +52,7 @@ public class Paladin extends JobClass {
                 defender.setHealth(revive_health);
                 defender.setMana(reset_mana);
                 hasRevived = true;
-                    VisualEffectsManager.getInstance().playAnimation("PALADIN_REVIVE", defender, () -> {
+                VisualEffectsManager.getInstance().playAnimation("PALADIN_REVIVE", defender, () -> {
                     LogManager.log(defender.getName() + " REVIVES", LogColor.HERO_ACTION);
                     }, true);
                 return 0;
@@ -68,29 +68,30 @@ public class Paladin extends JobClass {
     public List<Skill> createSkills() {
         SkillLogicConsumer healSelfLogic = (self, user, targets, onSkillComplete) -> {
             LogManager.log(self.getActionLog(user, " Heals", targets), LogColor.HERO_ACTION);
-
             int heal = ScalingLogic.calculateStat(user.getLevel(),20,10,0.05);
             int curr = user.getHealth();
 
-            user.setHealth(heal + curr);
-
-            VisualEffectsManager.getInstance().hideCharacterVisual(user);
-            VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_REVIVE", user, () -> {
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                }
-            }, true);
+//            if (user == targets.get(0)) {
+                VisualEffectsManager.getInstance().hideCharacterVisual(user);
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_REVIVE", targets.get(0), () -> {
+                    if (onSkillComplete != null) {
+                        onSkillComplete.run();
+                        VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+                        user.setHealth(heal + curr);
+                    }
+                }, true);
+//            } else {
+//                VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_REVIVE", hea, () -> {
+//
+//                });
+//            }
         };
-
-
 
         Skill HealSelf = new Skill(
                 "Self Heal", "Selfish Healing for themself", 10, 20,
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 healSelfLogic
         );
-
 
         return List.of(HealSelf);
     }

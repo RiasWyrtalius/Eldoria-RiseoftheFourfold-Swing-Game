@@ -50,7 +50,6 @@ public class Warrior extends JobClass {
         SkillLogicConsumer shieldBashLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,20,10,1.2,0.05);
             Character target = targets.get(0);
-            target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, " Bashes Shield on ", targets), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("WARRIOR_SHIELD-BASH", target, () -> {
@@ -65,7 +64,6 @@ public class Warrior extends JobClass {
         SkillLogicConsumer swordSlashLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,30,15,1.2,0.05);
             Character target = targets.get(0);
-            target.takeDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, " Slashes on ", targets), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("WARRIOR_SWORD-SLASH", target, () -> {

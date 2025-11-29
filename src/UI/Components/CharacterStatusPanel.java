@@ -22,49 +22,46 @@
         private final JLabel overlayDisplayLabel;
         private final JLabel iconDisplayLabel;
 
+        private static final int ICON_SIZE = 100;
+        private static final Border BORDER_SELECTED = BorderFactory.createLineBorder(new Color(255, 0, 0, 100), 3);
+        private static final Border BORDER_EMPTY = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+
         private JPanel iconPanel;
 
         public CharacterStatusPanel(BattleInterface parentInterface) {
             this.setOpaque(false);
+            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
             nameLabel = new JLabel("N/A - Lvl 0");
-            hpBar = new JProgressBar();
-            manaBar = new JProgressBar();
+            nameLabel = new JLabel("N/A - Lvl 0");
+            nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            nameLabel.setBorder(BORDER_EMPTY);
 
-            hpBar.setUI(new BasicProgressBarUI());
-            manaBar.setUI(new BasicProgressBarUI());
+            hpBar = createStyledBar();
+            manaBar = createStyledBar();
 
-            overlayDisplayLabel = new JLabel();
-            iconDisplayLabel = new JLabel();
+            overlayDisplayLabel = createIconLabel();
+            iconDisplayLabel = createIconLabel();
+
+//            overlayDisplayLabel = new JLabel();
+//            iconDisplayLabel = new JLabel();
 
             iconPanel = new JPanel();
-            iconPanel.setLayout(null); // makes it stack for some reason
+            iconPanel.setLayout(null);
             iconPanel.setOpaque(false);
-
-            final int ICON_SIZE = 100;
-
-            iconDisplayLabel.setBounds(0, 0, ICON_SIZE, ICON_SIZE);
-            overlayDisplayLabel.setBounds(0, 0, ICON_SIZE, ICON_SIZE);
-
             iconPanel.setPreferredSize(new Dimension(ICON_SIZE, ICON_SIZE));
 
-            MouseAdapter clickAdapter = attachListener(parentInterface);
-            this.addMouseListener(clickAdapter);
-
-            nameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
-            nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
-
-            overlayDisplayLabel.setOpaque(false);
-            overlayDisplayLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            iconDisplayLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-            iconPanel.add(iconDisplayLabel);
             iconPanel.add(overlayDisplayLabel);
-            iconPanel.addMouseListener(clickAdapter);
+            iconPanel.add(iconDisplayLabel);
 
-            nameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            hpBar.setStringPainted(true);
+            iconPanel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (character != null) {
+                        parentInterface.onCharacterPanelClick(character);
+                    }
+                }
+            });
 
             add(nameLabel);
             add(hpBar);
@@ -72,41 +69,45 @@
             add(iconPanel);
         }
 
-        private MouseAdapter attachListener(BattleInterface parentInterface) {
-            return new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (character != null) {
-                        parentInterface.onCharacterPanelClick(character);
-                    }
-                }
-            };
+        private JProgressBar createStyledBar() {
+            JProgressBar bar = new JProgressBar();
+            bar.setUI(new BasicProgressBarUI());
+            bar.setStringPainted(true);
+            return bar;
+        }
+
+        private JLabel createIconLabel() {
+            JLabel label = new JLabel();
+            label.setBounds(0, 0, ICON_SIZE, ICON_SIZE);
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+            return label;
         }
 
         public void setCharacterData(Character character) {
             if (character == null) {
                 this.setVisible(false);
+                // stop animations and clear icon
                 getIconDisplayLabel().setIcon(null);
-
                 this.setToolTipText(null);
-
                 return;
             }
+
+
             if (!character.isAlive()) {
                 hpBar.setVisible(false);
                 manaBar.setVisible(false);
-                return;
             } else {
                 hpBar.setVisible(true);
                 manaBar.setVisible(true);
             }
-            if (character.getMaxMana() <= 0)
+            if (character.getMaxMana() <= 0) {
                 manaBar.setVisible(false);
+                manaBar.setString("");
+            }
             else {
                 manaBar.setVisible(true);
 
                 manaBar.setStringPainted(true);
-
                 manaBar.setMaximum(character.getMaxMana());
                 manaBar.setValue(character.getMana());
                 manaBar.setString("mp " + character.getMana() + "/" + character.getMaxMana());
@@ -134,8 +135,6 @@
         }
 
         private Color barState(int current, int max) {
-            if (max == 0) return Color.GRAY;
-
             double percentage = (double) current / max;
 
             if (percentage >= 0.5) return Color.GREEN;
@@ -143,15 +142,41 @@
             else return Color.RED;
         }
 
+        public void setTargetAvailability(boolean isTargetingMode, boolean isValidTarget) {
+            if (!isTargetingMode) {
+                this.setCursor(Cursor.getDefaultCursor());
+                overlayDisplayLabel.setBackground(null);
+                overlayDisplayLabel.setOpaque(false);
+                return;
+            }
+
+            if (isValidTarget) {
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+                // TODO: dd a faint green glow
+                overlayDisplayLabel.setBackground(new Color(0, 100, 0, 100));
+                overlayDisplayLabel.setOpaque(true);
+            } else {
+                this.setCursor(Cursor.getDefaultCursor());
+
+                // Dim effect using a semi-transparent black overlay
+                overlayDisplayLabel.setBackground(new Color(0, 0, 0, 150));
+                overlayDisplayLabel.setOpaque(true);
+            }
+
+            this.repaint();
+        }
+
         public void setSelectionOverlay(boolean isSelected) {
             if (isSelected) {
                 Color semiTransparentRed = new Color(255, 0, 0, 100);
-                Border lineBorder = BorderFactory.createLineBorder(semiTransparentRed, 1);
-                iconDisplayLabel.setBorder(lineBorder);
+                overlayDisplayLabel.setBackground(semiTransparentRed);
+                overlayDisplayLabel.setOpaque(true);
             } else {
-                iconDisplayLabel.setBorder(null);
+                overlayDisplayLabel.setBackground(null);
+                overlayDisplayLabel.setOpaque(false);
             }
-            iconDisplayLabel.repaint();
+            overlayDisplayLabel.repaint();
         }
 
         public Character getCharacter() {
