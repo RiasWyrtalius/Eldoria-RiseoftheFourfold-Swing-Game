@@ -78,6 +78,18 @@ public class GameManager {
 
             }
         };
+        Rogue rogue = new Rogue();
+        Character elyi = new Hero("Ely",80,50,100,1,rogue,"WARRIOR_IDLE"){
+            @Override
+            protected void onDeath() {
+
+            }
+
+            @Override
+            protected void onDefeat(Character defeatedTarget) {
+
+            }
+        };
 
         FireMage fireMage = new FireMage();
         Character chaniy = new Hero("Chaniy the doubter",100,60,120,1,fireMage,"MAGE_IDLE"){
@@ -145,16 +157,27 @@ public class GameManager {
         };
 
         AeroMancer aeoroMancer = new AeroMancer();
-        Character kervs = new Hero("Kurtis", 100, 60, 120, 1, aeoroMancer, "MAGE_WIND-IDLE");
+        Character kervs = new Hero("Kurtis", 100, 60, 120, 1, aeoroMancer, "MAGE_WIND-IDLE"){
+            @Override
+            protected void onDeath() {
+
+            }
+
+            @Override
+            protected void onDefeat(Character defeatedTarget) {
+
+            }
+        };
 
 //        TODO: add max amount of party members
 //        heroParty.addPartyMember(charlie);
 //        heroParty.addPartyMember(ythan);
-//        heroParty.addPartyMember(erick);
+        heroParty.addPartyMember(erick);
 //        heroParty.addPartyMember(sammy);
-//        heroParty.addPartyMember(gianmeni);
-        heroParty.addPartyMember(kervs);
+        heroParty.addPartyMember(gianmeni);
+//        heroParty.addPartyMember(kervs);
 //        heroParty.addPartyMember(chaniy);
+        heroParty.addPartyMember(elyi);
 
         //TEMPORARY ENEMY SETUP
         enemyParty = new Party("Swarm of Goblins");
