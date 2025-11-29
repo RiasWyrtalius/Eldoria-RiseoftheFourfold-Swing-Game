@@ -32,7 +32,13 @@ public class Paladin extends JobClass {
         AssetManager.getInstance().registerAnimation(
                 "PALADIN_REVIVE",
                 "Assets/Animations/Heroes/Paladin/Effects/Revive/sprite_%d.png",
-                9, 100, 100 , 300,
+                9, 100, 100 , 500,
+                AnimationLoopType.ONE_CYCLE
+        );
+        AssetManager.getInstance().registerAnimation(
+                "PALADIN_HOLY-STRIKE",
+                "Assets/Animations/Heroes/Paladin/Effects/Holy_Strike/sprite_%d.png",
+                4, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );
 
@@ -71,20 +77,31 @@ public class Paladin extends JobClass {
             int heal = ScalingLogic.calculateStat(user.getLevel(),20,10,0.05);
             int curr = user.getHealth();
 
-//            if (user == targets.get(0)) {
+
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);
-                VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_REVIVE", targets.get(0), () -> {
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_REVIVE", targets.getFirst(), () -> {
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
                         VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                         user.setHealth(heal + curr);
                     }
                 }, true);
-//            } else {
-//                VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_REVIVE", hea, () -> {
-//
-//                });
-//            }
+        };
+
+        SkillLogicConsumer holyStrikeLogic = (self, user, targets, onSkillComplete) -> {
+            int dmg = ScalingLogic.calculateStat(user.getLevel(),30,20,0.05);
+            LogManager.log(self.getActionLog(user, "Strikes", targets), LogColor.HERO_ACTION);
+
+            Character target = targets.getFirst();
+
+                VisualEffectsManager.getInstance().hideCharacterVisual(user);
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_HOLY-STRIKE", target, () -> {
+                    target.takeDamage(dmg, user, self);
+                    if (onSkillComplete != null) {
+                        onSkillComplete.run();
+                        VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+                    }
+                }, true);
         };
 
         Skill HealSelf = new Skill(
@@ -92,8 +109,14 @@ public class Paladin extends JobClass {
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 healSelfLogic
         );
+        Skill HolyStrike = new Skill(
+                "Holy Strike", "Righteousness as a Sword Strike", 30, 30,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
+                holyStrikeLogic
+        );
 
-        return List.of(HealSelf);
+        return List.of(HolyStrike,HealSelf);
+
     }
 
     @Override public String getPreviewImagePath() { return IDLE_PATH; }
