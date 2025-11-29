@@ -13,13 +13,13 @@ import Resource.AssetManager;
 
 import java.util.List;
 
-public class Boss extends Enemy {
+public class DragonBoss extends Enemy {
 
-    public Boss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
-        super(name, initialHealth * (int)healthMultiplier, baseAtk, maxMana, level, type, rewardXP, "BOSS_IDLE", "boss of the level");
+    public DragonBoss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
+        super(name, initialHealth * (int)healthMultiplier, baseAtk, maxMana, level, type, rewardXP, "DRAGON_BOSS-IDLE", "boss of the level");
         AssetManager.getInstance().registerAnimation(
-                "BOSS_IDLE",
-                "Assets/Animations/Enemies/BOSS/Idle/sprite_%d.png",
+                "DRAGON_BOSS-IDLE",
+                "Assets/Animations/Enemies/Boss/Dragon/Idle/sprite_%d.png",
                 3, 100, 100 , 320,
                 AnimationLoopType.INFINITE
         );
@@ -39,7 +39,7 @@ public class Boss extends Enemy {
             }
 
             if (weakTarget == null && !targets.isEmpty()) {
-                weakTarget = targets.get(0);
+                weakTarget = targets.getFirst();
             }
 
             if (weakTarget != null) {
@@ -89,7 +89,7 @@ public class Boss extends Enemy {
     @Override
     protected void onDeath() {
         super.onDeath();
-        VisualEffectsManager.getInstance().pauseAnimation("BOSS_IDLE");
+        VisualEffectsManager.getInstance().pauseAnimation("DRAGON_BOSS-IDLE");
 //        VisualEffectsManager.getInstance().hideCharacterVisual(this);
     }
 

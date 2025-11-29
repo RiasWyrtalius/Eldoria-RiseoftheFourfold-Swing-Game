@@ -1,10 +1,11 @@
 package Core;
 
 import Abilities.Jobs.*;
+import Characters.Enemies.GolemBoss;
 import Core.Battle.TargetType;
 import Characters.Base.Hero;
 import Characters.Character;
-import Characters.Enemies.Boss;
+import Characters.Enemies.DragonBoss;
 import Characters.Enemies.Goblin;
 import Characters.Enemies.Slime;
 import Characters.Party;
@@ -195,11 +196,13 @@ public class GameManager {
         //TEMPORARY ENEMY SETUP
         enemyParty = new Party("Swarm of Goblins");
         Goblin goblin_1 = new Goblin();
-        Boss boss = new Boss("Serato The Destroyer" , 20,10,200,1,"Boss",200,3);
+        DragonBoss dragonBoss = new DragonBoss("Serato The Destroyer" , 20,10,200,1,"Boss",200,3);
         Slime slime_1 = new Slime();
+        GolemBoss golemBoss = new GolemBoss("Chanie the breaker of worlds", 30, 10 ,200,1,"Golem Boss",200,3);
         enemyParty.addPartyMember(goblin_1);
-        enemyParty.addPartyMember(boss);
+        enemyParty.addPartyMember(dragonBoss);
         enemyParty.addPartyMember(slime_1);
+        enemyParty.addPartyMember(golemBoss);
 
         createStartingItems();
     }

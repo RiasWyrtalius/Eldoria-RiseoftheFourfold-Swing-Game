@@ -53,7 +53,8 @@ public class Goblin extends Enemy {
         };
 
         SkillLogicConsumer throwCoinsLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = user.getBaseAtk();
+            int coins = Dice.roll(1,5);
+            int calculateDamage = (int)(user.getBaseAtk() + (getLevel() * 0.2) * coins);
 
             Character target = Dice.pickRandom(targets);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.ENEMY_ACTION);
