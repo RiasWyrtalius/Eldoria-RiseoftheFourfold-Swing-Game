@@ -7,6 +7,7 @@ import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
+import Core.Utils.ScalingLogic;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
@@ -43,7 +44,7 @@ public class DragonBoss extends Enemy {
             }
 
             if (weakTarget != null) {
-                int calculateDamage = user.getBaseAtk();
+                int calculateDamage = ScalingLogic.calculateDamage(user,(int)(baseAtk * 1.5),0.4,0.1);
                 LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget)), LogColor.ENEMY_ACTION);
                 weakTarget.takeDamage(calculateDamage, user, self);
             }
@@ -60,7 +61,7 @@ public class DragonBoss extends Enemy {
         );
 
         SkillLogicConsumer devastatingStrikeLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (int) (user.getBaseAtk() * 1.5);
+            int calculateDamage = ScalingLogic.calculateDamage(user,(int)(baseAtk * 1.25),0.2,0.2);
 
             LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogColor.ENEMY_ACTION);
 

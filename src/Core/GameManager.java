@@ -145,7 +145,7 @@ public class GameManager {
         };
 
         Cleric cleric = new Cleric();
-        Character erick = new Hero("Erick the cleric", 100, 60, 120, 1, cleric, "CLERIC_IDLE") {
+        Character erick = new Hero("Erick the cleric", 1000, 60, 120, 1, cleric, "CLERIC_IDLE") {
             @Override
             protected void onDeath() {
 
@@ -158,7 +158,7 @@ public class GameManager {
         };
 
         Archer archer = new Archer();
-        Character gianmeni = new Hero("Gian Meni",80,70,100,1,archer,"ARCHER_IDLE"){
+        Character gianmeni = new Hero("Gian Meni",40,70,100,1,archer,"ARCHER_IDLE"){
             @Override
             protected void onDeath() {
 
@@ -184,15 +184,15 @@ public class GameManager {
         };
 
 //        TODO: add max amount of party members
-        heroParty.addPartyMember(charlie);
-        heroParty.addPartyMember(ythan);
-//        heroParty.addPartyMember(erick);
+//        heroParty.addPartyMember(charlie);
+//        heroParty.addPartyMember(ythan);
+        heroParty.addPartyMember(erick);
 //        heroParty.addPartyMember(sammy);
         heroParty.addPartyMember(gianmeni);
 //        heroParty.addPartyMember(kervs);
 //        heroParty.addPartyMember(chaniy);
 //        heroParty.addPartyMember(elyi);
-        heroParty.addPartyMember(antot);
+//        heroParty.addPartyMember(antot);
 
         //TEMPORARY ENEMY SETUP
         enemyParty = new Party("Swarm of Goblins");
@@ -214,7 +214,7 @@ public class GameManager {
                 "Restores 50 HP to a selected target",
                 null,
                 Rarity.COMMON,
-                50,0,
+                (int) 1.10,0,
                 TargetType.SINGLE_TARGET
         );
 

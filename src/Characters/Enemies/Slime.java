@@ -17,7 +17,7 @@ import java.util.List;
 public class Slime extends Enemy {
     public Slime() {
 
-        super("Demon Slime", 500, 30, 0, 1, "Slime", 10, "SLIME_IDLE", "Slimes around");
+        super("Demon Slime", 500, 30, 0, 1, "Slime", 30, "SLIME_IDLE", "Slimes around");
         AssetManager.getInstance().registerAnimation(
                 "SLIME_IDLE",
                 "Assets/Animations/Enemies/Slime/Idle/sprite_%d.png",

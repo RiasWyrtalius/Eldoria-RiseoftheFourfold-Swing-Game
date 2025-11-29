@@ -8,6 +8,7 @@ import Core.Battle.TargetType;
 import Core.Utils.Dice;
 import Core.Utils.LogColor;
 import Core.Utils.LogManager;
+import Core.Utils.ScalingLogic;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
@@ -17,7 +18,7 @@ import java.util.List;
 public class Goblin extends Enemy {
     public Goblin() {
 
-        super("Goblin Grunt", 500, 30, 0, 1, "Goblin", 10, "GOBLIN_IDLE", "Steals stuff and kills stuff.");
+        super("Goblin Grunt", 500, 30, 0, 1, "Goblin", 50, "GOBLIN_IDLE", "Steals stuff and kills stuff.");
         AssetManager.getInstance().registerAnimation(
                 "GOBLIN_IDLE",
                 "Assets/Animations/Enemies/Goblin/Idle/sprite_%d.png",
@@ -37,7 +38,7 @@ public class Goblin extends Enemy {
     @Override
     protected void initializeSkills() {
         SkillLogicConsumer skirmishLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = user.getBaseAtk();
+            int calculateDamage = ScalingLogic.calculateDamage(user,baseAtk,0.2,0.1);
 
             Character target = Dice.pickRandom(targets);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.ENEMY_ACTION);
@@ -54,7 +55,7 @@ public class Goblin extends Enemy {
 
         SkillLogicConsumer throwCoinsLogic = (self, user, targets, onSkillComplete) -> {
             int coins = Dice.roll(1,5);
-            int calculateDamage = (int)(user.getBaseAtk() + (getLevel() * 0.2) * coins);
+            int calculateDamage = ScalingLogic.calculateDamage(user,baseAtk,0.2,0.1) * coins;
 
             Character target = Dice.pickRandom(targets);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.ENEMY_ACTION);

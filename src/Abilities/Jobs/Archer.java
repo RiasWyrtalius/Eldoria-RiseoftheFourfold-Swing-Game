@@ -50,9 +50,15 @@ public class Archer extends JobClass {
                 5, 100, 100 , 70,
                 AnimationLoopType.TWO_CYCLES
         );
+        AssetManager.getInstance().registerAnimation(
+                "ARCHER_DEATH",
+                "Assets/Animations/Heroes/Archer/Death/sprite_%d.png",
+                1, 100, 100 , 500,
+                AnimationLoopType.INFINITE
+        );
     }
 
-    // dodges if less than 80 percent of health
+    // dodges if less than 60 percent of health
     // TODO: account for animation completion
     @Override
     public List<ReactionSkill> createReactions() {
@@ -68,7 +74,19 @@ public class Archer extends JobClass {
 
         ReactionSkill dodge = new ReactionSkill("Dodge", ReactionTrigger.ON_RECIEVE_DAMAGE, dodgeLogic);
 
+//        ReactionLogic deathLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+//            if (defender.getHealth() == 0) {
+//                VisualEffectsManager.getInstance().playAnimation("ARCHER_DEATH", defender, () -> {
+//
+//                }, true);
+//                return 0;
+//            }
+//            return -1;
+//        };
+//
+//        ReactionSkill death = new ReactionSkill("Death", ReactionTrigger.ON_FATAL_DAMAGE, deathLogic);
         return List.of(dodge);
+
     }
 
     public List<Skill> createSkills() {
@@ -86,7 +104,7 @@ public class Archer extends JobClass {
 
         SkillLogicConsumer heavyArrowLogic = (self, user, targets, onSkillComplete) -> {
             int dmg = ScalingLogic.calculateDamage(user, 40, 20, 1.2, 0.05);
-            Character target = targets.get(0);
+            Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, "Pulls their bow the hardest they can to release", targets), LogColor.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW", user, () -> {
                 target.takeDamage(dmg, user, self);
