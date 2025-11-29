@@ -91,7 +91,6 @@ public class BattleController {
             this.mainView.refreshUI();
     }
 
-
     public void executeItemActionFromUI(Item item, List<Character> targets) {
         LogManager.log("sfsufhufh");
         if (!isBattleActive) return;
