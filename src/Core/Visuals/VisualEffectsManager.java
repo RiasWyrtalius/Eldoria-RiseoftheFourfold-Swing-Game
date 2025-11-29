@@ -386,6 +386,46 @@ public class VisualEffectsManager {
         t.start();
     }
 
+    public void reviveEffect(Character character) {
+        if (character == null) return;
+
+        JLabel displayLabel = getDisplayComponent(character);
+        if (displayLabel == null) return;
+
+        Icon original = displayLabel.getIcon();
+        if (original == null || !(original instanceof ImageIcon)) {
+            return;
+        }
+
+        int r = 255;
+        int g = 255;
+        int b = 200;
+
+        int startAlpha = 200;
+        int fadeSpeed = 10;
+        int delayMs = 40;
+
+        final int[] currentAlpha = {startAlpha};
+
+        Timer timer = new Timer(delayMs, null);
+        timer.addActionListener(e -> {
+            currentAlpha[0] -= fadeSpeed;
+
+            if (currentAlpha[0] <= 0) {
+                displayLabel.setIcon(original);
+                displayLabel.repaint();
+                ((Timer)e.getSource()).stop();
+            } else {
+                Color tintColor = new Color(r, g, b, currentAlpha[0]);
+
+                ImageIcon tintedIcon = Core.Utils.ImageUtils.tintImage((ImageIcon) original, tintColor);
+                displayLabel.setIcon(tintedIcon);
+                displayLabel.repaint();
+            }
+        });
+
+        timer.start();
+    }
     public void setMainView(BattleInterface mainView) {
         this.mainView = mainView;
     }

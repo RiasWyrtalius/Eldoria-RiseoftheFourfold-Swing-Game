@@ -184,12 +184,12 @@ public class GameManager {
 
 //        TODO: add max amount of party members
         heroParty.addPartyMember(charlie);
-//        heroParty.addPartyMember(ythan);
+        heroParty.addPartyMember(ythan);
 //        heroParty.addPartyMember(erick);
 //        heroParty.addPartyMember(sammy);
         heroParty.addPartyMember(gianmeni);
-        heroParty.addPartyMember(kervs);
-        heroParty.addPartyMember(chaniy);
+//        heroParty.addPartyMember(kervs);
+//        heroParty.addPartyMember(chaniy);
 //        heroParty.addPartyMember(elyi);
         heroParty.addPartyMember(antot);
 
@@ -225,7 +225,8 @@ public class GameManager {
                 null,
                 Rarity.RARE,
                 (item, user, targets, onItemComplete) -> {
-                    user.setHealth(20);
+                    VisualEffectsManager.getInstance().reviveEffect(targets.get(0));
+                    targets.get(0).setHealth(20);
                 }
         );
 

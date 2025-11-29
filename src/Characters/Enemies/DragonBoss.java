@@ -89,7 +89,7 @@ public class DragonBoss extends Enemy {
     @Override
     protected void onDeath() {
         super.onDeath();
-        VisualEffectsManager.getInstance().pauseAnimation("DRAGON_BOSS-IDLE");
+//        VisualEffectsManager.getInstance().pauseAnimation("DRAGON_BOSS-IDLE");
 //        VisualEffectsManager.getInstance().hideCharacterVisual(this);
     }
 
