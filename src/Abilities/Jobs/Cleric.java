@@ -78,6 +78,23 @@ public class Cleric extends JobClass {
             }, true);
         };
 
+        SkillLogicConsumer reviveLogic = (self, user, targets, onSkillComplete) -> {
+            Character target = targets.getFirst();
+
+            int revive_health= (int)(target.getInitialHealth() * 0.30);
+            int reset_mana= (int)(target.getMaxMana() * 0.50);
+            VisualEffectsManager.getInstance().hideCharacterVisual(user);
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("CLERIC_HEAL", user, () -> {
+                target.setHealth(revive_health);
+                target.setMana(reset_mana);
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+                }
+            }, true);
+
+        };
+
         SkillLogicConsumer BashLogic = (self, user, targets, onSkillComplete) -> {
             Character target = targets.getFirst();
 

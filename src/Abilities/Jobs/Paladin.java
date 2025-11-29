@@ -49,19 +49,17 @@ public class Paladin extends JobClass {
             int revive_health= (int)(defender.getInitialHealth() * 0.30);
             int reset_mana= (int)(defender.getMaxMana() * 0.50);
             if (hp_percent <= 0 && !hasRevived) {
-
                 defender.setHealth(revive_health);
                 defender.setMana(reset_mana);
                 hasRevived = true;
                     VisualEffectsManager.getInstance().playAnimation("PALADIN_REVIVE", defender, () -> {
-                    LogManager.log(defender.getName() + "REVIVES", LogColor.HERO_ACTION);
-
+                    LogManager.log(defender.getName() + " REVIVES", LogColor.HERO_ACTION);
                     }, true);
                 return 0;
             }
             return -1;
         };
-        ReactionSkill Revive = new ReactionSkill("Revive", ReviveLogic);
+        ReactionSkill Revive = new ReactionSkill("Revive", ReactionTrigger.ON_FATAL_DAMAGE, ReviveLogic);
         return List.of(Revive);
     }
 
