@@ -90,6 +90,21 @@ public class Cleric extends JobClass {
 
         };
 
+        SkillLogicConsumer reviveLogic = (self, user, targets, onSkillComplete) -> {
+            Character target = targets.getFirst();
+
+            int revive_health= (int)(target.getInitialHealth() * 0.20);
+            VisualEffectsManager.getInstance().hideCharacterVisual(user);
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("CLERIC_HEAL", user, () -> {
+                target.setHealth(revive_health);
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+                }
+            }, true);
+
+        };
+
 
 
 
@@ -108,8 +123,14 @@ public class Cleric extends JobClass {
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 BashLogic
         );
+        Skill Revive = new Skill(
+                "Revive", "Revive their teammate", 40, 0,
+                SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.DEAD,
+                reviveLogic
+        );
 
-        return List.of(HealSelf,HealGroup,BashStaff);
+
+        return List.of(HealSelf,HealGroup,BashStaff,Revive);
     }
 
     @Override public String getPreviewImagePath() { return IDLE_PATH; }
