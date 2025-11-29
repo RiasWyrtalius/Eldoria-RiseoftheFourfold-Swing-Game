@@ -96,6 +96,7 @@
             if (!character.isAlive()) {
                 hpBar.setVisible(false);
                 manaBar.setVisible(false);
+                manaBar.setString("");
             } else {
                 hpBar.setVisible(true);
                 manaBar.setVisible(true);

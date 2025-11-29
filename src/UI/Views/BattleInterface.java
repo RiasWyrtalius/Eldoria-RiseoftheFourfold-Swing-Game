@@ -94,7 +94,7 @@ public class BattleInterface extends JFrame{
     public void listenerInit() {
         if (endTurnButton != null) {
             endTurnButton.addActionListener(e -> {
-//                resetSelectionState();
+                resetSelectionState();
                 battleController.endHeroPhaseManually();
                 refreshUI();
             });
