@@ -345,21 +345,44 @@ public class VisualEffectsManager {
     }
 
     public void flashDamage(Character character) {
+        if (character == null) return;
+
         JLabel displayLabel = getDisplayComponent(character);
+        if (displayLabel == null) return;
+
         Icon original = displayLabel.getIcon();
+        if (!(original instanceof ImageIcon)) return;
 
         Color damageColor = new Color(255, 0, 0, 200);
-        ImageIcon redIcon = tintImage((ImageIcon)original, damageColor);
+        ImageIcon redIcon = Core.Utils.ImageUtils.tintImage((ImageIcon) original, damageColor);
+
+        int delayMs = 100;
+
+        final int[] tick = {0};
 
         displayLabel.setIcon(redIcon);
         displayLabel.repaint();
 
-        Timer t = new Timer(100, e -> {
-            displayLabel.setIcon(original);
+        Timer t = new Timer(delayMs, null);
+        t.addActionListener(e -> {
+            tick[0]++;
+
+            if (tick[0] == 1) {
+                displayLabel.setIcon((ImageIcon) original);
+            }
+            else if (tick[0] == 2) {
+                displayLabel.setIcon(redIcon);
+            }
+            else if (tick[0] >= 3) {
+                displayLabel.setIcon((ImageIcon) original);
+                displayLabel.repaint();
+                ((Timer)e.getSource()).stop();
+                return;
+            }
+
             displayLabel.repaint();
-            ((Timer)e.getSource()).stop();
         });
-        t.setRepeats(false);
+
         t.start();
     }
 

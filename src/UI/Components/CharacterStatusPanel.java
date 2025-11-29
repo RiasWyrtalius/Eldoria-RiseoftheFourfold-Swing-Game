@@ -23,8 +23,6 @@
         private final JLabel iconDisplayLabel;
 
         private static final int ICON_SIZE = 100;
-        private static final Border BORDER_SELECTED = BorderFactory.createLineBorder(new Color(255, 0, 0, 100), 3);
-        private static final Border BORDER_EMPTY = BorderFactory.createEmptyBorder(5, 5, 5, 5);
 
         private JPanel iconPanel;
 
@@ -35,16 +33,12 @@
             nameLabel = new JLabel("N/A - Lvl 0");
             nameLabel = new JLabel("N/A - Lvl 0");
             nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
-            nameLabel.setBorder(BORDER_EMPTY);
 
             hpBar = createStyledBar();
             manaBar = createStyledBar();
 
             overlayDisplayLabel = createIconLabel();
             iconDisplayLabel = createIconLabel();
-
-//            overlayDisplayLabel = new JLabel();
-//            iconDisplayLabel = new JLabel();
 
             iconPanel = new JPanel();
             iconPanel.setLayout(null);

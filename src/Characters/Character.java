@@ -46,7 +46,6 @@ public abstract class Character {
     }
 
     public void takeDamage(int rawDamage, Character attacker, Skill incomingSkill) {
-//        VisualEffectsManager.getInstance().flashDamage(this);
         int finalDamage = processDamageReactions(attacker, incomingSkill, rawDamage);
 
         setHealth(this.health - finalDamage);
@@ -135,14 +134,16 @@ public abstract class Character {
 
     protected int processDamageReactions(Character attacker, Skill incomingSkill, int incomingDamage) {
         int currentDamage = incomingDamage;
+        VisualEffectsManager.getInstance().flashDamage(this);
 
         for (ReactionSkill reaction : reactions) {
             if (reaction.trigger() == ReactionTrigger.ON_RECIEVE_DAMAGE) {
                 int result = reaction.logic().tryReact(this, attacker, incomingSkill, incomingDamage);
+                // TODO: what about other chain reactions
                 if (result != -1) {
                     currentDamage = result;
-                    // TODO: what about other chain reactions
-                    if (result == 0) break; // negates all damage
+                    if (result > 0) {
+                    } else break;
                 }
             }
         }
