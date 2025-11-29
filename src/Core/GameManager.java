@@ -67,7 +67,19 @@ public class GameManager {
         //TEMPORARY HERO SETUP
         heroParty = new Party("The Godslayers");
         Warrior warrior = new Warrior();
-        Character charlie = new Hero("Charlie",150,50,100,1,warrior,"WARRIOR_IDLE"){
+        Character charlie = new Hero("Charlie",1500,50,100,1,warrior,"WARRIOR_IDLE"){
+            @Override
+            protected void onDeath() {
+
+            }
+
+            @Override
+            protected void onDefeat(Character defeatedTarget) {
+
+            }
+        };
+        Paladin paladin = new Paladin();
+        Character antot = new Hero("Antot",150,50,100,1,paladin,"PALADIN_IDLE"){
             @Override
             protected void onDeath() {
 
@@ -173,11 +185,12 @@ public class GameManager {
         heroParty.addPartyMember(charlie);
 //        heroParty.addPartyMember(ythan);
 //        heroParty.addPartyMember(erick);
-        heroParty.addPartyMember(sammy);
-        heroParty.addPartyMember(gianmeni);
-        heroParty.addPartyMember(kervs);
+//        heroParty.addPartyMember(sammy);
+//        heroParty.addPartyMember(gianmeni);
+//        heroParty.addPartyMember(kervs);
 //        heroParty.addPartyMember(chaniy);
-        heroParty.addPartyMember(elyi);
+//        heroParty.addPartyMember(elyi);
+        heroParty.addPartyMember(antot);
 
         //TEMPORARY ENEMY SETUP
         enemyParty = new Party("Swarm of Goblins");
