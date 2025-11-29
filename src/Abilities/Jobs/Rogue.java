@@ -33,7 +33,7 @@ public class Rogue extends JobClass{
         public List<ReactionSkill> createReactions() {
             ReactionLogic dodgeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
                 double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
-                if (Dice.chance(0.55) && hp_percent < 0.98) {
+                if (Dice.chance(0.60) && hp_percent < 0.98) {
 //                    VisualEffectsManager.getInstance().playAnimation("ARCHER_DODGE", defender, () -> {
                         LogManager.log(defender.getName() + " Skillfully dodges the attack!", LogColor.ENEMY_ACTION);
 

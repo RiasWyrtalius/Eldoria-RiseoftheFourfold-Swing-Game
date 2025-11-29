@@ -48,7 +48,7 @@ public class Paladin extends JobClass {
             }
             int revive_health= (int)(defender.getInitialHealth() * 0.30);
             int reset_mana= (int)(defender.getMaxMana() * 0.50);
-            if (hp_percent <= 0 && !hasRevived) {
+            if (Dice.chance(0.75) && hp_percent <= 0 && !hasRevived) {
                 defender.setHealth(revive_health);
                 defender.setMana(reset_mana);
                 hasRevived = true;
@@ -59,7 +59,9 @@ public class Paladin extends JobClass {
             }
             return -1;
         };
+
         ReactionSkill Revive = new ReactionSkill("Revive", ReactionTrigger.ON_FATAL_DAMAGE, ReviveLogic);
+
         return List.of(Revive);
     }
 
@@ -67,7 +69,7 @@ public class Paladin extends JobClass {
         SkillLogicConsumer healSelfLogic = (self, user, targets, onSkillComplete) -> {
             LogManager.log(self.getActionLog(user, " Heals", targets), LogColor.HERO_ACTION);
 
-            int heal = ScalingLogic.calculateStat(user.getLevel(),30,10,0.05);
+            int heal = ScalingLogic.calculateStat(user.getLevel(),20,10,0.05);
             int curr = user.getHealth();
 
             user.setHealth(heal + curr);
