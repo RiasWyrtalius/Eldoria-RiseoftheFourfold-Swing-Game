@@ -27,12 +27,11 @@ public record Level(
             Party party = new Party(levelName + " Enemies");
 
             Random localRng = new Random(levelSeed);
-            int count = Dice.getInstance().roll(minEnemies, maxEnemies);
+            int count = Dice.getInstance().roll(minEnemies, maxEnemies, localRng);
 
             // TODO: deal with this cast
             for (int i = 0; i < count; i++) {
-                Function<Integer, Enemy> spawner = Dice.getInstance().pickRandom(enemyGenerators);
-
+                Function<Integer, Enemy> spawner = Dice.getInstance().pickRandom(enemyGenerators, localRng);
                 if (spawner != null) {
                     Enemy enemy = spawner.apply(this.levelNumber);
                     party.addPartyMember(enemy);

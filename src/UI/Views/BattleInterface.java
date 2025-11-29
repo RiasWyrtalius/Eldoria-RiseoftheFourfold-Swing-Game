@@ -559,7 +559,7 @@ public class BattleInterface extends JFrame{
 
             @Override
             public void popupMenuCanceled(PopupMenuEvent e) {
-                LogManager.log("Skill selection cancelled");
+//                LogManager.log("Skill selection cancelled");
                 resetSelectionState();
             }
         });

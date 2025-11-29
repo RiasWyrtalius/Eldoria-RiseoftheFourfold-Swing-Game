@@ -241,6 +241,7 @@ public class BattleController {
     public void endBattle() {
         if (!isBattleActive) return; // additional safety check
 
+        resetTurnReadiness();
         isBattleActive = false;
         setCurrentPhase(BattlePhase.BATTLE_ENDED);
         if (checkLose() && checkWin()) {
