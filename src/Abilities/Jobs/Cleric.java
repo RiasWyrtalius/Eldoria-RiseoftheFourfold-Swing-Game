@@ -90,24 +90,6 @@ public class Cleric extends JobClass {
 
         };
 
-        SkillLogicConsumer reviveLogic = (self, user, targets, onSkillComplete) -> {
-            Character target = targets.getFirst();
-
-            int revive_health= (int)(target.getInitialHealth() * 0.30);
-            int reset_mana= (int)(target.getMaxMana() * 0.50);
-            VisualEffectsManager.getInstance().hideCharacterVisual(user);
-            VisualEffectsManager.getInstance().playAnimationOnCharacter("CLERIC_HEAL", user, () -> {
-                target.setHealth(revive_health);
-                target.setMana(reset_mana);
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                }
-            }, true);
-
-        };
-
-
         Skill HealSelf = new Skill(
                 "Self Heal", "Healing themself", 15, 20,
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,

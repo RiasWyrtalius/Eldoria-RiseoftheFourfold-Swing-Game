@@ -1,6 +1,7 @@
 package Characters;
 
 import Abilities.ReactionSkill;
+import Abilities.ReactionTrigger;
 import Abilities.Skill;
 import Core.Utils.Dice;
 import Core.Utils.LogColor;
@@ -44,9 +45,7 @@ public abstract class Character {
     }
 
     public void takeDamage(int rawDamage, Character attacker, Skill incomingSkill) {
-        int finalDamage = processReactions(attacker, incomingSkill, rawDamage);
-
-        boolean wasAlive = this.isAlive;
+        int finalDamage = processDamageReactions(attacker, incomingSkill, rawDamage);
 
         setHealth(this.health - finalDamage);
 
@@ -56,8 +55,18 @@ public abstract class Character {
             LogManager.log(this.name + " takes " + finalDamage + " damage.");
         }
 
-        if (wasAlive && !this.isAlive && attacker != null) {
-            onDefeat(attacker);
+        // PHASE 2: Check for Death or Revival
+        if (this.health <= 0) {
+            // Before we call die(), check if a reaction saves us!
+            boolean wasSaved = processFatalReactions(attacker, incomingSkill);
+
+            // If NOT saved, then proceed to die
+            if (!wasSaved) {
+                die();
+                if (attacker != null) {
+                    onDefeat(attacker);
+                }
+            }
         }
     }
 
@@ -126,20 +135,46 @@ public abstract class Character {
         this.reactions.add(reaction);
     }
 
-    protected int processReactions(Character attacker, Skill incomingSkill, int incomingDamage) {
+    protected int processDamageReactions(Character attacker, Skill incomingSkill, int incomingDamage) {
         int currentDamage = incomingDamage;
-        // TODO: add process the most fit reaction but this will take a while, just do random
-        if (reactions.isEmpty()) {
-            return currentDamage;
-        }
 
-        ReactionSkill reaction = Dice.pickRandom(reactions);
-        int result = reaction.logic().tryReact(this, attacker, incomingSkill, incomingDamage);
-        if (result != -1) {
-            currentDamage = result;
+        for (ReactionSkill reaction : reactions) {
+            if (reaction.trigger() == ReactionTrigger.ON_RECIEVE_DAMAGE) {
+                int result = reaction.logic().tryReact(this, attacker, incomingSkill, incomingDamage);
+                if (result != -1) {
+                    currentDamage = result;
+                    // TODO: what about other chain reactions
+                    if (result == 0) break; // negates all damage
+                }
+            }
         }
         return currentDamage;
     }
+
+    protected boolean processFatalReactions(Character attacker, Skill incomingSkill) {
+        for (ReactionSkill reaction : reactions) {
+            if (reaction.trigger() == ReactionTrigger.ON_FATAL_DAMAGE) {
+                int result = reaction.logic().tryReact(this, attacker, incomingSkill, 0);
+                if (result != -1) return true;
+            }
+        }
+        return false;
+    }
+
+//    protected int processReactions(Character attacker, Skill incomingSkill, int incomingDamage) {
+//        int currentDamage = incomingDamage;
+//        // TODO: add process the most fit reaction but this will take a while, just do random
+//        if (reactions.isEmpty()) {
+//            return currentDamage;
+//        }
+//
+//        ReactionSkill reaction = Dice.pickRandom(reactions);
+//        int result = reaction.logic().tryReact(this, attacker, incomingSkill, incomingDamage);
+//        if (result != -1) {
+//            currentDamage = result;
+//        }
+//        return currentDamage;
+//    }
 
     // =============== PUBLIC GETTERS FOR UI ===============
     public int getInitialHealth() {

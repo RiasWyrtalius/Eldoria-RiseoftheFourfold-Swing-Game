@@ -66,7 +66,7 @@ public class Archer extends JobClass {
             return -1;
         };
 
-        ReactionSkill dodge = new ReactionSkill("Dodge", dodgeLogic);
+        ReactionSkill dodge = new ReactionSkill("Dodge", ReactionTrigger.ON_RECIEVE_DAMAGE, dodgeLogic);
 
         return List.of(dodge);
     }
