@@ -109,6 +109,7 @@ public class GameManager {
             @Override
             protected void onDeath() {
 
+
             }
 
             @Override
@@ -225,8 +226,8 @@ public class GameManager {
                 null,
                 Rarity.RARE,
                 (item, user, targets, onItemComplete) -> {
-                    VisualEffectsManager.getInstance().reviveEffect(targets.get(0));
-                    targets.get(0).setHealth(20);
+                    VisualEffectsManager.getInstance().reviveEffect(targets.getFirst());
+                    targets.getFirst().setHealth(20);
                 }
         );
 
