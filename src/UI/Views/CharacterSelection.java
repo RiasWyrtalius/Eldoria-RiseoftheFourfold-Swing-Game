@@ -112,12 +112,16 @@ public class CharacterSelection extends JFrame {
     private void setupListeners() {
         nextButton.addActionListener(e -> {
             currentIndex++;
+            textField1.setText("");
+            textField2.setText("");
             if (currentIndex >= characterList.size()) currentIndex = 0;
             updateView();
         });
 
         previousButton.addActionListener(e -> {
             currentIndex--;
+            textField1.setText("");
+            textField2.setText("");
             if (currentIndex < 0) currentIndex = characterList.size() - 1;
             updateView();
         });
