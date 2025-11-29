@@ -85,7 +85,7 @@ public class Boss extends Enemy {
         skills.add(devastatingStrike);
     }
 
-    // TODO: character death animationN
+    // TODO: character death animation
     @Override
     protected void onDeath() {
         super.onDeath();
