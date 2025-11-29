@@ -136,7 +136,7 @@ public class CharacterSelection extends JFrame {
         customizePanel(SelectedCharacter, "Selected Hero", TitledBorder.CENTER);
 
         CharacterPreview.setPreferredSize(new Dimension(500, 500));
-        ((BackgroundPanel) CharacterPreview).setBackgroundImage("Assets/Images/Backgrounds/CSelection_BG.png");
+        ((BackgroundPanel) CharacterPreview).setBackgroundImage("Assets/Images/Backgrounds/CSelection_BG-TEST.png");
     }
 
     private void customizePanel(JPanel panel, String titleText, int alignment) {
