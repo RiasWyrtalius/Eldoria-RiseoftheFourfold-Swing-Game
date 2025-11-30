@@ -1,8 +1,5 @@
 package Abilities;
 
-import Resource.AssetManager;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class JobClass {

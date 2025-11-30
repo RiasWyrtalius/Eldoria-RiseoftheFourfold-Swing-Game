@@ -1,4 +1,4 @@
-package Resource;
+package Resource.Animation;
 
 public enum AnimationLoopType {
     INFINITE(-1),

@@ -2,8 +2,8 @@ package Core.Visuals;
 
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
-import Resource.Animation;
-import Resource.AssetManager;
+import Resource.Animation.Animation;
+import Resource.Animation.AssetManager;
 import UI.Components.CharacterStatusPanel;
 import UI.Views.BattleInterface;
 

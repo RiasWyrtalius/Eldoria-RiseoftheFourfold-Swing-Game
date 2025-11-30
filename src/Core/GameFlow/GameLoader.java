@@ -9,7 +9,8 @@ import Characters.Enemies.Slime;
 import Characters.Enemies.Spider;
 import Characters.Enemies.Vampire;
 import Characters.Party;
-import Core.Utils.LogFormat;
+import Resource.Audio.AudioManager;
+import Core.Utils.LogColor;
 import Core.Utils.LogManager;
 import Items.*;
 
@@ -27,6 +28,7 @@ public class GameLoader {
 
     public GameLoader() {
         this.campaignQueue = new LinkedList<>();
+        registerAudioAssets();
         initializeAllEnemyTypes();
     }
 
@@ -332,6 +334,12 @@ public class GameLoader {
         allEnemyTypes.add(new EnemySpawnRule(Slime::new,1));
         allEnemyTypes.add(new EnemySpawnRule(Spider::new, 3));
         allEnemyTypes.add(new EnemySpawnRule(Vampire::new, 5));
+    }
+
+    private void registerAudioAssets() {
+        AudioManager am = AudioManager.getInstance();
+
+        am.registerSound("VICTORY_MUSIC_1", "/Audio/SFX/victory_sound_1.wav");
     }
 
     // TODO: File handling stuff here

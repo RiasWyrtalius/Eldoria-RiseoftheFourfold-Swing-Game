@@ -3,11 +3,10 @@
     import Characters.Character;
     import Core.Visuals.VisualAsset;
     import Core.Visuals.VisualEffectsManager;
-    import Resource.AssetManager;
+    import Resource.Animation.AssetManager;
     import UI.Views.BattleInterface;
 
     import javax.swing.*;
-    import javax.swing.border.Border;
     import javax.swing.plaf.basic.BasicProgressBarUI;
     import java.awt.*;
     import java.awt.event.MouseAdapter;

@@ -1,4 +1,4 @@
-package Resource;
+package Resource.Animation;
 
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;

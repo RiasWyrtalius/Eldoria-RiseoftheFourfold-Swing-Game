@@ -10,8 +10,8 @@ import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Utils.ScalingLogic;
 import Core.Visuals.VisualEffectsManager;
-import Resource.AnimationLoopType;
-import Resource.AssetManager;
+import Resource.Animation.AnimationLoopType;
+import Resource.Animation.AssetManager;
 
 import java.util.List;
 

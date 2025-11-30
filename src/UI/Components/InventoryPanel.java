@@ -2,7 +2,6 @@ package UI.Components;
 
 import Items.Inventory;
 import Items.Item;
-import Resource.AssetManager;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package Resource;
+package Resource.Animation;
 
 import javax.swing.*;
 import java.util.List;
