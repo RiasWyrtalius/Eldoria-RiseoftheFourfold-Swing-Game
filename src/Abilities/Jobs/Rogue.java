@@ -8,6 +8,7 @@ import Core.Utils.Dice;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Utils.ScalingLogic;
+import Core.Visuals.VisualEffectsManager;
 import Resource.Animation.AnimationLoopType;
 import Resource.Animation.AssetManager;
 

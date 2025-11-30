@@ -65,15 +65,15 @@ public class Cleric extends JobClass {
             LogManager.log(self.getActionLog(user, " Heals", targets), LogFormat.HERO_ACTION);
 
             int heal = ScalingLogic.calculateStat(user.getLevel(),20,10,0.05);
+            for(Character target : targets) {
+                int curr = target.getHealth();
+                target.setHealth(heal + curr);
+            }
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("CLERIC_HEAL", user, () -> {
+                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                 if (onSkillComplete != null) {
-                    for(Character target : targets) {
-                        int curr = target.getHealth();
-                        target.setHealth(heal + curr);
-                    }
                     onSkillComplete.run();
-                        VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                 }
             }, true);
         };

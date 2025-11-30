@@ -10,8 +10,8 @@ import Characters.Enemies.Spider;
 import Characters.Enemies.Vampire;
 import Characters.Party;
 import Resource.Audio.AudioManager;
-import Core.Utils.LogColor;
 import Core.Utils.LogManager;
+import Core.Utils.LogFormat;
 import Items.*;
 
 import java.util.*;
