@@ -21,10 +21,6 @@ public class LogFormat {
         TIE                       - Silver
     */
 
-    // ==========================================
-    //           SYSTEM & ERROR HANDLING
-    // ==========================================
-
     // SYSTEM LOGS
     public static final Color SYSTEM = new Color(99, 99, 99);
     public static final Color SYSTEM_ERROR   = new Color(220, 20, 60);   // Crimson Red
@@ -45,14 +41,9 @@ public class LogFormat {
     public static final Color TIE = new Color(192, 192, 192);
 
     public static final int ICON_SIZE = 100;
-    public static final Color HP_LOW = Color.RED;
-    public static final Color HP_MID = Color.YELLOW;
-    public static final Color HP_HIGH = Color.GREEN;
     public static final Color HP = new Color(0, 255, 0);
     public static final Color MP = new Color(138, 216, 244);
     public static final Color DEAD = Color.GRAY;
-    public static final Color OVERLAY_VALID = new Color(0, 255, 0, 50);
-    public static final Color OVERLAY_INVALID = new Color(0, 0, 0, 150);
 
     public static final int SIZE_NOTIFICATION = 20; // Default (Items found, minor alerts)
     public static final int SIZE_ACTION       = 28; // Attacks, Skills, Buffs

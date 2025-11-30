@@ -4,6 +4,7 @@ import Abilities.Skill;
 import Core.Battle.*;
 import Characters.Base.Hero;
 import Characters.Character;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Items.Inventory;
 import Items.Item;
@@ -11,7 +12,6 @@ import UI.Components.BackgroundPanel;
 import UI.Components.BattleUIMode;
 import UI.Components.CharacterStatusPanel;
 import UI.Components.InventoryPanel;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +23,10 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
+import javax.swing.text.BadLocationException;
+import javax.swing.JTextPane;
+import javax.swing.text.*;
+import java.awt.Color;
 
 // TODO: DESCEND calls battle controller->game manager for next battle
 public class BattleInterface extends JFrame{
@@ -52,7 +56,7 @@ public class BattleInterface extends JFrame{
     private List<JPanel> enemyPartyPanels;
 
     private JScrollPane CharacterInspector_JSP;
-    private JTextArea inspectorText;
+    private JTextPane inspectorText;
 
     private final Map<Character, CharacterStatusPanel> characterToPanelMap = new HashMap<>();
 
@@ -78,6 +82,7 @@ public class BattleInterface extends JFrame{
         this.setContentPane(contentPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        heroPartyLabel.setForeground(Color.WHITE);
         if (SplitPane_1 != null) {
             SplitPane_1.setUI(new BasicSplitPaneUI() {
                 @Override
@@ -611,12 +616,10 @@ public class BattleInterface extends JFrame{
     }
 
     private void setupInspector() {
-        inspectorText = new JTextArea();
+        inspectorText = new JTextPane();
         inspectorText.setEditable(false);
-        inspectorText.setLineWrap(true);
-        inspectorText.setWrapStyleWord(true);
-
         inspectorText.setMargin(new Insets(10, 10, 10, 10)); // padding
+        inspectorText.setCaretColor(Color.WHITE);
 
         if (CharacterInspector_JSP != null) {
             CharacterInspector_JSP.setViewportView(inspectorText);
@@ -624,46 +627,78 @@ public class BattleInterface extends JFrame{
     }
 
     private void updateInspectorPanel(Character c) {
-        if (inspectorText == null) { return; }
+        if (inspectorText == null) return;
 
-        if (c == null) {
-            inspectorText.setText("");
-            return;
+        inspectorText.setText("");
+        if (c == null) return;
+
+        StyledDocument doc = inspectorText.getStyledDocument();
+
+        //Helper Styles
+        SimpleAttributeSet titleStyle = new SimpleAttributeSet();
+        StyleConstants.setForeground(titleStyle, new Color(65, 105, 225));
+        StyleConstants.setBold(titleStyle, true);
+        StyleConstants.setFontSize(titleStyle, 20);
+
+        SimpleAttributeSet hpStyle = new SimpleAttributeSet();
+        StyleConstants.setForeground(hpStyle, Color.GREEN);
+        StyleConstants.setBold(hpStyle, true);
+
+        SimpleAttributeSet mpStyle = new SimpleAttributeSet();
+        StyleConstants.setForeground(mpStyle, new Color(100, 149, 237));
+        StyleConstants.setBold(mpStyle, true);
+
+        SimpleAttributeSet grayStyle = new SimpleAttributeSet();
+        StyleConstants.setForeground(grayStyle, Color.GRAY);
+
+        SimpleAttributeSet defaultStyle = new SimpleAttributeSet();
+        StyleConstants.setForeground(defaultStyle, Color.BLACK);
+
+        try {
+            //NAME & CLASS
+            doc.insertString(doc.getLength(), c.getName().toUpperCase() + "\n", titleStyle);
+
+            if (c instanceof Hero) {
+                doc.insertString(doc.getLength(), ((Hero) c).getJob().getName() + "\n", defaultStyle);
+            }
+
+            doc.insertString(doc.getLength(), "\n──────────────── ⋆⋅☆⋅⋆ ────────────────\n\n", grayStyle);
+
+            //STATS
+            doc.insertString(doc.getLength(), "LVL: " + c.getLevel() + "\n", defaultStyle);
+
+            if (c instanceof Hero) {
+                Hero h = (Hero)c;
+                doc.insertString(doc.getLength(), "XP: " + h.getXP() + "/" + h.getRequiredXP() + "\n", defaultStyle);
+            }
+
+            //HP & MANA
+            doc.insertString(doc.getLength(), "HP: ", defaultStyle);
+            doc.insertString(doc.getLength(), c.getHealth() + "/" + c.getInitialHealth() + "\n", hpStyle);
+
+            doc.insertString(doc.getLength(), "MP: ", defaultStyle);
+            doc.insertString(doc.getLength(), c.getMana() + "/" + c.getMaxMana() + "\n", mpStyle);
+            doc.insertString(doc.getLength(), "\n", defaultStyle);
+
+            //SKILLS
+            doc.insertString(doc.getLength(), "[ SKILLS ]\n", defaultStyle);
+            if (c.getSkills() != null) {
+                for (Skill s : c.getSkills()) {
+                    doc.insertString(doc.getLength(), "• " + s.getName() + " ", defaultStyle);
+                    doc.insertString(doc.getLength(), "[" + s.getManaCost() + " MP]\n", mpStyle);
+                }
+            }
+
+            String description = c.getDescription();
+            if (description != null && !description.isEmpty()) {
+                doc.insertString(doc.getLength(), "\n──────────────── ⋆⋅☆⋅⋆ ────────────────\n\n", grayStyle);
+                doc.insertString(doc.getLength(), description, defaultStyle);
+            }
+
+        } catch (BadLocationException e) {
+            e.printStackTrace();
         }
 
-        StringBuilder sb = new StringBuilder();
-
-        // --- NAME & CLASS ---
-        sb.append(c.getName().toUpperCase()).append("\n");
-        if (c instanceof Hero) {
-            sb.append(((Hero) c).getJob().getName()).append("\n");
-        }
-        sb.append("----------------\n");
-
-        sb.append("LVL: " + c.getLevel()).append("\n");
-        if (c instanceof Hero) {
-            Hero h = (Hero)c;
-            sb.append("XP: ").append(h.getXP()).append("/").append(h.getRequiredXP()).append("\n");
-        }
-        // --- HP & MANA ---
-        sb.append("HP: ").append(c.getHealth()).append("/").append(c.getInitialHealth()).append("\n");
-        sb.append("MP: ").append(c.getMana()).append("/").append(c.getMaxMana()).append("\n");
-        sb.append("\n");
-
-        sb.append("[ SKILLS ]\n");
-        // --- SKILLS
-        for (Skill s : c.getSkills()) {
-            sb.append("• ").append(s.getName())
-                    .append(" (").append(s.getManaCost()).append(" MP)\n");
-        }
-
-        String description = c.getDescription();
-        if (description != null) {
-            sb.append("----------------\n");
-            sb.append(c.getDescription());
-        }
-
-        inspectorText.setText(sb.toString());
         inspectorText.setCaretPosition(0);
     }
 

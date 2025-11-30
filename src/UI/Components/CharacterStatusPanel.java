@@ -103,6 +103,7 @@
                 manaBar.setVisible(true);
 
                 manaBar.setStringPainted(true);
+                manaBar.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
                 manaBar.setMaximum(character.getMaxMana());
                 manaBar.setValue(character.getMana());
                 manaBar.setString("MP " + character.getMana() + "/" + character.getMaxMana());
@@ -113,10 +114,13 @@
 
             this.character = character;
             this.setVisible(true);
+            nameLabel.setForeground(new Color(65, 105, 225));
+            nameLabel.setFont(new Font("JetBrains Mono", Font.PLAIN, 14));
             nameLabel.setText("Lv. " + character.getLevel() + " - " + character.getName());
 
             hpBar.setMaximum(character.getInitialHealth());
             hpBar.setValue(character.getHealth());
+            hpBar.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
             hpBar.setString("HP " + character.getHealth() + "/" + character.getInitialHealth());
             hpBar.setForeground(barState(character.getHealth(), character.getInitialHealth()));
 
