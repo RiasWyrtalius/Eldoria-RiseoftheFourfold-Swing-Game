@@ -109,11 +109,6 @@ public class Hero extends Character {
     }
 
     @Override
-    public List<Skill> getSkills() {
-        return job.getSkills();
-    }
-
-    @Override
     public String getDescription() {
         return job.getDescription();
     }
@@ -125,6 +120,9 @@ public class Hero extends Character {
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============
+    @Override public List<Skill> getSkills() {
+        return job.getSkills();
+    }
     public int getXP() {
         return XP;
     }

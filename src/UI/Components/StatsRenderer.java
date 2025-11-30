@@ -1,5 +1,6 @@
 package UI.Components;
 
+import Abilities.Skill;
 import Characters.Base.Hero;
 import javax.swing.*;
 import javax.swing.text.*;
@@ -41,10 +42,7 @@ public class StatsRenderer {
 
     public void updateDisplay(Hero hero) {
         try {
-            // Clear existing text
             doc.remove(0, doc.getLength());
-
-            // Insert new formatted text
             insertPair("Class: ", hero.getJob().getName() + "\n", classStyle);
             insertPair("HP: ", hero.getInitialHealth() + "\n", hpStyle);
             insertPair("MP: ", hero.getMaxMana() + "\n\n", mpStyle);
@@ -52,6 +50,13 @@ public class StatsRenderer {
             doc.insertString(doc.getLength(), "Description:\n", labelStyle);
             doc.insertString(doc.getLength(), hero.getJob().getDescription(), descStyle);
 
+            doc.insertString(doc.getLength(), "\n\nSkills:\n", labelStyle);
+            if (hero.getSkills() != null) {
+                for (Skill s : hero.getSkills()) {
+                    doc.insertString(doc.getLength(), "• " + s.getName() + " ", descStyle);
+                    doc.insertString(doc.getLength(), "[" + s.getManaCost() + " MP]\n", mpStyle);
+                }
+            }
         } catch (BadLocationException e) {
             e.printStackTrace();
         }

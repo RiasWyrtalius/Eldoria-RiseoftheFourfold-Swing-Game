@@ -83,5 +83,9 @@ public class Slime extends Enemy {
         );
     }
 
+    @Override
+    public List<Skill> getSkills() {
+        return List.of();
+    }
 }
 

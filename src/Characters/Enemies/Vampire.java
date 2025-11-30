@@ -75,5 +75,9 @@ public class Vampire extends Enemy {
         skill.execute(this, targets, onSkillComplete);
     }
 
+    @Override
+    public List<Skill> getSkills() {
+        return List.of();
+    }
 }
 

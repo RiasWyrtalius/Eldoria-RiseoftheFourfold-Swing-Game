@@ -115,6 +115,11 @@ public class GolemBoss extends Boss {
     }
 
     @Override
+    public List<Skill> getSkills() {
+        return List.of();
+    }
+
+    @Override
     public void makeAttack(List<Character> targets, Runnable onSkillComplete) {
         Skill basicAttack = skills.get(0);
         Skill devastatingStrike = skills.get(1);

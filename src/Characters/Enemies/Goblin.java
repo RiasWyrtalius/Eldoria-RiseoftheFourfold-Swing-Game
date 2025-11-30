@@ -133,4 +133,9 @@ public class Goblin extends Enemy {
 
         this.addReaction(new ReactionSkill("Cowardice", ReactionTrigger.ON_RECIEVE_DAMAGE, cowardiceLogic));
     }
+
+    @Override
+    public List<Skill> getSkills() {
+        return List.of();
+    }
 }

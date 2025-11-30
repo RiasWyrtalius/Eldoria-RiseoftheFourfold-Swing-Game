@@ -50,7 +50,7 @@ public class CharacterSelection extends JFrame {
         characterImageLabel = new JLabel();
         CharacterPreview.add(characterImageLabel);
 
-        // 4. Logic Setup
+        //Logic Setup
         setupListeners();
         updateView();
 

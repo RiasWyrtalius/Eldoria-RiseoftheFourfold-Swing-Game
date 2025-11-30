@@ -53,11 +53,6 @@ public abstract class Enemy extends Character {
     // =============== PUBLIC GETTERS FOR UI ===============
 
     @Override
-    public List<Skill> getSkills() {
-        return this.skills;
-    }
-
-    @Override
     public String getDescription() {
         return this.description;
     }
