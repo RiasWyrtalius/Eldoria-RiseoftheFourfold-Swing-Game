@@ -1,6 +1,7 @@
 package Characters.Base;
 
 import Abilities.JobClass;
+import Abilities.ReactionSkill;
 import Abilities.Skill;
 import Characters.Character;
 import Core.Utils.LogFormat;
@@ -120,9 +121,8 @@ public class Hero extends Character {
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============
-    @Override public List<Skill> getSkills() {
-        return job.getSkills();
-    }
+    @Override public List<Skill> getSkills() { return job.getSkills(); }
+    public List<ReactionSkill> getReactions() { return reactions; }
     public int getXP() {
         return XP;
     }

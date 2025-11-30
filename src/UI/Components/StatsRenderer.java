@@ -1,5 +1,6 @@
 package UI.Components;
 
+import Abilities.ReactionSkill;
 import Abilities.Skill;
 import Characters.Base.Hero;
 import javax.swing.*;
@@ -55,6 +56,14 @@ public class StatsRenderer {
                 for (Skill s : hero.getSkills()) {
                     doc.insertString(doc.getLength(), "• " + s.getName() + " ", descStyle);
                     doc.insertString(doc.getLength(), "[" + s.getManaCost() + " MP]\n", mpStyle);
+                }
+            }
+
+            //if hero doesnt have passive
+            if (hero.getReactions() != null && !hero.getReactions().isEmpty()) {
+                doc.insertString(doc.getLength(), "\nPassive:\n", labelStyle);
+                for (ReactionSkill s : hero.getReactions()) {
+                    doc.insertString(doc.getLength(), "• " + s.getName() + " ", descStyle);
                 }
             }
         } catch (BadLocationException e) {

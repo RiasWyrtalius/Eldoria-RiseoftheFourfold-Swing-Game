@@ -25,7 +25,7 @@ public class Paladin extends JobClass {
         super("Paladin", description, 30, 0);
         AssetManager.getInstance().registerAnimation(
                 "PALADIN_IDLE",
-                "Assets/Animations/Heroes/Paladin/Idle/sprite_%d.png",
+                IDLE_PATH,
                 3, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );

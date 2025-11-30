@@ -81,7 +81,7 @@ public class GameLoader {
         //TEMPORARY HERO SETUP
         heroParty = new Party("The Godslayers");
         Warrior warrior = new Warrior();
-        Characters.Character charlie = new Hero("Charlie",1500,50,100,1,warrior,"WARRIOR_IDLE"){
+        Characters.Character charlie = new Hero("Charlie",150,50,100,1,warrior,"WARRIOR_IDLE"){
             @Override
             protected void onDeath() {
 

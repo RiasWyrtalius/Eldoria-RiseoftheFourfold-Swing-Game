@@ -47,7 +47,6 @@ public abstract class JobClass {
     public int getManaBonus() {
         return manaBonus;
     }
-
     public String getDescription() {
         return description;
     }
