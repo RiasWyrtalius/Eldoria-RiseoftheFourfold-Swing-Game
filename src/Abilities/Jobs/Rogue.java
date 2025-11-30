@@ -8,6 +8,7 @@ import Core.Utils.Dice;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Utils.ScalingLogic;
+import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
 
@@ -21,11 +22,24 @@ public class Rogue extends JobClass{
             super("Rogue", "Wields Knife and the shadows", -20, 0);
             
             AssetManager.getInstance().registerAnimation(
-                    "MAGE_IDLE",
+                    "ROGUE_IDLE",
                     IDLE_PATH,
                     3, 100, 100 , 300,
                     AnimationLoopType.INFINITE
             );
+            AssetManager.getInstance().registerAnimation(
+                    "ROGUE_ATTACK",
+                    "Assets/Animations/Heroes/Rogue/Effects/Attack/sprite_%d.png",
+                    6, 100, 100 , 100,
+                    AnimationLoopType.ONE_CYCLE
+            );
+            AssetManager.getInstance().registerAnimation(
+                    "ROGUE_DODGE",
+                    "Assets/Animations/Heroes/Rogue/Effects/Dodge/sprite_%d.png",
+                    6, 100, 100 , 100,
+                    AnimationLoopType.ONE_CYCLE
+            );
+
 
         }
         @Override
@@ -33,10 +47,8 @@ public class Rogue extends JobClass{
             ReactionLogic dodgeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
                 double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
                 if (Dice.getInstance().chance(0.60) && hp_percent < 0.98) {
-//                    VisualEffectsManager.getInstance().playAnimation("ARCHER_DODGE", defender, () -> {
-                        LogManager.log(defender.getName() + " Skillfully dodges the attack!", LogFormat.ENEMY_ACTION);
-
-//                    }, true);
+                    LogManager.log(defender.getName() + " skillfully dodges the attack!", LogFormat.ENEMY_ACTION);
+                    VisualEffectsManager.getInstance().playAnimation("ROGUE_DODGE", defender, null, true);
                     return 0;
                 }
                 return -1;
@@ -55,12 +67,14 @@ public class Rogue extends JobClass{
                 int calculateDamage = ScalingLogic.calculateDamage(user,30,40,1.3,0.05);
                 Characters.Character target = targets.getFirst();
                 LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
-//                VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
+                VisualEffectsManager.getInstance().hideCharacterVisual(user);
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("ROGUE_ATTACK", target, () -> {
                     target.takeDamage(calculateDamage, user, self);
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
+                        VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                     }
-//                }, true);
+                }, true);
 
             };
 
@@ -68,14 +82,14 @@ public class Rogue extends JobClass{
                 int calculateDamage = ScalingLogic.calculateDamage(user,20,50,1.2,0.05);
                 LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
                 for(Character t : targets) {
-//                    VisualEffectsManager.getInstance().playAnimationOnCharacter("FIRE_CYCLONE", t, () -> {
-
-                        t.takeDamage(calculateDamage, user, self);
-
-                        if (onSkillComplete != null) {
-                            onSkillComplete.run();
-                        }
-//                    }, true);
+                VisualEffectsManager.getInstance().hideCharacterVisual(user);
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("ROGUE_ATTACK", t, () -> {
+                    t.takeDamage(calculateDamage, user, self);
+                    if (onSkillComplete != null) {
+                        onSkillComplete.run();
+                        VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+                    }
+                }, true);
                 }
 
             };

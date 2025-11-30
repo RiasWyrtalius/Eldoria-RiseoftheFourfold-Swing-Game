@@ -42,7 +42,8 @@ public class GameLoader {
                 "A swarm of goblins surround you!",
                 buildEnemyGroup(Goblin::new, Goblin::new),
                 buildLoot(
-                        ItemFactory.revivePotion(), ItemFactory.smallPotion()
+                        ItemFactory.revivePotion(), ItemFactory.smallHealthPotion(),
+                        ItemFactory.smallManaPotion()
                 )
         ));
 
@@ -105,7 +106,7 @@ public class GameLoader {
             }
         };
         Rogue rogue = new Rogue();
-        Characters.Character elyi = new Hero("Ely",80,50,100,1,rogue,"WARRIOR_IDLE"){
+        Characters.Character elyi = new Hero("Ely",80,50,100,1,rogue,"ROGUE_IDLE"){
             @Override
             protected void onDeath() {
 
@@ -197,14 +198,14 @@ public class GameLoader {
 
 //        TODO: add max amount of party members
         heroParty.addPartyMember(charlie);
-        heroParty.addPartyMember(ythan);
-//        heroParty.addPartyMember(erick);
+//        heroParty.addPartyMember(ythan);
+        heroParty.addPartyMember(erick);
 //        heroParty.addPartyMember(sammy);
-        heroParty.addPartyMember(gianmeni);
+//        heroParty.addPartyMember(gianmeni);
 //        heroParty.addPartyMember(kervs);
 //        heroParty.addPartyMember(chaniy);
-//        heroParty.addPartyMember(elyi);
-        heroParty.addPartyMember(antot);
+        heroParty.addPartyMember(elyi);
+//        heroParty.addPartyMember(antot);
 
         loadStartingInventory(heroParty);
 
@@ -213,7 +214,7 @@ public class GameLoader {
 
     private static void loadStartingInventory(Party party) {
         party.getInventory().addItem(ItemFactory.revivePotion(), 1);
-        party.getInventory().addItem(ItemFactory.smallPotion(), 3);
+        party.getInventory().addItem(ItemFactory.smallHealthPotion(), 3);
     }
 
     // TODO: hybrid procedural generation of levels according to seed

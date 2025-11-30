@@ -5,13 +5,23 @@ import Core.Battle.TargetType;
 import Core.Visuals.VisualEffectsManager;
 
 public class ItemFactory {
-    public static Item smallPotion() {
+    public static Item smallHealthPotion() {
         return new ResourceItem(
-                "Small Potion",
+                "Small Health Potion",
                 "Restores 50 HP to a selected target",
                 null,
                 Rarity.COMMON,
                 50, 0,
+                TargetType.SINGLE_TARGET
+        );
+    }
+    public static Item smallManaPotion() {
+        return new ResourceItem(
+                "Small Mana Potion",
+                "Restores 25 MP to a selected target",
+                null,
+                Rarity.COMMON,
+                0, 25,
                 TargetType.SINGLE_TARGET
         );
     }

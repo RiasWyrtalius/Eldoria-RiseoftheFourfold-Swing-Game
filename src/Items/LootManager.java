@@ -36,7 +36,8 @@ public class LootManager {
      * TODO: this is where flurgerburger  shines
      */
     private void registerAllItems() {
-        register(ItemFactory::smallPotion);
+        register(ItemFactory::smallHealthPotion);
+        register(ItemFactory::smallManaPotion);
         register(ItemFactory::revivePotion);
     }
 
@@ -56,7 +57,7 @@ public class LootManager {
             Item item = pool.get(rng.nextInt(pool.size())).get();
             drops.add(item);
         } else {
-            Supplier<Item> fallback = masterLootList.get(Rarity.COMMON).get(0);
+            Supplier<Item> fallback = masterLootList.get(Rarity.COMMON).getFirst();
             drops.add(fallback.get());
         }
 
@@ -80,8 +81,8 @@ public class LootManager {
 
         weights.put(Rarity.COMMON,      1000); // Always constant, becomes relatively smaller as others grow
         weights.put(Rarity.UNCOMMON,    10 + (level * 20));
-        weights.put(Rarity.RARE,        0  + (level * 10));
-        weights.put(Rarity.SUPERIOR,    0  + (level * 5));
+        weights.put(Rarity.RARE,        5  + (level * 10));
+        weights.put(Rarity.SUPERIOR,    1  + (level * 5));
         weights.put(Rarity.EPIC,        (level > 10) ? (level * 3) : 0); // Only after lvl 10
         weights.put(Rarity.LEGENDARY,   (level > 20) ? (level * 2) : 0); // Only after lvl 20
         weights.put(Rarity.MYTHIC,      (level > 50) ? (level * 2) : 0); // Only after lvl 50
