@@ -25,6 +25,47 @@ public class ItemFactory {
                 TargetType.SINGLE_TARGET
         );
     }
+    public static Item splashSmallHealthPotion() {
+        return new ResourceItem(
+                "Splash Small Health Potion",
+                "Restores 50 HP to a selected targets",
+                null,
+                Rarity.UNCOMMON,
+                30, 0,
+                TargetType.AOE_TWO_TARGETS
+        );
+    }
+    public static Item splashSmallManaPotion() {
+        return new ResourceItem(
+                "Splash Small Mana Potion",
+                "Restores 10 MP to a selected targets",
+                null,
+                Rarity.UNCOMMON,
+                0, 10,
+                TargetType.AOE_TWO_TARGETS
+        );
+    }
+
+    public static Item mediumHealthPotion() {
+        return new ResourceItem(
+                "Medium Health Potion",
+                "Restores 80 HP to a selected target",
+                null,
+                Rarity.RARE,
+                80, 0,
+                TargetType.SINGLE_TARGET
+        );
+    }
+    public static Item mediumManaPotion() {
+        return new ResourceItem(
+                "Medium Mana Potion",
+                "Restores 40 MP to a selected target",
+                null,
+                Rarity.RARE,
+                0, 40,
+                TargetType.SINGLE_TARGET
+        );
+    }
 
     public static Item revivePotion() {
         return new UtilityItem(
@@ -33,10 +74,11 @@ public class ItemFactory {
                 TargetType.SINGLE_TARGET,
                 TargetCondition.DEAD,
                 null,
-                Rarity.RARE,
+                Rarity.EPIC,
                 (item, user, targets, onItemComplete) -> {
-                    VisualEffectsManager.getInstance().reviveEffect(targets.get(0));
-                    targets.get(0).setHealth(20);
+                    VisualEffectsManager.getInstance().reviveEffect(targets.getFirst());
+                    int hp = (int)(targets.getFirst().getInitialHealth() * .20);
+                    targets.getFirst().setHealth(hp);
                 }
         );
     }

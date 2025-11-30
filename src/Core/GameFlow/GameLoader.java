@@ -44,8 +44,13 @@ public class GameLoader {
                 "A swarm of goblins surround you!",
                 buildEnemyGroup(Goblin::new, Goblin::new),
                 buildLoot(
-                        ItemFactory.revivePotion(), ItemFactory.smallHealthPotion(),
-                        ItemFactory.smallManaPotion()
+                        ItemFactory.revivePotion(),
+                        ItemFactory.smallHealthPotion(),
+                        ItemFactory.smallManaPotion(),
+                        ItemFactory.splashSmallHealthPotion(),
+                        ItemFactory.splashSmallManaPotion(),
+                        ItemFactory.mediumHealthPotion(),
+                        ItemFactory.mediumManaPotion()
                 )
         ));
 
@@ -87,6 +92,7 @@ public class GameLoader {
         Characters.Character charlie = new Hero("Charlie",150,50,100,1,warrior,"WARRIOR_IDLE"){
             @Override
             protected void onDeath() {
+                super.onDeath();
 
             }
 
@@ -271,8 +277,8 @@ public class GameLoader {
         if (minEnemies > maxEnemies) minEnemies = maxEnemies;
 
         String bg = rng.nextBoolean() ?
-                "Assets/Images/Backgrounds/sample.jpg" :
-                "Assets/Images/Backgrounds/dungeon_bg.png";
+                "Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png" :
+                "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png" ;
 
         return new Level(
                 levelNum,

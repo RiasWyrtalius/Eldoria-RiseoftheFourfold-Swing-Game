@@ -18,7 +18,7 @@ public class HeroRepository {
         list.add(new CharacterDisplayData(new Hero("Gian", 80, 70, 100, 1, new Archer(), "ARCHER_IDLE")));
         list.add(new CharacterDisplayData(new Hero("Kervs", 100, 60, 120, 1, new AeroMancer(), "MAGE_WIND-IDLE")));
         list.add(new CharacterDisplayData(new Hero("Antot", 150, 50, 100, 1, new Paladin(), "PALADIN_IDLE")));
-        list.add(new CharacterDisplayData(new Hero("Ely", 80, 50, 100, 1, new Rogue(), "MAGE_IDLE")));
+        list.add(new CharacterDisplayData(new Hero("Ely", 80, 50, 100, 1, new Rogue(), "ROGUE_IDLE")));
 
         return list;
     }
