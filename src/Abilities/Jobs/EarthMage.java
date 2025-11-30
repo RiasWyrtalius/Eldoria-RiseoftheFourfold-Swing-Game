@@ -7,7 +7,7 @@ import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.ScalingLogic;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
@@ -61,7 +61,7 @@ public class EarthMage extends JobClass {
         SkillLogicConsumer earthAttackLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,50,28,1.2,0.05);
 
-            LogManager.log(self.getActionLog(user, "Shakes the earth", targets), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "Shakes the earth", targets), LogFormat.HERO_ACTION);
             for(Character t : targets) {
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("EARTH_ATTACK", t, () -> {
 
@@ -83,7 +83,7 @@ public class EarthMage extends JobClass {
         SkillLogicConsumer earthquakeSpellLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,55,(int)23.5,1.2,0.05);
 
-            LogManager.log(self.getActionLog(user, "Shakes the earth", targets), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "Shakes the earth", targets), LogFormat.HERO_ACTION);
             for(Character t : targets) {
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("EARTHQUAKE", t, () -> {
 
@@ -103,7 +103,7 @@ public class EarthMage extends JobClass {
             int calculateDamage = ScalingLogic.calculateDamage(user,20,10,1.2,0.05);
             Character target = targets.get(0);
             target.takeDamage(calculateDamage, user, self);
-            LogManager.log(self.getActionLog(user, "Multitudes of earth crumbles down", targets), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "Multitudes of earth crumbles down", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("STONE_HAIL", target, () -> {
                 target.takeDamage(calculateDamage, user, self);
 

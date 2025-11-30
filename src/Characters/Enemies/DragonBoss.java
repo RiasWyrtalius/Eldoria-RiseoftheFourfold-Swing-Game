@@ -2,14 +2,12 @@ package Characters.Enemies;
 
 import Abilities.*;
 import Characters.Base.Boss;
-import Characters.Base.Enemy;
 import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Utils.ScalingLogic;
-import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
 
@@ -51,7 +49,7 @@ public class DragonBoss extends Boss {
 
             if (weakTarget != null) {
                 int calculateDamage = ScalingLogic.calculateDamage(user,(int)(baseAtk * 1.5),0.4,0.1);
-                LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget)), LogColor.ENEMY_ACTION);
+                LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget)), LogFormat.ENEMY_ACTION);
                 weakTarget.takeDamage(calculateDamage, user, self);
             }
 
@@ -69,7 +67,7 @@ public class DragonBoss extends Boss {
         SkillLogicConsumer devastatingStrikeLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,(int)(baseAtk * 1.25),0.2,0.2);
 
-            LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogColor.ENEMY_ACTION);
+            LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogFormat.ENEMY_ACTION);
 
             for (Character target : targets) {
                 if (target.getHealth() > 0) {

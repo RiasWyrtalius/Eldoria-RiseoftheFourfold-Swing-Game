@@ -1,7 +1,7 @@
 package Characters;
 
 import Items.Inventory;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 
 import java.awt.*;
@@ -30,7 +30,7 @@ public class Party {
     public void addPartyMember(Character member) {
         if (member != null) {
             this.partyMembers.add(member);
-            LogManager.log(member.getName() + " joined " + partyName + "!", LogColor.PLAYER_JOIN);
+            LogManager.log(member.getName() + " joined " + partyName + "!", LogFormat.PLAYER_JOIN);
         }
     }
 

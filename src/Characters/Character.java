@@ -3,7 +3,7 @@ package Characters;
 import Abilities.ReactionSkill;
 import Abilities.ReactionTrigger;
 import Abilities.Skill;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 
@@ -77,7 +77,7 @@ public abstract class Character {
     protected abstract void onDeath();
 
     protected void onDefeat(Character attacker) {
-        LogManager.log(this.name + " is killed by " + attacker.getName() + "!", LogColor.ENEMY_ACTION);
+        LogManager.log(this.name + " is killed by " + attacker.getName() + "!", LogFormat.ENEMY_ACTION);
     };
 
     public boolean canCast(int manaCost) {

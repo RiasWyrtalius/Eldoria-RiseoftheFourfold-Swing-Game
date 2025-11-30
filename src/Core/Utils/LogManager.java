@@ -57,7 +57,7 @@ public class LogManager {
         }
     }
 
-    // clear the highlight box should use this to start new turns or attacks AND EVERYTHINGGG
+    // clear the highlight box should use this to start new turns or attacks AND EVERYTHING
     public static void clearHighlight() {
         if (logHighlightComponent != null) {
             SwingUtilities.invokeLater(() -> {

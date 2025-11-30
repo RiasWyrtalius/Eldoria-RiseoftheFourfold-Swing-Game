@@ -2,11 +2,10 @@ package Characters.Enemies;
 
 import Abilities.*;
 import Characters.Base.Boss;
-import Characters.Base.Enemy;
 import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
@@ -54,7 +53,7 @@ public class GolemBoss extends Boss {
 
             if (weakTarget != null) {
                 int calculateDamage = user.getBaseAtk();
-                LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget)), LogColor.ENEMY_ACTION);
+                LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget)), LogFormat.ENEMY_ACTION);
                 Character target = weakTarget;
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("GOLEM_BOSS-ATTACK", target, () -> {
@@ -78,7 +77,7 @@ public class GolemBoss extends Boss {
         SkillLogicConsumer devastatingStrikeLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = (int) (user.getBaseAtk() * 1.5);
 
-            LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogColor.ENEMY_ACTION);
+            LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogFormat.ENEMY_ACTION);
 
             for (Character target : targets) {
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);

@@ -105,7 +105,7 @@
                 manaBar.setStringPainted(true);
                 manaBar.setMaximum(character.getMaxMana());
                 manaBar.setValue(character.getMana());
-                manaBar.setString("mp " + character.getMana() + "/" + character.getMaxMana());
+                manaBar.setString("MP " + character.getMana() + "/" + character.getMaxMana());
                 manaBar.setForeground(barState(character.getMana(), character.getMaxMana()));
 
                 manaBar.setForeground(new Color(0, 150, 255));
@@ -113,11 +113,11 @@
 
             this.character = character;
             this.setVisible(true);
-            nameLabel.setText("Lvl " + character.getLevel() + " - " + character.getName());
+            nameLabel.setText("Lv. " + character.getLevel() + " - " + character.getName());
 
             hpBar.setMaximum(character.getInitialHealth());
             hpBar.setValue(character.getHealth());
-            hpBar.setString("hp " + character.getHealth() + "/" + character.getInitialHealth());
+            hpBar.setString("HP " + character.getHealth() + "/" + character.getInitialHealth());
             hpBar.setForeground(barState(character.getHealth(), character.getInitialHealth()));
 
             String visualId = character.getImageKey();

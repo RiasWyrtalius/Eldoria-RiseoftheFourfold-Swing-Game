@@ -18,8 +18,11 @@ import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.plaf.basic.BasicSplitPaneDivider;
+import javax.swing.plaf.basic.BasicSplitPaneUI;
 
 // TODO: DESCEND calls battle controller->game manager for next battle
 public class BattleInterface extends JFrame{
@@ -68,11 +71,46 @@ public class BattleInterface extends JFrame{
     private JPanel infoPanel;
     private JPanel enemyPanel;
     private JLabel floorLabel;
+    private JSplitPane SplitPane_1;
+    private JSplitPane SplitPane_2;
 
     public BattleInterface() {
         this.setContentPane(contentPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        if (SplitPane_1 != null) {
+            SplitPane_1.setUI(new BasicSplitPaneUI() {
+                @Override
+                public BasicSplitPaneDivider createDefaultDivider() {
+                    return new BasicSplitPaneDivider(this) {
+                        @Override
+                        public void setBorder(Border b) {
+                            // This removes the 3D border so the color shows
+                        }
+                    };
+                }
+            });
+            SplitPane_1.setBackground(new Color(44, 44, 44));
+            SplitPane_1.setDividerSize(10);
+        }
+        if (SplitPane_2 != null) {
+            SplitPane_2.setUI(new BasicSplitPaneUI() {
+                @Override
+                public BasicSplitPaneDivider createDefaultDivider() {
+                    return new BasicSplitPaneDivider(this) {
+                        @Override
+                        public void setBorder(Border b) {
+                            // This removes the 3D border so the color shows
+                        }
+                    };
+                }
+            });
+            SplitPane_2.setBackground(new Color(44, 44, 44));
+            SplitPane_2.setDividerSize(10);
+        }
+
         setupInspector();
+
         this.pack();
         this.setVisible(true);
         setTitle("DND Swing Clone | Saja Boys");
@@ -577,6 +615,8 @@ public class BattleInterface extends JFrame{
         inspectorText.setEditable(false);
         inspectorText.setLineWrap(true);
         inspectorText.setWrapStyleWord(true);
+
+        inspectorText.setMargin(new Insets(10, 10, 10, 10)); // padding
 
         if (CharacterInspector_JSP != null) {
             CharacterInspector_JSP.setViewportView(inspectorText);

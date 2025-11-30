@@ -8,9 +8,8 @@ import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.Dice;
 import Core.Utils.ScalingLogic;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
-import Core.Visuals.VisualAsset;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
 import Resource.AssetManager;
@@ -65,7 +64,7 @@ public class Archer extends JobClass {
         ReactionLogic dodgeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
             double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
             if (Dice.getInstance().chance(0.3) && hp_percent < 0.60) {
-                LogManager.log(defender.getName() + " swiftly dodges the attack!", LogColor.ENEMY_ACTION);
+                LogManager.log(defender.getName() + " swiftly dodges the attack!", LogFormat.ENEMY_ACTION);
                 VisualEffectsManager.getInstance().playAnimation("ARCHER_DODGE", defender, null, true);
                 return 0;
             }
@@ -93,7 +92,7 @@ public class Archer extends JobClass {
         SkillLogicConsumer rapidFireLogic = (self, user, targets, onSkillComplete) -> {
             int dmg = ScalingLogic.calculateDamage(user, 20, 15, 1.2, 0.05);
             Character target = targets.getFirst();
-            LogManager.log(self.getActionLog(user, "Unleashes array of Arrows", targets), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "Unleashes array of Arrows", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW-Rapid", user, () -> {
                 target.takeDamage(dmg, user, self);
                 if (onSkillComplete != null) {
@@ -105,7 +104,7 @@ public class Archer extends JobClass {
         SkillLogicConsumer heavyArrowLogic = (self, user, targets, onSkillComplete) -> {
             int dmg = ScalingLogic.calculateDamage(user, 40, 20, 1.2, 0.05);
             Character target = targets.getFirst();
-            LogManager.log(self.getActionLog(user, "Pulls their bow the hardest they can to release", targets), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "Pulls their bow the hardest they can to release", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW", user, () -> {
                 target.takeDamage(dmg, user, self);
                 if (onSkillComplete != null) {

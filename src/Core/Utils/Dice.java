@@ -18,13 +18,13 @@ public class Dice {
         this.seed = new Random().nextLong();
         this.random = new Random(seed);
 
-        LogManager.log("Dice initialized with Seed: " + this.seed);
+        LogManager.log("Dice initialized with Seed: " + this.seed, LogFormat.SYSTEM);
     }
 
     private Dice(long seed) {
         this.seed = seed;
         this.random = new Random(seed);
-        LogManager.log("Dice initialized with Loaded Seed: " + this.seed);
+        LogManager.log("Dice initialized with Loaded Seed: " + this.seed, LogFormat.SYSTEM);
     }
 
     public static Dice getInstance() {

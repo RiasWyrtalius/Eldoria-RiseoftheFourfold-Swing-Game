@@ -7,7 +7,7 @@ import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.Dice;
 import Core.Utils.ScalingLogic;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
@@ -59,7 +59,7 @@ public class Paladin extends JobClass {
                 defender.setMana(reset_mana);
                 hasRevived = true;
                 VisualEffectsManager.getInstance().playAnimation("PALADIN_REVIVE", defender, () -> {
-                    LogManager.log(defender.getName() + " REVIVES", LogColor.HERO_ACTION);
+                    LogManager.log(defender.getName() + " REVIVES", LogFormat.HERO_ACTION);
                     }, true);
                 return 0;
             }
@@ -73,7 +73,7 @@ public class Paladin extends JobClass {
 
     public List<Skill> createSkills() {
         SkillLogicConsumer healSelfLogic = (self, user, targets, onSkillComplete) -> {
-            LogManager.log(self.getActionLog(user, " Heals", targets), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, " Heals", targets), LogFormat.HERO_ACTION);
             int heal = ScalingLogic.calculateStat(user.getLevel(),20,10,0.05);
             int curr = user.getHealth();
 
@@ -90,7 +90,7 @@ public class Paladin extends JobClass {
 
         SkillLogicConsumer holyStrikeLogic = (self, user, targets, onSkillComplete) -> {
             int dmg = ScalingLogic.calculateStat(user.getLevel(),30,20,0.05);
-            LogManager.log(self.getActionLog(user, "Strikes", targets), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "Strikes", targets), LogFormat.HERO_ACTION);
 
             Character target = targets.getFirst();
 

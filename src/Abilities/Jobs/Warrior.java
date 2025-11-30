@@ -6,7 +6,7 @@ import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.ScalingLogic;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
@@ -50,7 +50,7 @@ public class Warrior extends JobClass {
         SkillLogicConsumer shieldBashLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,20,10,1.2,0.05);
             Character target = targets.get(0);
-            LogManager.log(self.getActionLog(user, " Bashes Shield on ", targets), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, " Bashes Shield on ", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("WARRIOR_SHIELD-BASH", target, () -> {
                 target.takeDamage(calculateDamage, user, self);
@@ -64,7 +64,7 @@ public class Warrior extends JobClass {
         SkillLogicConsumer swordSlashLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,30,15,1.2,0.05);
             Character target = targets.get(0);
-            LogManager.log(self.getActionLog(user, " Slashes on ", targets), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, " Slashes on ", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("WARRIOR_SWORD-SLASH", target, () -> {
                 target.takeDamage(calculateDamage, user, self);

@@ -1,6 +1,6 @@
 package Resource;
 
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualAsset;
 
@@ -58,9 +58,9 @@ public class AssetManager {
             Image scaledImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
             scaledIcon = new ImageIcon(scaledImg);
             imageCache.put(cachedKey, scaledIcon);
-            LogManager.log("AssetManager: retrieving cached " + cachedKey, LogColor.SYSTEM);
+            LogManager.log("AssetManager: retrieving cached " + cachedKey, LogFormat.SYSTEM);
         } catch (Exception e) {
-            LogManager.log("AssetManager ERROR: Failed to load/scale image '" + key + "'. Using fallback Icon", LogColor.SYSTEM);
+            LogManager.log("AssetManager ERROR: Failed to load/scale image '" + key + "'. Using fallback Icon", LogFormat.SYSTEM);
             scaledIcon = createFallbackIcon(width, height);
             imageCache.put(cachedKey, scaledIcon);
         }
@@ -93,7 +93,7 @@ public class AssetManager {
      */
     public void registerAnimation(String animationId, String basePath, int frameCount, int width, int height, int durationMs, AnimationLoopType loopType) {
         if (animationRepository.containsKey(animationId)) {
-            LogManager.log("Animation ID: " + animationId + " is already registered.", Color.yellow);
+            LogManager.log("Animation ID: " + animationId + " is already registered.", LogFormat.SYSTEM);
             return;
         }
 
@@ -102,7 +102,7 @@ public class AssetManager {
         Animation newAnimation = new Animation(frames, durationMs, loopType);
 
         animationRepository.put(animationId, newAnimation);
-        LogManager.log("Registered animation: " + animationId);
+        LogManager.log("Registered animation: " + animationId, LogFormat.SYSTEM);
     }
 
     /**

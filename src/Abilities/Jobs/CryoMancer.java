@@ -7,7 +7,7 @@ import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.ScalingLogic;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
@@ -55,7 +55,7 @@ public class CryoMancer extends JobClass {
             int calculateDamage = ScalingLogic.calculateDamage(user,30,15,1.2,0.05);
             Character target = targets.get(0);
 
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
 
             VisualEffectsManager.getInstance().playAnimationOnCharacter("ICE_SPIKE", target, () -> {
 
@@ -78,7 +78,7 @@ public class CryoMancer extends JobClass {
             int calculateDamage = ScalingLogic.calculateDamage(user,15,15,1.2,0.05);
             Character target = targets.get(0);
 
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
 
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FROSTBITE", target, () -> {
 

@@ -1,6 +1,6 @@
 package Core.Visuals;
 
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Resource.Animation;
 import Resource.AssetManager;
@@ -47,7 +47,7 @@ public class VisualEffectsManager {
 
         Animation animation = AssetManager.getInstance().getAnimation(animationId);
         if (animation == null) {
-            LogManager.log("Error: Animation ID not found: " + animationId, Color.RED);
+            LogManager.log("Error: Animation ID not found: " + animationId, LogFormat.SYSTEM_WARNING);
             // Ensure callback runs even if error, to prevent soft-lock
             if (onFinish != null) onFinish.run();
             return;
@@ -98,7 +98,7 @@ public class VisualEffectsManager {
         }
 
         if (isGlobalPaused) {
-            LogManager.log("Animation queued (System Paused): " + animationId);
+            LogManager.log("Animation queued (System Paused): " + animationId, LogFormat.SYSTEM);
         } else {
             timer.start();
         }
@@ -162,7 +162,7 @@ public class VisualEffectsManager {
             if (onFinish != null) {
                 onFinish.run();
             }
-            LogManager.log("Warning: Visual component not found. Executing callback immediately.", java.awt.Color.ORANGE);
+            LogManager.log("Warning: Visual component not found. Executing callback immediately.", LogFormat.SYSTEM_WARNING);
         }
     }
 
@@ -175,7 +175,7 @@ public class VisualEffectsManager {
             if (onFinish != null) {
                 onFinish.run();
             }
-            LogManager.log("Warning: Visual component not found. Executing callback immediately.", java.awt.Color.ORANGE);
+            LogManager.log("Warning: Visual component not found. Executing callback immediately.", LogFormat.SYSTEM_WARNING);
         }
     }
 
@@ -185,7 +185,7 @@ public class VisualEffectsManager {
         if (animation != null) {
             animation.pauseAnimation();
         } else {
-            LogManager.log("Animation " + animationId + " does not exist!", LogColor.SYSTEM);
+            LogManager.log("Animation " + animationId + " does not exist!", LogFormat.SYSTEM);
         }
     }
 
@@ -197,7 +197,7 @@ public class VisualEffectsManager {
                 timer.stop();
             }
         }
-        LogManager.log("System: All visuals PAUSED.", java.awt.Color.YELLOW);
+        LogManager.log("System: All visuals PAUSED.", LogFormat.SYSTEM);
     }
 
     public void resumeAllAnimations() {
@@ -207,7 +207,7 @@ public class VisualEffectsManager {
             // Restart the timer (it continues from current state)
             timer.start();
         }
-        LogManager.log("System: All visuals RESUMED.", java.awt.Color.YELLOW);
+        LogManager.log("System: All visuals RESUMED.", LogFormat.DEBUG_INFO);
     }
 
     public void hideCharacterVisual(Character character) {
@@ -224,7 +224,7 @@ public class VisualEffectsManager {
 
     public JLabel getDisplayComponent(Character character) {
         if (mainView == null) {
-            LogManager.log("ERROR: VEM is not linked to BattleInterface (mainView is null).", java.awt.Color.RED);
+            LogManager.log("ERROR: VEM is not linked to BattleInterface (mainView is null).", LogFormat.SYSTEM_ERROR);
             return null;
         }
 
@@ -233,13 +233,13 @@ public class VisualEffectsManager {
             return panel.getIconDisplayLabel();
         }
 
-        LogManager.log("Warning: UI Panel not found for character: " + character.getName(), java.awt.Color.ORANGE);
+        LogManager.log("Warning: UI Panel not found for character: " + character.getName(), LogFormat.SYSTEM_WARNING);
         return null;
     }
 
     public JLabel getOverlayComponent(Character character) {
         if (mainView == null) {
-            LogManager.log("ERROR: VEM is not linked to BattleInterface (mainView is null).", java.awt.Color.RED);
+            LogManager.log("ERROR: VEM is not linked to BattleInterface (mainView is null).", LogFormat.SYSTEM_ERROR);
             return null;
         }
 
@@ -248,7 +248,7 @@ public class VisualEffectsManager {
             return panel.getOverlayDisplayLabel();
         }
 
-        LogManager.log("Warning: UI Panel not found for character: " + character.getName(), java.awt.Color.ORANGE);
+        LogManager.log("Warning: UI Panel not found for character: " + character.getName(), LogFormat.SYSTEM_WARNING);
         return null;
     }
 
@@ -321,7 +321,7 @@ public class VisualEffectsManager {
         runningAnimationIDs.clear();
 
 
-        LogManager.log("All active animation timers have been stopped.", java.awt.Color.BLUE);
+        LogManager.log("All active animation timers have been stopped.", LogFormat.SYSTEM);
     }
 
     public void applyStatusTint(JLabel displayLabel, String animationId, Color tintColor) {

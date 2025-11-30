@@ -6,7 +6,7 @@ import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.ScalingLogic;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
@@ -44,7 +44,7 @@ public class Cleric extends JobClass {
     public List<Skill> createSkills() {
         SkillLogicConsumer healSelfLogic = (self, user, targets, onSkillComplete) -> {
             Character target = user;
-            LogManager.log(self.getActionLog(user, " Heals", targets), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, " Heals", targets), LogFormat.HERO_ACTION);
             int heal = ScalingLogic.calculateStat(user.getLevel(),30,10,0.05);
             int curr = user.getHealth();
 
@@ -62,7 +62,7 @@ public class Cleric extends JobClass {
         SkillLogicConsumer healGroupLogic = (self, user, targets, onSkillComplete) -> {
 
 
-            LogManager.log(self.getActionLog(user, " Heals", targets), LogColor.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, " Heals", targets), LogFormat.HERO_ACTION);
 
             int heal = ScalingLogic.calculateStat(user.getLevel(),20,10,0.05);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);

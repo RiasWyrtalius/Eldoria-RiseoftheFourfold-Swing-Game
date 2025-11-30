@@ -1,7 +1,6 @@
 package Core.GameFlow;
 
 import Abilities.Jobs.*;
-import Characters.Base.Boss;
 import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
@@ -10,18 +9,12 @@ import Characters.Enemies.Slime;
 import Characters.Enemies.Spider;
 import Characters.Enemies.Vampire;
 import Characters.Party;
-import Core.Battle.TargetCondition;
-import Core.Battle.TargetType;
-import Core.Utils.Dice;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
-import Core.Visuals.VisualEffectsManager;
 import Items.*;
 
-import javax.management.QueryEval;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Loads and saves levels
@@ -230,7 +223,7 @@ public class GameLoader {
 
         Random campaignRng = new Random(seed);
 
-        LogManager.log("Generating Campaign with Seed: " + seed, LogColor.SYSTEM);
+        LogManager.log("Generating Campaign with Seed: " + seed, LogFormat.SYSTEM);
 
         Map<Integer, Level> fixedLevels = getPredefinedLevels();
 
@@ -328,8 +321,8 @@ public class GameLoader {
 
     // TODO: end level
     public void finishCampaign() {
-        LogManager.logHighlight("CAMPAIGN COMPLETE!", LogColor.VICTORY, 30, true);
-        LogManager.log("You have cleared all stages!", LogColor.VICTORY);
+        LogManager.logHighlight("CAMPAIGN COMPLETE!", LogFormat.VICTORY, LogFormat.SIZE_HEADER, true);
+        LogManager.log("You have cleared all stages!", LogFormat.VICTORY);
     }
 
     // TODO: Refine this stuff

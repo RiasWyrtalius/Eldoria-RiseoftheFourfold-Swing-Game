@@ -1,14 +1,12 @@
 package Core;
 
-import Abilities.Jobs.*;
 import Characters.Party;
 import Core.Battle.BattleController;
 import Core.GameFlow.GameLoader;
 import Core.GameFlow.Level;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
-import Items.*;
 import UI.Views.BattleInterface;
 import UI.Views.MainMenu;
 
@@ -48,8 +46,7 @@ public class GameManager {
             return;
         }
 
-        LogManager.log("");
-        LogManager.log("Entering Level " + nextLevel.levelNumber(), LogColor.SYSTEM);
+        LogManager.log("Entering Level " + nextLevel.levelNumber(), LogFormat.SYSTEM);
 
         mainView.setBattleBackground(nextLevel.battleBackground());
 
@@ -65,7 +62,7 @@ public class GameManager {
         mainView = new BattleInterface();
 
         LogManager.initialize(mainView.getGameLogPanelTextPane(), mainView.getGameLogHighlightPanelTextPane());
-        LogManager.log("Logger initialized with UI component", LogColor.SYSTEM);
+        LogManager.log("Logger initialized with UI component", LogFormat.SYSTEM);
         VisualEffectsManager.getInstance().setMainView(mainView);
 
         this.heroParty = GameLoader.loadStarterParty();

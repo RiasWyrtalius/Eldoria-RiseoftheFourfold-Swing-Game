@@ -6,9 +6,8 @@ import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.Dice;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
-import Core.Utils.ScalingLogic;
 import Core.Utils.ScalingLogic;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
@@ -61,7 +60,7 @@ public class Goblin extends Enemy {
             int calculateDamage = ScalingLogic.calculateDamage(user,baseAtk,0.2,0.1);
 
             Character target = Dice.getInstance().pickRandom(targets);
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.ENEMY_ACTION);
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.ENEMY_ACTION);
             // TODO: panel should be empty during the swinging
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", target, () -> {
@@ -78,7 +77,7 @@ public class Goblin extends Enemy {
             int calculateDamage = ScalingLogic.calculateDamage(user,baseAtk,0.2,0.1) * coins;
 
             Character target = Dice.getInstance().pickRandom(targets);
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogColor.ENEMY_ACTION);
+            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.ENEMY_ACTION);
             // TODO: panel should be empty during the swinging
 //            VisualEffectsManager.getInstance().hideCharacterVisual(user);
 //            VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", target, () -> {
@@ -123,7 +122,7 @@ public class Goblin extends Enemy {
             }
 
             if (Dice.getInstance().chance(0.30)) {
-                LogManager.log(defender.getName() + " panics and dodges the attack!", LogColor.ENEMY_ACTION);
+                LogManager.log(defender.getName() + " panics and dodges the attack!", LogFormat.ENEMY_ACTION);
 
 //                TODO: Trigger pop up or sound or something
                 return 0;

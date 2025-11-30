@@ -6,7 +6,7 @@ import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.Dice;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import Resource.AnimationLoopType;
@@ -47,7 +47,7 @@ public class Spider extends Enemy {
             int calculateDamage = user.getBaseAtk();
 
             Character target = Dice.getInstance().pickRandom(targets);
-            LogManager.log(self.getActionLog(user, "uses", targets), LogColor.ENEMY_ACTION);
+            LogManager.log(self.getActionLog(user, "uses", targets), LogFormat.ENEMY_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("SPIDER_VENOM", target, () -> {
                 target.takeDamage(calculateDamage, user, self);

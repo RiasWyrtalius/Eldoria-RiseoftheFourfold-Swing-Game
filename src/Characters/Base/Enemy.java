@@ -2,10 +2,8 @@ package Characters.Base;
 
 import Abilities.Skill;
 import Characters.Character;
-import Characters.Enemies.Slime;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
-import jdk.jfr.Description;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -39,7 +37,7 @@ public abstract class Enemy extends Character {
 
     @Override
     protected void onDeath() {
-        LogManager.log("(ENEMY) : " + this.name + " has died!", LogColor.ENEMY_DEATH);
+        LogManager.log("(ENEMY) : " + this.name + " has died!", LogFormat.ENEMY_DEATH);
     }
 
     @Override

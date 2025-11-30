@@ -6,7 +6,7 @@ import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Party;
 import Core.GameFlow.Level;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import Items.Inventory;
@@ -43,16 +43,16 @@ public class BattleController {
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
-                LogManager.logHighlight("BATTLE", LogColor.BATTLE_HEADER, 60, false);
+                LogManager.logHighlight("BATTLE", LogFormat.BATTLE_HEADER, LogFormat.SIZE_HEADER, false);
                 Thread.sleep(500);
                 LogManager.clearHighlight();
-                LogManager.logHighlight("START!!", LogColor.BATTLE_HEADER, 60, false);
+                LogManager.logHighlight("START!!", LogFormat.BATTLE_HEADER, LogFormat.SIZE_HEADER, false);
                 Thread.sleep(500);
                 LogManager.clearHighlight();
 
-                LogManager.log("+==============+", LogColor.BATTLE_HEADER);
-                LogManager.log("|   BATTLE START   |", LogColor.BATTLE_HEADER);
-                LogManager.log("+==============+", LogColor.BATTLE_HEADER);
+                LogManager.log("┌──── ∘°❉ - ❉°∘ ────┐", LogFormat.BATTLE_HEADER);
+                LogManager.log("│   BATTLE START    │", LogFormat.BATTLE_HEADER);
+                LogManager.log("└──── °∘❉ - ❉∘° ────┘", LogFormat.BATTLE_HEADER);
 
                 VisualEffectsManager.getInstance().resumeAllAnimations();
 
@@ -73,7 +73,7 @@ public class BattleController {
     }
 
     private void resetTurnReadiness() {
-        LogManager.log("Turn " + turnCounter, LogColor.TURN_INDICATOR);
+//        LogManager.log("Turn " + turnCounter, LogFormat.TURN_INDICATOR);
         heroParty.setPartyExhaustion(false);
         enemyParty.setPartyExhaustion(false);
     }
@@ -102,7 +102,7 @@ public class BattleController {
         Inventory inventory = heroParty.getInventory();
 
         if (!inventory.consumeItem(item.getName())) {
-            LogManager.log("You have no " + item.getName() + " left!", LogColor.ENEMY_ACTION);
+            LogManager.log("You have no " + item.getName() + " left!", LogFormat.ENEMY_ACTION);
         }
 
         List<Character> finalTargets = (targets == null) ? new ArrayList<>() : new ArrayList<>(targets);
@@ -113,7 +113,7 @@ public class BattleController {
             advanceTurnCycle(true); // Manual override to force phase change
         };
 
-        LogManager.log("Party used " + item.getName() + "!", LogColor.PLAYER_JOIN);
+        LogManager.log("Party used " + item.getName() + "!", LogFormat.PLAYER_JOIN);
         item.use(null, finalTargets, onItemComplete);
     }
 
@@ -148,9 +148,9 @@ public class BattleController {
     }
 
     private void executeEnemyPhase() {
-        LogManager.log("+=============+", LogColor.TURN_INDICATOR); //legit unnecessary fanciness..
-        LogManager.log("| ENEMY PHASE |", LogColor.TURN_INDICATOR); // the right amount of fanciness :D
-        LogManager.log("+=============+", LogColor.TURN_INDICATOR);
+        LogManager.log("┌──── ∘°❉ - ❉°∘ ────┐", LogFormat.TURN_INDICATOR); //legit unnecessary fanciness..
+        LogManager.log("│   ENEMY PHASE   │", LogFormat.TURN_INDICATOR); // the right amount of fanciness :D
+        LogManager.log("└──── °∘❉ - ❉∘° ────┘", LogFormat.TURN_INDICATOR);
 
         setCurrentPhase(BattlePhase.ENEMY_ACTION);
 
@@ -209,13 +209,15 @@ public class BattleController {
 
         setCurrentPhase(BattlePhase.HERO_ACTION_WAIT);
         LogManager.log("");
-        LogManager.log("TURN " + turnCounter + " BEGINS", LogColor.TURN_INDICATOR);
+        LogManager.log("TURN " + turnCounter + " BEGINS", LogFormat.TURN_INDICATOR);
 
         if (this.mainView != null) this.mainView.refreshUI();
     }
 
     private void executeTurnCleanUp() {
-        LogManager.log("--- Turn Recovery ---", LogColor.TURN_INDICATOR);
+        LogManager.log("┌──── ∘°❉ - ❉°∘ ────┐", LogFormat.TURN_INDICATOR);
+        LogManager.log("│     Turn Recovery     │", LogFormat.TURN_INDICATOR);
+        LogManager.log("└──── °∘❉ - ❉∘° ────┘", LogFormat.TURN_INDICATOR);
 
         List<Character> aliveMembers = heroParty.getPartyMembers();
 
@@ -255,18 +257,18 @@ public class BattleController {
         BattleResult result = getFinalResult();
         switch (result) {
             case VICTORY -> {
-                LogManager.log("VICTORY! " + heroParty.getPartyName() + " is Triumphant!", LogColor.VICTORY);
-                LogManager.logHighlight("VICTORY! Well Done!", LogColor.VICTORY, 40, true);
+                LogManager.log("VICTORY! " + heroParty.getPartyName() + " is Triumphant!", LogFormat.VICTORY);
+                LogManager.logHighlight("VICTORY!", LogFormat.HIGHLIGHT_VICTORY, LogFormat.SIZE_HEADER, true);
             }
             case DEFEAT -> {
-                LogManager.log("DEFEAT! " + enemyParty.getPartyName() + " has wiped " + heroParty.getPartyName() + " out!", LogColor.DEFEAT);
-                LogManager.logHighlight("DEFEAT! Game Over.", LogColor.DEFEAT, 40, true);
+                LogManager.log("DEFEAT! " + enemyParty.getPartyName() + " has wiped " + heroParty.getPartyName() + " out!", LogFormat.DEFEAT);
+                LogManager.logHighlight("DEFEAT! Game Over.", LogFormat.DEFEAT, LogFormat.SIZE_HEADER, true);
             }
             case TIE -> {
-                LogManager.log("TIE!: Truly everyone is dead and gone.", LogColor.TIE);
-                LogManager.logHighlight("TIE! Game Over. Truly no one wins in the end.", LogColor.TIE, 40, true);
+                LogManager.log("TIE!: Truly everyone is dead and gone.", LogFormat.TIE);
+                LogManager.logHighlight("TIE! Game Over. Truly no one wins in the end.", LogFormat.TIE, LogFormat.SIZE_HEADER, true);
             }
-            default -> LogManager.logHighlight("Battle Ended.", LogColor.VICTORY, 40, true);
+            default -> LogManager.logHighlight("Battle Ended.", LogFormat.HIGHLIGHT_VICTORY, LogFormat.SIZE_HEADER, true);
         };
 
         VisualEffectsManager.getInstance().stopAllTimers();
@@ -277,7 +279,7 @@ public class BattleController {
     }
 
     private void processVictoryRewards() {
-        LogManager.log("--- STAGE CLEAR REWARDS ---", LogColor.VICTORY);
+        LogManager.log("--- STAGE CLEAR REWARDS ---", LogFormat.VICTORY);
 
         int xpBonus = currentLevel.xpReward();
         if (xpBonus > 0) {
@@ -295,7 +297,8 @@ public class BattleController {
             LogManager.log("Loot found!");
             for (Item item : loot) {
                 heroParty.getInventory().addItem(item, 1);
-                LogManager.log(" - " + item.getName(), LogColor.PLAYER_JOIN);
+                LogManager.logHighlight("+" + xpBonus + " XP", LogFormat.HIGHLIGHT_LEVELUP, LogFormat.SIZE_IMPACT, false);
+                LogManager.log(" - " + item.getName(), LogFormat.PLAYER_JOIN);
             }
         } else {
             LogManager.log("No items found.");

@@ -1,11 +1,9 @@
 package Characters.Base;
 
 import Abilities.JobClass;
-import Abilities.Jobs.AeroMancer;
-import Abilities.ReactionSkill;
 import Abilities.Skill;
 import Characters.Character;
-import Core.Utils.LogColor;
+import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 
 import java.awt.*;
@@ -35,7 +33,7 @@ public class Hero extends Character {
     }
 
     public void gainXP(int amount) {
-        LogManager.log(getName() + " Gains " + amount + "XP!", LogColor.XP_GAIN);
+        LogManager.log(getName() + " gains " + amount + "XP!", LogFormat.XP_GAIN);
         XP += amount;
 
         while (XP >= requiredXP) {
@@ -81,7 +79,7 @@ public class Hero extends Character {
             }
 
             setHealth(newHP);
-            logMsg.append(this.name).append(" has healed ").append(passiveHP).append(" HP.\n");
+            LogManager.log(this.name + " has healed " + passiveHP + "HP.", LogFormat.HP);
         }
 
         if (getMana() < getMaxMana()) {
@@ -92,7 +90,7 @@ public class Hero extends Character {
              }
 
              setMana(newMana);
-             logMsg.append(this.name).append(" has recovered ").append(passiveMana).append(" mana.\n");
+             LogManager.log(this.name + " has recovered " + passiveMana + "MP.\n", LogFormat.MP);
         }
 
         return logMsg.toString();
