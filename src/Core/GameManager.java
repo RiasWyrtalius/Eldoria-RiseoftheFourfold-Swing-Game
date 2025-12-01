@@ -41,10 +41,12 @@ public class GameManager {
     public void loadNextLevel() {
         Level nextLevel = gameLoader.loadNextLevel();
 
-        if (nextLevel == null) {
+        if (nextLevel == null && battleController.isBattleOver()) {
             gameLoader.finishCampaign();
             return;
         }
+
+        if (nextLevel == null) return;
 
         LogManager.log("Entering Level " + nextLevel.levelNumber(), LogFormat.SYSTEM);
 

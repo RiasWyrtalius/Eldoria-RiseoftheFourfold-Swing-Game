@@ -97,8 +97,10 @@ public class BattleController {
     }
 
     public void executeItemActionFromUI(Item item, List<Character> targets) {
-        LogManager.log("sfsufhufh");
-        if (!isBattleActive) return;
+        if (!isBattleActive) {
+            LogManager.log("cannot use item right now.");
+            return;
+        }
 
         Inventory inventory = heroParty.getInventory();
 
