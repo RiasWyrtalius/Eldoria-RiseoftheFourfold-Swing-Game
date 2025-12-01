@@ -9,6 +9,7 @@ import Characters.Enemies.Slime;
 import Characters.Enemies.Spider;
 import Characters.Enemies.Vampire;
 import Characters.Party;
+import Core.Utils.Dice;
 import Resource.Audio.AudioManager;
 import Core.Utils.LogManager;
 import Core.Utils.LogFormat;
@@ -44,13 +45,8 @@ public class GameLoader {
                 "A swarm of goblins surround you!",
                 buildEnemyGroup(Goblin::new, Goblin::new),
                 buildLoot(
-                        ItemFactory.revivePotion(),
                         ItemFactory.smallHealthPotion(),
-                        ItemFactory.smallManaPotion(),
-                        ItemFactory.splashSmallHealthPotion(),
-                        ItemFactory.splashSmallManaPotion(),
-                        ItemFactory.mediumHealthPotion(),
-                        ItemFactory.mediumManaPotion()
+                        ItemFactory.smallManaPotion()
                 )
         ));
 
@@ -276,9 +272,16 @@ public class GameLoader {
 
         if (minEnemies > maxEnemies) minEnemies = maxEnemies;
 
-        String bg = rng.nextBoolean() ?
-                "Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png" :
-                "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png" ;
+        String bg = "";
+        List<String> bg_List = new ArrayList<String>();
+        bg_List.add("Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png");
+        bg_List.add("Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png");
+        bg_List.add("Assets/Images/Backgrounds/Level_BG/Snow_Biome/sprite_0.png");
+        bg = Dice.getInstance().pickRandom(bg_List);
+//        for(int i = 0; i < 20 ; i++){
+//            int separator = (i - 2) / 5;
+//            bg = bg_List.get(separator % bg_List.size());
+//        }
 
         return new Level(
                 levelNum,
