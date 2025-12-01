@@ -30,13 +30,13 @@ public class Rogue extends JobClass{
             AssetManager.getInstance().registerAnimation(
                     "ROGUE_ATTACK",
                     "Assets/Animations/Heroes/Rogue/Effects/Attack/sprite_%d.png",
-                    6, 100, 100 , 100,
+                    6, 100, 100 , 200,
                     AnimationLoopType.ONE_CYCLE
             );
             AssetManager.getInstance().registerAnimation(
                     "ROGUE_DODGE",
                     "Assets/Animations/Heroes/Rogue/Effects/Dodge/sprite_%d.png",
-                    6, 100, 100 , 100,
+                    6, 100, 100 , 200,
                     AnimationLoopType.ONE_CYCLE
             );
 

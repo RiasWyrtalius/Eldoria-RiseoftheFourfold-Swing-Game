@@ -51,9 +51,10 @@ public class Spider extends Enemy {
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("SPIDER_VENOM", target, () -> {
                 target.takeDamage(calculateDamage, user, self);
-                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
+                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                 }
             }, true);
         };
