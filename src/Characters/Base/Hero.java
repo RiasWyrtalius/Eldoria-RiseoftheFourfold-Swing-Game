@@ -63,6 +63,8 @@ public class Hero extends Character {
         super.setMaxMana(new_mana);
     }
 
+
+
     public String regenerateTurnResources() {
         if (!isAlive) { return null; }
 
@@ -99,6 +101,7 @@ public class Hero extends Character {
 
     @Override
     protected void onDeath() {
+        super.onDeath();
         LogManager.log("(HERO) : " + this.name + " has died!");
     }
 

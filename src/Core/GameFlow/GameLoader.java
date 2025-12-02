@@ -4,11 +4,7 @@ import Abilities.Jobs.*;
 import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
-import Characters.Enemies.Goblin;
-import Characters.Enemies.Skull;
-import Characters.Enemies.Slime;
-import Characters.Enemies.Spider;
-import Characters.Enemies.Vampire;
+import Characters.Enemies.*;
 import Characters.Party;
 import Core.Utils.Dice;
 import Resource.Audio.AudioManager;
@@ -84,119 +80,37 @@ public class GameLoader {
         //TEMPORARY HERO SETUP
         heroParty = new Party("The Godslayers");
         Warrior warrior = new Warrior();
-        Characters.Character charlie = new Hero("Charlie",150,50,100,1,warrior,"WARRIOR_IDLE"){
-            @Override
-            protected void onDeath() {
-                super.onDeath();
-
-            }
-
-            @Override
-            protected void onDefeat(Characters.Character defeatedTarget) {
-
-            }
+        Character charlie = new Hero("Charlie",150,50,100,1,warrior,"WARRIOR_IDLE"){
         };
         Paladin paladin = new Paladin();
-        Characters.Character antot = new Hero("Antot",150,50,100,1,paladin,"PALADIN_IDLE"){
-            @Override
-            protected void onDeath() {
-
-            }
-
-            @Override
-            protected void onDefeat(Characters.Character defeatedTarget) {
-
-            }
+        Character antot = new Hero("Antot",150,50,100,1,paladin,"PALADIN_IDLE"){
         };
         Rogue rogue = new Rogue();
-        Characters.Character elyi = new Hero("Ely",80,50,100,1,rogue,"ROGUE_IDLE"){
-            @Override
-            protected void onDeath() {
-
-            }
-
-            @Override
-            protected void onDefeat(Characters.Character defeatedTarget) {
-
-            }
+        Character elyi = new Hero("Ely",80,50,100,1,rogue,"ROGUE_IDLE"){
         };
 
         FireMage fireMage = new FireMage();
-        Characters.Character chaniy = new Hero("Chaniy the doubter",100,60,120,1,fireMage,"MAGE_IDLE"){
-            @Override
-            protected void onDeath() {
-
-            }
-
-            @Override
-            protected void onDefeat(Characters.Character defeatedTarget) {
-
-            }
+        Character chaniy = new Hero("Chaniy the doubter",100,60,120,1,fireMage,"MAGE_IDLE"){
         };
 
         CryoMancer iceMage = new CryoMancer();
-        Characters.Character sammy = new Hero("Sammy", 100, 60, 120, 1, iceMage, "MAGE_ICE-IDLE") {
-            @Override
-            protected void onDeath() {
-
-            }
-
-            @Override
-            protected void onDefeat(Characters.Character defeatedTarget) {
-
-            }
+        Character sammy = new Hero("Sammy", 100, 60, 120, 1, iceMage, "MAGE_ICE-IDLE") {
         };
 
         EarthMage earthMage = new EarthMage();
-        Characters.Character ythan = new Hero("Ythanny W", 100, 60, 120, 1, earthMage, "MAGE_EARTH-IDLE") {
-            @Override
-            protected void onDeath() {
-
-            }
-
-            @Override
-            protected void onDefeat(Characters.Character defeatedTarget) {
-
-            }
+        Character ythan = new Hero("Ythanny W", 100, 60, 120, 1, earthMage, "MAGE_EARTH-IDLE") {
         };
 
         Cleric cleric = new Cleric();
-        Characters.Character erick = new Hero("Erick the cleric", 100, 60, 120, 1, cleric, "CLERIC_IDLE") {
-            @Override
-            protected void onDeath() {
-
-            }
-
-            @Override
-            protected void onDefeat(Characters.Character defeatedTarget) {
-
-            }
+        Character erick = new Hero("Erick the cleric", 100, 60, 120, 1, cleric, "CLERIC_IDLE") {
         };
 
         Archer archer = new Archer();
-        Characters.Character gianmeni = new Hero("Gian Meni",80,70,100,1,archer,"ARCHER_IDLE"){
-            @Override
-            protected void onDeath() {
-
-            }
-
-            @Override
-            protected void onDefeat(Characters.Character defeatedTarget) {
-
-            }
+        Character gianmeni = new Hero("Gian Meni",80,70,100,1,archer,"ARCHER_IDLE"){
         };
 
         AeroMancer aeoroMancer = new AeroMancer();
-        Characters.Character kervs = new Hero("Kurtis", 100, 60, 120, 1, aeoroMancer, "MAGE_WIND-IDLE"){
-            @Override
-            protected void onDeath() {
-
-            }
-
-            @Override
-            protected void onDefeat(Character defeatedTarget) {
-
-            }
+        Character kervs = new Hero("Kurtis", 100, 60, 120, 1, aeoroMancer, "MAGE_WIND-IDLE"){
         };
 
 //        TODO: add max amount of party members

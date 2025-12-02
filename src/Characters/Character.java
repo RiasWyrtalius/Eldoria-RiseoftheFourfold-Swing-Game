@@ -74,7 +74,13 @@ public abstract class Character {
     }
 
     // Subclass Hooks
-    protected abstract void onDeath();
+    protected void onDeath() {
+        VisualEffectsManager.getInstance().pauseCharacterAnimation(this);
+    }
+
+    protected void onRevive() {
+        VisualEffectsManager.getInstance().resumeCharacterAnimation(this);
+    }
 
     protected void onDefeat(Character attacker) {
         LogManager.log(this.name + " is killed by " + attacker.getName() + "!", LogFormat.ENEMY_ACTION);
@@ -122,6 +128,7 @@ public abstract class Character {
     private void reviveState() {
         this.isAlive = true;
         LogManager.log(this.name + " has been revived!");
+        onRevive();
     }
 
     public void setInitialHealth(int initialHealth){this.initialHealth = initialHealth;}

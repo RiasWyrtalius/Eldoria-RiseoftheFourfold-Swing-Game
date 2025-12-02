@@ -189,6 +189,16 @@ public class VisualEffectsManager {
         }
     }
 
+    public void resumeAnimation(String animationId) {
+        // check if animation is playing
+        Animation animation = AssetManager.getInstance().getAnimation(animationId);
+        if (animation != null) {
+            animation.continueAnimation();
+        } else {
+            LogManager.log("Animation " + animationId + " does not exist!", LogFormat.SYSTEM);
+        }
+    }
+
     public void pauseAllAnimations() {
         isGlobalPaused = true;
 
@@ -208,6 +218,42 @@ public class VisualEffectsManager {
             timer.start();
         }
         LogManager.log("System: All visuals RESUMED.", LogFormat.DEBUG_INFO);
+    }
+
+    public void pauseCharacterAnimation(Character character) {
+        JLabel displayLabel = getDisplayComponent(character);
+
+        if (displayLabel == null) {
+            LogManager.log("Cannot pause: UI component not found for " + character.getName(), LogFormat.SYSTEM);
+            return;
+        }
+
+        if (activeAnimationTimers.containsKey(displayLabel)) {
+            Timer timer = activeAnimationTimers.get(displayLabel);
+
+            if (timer.isRunning()) {
+                timer.stop();
+                LogManager.log("Paused visual for " + character.getName(), LogFormat.DEBUG_INFO);
+            }
+        }
+    }
+
+    public void resumeCharacterAnimation(Character character) {
+        JLabel displayLabel = getDisplayComponent(character);
+
+        if (displayLabel == null) {
+            LogManager.log("Cannot resume: UI component not found for " + character.getName(), LogFormat.SYSTEM);
+            return;
+        }
+
+        if (activeAnimationTimers.containsKey(displayLabel)) {
+            Timer timer = activeAnimationTimers.get(displayLabel);
+
+            if (!timer.isRunning()) {
+                timer.start();
+                LogManager.log("Resumed visual for " + character.getName(), LogFormat.DEBUG_INFO);
+            }
+        }
     }
 
     public void hideCharacterVisual(Character character) {

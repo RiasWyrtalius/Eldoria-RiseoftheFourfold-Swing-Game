@@ -37,6 +37,7 @@ public abstract class Enemy extends Character {
 
     @Override
     protected void onDeath() {
+        super.onDeath();
         LogManager.log("(ENEMY) : " + this.name + " has died!", LogFormat.ENEMY_DEATH);
     }
 

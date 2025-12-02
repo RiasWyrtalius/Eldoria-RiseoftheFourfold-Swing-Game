@@ -23,7 +23,6 @@ public class Spider extends Enemy {
         super("Demon Spider", 500, 30, 0, 1, "Slime", 10, "SPIDER_IDLE", "Best web designer around");
     }
 
-
     @Override
     protected void registerAssets() {
         AssetManager.getInstance().registerAnimation(
