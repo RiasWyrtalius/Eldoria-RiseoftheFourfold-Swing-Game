@@ -6,12 +6,14 @@ import Characters.Base.Hero;
 import Characters.HeroRepository;
 import Resource.Animation.Animation;
 import Resource.Animation.AssetManager;
+import UI.Components.AnimatedStatBar;
 import UI.Components.BackgroundPanel;
 import Characters.CharacterDisplayData;
 import java.awt.*;
 import java.util.List;
 import Characters.Character;
 import UI.Components.StatsRenderer;
+import Abilities.JobClass;
 
 public class CharacterSelection extends JFrame {
     private JPanel CharacterSelection;
@@ -24,6 +26,10 @@ public class CharacterSelection extends JFrame {
     private JTextField textField1;
     private JTextField textField2;
     private JTextPane statsTA;
+
+    private JLabel classLabel;
+    private AnimatedStatBar hpBar;
+    private AnimatedStatBar mpBar;
 
     private StatsRenderer statsRenderer;
     private List<CharacterDisplayData> characterList;
@@ -39,9 +45,12 @@ public class CharacterSelection extends JFrame {
         setTitle("Character Selection");
 
         setupPanels();
+        setupStatBar();
 
         if (statsTA != null) {
             statsRenderer = new StatsRenderer(statsTA);
+            statsTA.setOpaque(false);
+            statsTA.setAlignmentX(Component.LEFT_ALIGNMENT);
         }
 
         characterList = HeroRepository.getHeroes();
@@ -59,6 +68,77 @@ public class CharacterSelection extends JFrame {
         this.setVisible(true);
     }
 
+    private void setupStatBar() {
+        classLabel = new JLabel("Class: ");
+        classLabel.setFont(new Font("Georgia", Font.BOLD, 16));
+        classLabel.setForeground(new Color(0x000000)); // Gold color
+        classLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        hpBar = new AnimatedStatBar(500, new Color(220, 50, 50), "HP: ");
+        mpBar = new AnimatedStatBar(300, new Color(50, 150, 255), "MP: ");
+
+        //ensures it doesnt stretch
+        hpBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        mpBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        hpBar.setAlignmentX(Component.LEFT_ALIGNMENT);
+        mpBar.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        //boxlayout is used to stack text & bars vertically
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+
+        if (textField1 != null) {
+            textField1.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+            textField1.setAlignmentX(Component.LEFT_ALIGNMENT);
+        }
+        if (textField2 != null) {
+            textField2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+            textField2.setAlignmentX(Component.LEFT_ALIGNMENT);
+        }
+
+        // idk the fix but like were going to remove everything cause it breaks...
+        infoPanel.removeAll();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+
+        //Name Section
+        infoPanel.add(createHeaderLabel("Name:"));
+        if (textField1 != null) infoPanel.add(textField1);
+        infoPanel.add(Box.createVerticalStrut(10));
+
+        //Party Name Section
+        infoPanel.add(createHeaderLabel("Party Name:"));
+        if (textField2 != null) infoPanel.add(textField2);
+        infoPanel.add(Box.createVerticalStrut(15));
+
+        //Stats Header
+        infoPanel.add(createHeaderLabel("Stats:"));
+
+        //Class Label
+        infoPanel.add(classLabel);
+        infoPanel.add(Box.createVerticalStrut(5));
+
+        //Bars
+        infoPanel.add(hpBar);
+        infoPanel.add(Box.createVerticalStrut(5));
+        infoPanel.add(mpBar);
+        infoPanel.add(Box.createVerticalStrut(15));
+
+        //Description (statsTA)
+        if (statsTA != null) {
+            infoPanel.add(statsTA);
+        }
+
+        infoPanel.revalidate();
+        infoPanel.repaint();
+    }
+
+    private JLabel createHeaderLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Segoe UI Light", Font.BOLD, 16));
+        label.setForeground(Color.BLACK);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return label;
+    }
+
     private void updateView() {
         if (characterList.isEmpty()) return;
 
@@ -67,10 +147,15 @@ public class CharacterSelection extends JFrame {
 
         if (myChar instanceof Hero) {
             Hero myHero = (Hero) myChar;
+            JobClass job = myHero.getJob();
+            classLabel.setText("<html>Class: <font color='blue'>" + job.getName() + "</font></html>");
 
             if (statsRenderer != null) {
                 statsRenderer.updateDisplay(myHero);
             }
+
+            hpBar.setValue(myHero.getInitialHealth());
+            mpBar.setValue(myHero.getMaxMana());
 
             updateAnimation(myHero);
         }
@@ -134,7 +219,7 @@ public class CharacterSelection extends JFrame {
     private void setupPanels() {
         infoPanel.setOpaque(false);
         SelectedCharacter.setOpaque(false);
-        infoPanel.setPreferredSize(new Dimension(300, 500));
+        infoPanel.setPreferredSize(new Dimension(300, 550));
 
         customizePanel(infoPanel, "Character Information", TitledBorder.LEFT);
         customizePanel(SelectedCharacter, "Selected Hero", TitledBorder.CENTER);

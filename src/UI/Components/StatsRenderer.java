@@ -44,11 +44,7 @@ public class StatsRenderer {
     public void updateDisplay(Hero hero) {
         try {
             doc.remove(0, doc.getLength());
-            insertPair("Class: ", hero.getJob().getName() + "\n", classStyle);
-            insertPair("HP: ", hero.getInitialHealth() + "\n", hpStyle);
-            insertPair("MP: ", hero.getMaxMana() + "\n\n", mpStyle);
-
-            doc.insertString(doc.getLength(), "Description:\n", labelStyle);
+            doc.insertString(doc.getLength(), "\nDescription:\n", labelStyle);
             doc.insertString(doc.getLength(), hero.getJob().getDescription(), descStyle);
 
             doc.insertString(doc.getLength(), "\n\nSkills:\n", labelStyle);
