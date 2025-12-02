@@ -5,6 +5,7 @@ import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Enemies.Goblin;
+import Characters.Enemies.Skull;
 import Characters.Enemies.Slime;
 import Characters.Enemies.Spider;
 import Characters.Enemies.Vampire;
@@ -43,7 +44,7 @@ public class GameLoader {
                 "The Gates",
                 "Assets/Images/Backgrounds/sample.jpg",
                 "A swarm of goblins surround you!",
-                buildEnemyGroup(Goblin::new, Goblin::new),
+                buildEnemyGroup(Skull::new, Skull::new),
                 // TODO: this is gauranteed, not
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
@@ -344,6 +345,7 @@ public class GameLoader {
     private void initializeAllEnemyTypes() {
         allEnemyTypes.add(new EnemySpawnRule(Goblin::new,1));
         allEnemyTypes.add(new EnemySpawnRule(Slime::new,1));
+        allEnemyTypes.add(new EnemySpawnRule(Skull::new, 2));
         allEnemyTypes.add(new EnemySpawnRule(Spider::new, 3));
         allEnemyTypes.add(new EnemySpawnRule(Vampire::new, 5));
     }
