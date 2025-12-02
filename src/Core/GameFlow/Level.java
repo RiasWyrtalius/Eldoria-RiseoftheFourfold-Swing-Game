@@ -21,23 +21,31 @@ public record Level(
 
         List<Item> possibleItemDrops,
         int xpReward,
-        long levelSeed) {
+        long levelSeed,
+        boolean isFixedRoster) {
 
-        public Party createEnemyParty() {
-            Party party = new Party(levelName + " Enemies");
+    public Party buildEnemyParty() {
+        Party party = new Party(levelName + " Enemies");
 
-            Random localRng = new Random(levelSeed);
+        if (this.isFixedRoster) {
+            for (Function<Integer, Enemy> spawner : enemyGenerators) {
+                party.addPartyMember(spawner.apply(this.levelNumber));
+            }
+        }
+        else {
+            Random localRng = new Random(this.levelSeed);
+
             int count = Dice.getInstance().roll(minEnemies, maxEnemies, localRng);
 
-            // TODO: deal with this cast
             for (int i = 0; i < count; i++) {
                 Function<Integer, Enemy> spawner = Dice.getInstance().pickRandom(enemyGenerators, localRng);
+
                 if (spawner != null) {
-                    Enemy enemy = spawner.apply(this.levelNumber);
-                    party.addPartyMember(enemy);
+                    party.addPartyMember(spawner.apply(this.levelNumber));
                 }
             }
-
-            return party;
         }
+
+        return party;
+    }
 }

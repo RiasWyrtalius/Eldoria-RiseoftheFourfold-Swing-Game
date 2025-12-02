@@ -52,7 +52,7 @@ public class GameManager {
 
         mainView.setBattleBackground(nextLevel.battleBackground());
 
-        Party enemyParty = nextLevel.createEnemyParty();
+        Party enemyParty = nextLevel.buildEnemyParty();
         this.battleController = new BattleController(heroParty, enemyParty, nextLevel);
 
         battleController.setMainView(mainView);

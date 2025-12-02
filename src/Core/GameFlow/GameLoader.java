@@ -45,7 +45,6 @@ public class GameLoader {
                 "Assets/Images/Backgrounds/sample.jpg",
                 "A swarm of goblins surround you!",
                 buildEnemyGroup(Skull::new, Skull::new),
-                // TODO: this is gauranteed, not
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion()
@@ -67,16 +66,13 @@ public class GameLoader {
     private Level createSpecificLevel(int levelNum, String name, String bgKey, String intro,
                                       List<Function<Integer, Enemy>> enemies, List<Item> loot) {
         return new Level(
-                levelNum,
-                name,
-                intro,
-                bgKey,
+                levelNum, name, intro, bgKey,
                 enemies,
-                enemies.size(),
-                enemies.size(),
+                enemies.size(), enemies.size(),
                 loot,
                 100 * levelNum,
-                0 // fixed seed
+                0, // fixed seed
+                true
         );
     }
 
@@ -297,7 +293,8 @@ public class GameLoader {
                 maxEnemies,
                 generateRandomLoot(rng, levelNum),
                 100 * levelNum,
-                levelSeed
+                levelSeed,
+                false
         );
 
     }
@@ -327,7 +324,8 @@ public class GameLoader {
 //                1, 1, // Only 1 boss
 //                generateRandomLoot(rng, levelNum * 2), // Better loot
 //                500 * levelNum,
-//                levelSeed
+//                levelSeed,
+//                false
 //        );
 //    }
 
