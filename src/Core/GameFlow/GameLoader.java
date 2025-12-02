@@ -44,6 +44,7 @@ public class GameLoader {
                 "Assets/Images/Backgrounds/sample.jpg",
                 "A swarm of goblins surround you!",
                 buildEnemyGroup(Goblin::new, Goblin::new),
+                // TODO: this is gauranteed, not
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion()
@@ -79,6 +80,7 @@ public class GameLoader {
     }
 
     // TODO: Link up with character creation later!!!
+    // TODO: optimize character creation using factories (maybe)
     public static Party loadStarterParty() {
         Party heroParty = new Party("The Godslayers");
 
@@ -250,6 +252,7 @@ public class GameLoader {
     }
 
     private Level generateRandomMobLevel(Random rng, int levelNum, long levelSeed) {
+        LogManager.log("GENERATING LEVEL " + levelNum);
         List<Function<Integer, Enemy>> validGenerators = new ArrayList<>();
 
         for (EnemySpawnRule rule : allEnemyTypes) {
@@ -350,7 +353,7 @@ public class GameLoader {
 
         am.registerSound("VICTORY_MUSIC_1", "/Audio/SFX/victory_sound_1.wav");
     }
-
+    
     // TODO: File handling stuff here
     public void saveGame() {
         // write to json or object buffer

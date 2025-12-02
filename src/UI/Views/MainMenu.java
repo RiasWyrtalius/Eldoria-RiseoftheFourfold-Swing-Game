@@ -1,6 +1,7 @@
 package UI.Views;
 
 import Core.GameManager;
+import Resource.Audio.AudioManager;
 
 import javax.swing.*;
 import java.awt.*;

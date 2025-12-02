@@ -4,6 +4,8 @@ import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Visuals.VisualEffectsManager;
 
+// TODO: Item should not be recreated many times. just once and use a copy, and the quantity
+// TODO: make this into a flyweight
 public class ItemFactory {
     public static Item smallHealthPotion() {
         return new ResourceItem(

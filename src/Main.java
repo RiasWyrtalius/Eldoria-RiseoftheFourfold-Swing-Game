@@ -1,4 +1,4 @@
-package Core;
+import Core.GameManager;
 
 /**
  * Main Entry point

@@ -72,7 +72,7 @@ public class GameManager {
         // DONT DELETE! DEBUG to check if seed generation works properly
         // 2 goblins -> 2 slimes -> 1 goblin 1 spider -> etc. etc.
         // seed = 1764436935686L;
-        gameLoader.generateCampaign(seed, 5); // Generate 5 levels
+        gameLoader.generateCampaign(seed, 20); // Generate n levels
 
         loadNextLevel();
     }
