@@ -14,7 +14,7 @@
 
     public class CharacterStatusPanel extends JPanel {
         private Character character;
-        private JLabel nameLabel;
+        private OutlinedLabel nameLabel;
         private JProgressBar hpBar;
         private JProgressBar manaBar;
 
@@ -29,9 +29,13 @@
             this.setOpaque(false);
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-            nameLabel = new JLabel("N/A - Lvl 0");
-            nameLabel = new JLabel("N/A - Lvl 0");
+            nameLabel = new OutlinedLabel("N/A - Lvl 0", JLabel.LEFT);
             nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+
+            nameLabel.setOutlineColor(Color.BLACK);
+            nameLabel.setStrokeWidth(2.5f);
+            nameLabel.setForeground(Color.WHITE);
+            nameLabel.setFont(new Font("JetBrains Mono", Font.PLAIN, 14));
 
             hpBar = createStyledBar();
             manaBar = createStyledBar();
@@ -113,9 +117,9 @@
 
             this.character = character;
             this.setVisible(true);
-            nameLabel.setForeground(new Color(65, 105, 225));
-            nameLabel.setFont(new Font("JetBrains Mono", Font.PLAIN, 14));
+
             nameLabel.setText("Lv. " + character.getLevel() + " - " + character.getName());
+            nameLabel.setForeground(Color.WHITE);
 
             hpBar.setMaximum(character.getInitialHealth());
             hpBar.setValue(character.getHealth());
