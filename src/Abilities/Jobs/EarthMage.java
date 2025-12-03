@@ -22,7 +22,7 @@ public class EarthMage extends JobClass {
     public static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Earth/Idle/sprite_%d.png";
 
     public EarthMage(){
-        super("Earth Mage", description,0,0);
+        super("Earth Mage", description,0,50);
 
         AssetManager.getInstance().registerAnimation(
                 "MAGE_EARTH-IDLE",

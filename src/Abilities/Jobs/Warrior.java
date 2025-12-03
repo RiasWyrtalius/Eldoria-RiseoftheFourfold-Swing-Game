@@ -21,7 +21,7 @@ public class Warrior extends JobClass {
     public static final String IDLE_PATH = "Assets/Animations/Heroes/Warrior/Idle/sprite_%d.png";
 
     public Warrior() {
-        super("Warrior", description, 10, 0);
+        super("Warrior", description, 50, 0);
         AssetManager.getInstance().registerAnimation(
                 "WARRIOR_IDLE",
                 IDLE_PATH,
@@ -47,7 +47,7 @@ public class Warrior extends JobClass {
         ReactionLogic blockLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
             double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
             if (Dice.getInstance().chance(0.20) && hp_percent < 0.50) {
-                LogManager.log(defender.getName() + "Uses their shield to block", LogFormat.ENEMY_ACTION);
+                LogManager.log(defender.getName() + " Uses their shield to block", LogFormat.ENEMY_ACTION);
                 VisualEffectsManager.getInstance().playAnimation("WARRIOR_SHIELD-BASH", defender, null, true);
                 return 0;
             }

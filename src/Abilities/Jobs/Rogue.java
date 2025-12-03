@@ -46,10 +46,21 @@ public class Rogue extends JobClass{
         public List<ReactionSkill> createReactions() {
             ReactionLogic dodgeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
                 double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
-                if (Dice.getInstance().chance(0.50) && hp_percent < 0.60) {
-                    LogManager.log(defender.getName() + " skillfully dodges the attack!", LogFormat.ENEMY_ACTION);
-                    VisualEffectsManager.getInstance().playAnimation("ROGUE_DODGE", defender, null, true);
-                    return 0;
+
+                if (hp_percent < 0.60) {
+                    // Scale chance from 10% at 60% HP up to 40% at 0% HP
+                    double dodgeChance = 0.10 + (0.60 - hp_percent) * 0.50;
+
+                    // Clamp so it never goes above 40%
+                    if (dodgeChance > 0.40) {
+                        dodgeChance = 0.40;
+                    }
+
+                    if (Dice.getInstance().chance(dodgeChance)) {
+                        LogManager.log(defender.getName() + " skillfully dodges the attack!", LogFormat.ENEMY_ACTION);
+                        VisualEffectsManager.getInstance().playAnimation("ROGUE_DODGE", defender, null, true);
+                        return 0;
+                    }
                 }
                 return -1;
             };
@@ -79,7 +90,7 @@ public class Rogue extends JobClass{
             };
 
             SkillLogicConsumer cloneAttackLogic = (self, user, targets, onSkillComplete) -> {
-                int calculateDamage = ScalingLogic.calculateDamage(user,20,50,1.2,0.05);
+                int calculateDamage = ScalingLogic.calculateDamage(user,20,30,1.2,0.05);
                 LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
                 for(Character t : targets) {
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);
@@ -101,7 +112,7 @@ public class Rogue extends JobClass{
             );
 
             Skill CloneAttack = new Skill(
-                    "Clone Attack", "Multi-target clone spell", 50, 55,
+                    "Clone Attack", "Multi-target clone spell", 50, 30,
                     SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.AOE_ALL_TARGETS,TargetCondition.ALIVE,
                     cloneAttackLogic
             );

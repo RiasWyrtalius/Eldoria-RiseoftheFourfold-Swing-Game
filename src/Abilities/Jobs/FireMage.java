@@ -5,6 +5,7 @@ import Abilities.*;
 import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
+import Core.Utils.Dice;
 import Core.Utils.ScalingLogic;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
@@ -21,7 +22,7 @@ public class FireMage extends JobClass {
     public static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png";
 
     public FireMage() {
-        super("Fire Mage", description, 0, 0);
+        super("Fire Mage", description, 0, 50);
 
         AssetManager.getInstance().registerAnimation(
                 "MAGE_IDLE",
@@ -47,7 +48,23 @@ public class FireMage extends JobClass {
 
     @Override
     public List<ReactionSkill> createReactions() {
-        return List.of();
+        ReactionLogic reflectFireballLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+            double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
+            int calculateDmg = ScalingLogic.calculateDamage(defender,25,15,1.2,0.05);
+            int calculateDamage = (int)(calculateDmg * 0.4);
+            if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
+                LogManager.log(defender.getName() + " Attacks them back", LogFormat.ENEMY_ACTION);
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", attacker, () ->{
+                    attacker.receiveDamage(calculateDamage, defender, incomingSkill);
+                }, true);
+                return 0;
+            }
+            return -1;
+        };
+
+        ReactionSkill ReflectFireball = new ReactionSkill("Reflect Fireball", ReactionTrigger.ON_RECEIVE_DAMAGE, reflectFireballLogic);
+
+        return List.of(ReflectFireball);
     }
 
     public List<Skill> createSkills() {

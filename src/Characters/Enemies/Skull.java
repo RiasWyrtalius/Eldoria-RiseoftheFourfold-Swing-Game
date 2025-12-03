@@ -98,8 +98,8 @@ public class Skull extends Enemy {
 //            if (onSkillComplete != null) onSkillComplete.run();
 //        };
 
-        Skill skirmish = new Skill(
-                "Skirmish", "something something", 0, 15,
+        Skill FireBreath = new Skill(
+                "Fire Breath", "Breathes fire", 0, 15,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 fireBreath
         );
@@ -115,7 +115,7 @@ public class Skull extends Enemy {
         }
 
         skills.clear();
-        skills.add(skirmish);
+        skills.add(FireBreath);
 //        skills.add(throwCoin);
     }
 

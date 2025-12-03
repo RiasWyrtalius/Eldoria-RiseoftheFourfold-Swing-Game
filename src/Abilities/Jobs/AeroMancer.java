@@ -57,7 +57,7 @@ public class AeroMancer extends JobClass {
 
     public List<Skill> createSkills() {
         SkillLogicConsumer windTornadoLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user,40,(int)18.5,1.2,0.05);
+            int calculateDamage = ScalingLogic.calculateDamage(user,30,(int)18.5,1.2,0.05);
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
 
@@ -76,7 +76,7 @@ public class AeroMancer extends JobClass {
 //            }
         };
         SkillLogicConsumer windSlashLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user,30,(int)18.5,1.2,0.05);
+            int calculateDamage = ScalingLogic.calculateDamage(user,20,(int)18.5,1.2,0.05);
             Character target = targets.get(0);
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
