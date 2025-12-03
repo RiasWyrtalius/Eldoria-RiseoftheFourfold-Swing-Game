@@ -4,6 +4,7 @@ import Abilities.Skill;
 import Core.Battle.*;
 import Characters.Base.Hero;
 import Characters.Character;
+import Core.GameManager;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Items.Inventory;
@@ -127,12 +128,13 @@ public class BattleInterface extends JFrame{
         GameLogHighlightPanelTextPane.setEditable(false);
         heroPartyPanels = Arrays.asList(heroPartyPanel1, heroPartyPanel2, heroPartyPanel3, heroPartyPanel4);
         enemyPartyPanels = Arrays.asList(enemyPartyPanel1, enemyPartyPanel2, enemyPartyPanel3, enemyPartyPanel4);
+
+        listenerInit();
     }
 
     public void linkControllerAndData(BattleController controller) {
         this.battleController = controller;
 
-        listenerInit();
         refreshUI();
     }
 
@@ -148,10 +150,9 @@ public class BattleInterface extends JFrame{
             descendButton.addActionListener(e -> {
                 resetSelectionState();
                 descendPanel.setVisible(false);
-                Core.GameManager.getInstance().loadNextLevel();
+                GameManager.getInstance().loadNextLevel();
             });
         }
-        refreshUI();
     }
 
     public void refreshUI() {

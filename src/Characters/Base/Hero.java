@@ -94,11 +94,6 @@ public class Hero extends Character {
     }
 
     @Override
-    protected void onDefeat(Character finalAttacker) {
-        LogManager.log("(ENEMY) :" + finalAttacker.getName() + " has slain " + "(HERO) : " + this.name + "!");
-    }
-
-    @Override
     public String getDescription() {
         return job.getDescription();
     }

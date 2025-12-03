@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Skill {
-    private String name;
-    private String effect;
-    private int manaCost;
-    private int power;
-    private SkillType skillType;
-    private SkillAction skillAction;
-    private TargetType targetType;
-    private TargetCondition targetCondition;
+    private final String name;
+    private final String effect;
+    private final int manaCost;
+    private final int power;
+    private final SkillType skillType;
+    private final SkillAction skillAction;
+    private final TargetType targetType;
+    private final TargetCondition targetCondition;
     private final SkillLogicConsumer executeLogic;
 
     public Skill(String name, String effect, int manaCost, int power, SkillType skillType, SkillAction skillAction, TargetType targetType, TargetCondition targetCondition, SkillLogicConsumer executeLogic) {

@@ -38,17 +38,16 @@ public abstract class Enemy extends Character {
     @Override
     protected void onDeath() {
         super.onDeath();
-        LogManager.log("(ENEMY) : " + this.name + " has died!", LogFormat.ENEMY_DEATH);
+        LogManager.log("(ENEMY) : " + this.name + " has died!");
     }
 
     @Override
     protected void onDefeat(Character finalAttacker) {
+        super.onDefeat(finalAttacker);
         if (finalAttacker instanceof Hero winner) {
             LogManager.log(winner.getName() + " delivered the final blow to " + this.name + "!", Color.CYAN);
             winner.gainXP(this.getRewardXP()); // Grant XP to the winner
-            return;
         }
-        LogManager.log("(HERO) :" + finalAttacker.getName() + " has slain " + "(ENEMY) : " + this.name + "!");
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============

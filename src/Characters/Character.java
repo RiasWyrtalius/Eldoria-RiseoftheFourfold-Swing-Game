@@ -3,6 +3,7 @@ package Characters;
 import Abilities.ReactionSkill;
 import Abilities.ReactionTrigger;
 import Abilities.Skill;
+import Characters.Base.Hero;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
@@ -47,32 +48,31 @@ public abstract class Character {
     public void receiveDamage(int rawDamage, Character attacker, Skill incomingSkill) {
         int finalDamage = processReactions(ReactionTrigger.ON_RECEIVE_DAMAGE, attacker, incomingSkill, rawDamage);
 
-
         if (finalDamage == 0) {
             LogManager.log(this.name + " took no damage (Mitigated)!");
         } else {
             LogManager.log(this.name + " takes " + finalDamage + " damage.");
         }
 
-        setHealth(this.health - finalDamage, attacker);
+        int potentialHealth = this.health - finalDamage;
 
-        if (this.health <= 0) {
+        if (potentialHealth <= 0) {
             int savedCheck = processReactions(ReactionTrigger.ON_FATAL_DAMAGE, attacker, incomingSkill, 0);
             boolean wasSaved = (savedCheck == 1);
 
-            if (!wasSaved) {
-                if (attacker != null) {
-                    onDefeat(attacker);
-                }
+            if (wasSaved) {
+                return;
             }
         }
+
+        setHealth(potentialHealth, attacker);
     }
 
     public final void die() {
         this.health = 0;
         this.isAlive = false;
-        setMana(0);
         onDeath();
+        setMana(0);
     }
 
     // Subclass Hooks
@@ -86,6 +86,7 @@ public abstract class Character {
     }
 
     protected void onDefeat(Character attacker) {
+        if (attacker == null) return;
         LogManager.log(this.name + " is killed by " + attacker.getName() + "!", LogFormat.ENEMY_ACTION);
     };
 
@@ -153,16 +154,26 @@ public abstract class Character {
         this.health = newHealth;
         if (this.health == 0 && this.isAlive) {
             die();
+
+            onDefeat(source);
         }
         else if (this.health > 0 && !this.isAlive) {
-            reviveState();
+            reviveState(source);
         }
     }
 
-    private void reviveState() {
+    private void reviveState(Character source) {
         this.isAlive = true;
-        LogManager.log(this.name + " has been revived!");
-        processReactions(ReactionTrigger.ON_REVIVE, null, null, 0);
+
+        // Trigger ON_REVIVE reactions
+        processReactions(ReactionTrigger.ON_REVIVE, source, null, 0);
+
+        if (source != null) {
+            LogManager.log(this.name + " was revived by " + source.getName() + "!");
+        } else {
+            LogManager.log(this.name + " has been revived!");
+        }
+
         onRevive();
     }
 
