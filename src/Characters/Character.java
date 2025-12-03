@@ -49,7 +49,7 @@ public abstract class Character {
         int finalDamage = processReactions(ReactionTrigger.ON_RECEIVE_DAMAGE, attacker, incomingSkill, rawDamage);
 
         if (finalDamage == 0) {
-            LogManager.log(this.name + " took no damage (Mitigated)!");
+            LogManager.log(this.name + " took no damage (Mitiga ted)!");
         } else {
             LogManager.log(this.name + " takes " + finalDamage + " damage.");
         }
@@ -102,7 +102,7 @@ public abstract class Character {
         // TODO: Front end logging for spending mana here or within in the
         //      subclass method called
         if (canCast(manaCost)) {
-            setMana(this.maxMana - manaCost);
+            setMana(this.mana - manaCost);
             return true;
         } else {
             return false;
@@ -204,7 +204,7 @@ public abstract class Character {
                     case ON_RECEIVE_MANA:
                         currentValue = result;
                         // If 0 then optionally stop processing further reactions
-                        if (currentValue == 0 && trigger == ReactionTrigger.ON_RECEIVE_DAMAGE) {
+                        if (currentValue <= 0) {
                             return 0;
                         }
                         break;
@@ -264,6 +264,7 @@ public abstract class Character {
         if (newMana < 0) {
             newMana = 0;
         }
+        LogManager.log("set new mana: " + newMana, LogFormat.DEBUG_INFO);
         this.mana = newMana;
     }
     public abstract List<Skill> getSkills();

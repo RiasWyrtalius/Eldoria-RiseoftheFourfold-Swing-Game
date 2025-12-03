@@ -3,6 +3,8 @@ package Abilities;
 import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
+import Core.Utils.LogFormat;
+import Core.Utils.LogManager;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +34,7 @@ public class Skill {
 
     public void execute(Character user, List<Character> target, Runnable onSkillComplete) {
         if (user.spendMana(this.manaCost)) {
+            LogManager.log("spent: " + this.manaCost + " mana", LogFormat.DEBUG_INFO);
             executeLogic.accept(this, user, target, onSkillComplete);
         }
     }
