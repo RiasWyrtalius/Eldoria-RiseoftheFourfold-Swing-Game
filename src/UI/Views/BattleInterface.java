@@ -5,14 +5,11 @@ import Core.Battle.*;
 import Characters.Base.Hero;
 import Characters.Character;
 import Core.GameManager;
-import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Items.Inventory;
 import Items.Item;
-import UI.Components.BackgroundPanel;
-import UI.Components.BattleUIMode;
-import UI.Components.CharacterStatusPanel;
-import UI.Components.InventoryPanel;
+import UI.Components.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,6 +55,11 @@ public class BattleInterface extends JPanel {
 
     private JScrollPane CharacterInspector_JSP;
     private JTextPane inspectorText;
+
+    //NEW ADDITIONS
+        private AnimatedStatBar inspector_HpBar;
+        private AnimatedStatBar inspector_MpBar;
+        private AnimatedStatBar inspector_XPBar;
 
     private final Map<Character, CharacterStatusPanel> characterToPanelMap = new HashMap<>();
 
@@ -617,8 +619,17 @@ public class BattleInterface extends JPanel {
         inspectorText.setMargin(new Insets(10, 10, 10, 10)); // padding
         inspectorText.setCaretColor(Color.WHITE);
 
+        inspector_XPBar = new AnimatedStatBar(100, Color.YELLOW, "XP: ");
+        inspector_HpBar = new AnimatedStatBar(100, Color.GREEN, "HP:");
+        inspector_MpBar = new AnimatedStatBar(100, new Color(100, 149, 237), "MP:");
+
+        inspector_XPBar.setPreferredSize(new Dimension(180, 25));
+        inspector_HpBar.setPreferredSize(new Dimension(180, 25));
+        inspector_MpBar.setPreferredSize(new Dimension(180, 25));
+
         if (CharacterInspector_JSP != null) {
             CharacterInspector_JSP.setViewportView(inspectorText);
+            CharacterInspector_JSP.getViewport().setBackground(new Color(44, 44, 44));
         }
     }
 
@@ -626,7 +637,25 @@ public class BattleInterface extends JPanel {
         if (inspectorText == null) return;
 
         inspectorText.setText("");
-        if (c == null) return;
+
+        //no character selected
+        if (c == null) { return; }
+
+        inspector_HpBar.setVisible(true);
+        inspector_MpBar.setVisible(true);
+        inspector_XPBar.setVisible(true);
+
+        if (c instanceof Hero) {
+            Hero h = (Hero)c;
+            inspector_XPBar.setMaxValue(h.getRequiredXP());
+            inspector_XPBar.setValue(h.getXP());
+        }
+
+        inspector_HpBar.setMaxValue(c.getInitialHealth());
+        inspector_HpBar.setValue(c.getHealth());
+
+        inspector_MpBar.setMaxValue(c.getMaxMana());
+        inspector_MpBar.setValue(c.getMana());
 
         StyledDocument doc = inspectorText.getStyledDocument();
 
@@ -635,6 +664,16 @@ public class BattleInterface extends JPanel {
         StyleConstants.setForeground(titleStyle, new Color(65, 105, 225));
         StyleConstants.setBold(titleStyle, true);
         StyleConstants.setFontSize(titleStyle, 20);
+
+        SimpleAttributeSet levelStyle = new SimpleAttributeSet();
+        StyleConstants.setFontFamily(levelStyle, "Segoe UI Light");
+        StyleConstants.setForeground(levelStyle, new Color(41, 65, 121));
+        StyleConstants.setFontSize(levelStyle, 18);
+
+        SimpleAttributeSet skillStyle = new SimpleAttributeSet();
+        StyleConstants.setFontFamily(skillStyle, "Segoe UI Light");
+        StyleConstants.setForeground(skillStyle, new Color(41, 65, 121));
+        StyleConstants.setFontSize(skillStyle, 18);
 
         SimpleAttributeSet hpStyle = new SimpleAttributeSet();
         StyleConstants.setForeground(hpStyle, Color.GREEN);
@@ -661,23 +700,22 @@ public class BattleInterface extends JPanel {
             doc.insertString(doc.getLength(), "\n──────────────── ⋆⋅☆⋅⋆ ────────────────\n\n", grayStyle);
 
             //STATS
-            doc.insertString(doc.getLength(), "LVL: " + c.getLevel() + "\n", defaultStyle);
+            doc.insertString(doc.getLength(), "LVL: " + c.getLevel() + "\n", levelStyle);
 
-            if (c instanceof Hero) {
-                Hero h = (Hero)c;
-                doc.insertString(doc.getLength(), "XP: " + h.getXP() + "/" + h.getRequiredXP() + "\n", defaultStyle);
-            }
+            //XP, HP, & MANA
+            inspectorText.setCaretPosition(doc.getLength());
+            inspectorText.insertComponent(inspector_XPBar);
 
-            //HP & MANA
-            doc.insertString(doc.getLength(), "HP: ", defaultStyle);
-            doc.insertString(doc.getLength(), c.getHealth() + "/" + c.getInitialHealth() + "\n", hpStyle);
-
-            doc.insertString(doc.getLength(), "MP: ", defaultStyle);
-            doc.insertString(doc.getLength(), c.getMana() + "/" + c.getMaxMana() + "\n", mpStyle);
             doc.insertString(doc.getLength(), "\n", defaultStyle);
+            inspectorText.setCaretPosition(doc.getLength());
+            inspectorText.insertComponent(inspector_HpBar);
+            
+            doc.insertString(doc.getLength(), "\n", defaultStyle);
+            inspectorText.setCaretPosition(doc.getLength());
+            inspectorText.insertComponent(inspector_MpBar);
 
             //SKILLS
-            doc.insertString(doc.getLength(), "[ SKILLS ]\n", defaultStyle);
+            doc.insertString(doc.getLength(), "\n\n[ SKILLS ]\n", skillStyle);
             if (c.getSkills() != null) {
                 for (Skill s : c.getSkills()) {
                     doc.insertString(doc.getLength(), "• " + s.getName() + " ", defaultStyle);

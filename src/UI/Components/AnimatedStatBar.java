@@ -47,6 +47,15 @@ public class AnimatedStatBar extends JPanel {
         });
     }
 
+    //prevention for division by zeroes
+    public void setMaxValue(int max) {
+        this.maxValue = max;
+        if (this.maxValue <= 0) {
+            this.maxValue = 1;
+        }
+        repaint();
+    }
+
     public void setValue(int newValue) {
         this.targetValue = newValue;
         if (targetValue > maxValue) targetValue = maxValue;
