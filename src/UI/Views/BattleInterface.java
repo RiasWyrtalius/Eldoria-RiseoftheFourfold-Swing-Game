@@ -30,7 +30,7 @@ import javax.swing.text.*;
 import java.awt.Color;
 
 // TODO: DESCEND calls battle controller->game manager for next battle
-public class BattleInterface extends JFrame{
+public class BattleInterface extends JPanel {
     private BattleController battleController;
 
     private JPanel contentPanel;
@@ -80,8 +80,10 @@ public class BattleInterface extends JFrame{
     private JSplitPane SplitPane_2;
 
     public BattleInterface() {
-        this.setContentPane(contentPanel);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLayout(new BorderLayout());
+        if (contentPanel != null) {
+            this.add(contentPanel, BorderLayout.CENTER);
+        }
 
         heroPartyLabel.setForeground(Color.WHITE);
         if (SplitPane_1 != null) {
@@ -91,7 +93,6 @@ public class BattleInterface extends JFrame{
                     return new BasicSplitPaneDivider(this) {
                         @Override
                         public void setBorder(Border b) {
-                            // This removes the 3D border so the color shows
                         }
                     };
                 }
@@ -106,7 +107,6 @@ public class BattleInterface extends JFrame{
                     return new BasicSplitPaneDivider(this) {
                         @Override
                         public void setBorder(Border b) {
-                            // This removes the 3D border so the color shows
                         }
                     };
                 }
@@ -117,11 +117,6 @@ public class BattleInterface extends JFrame{
 
         setupInspector();
 
-        this.pack();
-        this.setVisible(true);
-        setTitle("DND Swing Clone | Saja Boys");
-
-        // shows when battle ends and heroes win to
         descendPanel.setVisible(false);
 
         GameLogPanelTextPane.setEditable(false);

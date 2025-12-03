@@ -6,12 +6,14 @@ import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Enemies.*;
 import Characters.Party;
+import Core.Story.StorySlide;
 import Core.Utils.Dice;
 import Resource.Audio.AudioManager;
 import Core.Utils.LogManager;
 import Core.Utils.LogFormat;
 import Items.*;
 
+import java.sql.Array;
 import java.util.*;
 import java.util.function.Function;
 
@@ -79,10 +81,13 @@ public class GameLoader {
 
         //TEMPORARY HERO SETUP
         heroParty = new Party("The Godslayers");
+
         Warrior warrior = new Warrior();
         Character charlie = new Hero("Charlie",150,50,100,1,warrior);
+
         Paladin paladin = new Paladin();
         Character antot = new Hero("Antot",150,50,100,1,paladin);
+
         Rogue rogue = new Rogue();
         Character elyi = new Hero("Ely",80,50,100,1,rogue);
 
@@ -233,6 +238,32 @@ public class GameLoader {
 //                false
 //        );
 //    }
+
+    public static List<StorySlide> loadIntroSequence() {
+        List<StorySlide> slides = new ArrayList<>();
+
+        slides.add(new StorySlide(
+                "Assets/Images/Backgrounds/forest_bg.png",
+                List.of(
+                        "The forest has been peaceful for centuries.",
+                        "The birds sang, and the wind blew gently."
+                ),
+                null
+//                () -> AudioManager.getInstance().playMusic("MUSIC_PEACEFUL")
+        ));
+
+        slides.add(new StorySlide(
+                "Assets/Images/Backgrounds/dungeon_bg.png",
+                List.of(
+                        "sadfhsadifhsadufsadhfusadhfsadf.",
+                        "The birds sang, and the wind blew gently."
+                ),
+                null
+//                () -> AudioManager.getInstance().playMusic("MUSIC_PEACEFUL")
+        ));
+
+        return slides;
+    }
 
     public Level loadNextLevel() {
         return campaignQueue.poll();

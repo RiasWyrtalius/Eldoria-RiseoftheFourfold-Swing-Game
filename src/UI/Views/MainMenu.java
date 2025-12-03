@@ -1,6 +1,7 @@
 package UI.Views;
 
 import Core.GameManager;
+import Core.Visuals.VisualEffectsManager;
 import Resource.Audio.AudioManager;
 
 import javax.swing.*;
@@ -16,35 +17,38 @@ public class MainMenu extends JFrame {
     private JButton startButton;
     private JButton continueButton;
 
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(1280, 720);
+    }
+
     public MainMenu(GameManager manager) {
         this.manager = manager;
 
         this.setContentPane(contentPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.pack();
+        this.setTitle("Elordia: Rise of the Fourfold");
+
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+//        this.pack();
+//        this.setLocationRelativeTo(null); // Center the window
         this.setVisible(true);
+
+        // TODO: play music HERE!
 
         //  TODO: enable continue button only if content save file is available
         continueButton.setEnabled(false);
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("...Exiting Application");
-                System.exit(0);
-            }
-        });
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            // TODO: create a new save file in the global context singleton
-                // delete this window
-                Window window = SwingUtilities.getWindowAncestor((JButton)e.getSource());
-                if (window != null) {
-                    window.dispose();
-                }
 
-                manager.startNewGame();
-            }
+        exitButton.addActionListener(e -> {
+            System.out.println("...Exiting Application");
+            // stop timers before killing JVM for some reason
+            VisualEffectsManager.getInstance().stopAllTimers();
+            System.exit(0);
+        });
+
+        startButton.addActionListener(e -> {
+            manager.startNewGame(this);
         });
     }
 }
