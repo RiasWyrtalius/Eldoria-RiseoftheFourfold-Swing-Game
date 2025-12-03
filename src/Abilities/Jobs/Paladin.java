@@ -22,7 +22,9 @@ public class Paladin extends JobClass {
     private static boolean hasRevived = false;
 
     public Paladin() {
-        super("Paladin", description, 50, 0);
+
+        super("Paladin", description, 30, 0, "PALADIN_IDLE");
+
         AssetManager.getInstance().registerAnimation(
                 "PALADIN_IDLE",
                 IDLE_PATH,

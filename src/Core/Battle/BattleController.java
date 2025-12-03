@@ -36,7 +36,7 @@ public class BattleController {
         this.isBattleActive = true;
         this.currentLevel = currentLevel;
 
-        VisualEffectsManager.getInstance().pauseAllAnimations();
+//        VisualEffectsManager.getInstance().pauseAllAnimations();
         runBattleIntro();
     }
 
@@ -276,7 +276,7 @@ public class BattleController {
             default -> LogManager.logHighlight("Battle Ended.", LogFormat.HIGHLIGHT_VICTORY, LogFormat.SIZE_HEADER, true);
         };
 
-        VisualEffectsManager.getInstance().stopAllTimers();
+//        VisualEffectsManager.getInstance().stopAllTimers();
 
         if (this.mainView != null) {
             this.mainView.refreshUI();

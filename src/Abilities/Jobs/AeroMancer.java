@@ -17,12 +17,11 @@ import java.util.List;
 
 
 public class AeroMancer extends JobClass {
-
     private static final String description = "Master of the skies, the AeroMancer bends the wind to her will. She summons gales to scatter enemies, rides currents to evade danger, and unleashes razor-sharp blasts of air. Her magic is swift, elusive, and devastating.";
     private static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Wind/Idle/sprite_%d.png";
 
     public AeroMancer(){
-        super("Wind Mage", description,0,0 );
+        super("Wind Mage", description,0,0,"MAGE_WIND-IDLE");
         AssetManager.getInstance().registerAnimation(
                 "MAGE_WIND-IDLE",
                 IDLE_PATH,

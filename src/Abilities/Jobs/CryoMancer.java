@@ -22,7 +22,9 @@ public class CryoMancer extends JobClass {
     private static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png";
 
     public CryoMancer(){
-        super("Ice Mage", description, 0, 50 );
+
+        super("Ice Mage", description, 0, 0,"MAGE_ICE-IDLE");
+
         AssetManager.getInstance().registerAnimation(
                 "MAGE_ICE-IDLE",
                 "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png",
