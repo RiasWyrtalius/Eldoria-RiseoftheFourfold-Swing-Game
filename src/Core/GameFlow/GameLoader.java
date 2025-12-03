@@ -40,7 +40,7 @@ public class GameLoader {
                 "The Gates",
                 "Assets/Images/Backgrounds/sample.jpg",
                 "A swarm of goblins surround you!",
-                buildEnemyGroup(Skull::new, Skull::new),
+                buildEnemyGroup(Goblin::new, Goblin::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion()
@@ -116,12 +116,12 @@ public class GameLoader {
 //        TODO: add max amount of party members
         heroParty.addPartyMember(charlie);
 //        heroParty.addPartyMember(ythan);
-        heroParty.addPartyMember(erick);
+//        heroParty.addPartyMember(erick);
 //        heroParty.addPartyMember(sammy);
 //        heroParty.addPartyMember(gianmeni);
 //        heroParty.addPartyMember(kervs);
 //        heroParty.addPartyMember(chaniy);
-        heroParty.addPartyMember(elyi);
+//        heroParty.addPartyMember(elyi);
 //        heroParty.addPartyMember(antot);
 
         loadStartingInventory(heroParty);

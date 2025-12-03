@@ -23,7 +23,7 @@ public class Goblin extends Enemy {
     public Goblin(int level) {
         super(
                 "Goblin Grunt",
-                ScalingLogic.calculateStat(level, 60, 5, 0.10),
+                ScalingLogic.calculateStat(level, 30, 5, 0.10),
                 ScalingLogic.calculateStat(level, 10, 2, 0.05),
                 0,
                 level,

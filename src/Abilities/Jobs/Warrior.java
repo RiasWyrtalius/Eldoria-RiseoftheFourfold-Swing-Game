@@ -5,6 +5,7 @@ import Abilities.*;
 import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
+import Core.Utils.Dice;
 import Core.Utils.ScalingLogic;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
@@ -43,7 +44,18 @@ public class Warrior extends JobClass {
 
     @Override
     public List<ReactionSkill> createReactions() {
-        return List.of();
+        ReactionLogic blockLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+            double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
+            if (Dice.getInstance().chance(0.20) && hp_percent < 0.50) {
+                LogManager.log(defender.getName() + "Uses their shield to block", LogFormat.ENEMY_ACTION);
+                VisualEffectsManager.getInstance().playAnimation("WARRIOR_SHIELD-BASH", defender, null, true);
+                return 0;
+            }
+            return -1;
+        };
+
+        ReactionSkill block = new ReactionSkill("Block", ReactionTrigger.ON_RECEIVE_DAMAGE, blockLogic);
+        return List.of(block);
     }
 
     public List<Skill> createSkills() {
