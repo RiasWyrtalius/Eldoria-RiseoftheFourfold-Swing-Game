@@ -65,7 +65,7 @@ public class EarthMage extends JobClass {
             for(Character t : targets) {
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("EARTH_ATTACK", t, () -> {
 
-                    t.takeDamage(calculateDamage, user, self);
+                    t.receiveDamage(calculateDamage, user, self);
 
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
@@ -87,7 +87,7 @@ public class EarthMage extends JobClass {
             for(Character t : targets) {
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("EARTHQUAKE", t, () -> {
 
-                    t.takeDamage(calculateDamage, user, self);
+                    t.receiveDamage(calculateDamage, user, self);
 
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
@@ -102,10 +102,10 @@ public class EarthMage extends JobClass {
         SkillLogicConsumer stoneHailLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,20,10,1.2,0.05);
             Character target = targets.get(0);
-            target.takeDamage(calculateDamage, user, self);
+            target.receiveDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, "Multitudes of earth crumbles down", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("STONE_HAIL", target, () -> {
-                target.takeDamage(calculateDamage, user, self);
+                target.receiveDamage(calculateDamage, user, self);
 
                 if (onSkillComplete != null) {
                     onSkillComplete.run();

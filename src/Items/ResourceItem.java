@@ -26,12 +26,10 @@ public class ResourceItem extends Item {
     public void use(Character user, List<Character> targets, Runnable onItemComplete) {
         for (Character target : targets) {
             if (this.hpAmount > 0) {
-                target.setHealth(target.getHealth() + this.hpAmount);
-                LogManager.log(target.getName() + " healed for " + this.hpAmount);
+                target.receiveHealing(this.hpAmount, user);
             }
             if (this.mpAmount > 0) {
-                target.setMana(target.getHealth() + this.mpAmount);
-                LogManager.log(target.getName() + " restored " + this.mpAmount);
+                target.receiveMana(this.mpAmount, user);
             }
         }
 

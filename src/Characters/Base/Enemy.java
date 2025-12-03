@@ -48,7 +48,7 @@ public abstract class Enemy extends Character {
             winner.gainXP(this.getRewardXP()); // Grant XP to the winner
             return;
         }
-        LogManager.log("(HERO) :" + finalAttacker.getName() + " has slain " + "(ENEMY) : " + this.name + " DAMN!");
+        LogManager.log("(HERO) :" + finalAttacker.getName() + " has slain " + "(ENEMY) : " + this.name + "!");
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============

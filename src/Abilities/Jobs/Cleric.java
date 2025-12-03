@@ -43,15 +43,13 @@ public class Cleric extends JobClass {
 
     public List<Skill> createSkills() {
         SkillLogicConsumer healSelfLogic = (self, user, targets, onSkillComplete) -> {
-            Character target = user;
             LogManager.log(self.getActionLog(user, " Heals", targets), LogFormat.HERO_ACTION);
             int heal = ScalingLogic.calculateStat(user.getLevel(),30,10,0.05);
-            int curr = user.getHealth();
 
-            user.setHealth(heal + curr);
+            user.receiveHealing(heal, user);
 
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
-            VisualEffectsManager.getInstance().playAnimationOnCharacter("CLERIC_HEAL", target, () -> {
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("CLERIC_HEAL", user, () -> {
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                     VisualEffectsManager.getInstance().restoreCharacterVisual(user);
@@ -60,18 +58,15 @@ public class Cleric extends JobClass {
         };
 
         SkillLogicConsumer healGroupLogic = (self, user, targets, onSkillComplete) -> {
-
-
             LogManager.log(self.getActionLog(user, " Heals", targets), LogFormat.HERO_ACTION);
 
             int heal = ScalingLogic.calculateStat(user.getLevel(),20,10,0.05);
             for(Character target : targets) {
-                int curr = target.getHealth();
-                target.setHealth(heal + curr);
+                target.receiveHealing(heal, user);
             }
-            VisualEffectsManager.getInstance().hideCharacterVisual(user);
-            VisualEffectsManager.getInstance().playAnimationOnCharacter("CLERIC_HEAL", user, () -> {
-                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+//            VisualEffectsManager.getInstance().hideCharacterVisual(user);
+            VisualEffectsManager.getInstance().playAnimation("CLERIC_HEAL", user, () -> {
+//                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                 }
@@ -85,8 +80,9 @@ public class Cleric extends JobClass {
             int reset_mana= (int)(target.getMaxMana() * 0.50);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("CLERIC_HEAL", user, () -> {
-                target.setHealth(revive_health);
+                target.revive(revive_health, user);
                 target.setMana(reset_mana);
+
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                     VisualEffectsManager.getInstance().restoreCharacterVisual(user);
@@ -100,7 +96,7 @@ public class Cleric extends JobClass {
 
             int calculateDamage = ScalingLogic.calculateDamage(user,20,20,0.02,0.005);
 
-                    target.takeDamage(calculateDamage, user, self);
+                    target.receiveDamage(calculateDamage, user, self);
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
                     }

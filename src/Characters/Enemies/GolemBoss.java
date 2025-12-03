@@ -59,7 +59,7 @@ public class GolemBoss extends Boss {
                 Character target = weakTarget;
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("GOLEM_BOSS-ATTACK", target, () -> {
-                target.takeDamage(calculateDamage, user, self);
+                target.receiveDamage(calculateDamage, user, self);
 
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
@@ -84,7 +84,7 @@ public class GolemBoss extends Boss {
             for (Character target : targets) {
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("GOLEM_BOSS-ATTACK", target, () -> {
-                    target.takeDamage(calculateDamage, user, self);
+                    target.receiveDamage(calculateDamage, user, self);
 
                     if (onSkillComplete != null) {
                         onSkillComplete.run();

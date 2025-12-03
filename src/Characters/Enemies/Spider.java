@@ -40,16 +40,18 @@ public class Spider extends Enemy {
         );
     }
 
+    // TODO: fix the SINGLE_TARGETING logic on this
     @Override
     protected void initializeSkills() {
         SkillLogicConsumer spiderVenomLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = user.getBaseAtk();
 
+//            int index = Dice.getInstance().roll(0, targets.size());
             Character target = Dice.getInstance().pickRandom(targets);
             LogManager.log(self.getActionLog(user, "uses", targets), LogFormat.ENEMY_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("SPIDER_VENOM", target, () -> {
-                target.takeDamage(calculateDamage, user, self);
+                target.receiveDamage(calculateDamage, user, self);
 
                 if (onSkillComplete != null) {
                     onSkillComplete.run();

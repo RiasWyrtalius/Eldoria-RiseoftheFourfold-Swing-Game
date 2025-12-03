@@ -1,6 +1,9 @@
 package Abilities;
 
 public enum ReactionTrigger {
-    ON_RECIEVE_DAMAGE,
-    ON_FATAL_DAMAGE
+    ON_RECEIVE_DAMAGE,
+    ON_FATAL_DAMAGE,
+    ON_RECEIVE_HEAL,
+    ON_REVIVE,
+    ON_RECEIVE_MANA
 }

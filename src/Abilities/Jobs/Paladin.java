@@ -55,7 +55,7 @@ public class Paladin extends JobClass {
             int revive_health= (int)(defender.getInitialHealth() * 0.30);
             int reset_mana= (int)(defender.getMaxMana() * 0.50);
             if (Dice.getInstance().chance(0.75) && hp_percent <= 0 && !hasRevived) {
-                defender.setHealth(revive_health);
+                defender.setHealth(revive_health, defender);
                 defender.setMana(reset_mana);
                 hasRevived = true;
                 VisualEffectsManager.getInstance().playAnimation("PALADIN_REVIVE", defender, () -> {
@@ -83,7 +83,7 @@ public class Paladin extends JobClass {
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
                         VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                        user.setHealth(heal + curr);
+                        user.setHealth(heal + curr, user);
                     }
                 }, true);
         };
@@ -96,7 +96,7 @@ public class Paladin extends JobClass {
 
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_HOLY-STRIKE", target, () -> {
-                    target.takeDamage(dmg, user, self);
+                    target.receiveDamage(dmg, user, self);
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
                         VisualEffectsManager.getInstance().restoreCharacterVisual(user);

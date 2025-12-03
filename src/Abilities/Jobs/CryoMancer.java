@@ -59,7 +59,7 @@ public class CryoMancer extends JobClass {
 
             VisualEffectsManager.getInstance().playAnimationOnCharacter("ICE_SPIKE", target, () -> {
 
-                target.takeDamage(calculateDamage, user, self);
+                target.receiveDamage(calculateDamage, user, self);
 
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
@@ -82,7 +82,7 @@ public class CryoMancer extends JobClass {
 
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FROSTBITE", target, () -> {
 
-                target.takeDamage(calculateDamage, user, self);
+                target.receiveDamage(calculateDamage, user, self);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                 }

@@ -50,7 +50,7 @@ public class DragonBoss extends Boss {
             if (weakTarget != null) {
                 int calculateDamage = ScalingLogic.calculateDamage(user,(int)(baseAtk * 1.5),0.4,0.1);
                 LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget)), LogFormat.ENEMY_ACTION);
-                weakTarget.takeDamage(calculateDamage, user, self);
+                weakTarget.receiveDamage(calculateDamage, user, self);
             }
 
             if (onSkillComplete != null) {
@@ -71,7 +71,7 @@ public class DragonBoss extends Boss {
 
             for (Character target : targets) {
                 if (target.getHealth() > 0) {
-                    target.takeDamage(calculateDamage, user, self);
+                    target.receiveDamage(calculateDamage, user, self);
                 }
             }
 

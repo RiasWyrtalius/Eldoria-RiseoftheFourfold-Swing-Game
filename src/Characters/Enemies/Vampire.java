@@ -49,7 +49,7 @@ public class Vampire extends Enemy {
             LogManager.log(self.getActionLog(user, "Attacks", targets), LogFormat.ENEMY_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("VAMPIRE_ATTACK", target, () -> {
-                target.takeDamage(calculateDamage, user, self);
+                target.receiveDamage(calculateDamage, user, self);
                 VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();

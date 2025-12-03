@@ -52,7 +52,7 @@ public class Skull extends Enemy {
                 "SKULL_ATTACK",
                 "Assets/Animations/Enemies/Skull/Effects/Attack/sprite_%d.png",
                 6,
-                100, 100, 300,
+                100, 100, 100,
                 AnimationLoopType.ONE_CYCLE
         );
 
@@ -67,54 +67,56 @@ public class Skull extends Enemy {
 
     @Override
     protected void initializeSkills() {
-        SkillLogicConsumer skirmishLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer fireBreath = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user, baseAtk, 0.2, 0.1);
 
             Character target = Dice.getInstance().pickRandom(targets);
             LogManager.log(self.getName() + " attacks " + target.getName() + "!", LogFormat.ENEMY_ACTION);
 
-            VisualEffectsManager.getInstance().hideCharacterVisual(user);
-            VisualEffectsManager.getInstance().playAnimationOnCharacter("SKULL_ATTACK", target, () -> {
+//            VisualEffectsManager.getInstance().hideCharacterVisual(user);
+            VisualEffectsManager.getInstance().playAnimation("SKULL_ATTACK", user, () -> {
+                // i like this
                 try {
-                    target.takeDamage(calculateDamage, user, self);
+                    target.receiveDamage(calculateDamage, user, self);
                 } finally {
-                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+//                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                     if (onSkillComplete != null) onSkillComplete.run();
                 }
             }, true);
         };
 
-        SkillLogicConsumer throwCoinsLogic = (self, user, targets, onSkillComplete) -> {
-            int coins = Dice.getInstance().roll(1, 5);
-            int calculateDamage = ScalingLogic.calculateDamage(user, baseAtk, 0.2, 0.1) * coins;
-
-            Character target = Dice.getInstance().pickRandom(targets);
-            LogManager.log(self.getName() + " throws " + coins + " coins at " + target.getName() + "!", LogFormat.ENEMY_ACTION);
-
-            // no hide/play animation here, but always restore (safe)
-            target.takeDamage(calculateDamage, user, self);
-            VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-            if (onSkillComplete != null) onSkillComplete.run();
-        };
+//        SkillLogicConsumer throwCoinsLogic = (self, user, targets, onSkillComplete) -> {
+//            int coins = Dice.getInstance().roll(1, 5);
+//            int calculateDamage = ScalingLogic.calculateDamage(user, baseAtk, 0.2, 0.1) * coins;
+//
+//            Character target = Dice.getInstance().pickRandom(targets);
+//            LogManager.log(self.getName() + " throws " + coins + " coins at " + target.getName() + "!", LogFormat.ENEMY_ACTION);
+//
+//            // no hide/play animation here, but always restore (safe)
+//            target.receiveDamage(calculateDamage, user, self);
+//            VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+//            if (onSkillComplete != null) onSkillComplete.run();
+//        };
 
         Skill skirmish = new Skill(
                 "Skirmish", "something something", 0, 15,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
-                skirmishLogic
+                fireBreath
         );
 
-        Skill throwCoin = new Skill(
-                "Coin Throw", "Fling Coins", 0, 10,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
-                throwCoinsLogic
-        );
+//        Skill throwCoin = new Skill(
+//                "Coin Throw", "Fling Coins", 0, 10,
+//                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
+//                throwCoinsLogic
+//        );
 
         if (skills == null) {
             skills = new java.util.ArrayList<>();
         }
+
         skills.clear();
         skills.add(skirmish);
-        skills.add(throwCoin);
+//        skills.add(throwCoin);
     }
 
     @Override

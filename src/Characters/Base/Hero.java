@@ -68,35 +68,23 @@ public class Hero extends Character {
     public String regenerateTurnResources() {
         if (!isAlive) { return null; }
 
-        StringBuilder logMsg = new StringBuilder();
+        String logMsg = "";
 
         if (getHealth() < getInitialHealth()) {
             
             int passiveHP = (int) (getInitialHealth() * 0.05);
             if (passiveHP < 1) passiveHP = 1;
 
-            int newHP = getHealth() + passiveHP;
-
-            if (newHP > getInitialHealth()) {
-                newHP = getInitialHealth();
-            }
-
-            setHealth(newHP);
-            LogManager.log(this.name + " has healed " + passiveHP + "HP.", LogFormat.HP);
+            this.receiveHealing(passiveHP, null);
         }
 
         if (getMana() < getMaxMana()) {
             int passiveMana = (int) (getMaxMana() * 0.03); // 3% max MP
-            int newMana = getMana() + passiveMana;
-             if (newMana > getMaxMana()) {
-                 newMana = getMaxMana();
-             }
 
-             setMana(newMana);
-             LogManager.log(this.name + " has recovered " + passiveMana + "MP.\n", LogFormat.MP);
+            this.receiveMana(passiveMana, null);
         }
 
-        return logMsg.toString();
+        return logMsg;
     }
 
     @Override
@@ -107,9 +95,7 @@ public class Hero extends Character {
 
     @Override
     protected void onDefeat(Character finalAttacker) {
-        LogManager.log("(ENEMY) : " + finalAttacker.getName(), Color.RED);
-        LogManager.log(" has slain ", Color.BLACK);
-        LogManager.log("(HERO) : " + this.name, Color.BLUE);
+        LogManager.log("(ENEMY) :" + finalAttacker.getName() + " has slain " + "(HERO) : " + this.name + "!");
     }
 
     @Override

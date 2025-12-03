@@ -59,7 +59,7 @@ public class FireMage extends JobClass {
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
-                target.takeDamage(calculateDamage, user, self);
+                target.receiveDamage(calculateDamage, user, self);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                 }
@@ -73,7 +73,7 @@ public class FireMage extends JobClass {
             for(Character t : targets) {
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("FIRE_CYCLONE", t, () -> {
 
-                        t.takeDamage(calculateDamage, user, self);
+                        t.receiveDamage(calculateDamage, user, self);
 
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
@@ -90,7 +90,7 @@ public class FireMage extends JobClass {
             int calculateDamage = ScalingLogic.calculateDamage(user,10,0,1.2,0.05);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
-            target.takeDamage(calculateDamage, user, self);
+            target.receiveDamage(calculateDamage, user, self);
             if (onSkillComplete != null) {
                 onSkillComplete.run();
             }

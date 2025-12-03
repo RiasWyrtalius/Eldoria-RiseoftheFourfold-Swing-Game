@@ -229,14 +229,15 @@ public class BattleController {
             return;
         }
 
+
         for (Character member : aliveMembers) {
+//
+            if (member instanceof Hero h) {
+                //
+//                String result = h.regenerateTurnResources();
+                h.regenerateTurnResources();
 
-            if (member instanceof Hero) {
-                Hero h = (Hero) member;
-
-                String result = h.regenerateTurnResources();
-
-                if (result != null && !result.isEmpty()) { LogManager.log(result); }
+//                if (result != null && !result.isEmpty()) { LogManager.log(result); }
             }
         }
 

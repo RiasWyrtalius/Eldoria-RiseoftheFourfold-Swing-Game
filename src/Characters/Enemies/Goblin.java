@@ -64,7 +64,7 @@ public class Goblin extends Enemy {
             // TODO: panel should be empty during the swinging
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", target, () -> {
-                target.takeDamage(calculateDamage, user, self);
+                target.receiveDamage(calculateDamage, user, self);
                 VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
@@ -81,7 +81,7 @@ public class Goblin extends Enemy {
             // TODO: panel should be empty during the swinging
 //            VisualEffectsManager.getInstance().hideCharacterVisual(user);
 //            VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", target, () -> {
-            target.takeDamage(calculateDamage, user, self);
+            target.receiveDamage(calculateDamage, user, self);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                     VisualEffectsManager.getInstance().restoreCharacterVisual(user);
@@ -131,7 +131,7 @@ public class Goblin extends Enemy {
             return -1;
         };
 
-        this.addReaction(new ReactionSkill("Cowardice", ReactionTrigger.ON_RECIEVE_DAMAGE, cowardiceLogic));
+        this.addReaction(new ReactionSkill("Cowardice", ReactionTrigger.ON_RECEIVE_DAMAGE, cowardiceLogic));
     }
 
     @Override

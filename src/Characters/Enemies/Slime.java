@@ -40,7 +40,7 @@ public class Slime extends Enemy {
             LogManager.log(self.getActionLog(user, "uses", targets), LogFormat.ENEMY_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("SLIME_ACIDIC-SLAM", target, () -> {
-                target.takeDamage(calculateDamage, user, self);
+                target.receiveDamage(calculateDamage, user, self);
                 VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();

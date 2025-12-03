@@ -71,7 +71,7 @@ public class Archer extends JobClass {
             return -1;
         };
 
-        ReactionSkill dodge = new ReactionSkill("Dodge", ReactionTrigger.ON_RECIEVE_DAMAGE, dodgeLogic);
+        ReactionSkill dodge = new ReactionSkill("Dodge", ReactionTrigger.ON_RECEIVE_DAMAGE, dodgeLogic);
 
 //        ReactionLogic deathLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
 //            if (defender.getHealth() == 0) {
@@ -94,7 +94,7 @@ public class Archer extends JobClass {
             Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, "Unleashes array of Arrows", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW-Rapid", user, () -> {
-                target.takeDamage(dmg, user, self);
+                target.receiveDamage(dmg, user, self);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                 }
@@ -106,7 +106,7 @@ public class Archer extends JobClass {
             Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, "Pulls their bow the hardest they can to release", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW", user, () -> {
-                target.takeDamage(dmg, user, self);
+                target.receiveDamage(dmg, user, self);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                 }

@@ -64,7 +64,7 @@ public class AeroMancer extends JobClass {
             for(Character t : targets) {
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("WIND_TORNADO", t, () -> {
 
-                    t.takeDamage(calculateDamage, user, self);
+                    t.receiveDamage(calculateDamage, user, self);
 
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
@@ -82,7 +82,7 @@ public class AeroMancer extends JobClass {
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("WIND_SLASH", target, () -> {
 
-                target.takeDamage(calculateDamage, user, self);
+                target.receiveDamage(calculateDamage, user, self);
 
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
@@ -100,7 +100,7 @@ public class AeroMancer extends JobClass {
             for(Character t : targets) {
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("WIND_PIERCE", t, () -> {
 
-                    t.takeDamage(calculateDamage, user, self);
+                    t.receiveDamage(calculateDamage, user, self);
 
                     if (onSkillComplete != null) {
                         onSkillComplete.run();

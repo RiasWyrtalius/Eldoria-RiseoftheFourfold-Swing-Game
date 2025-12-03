@@ -30,7 +30,7 @@ public class Warrior extends JobClass {
         AssetManager.getInstance().registerAnimation(
                 "WARRIOR_SWORD-SLASH",
                 "Assets/Animations/Heroes/Warrior/Effects/Sword_Slash/sprite_%d.png",
-                4, 100, 100 , 300,
+                4, 100, 100 , 150,
                 AnimationLoopType.ONE_CYCLE
         );
         AssetManager.getInstance().registerAnimation(
@@ -53,7 +53,7 @@ public class Warrior extends JobClass {
             LogManager.log(self.getActionLog(user, " Bashes Shield on ", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("WARRIOR_SHIELD-BASH", target, () -> {
-                target.takeDamage(calculateDamage, user, self);
+                target.receiveDamage(calculateDamage, user, self);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                     VisualEffectsManager.getInstance().restoreCharacterVisual(user);
@@ -67,7 +67,7 @@ public class Warrior extends JobClass {
             LogManager.log(self.getActionLog(user, " Slashes on ", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("WARRIOR_SWORD-SLASH", target, () -> {
-                target.takeDamage(calculateDamage, user, self);
+                target.receiveDamage(calculateDamage, user, self);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                     VisualEffectsManager.getInstance().restoreCharacterVisual(user);

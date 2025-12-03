@@ -54,7 +54,7 @@ public class Rogue extends JobClass{
                 return -1;
             };
 
-            ReactionSkill dodge = new ReactionSkill("Dodge", ReactionTrigger.ON_RECIEVE_DAMAGE, dodgeLogic);
+            ReactionSkill dodge = new ReactionSkill("Dodge", ReactionTrigger.ON_RECEIVE_DAMAGE, dodgeLogic);
 
             return List.of(dodge);
         }
@@ -69,7 +69,7 @@ public class Rogue extends JobClass{
                 LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("ROGUE_ATTACK", target, () -> {
-                    target.takeDamage(calculateDamage, user, self);
+                    target.receiveDamage(calculateDamage, user, self);
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
                         VisualEffectsManager.getInstance().restoreCharacterVisual(user);
@@ -84,7 +84,7 @@ public class Rogue extends JobClass{
                 for(Character t : targets) {
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("ROGUE_ATTACK", t, () -> {
-                    t.takeDamage(calculateDamage, user, self);
+                    t.receiveDamage(calculateDamage, user, self);
                     if (onSkillComplete != null) {
                         onSkillComplete.run();
                         VisualEffectsManager.getInstance().restoreCharacterVisual(user);
