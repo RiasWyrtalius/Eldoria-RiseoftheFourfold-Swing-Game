@@ -20,7 +20,7 @@ public class Cleric extends JobClass {
     private static final String IDLE_PATH = "Assets/Animations/Heroes/Cleric/Idle/sprite_%d.png";
 
     public Cleric() {
-        super("Cleric", description, 10, 0);
+        super("Cleric", description, 10, 0,"CLERIC_IDLE");
         AssetManager.getInstance().registerAnimation(
                 "CLERIC_IDLE",
                 "Assets/Animations/Heroes/Cleric/Idle/sprite_%d.png",

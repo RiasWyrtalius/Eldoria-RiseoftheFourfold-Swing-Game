@@ -127,7 +127,7 @@
             hpBar.setString("HP " + character.getHealth() + "/" + character.getInitialHealth());
             hpBar.setForeground(barState(character.getHealth(), character.getInitialHealth()));
 
-            String visualId = character.getImageKey();
+            String visualId = character.getIdleImageKey();
             VisualAsset assetData = AssetManager.getInstance().getVisualAssetData(visualId);
 
             VisualEffectsManager.getInstance().applyVisual(assetData, iconDisplayLabel, false);

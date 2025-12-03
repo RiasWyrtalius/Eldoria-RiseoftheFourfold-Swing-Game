@@ -9,17 +9,19 @@ public abstract class JobClass {
     private List<ReactionSkill> reactions;
     private final int hpBonus;
     private final int manaBonus;
+    private final String idleImageKey;
 
-    public JobClass(String name, String description, int hpBonus, int manaBonus) {
+    public JobClass(String name, String description, int hpBonus, int manaBonus, String idleImageKey) {
         this.name = name;
         this.description = description;
         this.hpBonus = hpBonus;
         this.manaBonus = manaBonus;
+        this.idleImageKey = idleImageKey;
         this.skills = createSkills();
     }
 
-    public JobClass(String name, String description) {
-        this(name, description, 0, 0);
+    public JobClass(String name, String description, String idleImageKey) {
+        this(name, description, 0, 0, idleImageKey);
     }
 
     public abstract List<ReactionSkill> createReactions();
@@ -50,4 +52,5 @@ public abstract class JobClass {
 
     //TEMPORARY GETTERS FOR CHARACTER DISPLAY
     public String getPreviewImagePath() { return ""; }
+    public String getIdleImageKey() { return this.idleImageKey; }
 }

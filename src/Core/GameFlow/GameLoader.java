@@ -80,38 +80,29 @@ public class GameLoader {
         //TEMPORARY HERO SETUP
         heroParty = new Party("The Godslayers");
         Warrior warrior = new Warrior();
-        Character charlie = new Hero("Charlie",150,50,100,1,warrior,"WARRIOR_IDLE"){
-        };
+        Character charlie = new Hero("Charlie",150,50,100,1,warrior);
         Paladin paladin = new Paladin();
-        Character antot = new Hero("Antot",150,50,100,1,paladin,"PALADIN_IDLE"){
-        };
+        Character antot = new Hero("Antot",150,50,100,1,paladin);
         Rogue rogue = new Rogue();
-        Character elyi = new Hero("Ely",80,50,100,1,rogue,"ROGUE_IDLE"){
-        };
+        Character elyi = new Hero("Ely",80,50,100,1,rogue);
 
         FireMage fireMage = new FireMage();
-        Character chaniy = new Hero("Chaniy the doubter",100,60,120,1,fireMage,"MAGE_IDLE"){
-        };
+        Character chaniy = new Hero("Chaniy the doubter",100,60,120,1,fireMage);
 
         CryoMancer iceMage = new CryoMancer();
-        Character sammy = new Hero("Sammy", 100, 60, 120, 1, iceMage, "MAGE_ICE-IDLE") {
-        };
+        Character sammy = new Hero("Sammy", 100, 60, 120, 1, iceMage);
 
         EarthMage earthMage = new EarthMage();
-        Character ythan = new Hero("Ythanny W", 100, 60, 120, 1, earthMage, "MAGE_EARTH-IDLE") {
-        };
+        Character ythan = new Hero("Ythanny W", 100, 60, 120, 1, earthMage);
 
         Cleric cleric = new Cleric();
-        Character erick = new Hero("Erick the cleric", 100, 60, 120, 1, cleric, "CLERIC_IDLE") {
-        };
+        Character erick = new Hero("Erick the cleric", 100, 60, 120, 1, cleric);
 
         Archer archer = new Archer();
-        Character gianmeni = new Hero("Gian Meni",80,70,100,1,archer,"ARCHER_IDLE"){
-        };
+        Character gianmeni = new Hero("Gian Meni",80,70,100,1,archer);
 
-        AeroMancer aeoroMancer = new AeroMancer();
-        Character kervs = new Hero("Kurtis", 100, 60, 120, 1, aeoroMancer, "MAGE_WIND-IDLE"){
-        };
+        AeroMancer aeromancer = new AeroMancer();
+        Character kervs = new Hero("Kurtis", 100, 60, 120, 1, aeromancer);
 
 //        TODO: add max amount of party members
         heroParty.addPartyMember(charlie);

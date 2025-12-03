@@ -21,7 +21,7 @@ public class Warrior extends JobClass {
     public static final String IDLE_PATH = "Assets/Animations/Heroes/Warrior/Idle/sprite_%d.png";
 
     public Warrior() {
-        super("Warrior", description, 10, 0);
+        super("Warrior", description, 10, 0,"WARRIOR_IDLE");
         AssetManager.getInstance().registerAnimation(
                 "WARRIOR_IDLE",
                 IDLE_PATH,

@@ -29,8 +29,8 @@ public class Goblin extends Enemy {
                 level,
                 "Goblin",
                 15 * level,
-                "GOBLIN_IDLE",
-                "Steals stuff and kills stuff."
+                "Steals stuff and kills stuff.",
+                "GOBLIN_IDLE"
                 );
 
         registerAssets();
@@ -131,7 +131,22 @@ public class Goblin extends Enemy {
             return -1;
         };
 
-        this.addReaction(new ReactionSkill("Cowardice", ReactionTrigger.ON_RECEIVE_DAMAGE, cowardiceLogic));
+        // TODO: huge refractoring fix here but damn, necessary hack for bad animation locking mechanism
+        ReactionLogic DeathLogic = (user,_,_,_) -> {
+//            VisualEffectsManager.getInstance().hideCharacterVisual(user);
+//            VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", user, () -> {
+////                // TODO: it seems redundant but pause character animation is called before this so..
+//                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+//                VisualEffectsManager.getInstance().pauseCharacterAnimation(user);
+//            }, true);
+            return -1; // should die, 0 and 1 is dont die
+        };
+
+        ReactionSkill cowardice = new ReactionSkill("Cowardice", ReactionTrigger.ON_RECEIVE_DAMAGE, cowardiceLogic);
+        ReactionSkill death = new ReactionSkill("death", ReactionTrigger.ON_FATAL_DAMAGE, DeathLogic);
+
+        this.addReaction(cowardice);
+        this.addReaction(death);
     }
 
     @Override

@@ -3,7 +3,6 @@ package Characters;
 import Abilities.ReactionSkill;
 import Abilities.ReactionTrigger;
 import Abilities.Skill;
-import Characters.Base.Hero;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
@@ -28,9 +27,7 @@ public abstract class Character {
 
     protected List<ReactionSkill> reactions = new ArrayList<>();
 
-    protected String imageKey;
-
-    public Character(String name, int initialHealth, int baseAtk, int maxMana, int level, String imageKey) {
+    public Character(String name, int initialHealth, int baseAtk, int maxMana, int level) {
         this.name = name;
         this.initialHealth = initialHealth;
         this.health = initialHealth;
@@ -38,18 +35,17 @@ public abstract class Character {
         this.maxMana = maxMana;
         this.mana = maxMana;
         this.level = level;
-        this.imageKey = imageKey;
     }
 
-    public Character(String name, int health, int baseAtk, int maxMana, String imageKey) {
-        this(name, health, baseAtk, maxMana, 1, imageKey);
+    public Character(String name, int health, int baseAtk, int maxMana) {
+        this(name, health, baseAtk, maxMana, 1);
     }
 
     public void receiveDamage(int rawDamage, Character attacker, Skill incomingSkill) {
         int finalDamage = processReactions(ReactionTrigger.ON_RECEIVE_DAMAGE, attacker, incomingSkill, rawDamage);
 
         if (finalDamage == 0) {
-            LogManager.log(this.name + " took no damage (Mitiga ted)!");
+            LogManager.log(this.name + " took no damage (Mitigated)!");
         } else {
             LogManager.log(this.name + " takes " + finalDamage + " damage.");
         }
@@ -95,7 +91,12 @@ public abstract class Character {
     }
 
     public void gainMana(int amount) {
+//        LogManager.log("mana amount received: " + amount, LogFormat.DEBUG_INFO);
         setMana(this.mana + amount);
+
+        if (amount > 0) {
+            Core.Utils.LogManager.log(this.name + " recovered " + amount + " MP.", LogFormat.MP);
+        }
     }
 
     public boolean spendMana(int manaCost) {
@@ -136,12 +137,7 @@ public abstract class Character {
 
     public void receiveMana(int rawAmount, Character source) {
         int finalAmount = processReactions(ReactionTrigger.ON_RECEIVE_MANA, source, null, rawAmount);
-
-        setMana(this.mana + finalAmount);
-
-        if (finalAmount > 0) {
-            Core.Utils.LogManager.log(this.name + " recovered " + finalAmount + " MP.", LogFormat.MP);
-        }
+        gainMana(finalAmount);
     }
 
     public void setHealth(int newHealth, Character source) {
@@ -247,9 +243,6 @@ public abstract class Character {
     public int getMaxMana() {
         return maxMana;
     }
-    public String getImageKey() {
-        return imageKey;
-    }
     public boolean isExhausted() {
         return isExhausted;
     }
@@ -264,9 +257,9 @@ public abstract class Character {
         if (newMana < 0) {
             newMana = 0;
         }
-        LogManager.log("set new mana: " + newMana, LogFormat.DEBUG_INFO);
         this.mana = newMana;
     }
     public abstract List<Skill> getSkills();
     public abstract String getDescription();
+    public abstract String getIdleImageKey();
 }

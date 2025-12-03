@@ -21,7 +21,7 @@ public class FireMage extends JobClass {
     public static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png";
 
     public FireMage() {
-        super("Fire Mage", description, 0, 0);
+        super("Fire Mage", description, 0, 0,"MAGE_IDLE");
 
         AssetManager.getInstance().registerAnimation(
                 "MAGE_IDLE",

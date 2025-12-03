@@ -17,8 +17,8 @@ public class Hero extends Character {
     protected final int incrementXP;
     protected JobClass job;
 
-    public Hero(String name, int initialHealth, int baseAtk, int maxMana, int level, JobClass job, String imageKey) {
-        super(name, initialHealth + job.getHpBonus(), baseAtk, maxMana, level, imageKey);
+    public Hero(String name, int initialHealth, int baseAtk, int maxMana, int level, JobClass job) {
+        super(name, initialHealth + job.getHpBonus(), baseAtk, maxMana, level);
         this.job = job;
         this.XP = 0;
         this.baseXP = 100;
@@ -29,8 +29,8 @@ public class Hero extends Character {
         reactions = job.createReactions();
     }
 
-    public Hero(String name, int health, int baseAtk, int maxMana, JobClass job, String imageKey) {
-        this(name, health, baseAtk, maxMana, 1, job, imageKey);
+    public Hero(String name, int health, int baseAtk, int maxMana, JobClass job) {
+        this(name, health, baseAtk, maxMana, 1, job);
     }
 
     public void gainXP(int amount) {
@@ -116,4 +116,5 @@ public class Hero extends Character {
     public JobClass getJob() {
         return job;
     }
+    @Override public String getIdleImageKey() { return this.job.getIdleImageKey(); }
 }

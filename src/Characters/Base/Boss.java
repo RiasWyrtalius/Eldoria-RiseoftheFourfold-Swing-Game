@@ -8,7 +8,7 @@ public abstract class Boss extends Enemy {
     protected double healthMultiplier;
 
     public Boss(String name, int baseHealth, int baseAtk, int maxMana, int level, String type, int rewardXP,
-                double healthMultiplier, String imageKey, String desc) {
+                double healthMultiplier, String idleImageKey, String desc) {
         super(
                 name,
                 (int)(baseHealth * healthMultiplier),
@@ -17,8 +17,8 @@ public abstract class Boss extends Enemy {
                 level,
                 type,
                 rewardXP,
-                imageKey,
-                desc
+                desc,
+                idleImageKey
         );
         this.healthMultiplier = healthMultiplier;
     }

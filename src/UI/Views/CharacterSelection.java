@@ -162,7 +162,7 @@ public class CharacterSelection extends JFrame {
     }
 
     private void updateAnimation(Hero myHero) {
-        String visualID = myHero.getImageKey();
+        String visualID = myHero.getIdleImageKey();
 
         if (animationTimer != null && animationTimer.isRunning()) {
             animationTimer.stop();
