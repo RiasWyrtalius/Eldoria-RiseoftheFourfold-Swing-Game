@@ -28,7 +28,7 @@ public class Slime extends Enemy {
                 0,
                 "Slime",
                 10 * level,
-                "SLIME_IDLE", "Slimes around");
+                "Slimes around", "SLIME_IDLE");
     }
 
     @Override

@@ -20,7 +20,7 @@ public class Vampire extends Enemy {
     }
 
     public Vampire(int level) {
-        super("Vampire", 500, 30, 0, 1, "Vampire", 10, "VAMPIRE_IDLE", "Blood Thirsty");
+        super("Vampire", 500, 30, 0, 1, "Vampire", 10, "Blood Thirsty", "VAMPIRE_IDLE");
     }
 
     @Override

@@ -20,7 +20,7 @@ public class Spider extends Enemy {
     }
 
     public Spider(int level) {
-        super("Demon Spider", 500, 30, 0, 1, "Slime", 10, "SPIDER_IDLE", "Best web designer around");
+        super("Demon Spider", 500, 30, 0, 1, "Slime", 10, "Best web designer around", "SPIDER_IDLE");
     }
 
     @Override

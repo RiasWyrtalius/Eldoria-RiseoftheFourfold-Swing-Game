@@ -29,8 +29,8 @@ public class Skull extends Enemy {
                 level,
                 "Skull",
                 15 * level,
-                "SKULL_IDLE",
-                "Cursed Bone"
+                "Cursed Bone",
+                "SKULL_IDLE"
         );
 
         registerAssets();
