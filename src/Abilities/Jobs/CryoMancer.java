@@ -6,6 +6,7 @@ import Abilities.*;
 import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
+import Core.Utils.Dice;
 import Core.Utils.ScalingLogic;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
@@ -48,7 +49,22 @@ public class CryoMancer extends JobClass {
 
     @Override
     public List<ReactionSkill> createReactions() {
-        return List.of();
+        ReactionLogic reflectIceSpikeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+            double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
+            int calculateDmg = ScalingLogic.calculateDamage(defender,30,15,1.2,0.05);
+            int calculateDamage = (int)(calculateDmg * 0.4);
+            if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
+                LogManager.log(defender.getName() + " Attacks them back", LogFormat.ENEMY_ACTION);
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("ICE_SPIKE", attacker, () ->{
+                    attacker.receiveDamage(calculateDamage, defender, incomingSkill);
+                }, true);
+                return 0;
+            }
+            return -1;
+        };
+
+        ReactionSkill ReflectIceSpike= new ReactionSkill("Reflect Ice Spike", ReactionTrigger.ON_RECEIVE_DAMAGE, reflectIceSpikeLogic);
+        return List.of(ReflectIceSpike);
     }
 
     public List<Skill> createSkills() {

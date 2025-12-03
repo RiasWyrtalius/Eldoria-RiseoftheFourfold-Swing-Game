@@ -6,6 +6,7 @@ import Abilities.*;
 import Characters.Character;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
+import Core.Utils.Dice;
 import Core.Utils.ScalingLogic;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
@@ -55,7 +56,23 @@ public class EarthMage extends JobClass {
 
     @Override
     public List<ReactionSkill> createReactions() {
-        return List.of();
+        ReactionLogic reflectStoneHailLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+            double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
+            int calculateDmg = ScalingLogic.calculateDamage(defender,20,10,1.2,0.05);
+            int calculateDamage = (int)(calculateDmg * 0.4);
+            if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
+                LogManager.log(defender.getName() + " Attacks them back", LogFormat.ENEMY_ACTION);
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("STONE_HAIL", attacker, () ->{
+                    attacker.receiveDamage(calculateDamage, defender, incomingSkill);
+                }, true);
+                return 0;
+            }
+            return -1;
+        };
+
+        ReactionSkill ReflectStoneHail= new ReactionSkill("Reflect Stone Hail", ReactionTrigger.ON_RECEIVE_DAMAGE, reflectStoneHailLogic);
+
+        return List.of(ReflectStoneHail);
     }
 
     public List<Skill> createSkills() {
