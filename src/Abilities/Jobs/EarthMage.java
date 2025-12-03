@@ -61,7 +61,7 @@ public class EarthMage extends JobClass {
         SkillLogicConsumer earthAttackLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,50,28,1.2,0.05);
 
-            LogManager.log(self.getActionLog(user, "Shakes the earth", targets), LogFormat.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "The earth unleashes itself", targets), LogFormat.HERO_ACTION);
             for(Character t : targets) {
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("EARTH_ATTACK", t, () -> {
 

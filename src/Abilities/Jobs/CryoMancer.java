@@ -89,9 +89,6 @@ public class CryoMancer extends JobClass {
             }, true);
 
 
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
         };
 
 

@@ -73,17 +73,6 @@ public class Archer extends JobClass {
 
         ReactionSkill dodge = new ReactionSkill("Dodge", ReactionTrigger.ON_RECEIVE_DAMAGE, dodgeLogic);
 
-//        ReactionLogic deathLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
-//            if (defender.getHealth() == 0) {
-//                VisualEffectsManager.getInstance().playAnimation("ARCHER_DEATH", defender, () -> {
-//
-//                }, true);
-//                return 0;
-//            }
-//            return -1;
-//        };
-//
-//        ReactionSkill death = new ReactionSkill("Death", ReactionTrigger.ON_FATAL_DAMAGE, deathLogic);
         return List.of(dodge);
 
     }
