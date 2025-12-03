@@ -42,14 +42,14 @@ public class Goblin extends Enemy {
         AssetManager.getInstance().registerAnimation(
                 "GOBLIN_IDLE",
                 "Assets/Animations/Enemies/Goblin/Idle/sprite_%d.png",
-                4, 100, 100 , 300,
+                4, 100, 100 , 150,
                 AnimationLoopType.INFINITE
         );
 
         AssetManager.getInstance().registerAnimation(
                 "GOBLIN_SWING-ATTACK",
                 "Assets/Animations/Enemies/Goblin/Effects/Swing_Attack/sprite_%d.png",
-                5, 100, 100 , 300,
+                5, 100, 100 , 150,
                 AnimationLoopType.ONE_CYCLE
         );
     }

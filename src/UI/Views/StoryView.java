@@ -1,6 +1,8 @@
 package UI.Views;
 
 import Core.Story.StorySlide;
+import Core.Utils.LogFormat;
+import Core.Utils.LogManager;
 import UI.Components.BackgroundPanel;
 import UI.Components.FantasyDialogPanel;
 
@@ -16,8 +18,8 @@ import java.util.List;
 
 public class StoryView extends JPanel {
     private JPanel backgroundPanel;
-    private JTextPane contentPane = null;
-    private JPanel textContainer; // Changed to custom class
+    private JTextPane contentPane;
+    private JPanel textContainer;
 
     private List<StorySlide> sequence;
     private int currentSlideIndex = 0;
@@ -78,6 +80,7 @@ public class StoryView extends JPanel {
     private void createUIComponents() {
         this.backgroundPanel = new BackgroundPanel();
         this.textContainer = new FantasyDialogPanel();
+        this.contentPane = new JTextPane();
     }
 
     public void startSequence(List<StorySlide> sequence, Runnable onFinish) {
@@ -96,7 +99,7 @@ public class StoryView extends JPanel {
         ((BackgroundPanel)backgroundPanel).setBackgroundImage(slide.imageKey());
         if (slide.onStart() != null) {
             try { slide.onStart().run(); }
-            catch (Exception e) { e.printStackTrace(); }
+            catch (Exception e) { LogManager.log(e.getMessage(), LogFormat.DEBUG_INFO); }
         }
         playCurrentLine();
     }

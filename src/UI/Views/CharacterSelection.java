@@ -11,11 +11,13 @@ import UI.Components.BackgroundPanel;
 import Characters.CharacterDisplayData;
 import java.awt.*;
 import java.util.List;
+import java.util.function.BiConsumer;
+
 import Characters.Character;
 import UI.Components.StatsRenderer;
 import Abilities.JobClass;
 
-public class CharacterSelection extends JFrame {
+public class CharacterSelection extends JPanel {
     private JPanel CharacterSelection;
     private JPanel CharacterPreview;
     private JButton selectCharacterButton;
@@ -39,10 +41,29 @@ public class CharacterSelection extends JFrame {
     private Timer animationTimer;
     private Animation currentAnimation;
 
-    public CharacterSelection() {
-        this.setContentPane(CharacterSelection);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Character Selection");
+    private final BiConsumer<Hero, String> onSelectionComplete;
+
+    public CharacterSelection(BiConsumer<Hero, String> onSelectionComplete) {
+        this.onSelectionComplete = onSelectionComplete;
+
+        this.setLayout(new BorderLayout());
+        this.setBackground(new Color(0, 0, 0, 200)); // 80% Black Overlay
+        this.setOpaque(false); // Ensure background color is drawn
+
+        JPanel modalContainer = new JPanel();
+        modalContainer.setLayout(new BorderLayout());
+        modalContainer.setBorder(new LineBorder(new Color(0xD4AF37), 3)); // Gold Border
+
+        if (CharacterSelection != null) {
+            modalContainer.add(CharacterSelection, BorderLayout.CENTER);
+        }
+
+
+        JPanel centerWrapper = new JPanel(new GridBagLayout());
+        centerWrapper.setOpaque(false);
+        centerWrapper.add(modalContainer);
+
+        this.add(centerWrapper, BorderLayout.CENTER);
 
         setupPanels();
         setupStatBar();
@@ -63,9 +84,6 @@ public class CharacterSelection extends JFrame {
         setupListeners();
         updateView();
 
-        this.pack();
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
     }
 
     private void setupStatBar() {
@@ -129,6 +147,14 @@ public class CharacterSelection extends JFrame {
 
         infoPanel.revalidate();
         infoPanel.repaint();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        // Manually paint the semi-transparent background
+        g.setColor(getBackground());
+        g.fillRect(0, 0, getWidth(), getHeight());
+        super.paintComponent(g);
     }
 
     private JLabel createHeaderLabel(String text) {
@@ -195,6 +221,36 @@ public class CharacterSelection extends JFrame {
     }
 
     private void setupListeners() {
+
+        selectCharacterButton.addActionListener(e -> {
+            String nameInput = textField1.getText().trim();
+            String partyNameInput = textField2.getText().trim();
+            String partyName = partyNameInput.isEmpty() ? null : partyNameInput;
+
+            if (nameInput.isEmpty() && partyNameInput.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter a Hero Name and a Party Name!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            else if (nameInput.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter a Hero Name!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            } else if (partyNameInput.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter a Party Name!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+
+            CharacterDisplayData data = characterList.get(currentIndex);
+            Hero template = (Hero) data.getCharacter();
+            template.setName(nameInput);
+
+            System.out.println("Selected: " + template.getName());
+
+            if (onSelectionComplete != null) {
+                onSelectionComplete.accept(template, partyName);
+            }
+        });
+
         nextButton.addActionListener(e -> {
             currentIndex++;
             textField1.setText("");
@@ -240,5 +296,4 @@ public class CharacterSelection extends JFrame {
     }
 
     private void createUIComponents() { CharacterPreview = new BackgroundPanel(); }
-    public static void main(String[] args) { SwingUtilities.invokeLater(CharacterSelection::new); }
 }

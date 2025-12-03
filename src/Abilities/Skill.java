@@ -34,7 +34,6 @@ public class Skill {
 
     public void execute(Character user, List<Character> target, Runnable onSkillComplete) {
         if (user.spendMana(this.manaCost)) {
-            LogManager.log("spent: " + this.manaCost + " mana", LogFormat.DEBUG_INFO);
             executeLogic.accept(this, user, target, onSkillComplete);
         }
     }
@@ -42,14 +41,12 @@ public class Skill {
     public String getActionLog(Character user, String action, List<Character> targets) {
         String targetNames = formatTargetList(targets);
 
-        String logMessage = String.format("%s %s with %s on %s!",
+        return String.format("%s %s with %s on %s!",
                 user.getName(),
                 action,
                 this.getName(),
                 targetNames
         );
-
-        return logMessage;
     }
 
     public static String formatTargetList(List<Character> targets) {
