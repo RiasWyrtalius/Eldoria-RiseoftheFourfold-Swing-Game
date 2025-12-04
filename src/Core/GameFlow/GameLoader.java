@@ -248,7 +248,7 @@ public class GameLoader {
         // Slide 1: The World of Eldoria
         slides.add(new StorySlide(
                 //Image should be Eldoria Map
-                "Assets/Images/Backgrounds/forest_bg.png",
+                "Assets/Images/Backgrounds/eldoria_map.png",
                 List.of(
                         "In the mythic land of ELDORIA, four elemental forces weave the fate of mortals.",
                         "Fire, wind, earth, and water...",
@@ -260,7 +260,7 @@ public class GameLoader {
         // Slide 2: The Peaceful Era
         slides.add(new StorySlide(
                 // Image should be like a city pwede ra we call it Avendale City
-                "Assets/Images/Backgrounds/forest_bg.png",
+                "Assets/Images/Backgrounds/avendale_city.png",
                 List.of(
                         "For generations, the great kingdoms knew peace. The Empire of AVENDALE stood strong at the center,",
                         "while elf academies and dwarf clans thrived. But even the calmest days whisper of storms ahead..."
@@ -271,7 +271,7 @@ public class GameLoader {
         // Slide 3: The Corruption Begins
         slides.add(new StorySlide(
                 // Image should be the Blackspire Mountain
-                "Assets/Images/Backgrounds/forest_bg.png",
+                "Assets/Images/Backgrounds/blackspire.png",
                 List.of(
                         "The peace ended when VAROTH, a court mage, ascended the BLACKSPIRE peak.",
                         "He communed with an ancient evil and returned as DREADLORD VAROTH."
@@ -282,7 +282,7 @@ public class GameLoader {
         // Slide 4: The Darkness Spreads
         slides.add(new StorySlide(
                 // Image should be the Corrupted Forest
-                "Assets/Images/Backgrounds/forest_bg.png",
+                "Assets/Images/Backgrounds/corrupted_forest.png",
                 List.of(
                         "Now, a pall of dread covers the land. Forests wilt under unnatural frost.",
                         "Fields lie fallow beneath a cursed blight. Goblins, orcs, and undead prowl the borderlands."
@@ -293,7 +293,7 @@ public class GameLoader {
         // Slide 5: The Prophecy
         slides.add(new StorySlide(
                 // Image should be the ancient scroll.
-                "Assets/Images/Backgrounds/forest_bg.png",
+                "Assets/Images/Backgrounds/ancient_scroll.png",
                 List.of(
                         "Yet an ancient prophecy endures. It speaks of a FOURFOLD PARTY:",
                         "• A WARRIOR, shield of the land",
@@ -306,7 +306,7 @@ public class GameLoader {
 
         // Slide 6: The Call to Action
         slides.add(new StorySlide(
-                "Assets/Images/Backgrounds/forest_bg.png",
+                "Assets/Images/Backgrounds/fourfolds_bg.png",
                 List.of(
                         "Only when these four stand together can the balance of Eldoria be restored.",
                         "But first, they must brave the heart of darkness. The corrupted dungeons beneath Blackspire itself."
@@ -316,7 +316,7 @@ public class GameLoader {
 
         // Slide 7: The Descent Begins
         slides.add(new StorySlide(
-                "Assets/Images/Backgrounds/forest_bg.png",
+                "Assets/Images/Backgrounds/dungeon_entrance.png",
                 List.of(
                         "The path now leads into ancient, twisted passages where dark magic chokes the air.",
                         "Every shadowed corridor is a trial, every chamber, a test of unity and strength."
@@ -326,7 +326,7 @@ public class GameLoader {
 
         // Slide 8: The Final Challenge
         slides.add(new StorySlide(
-                "Assets/Images/Backgrounds/forest_bg.png",
+                "Assets/Images/Backgrounds/throne_room.png",
                 List.of(
                         "At the peak, in an obsidian throne room, Dreadlord Varoth awaits.",
                         "Victory depends on unity, strategy, and the combined gifts of the Fourfold Party."
@@ -336,7 +336,7 @@ public class GameLoader {
 
         // Slide 9: The Player's Role
         slides.add(new StorySlide(
-                "Assets/Images/Backgrounds/forest_bg.png",
+                "Assets/Images/Backgrounds/heroes.png",
                 List.of(
                         "Now, the fate of Eldoria rests with you. WHO WILL STAND AGAINST THE DARKNESS?",
                         "Form your party and become the prophecy."
