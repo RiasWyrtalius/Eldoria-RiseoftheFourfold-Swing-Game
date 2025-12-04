@@ -1,6 +1,13 @@
 package UI.Views;
 
+import java.io.File;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.AudioInputStream;
+import java.net.URL;
+
 import Core.GameManager;
+import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import Resource.Audio.AudioManager;
 
@@ -9,7 +16,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -28,10 +34,9 @@ public class MainMenu extends JFrame {
     public MainMenu(GameManager manager) {
         this.manager = manager;
 
-        //TODO: @samuelcarillogwapito
         AudioManager audio = AudioManager.getInstance();
-        audio.registerSound("MENU_THEME", "Assets/Audio/SFX/victory_sound_1.wav");
-        audio.playMusic("MENU_THEME");
+        audio.registerSound("MAIN-THEME", "Assets/Audio/SFX/mainMenu_bgm.wav");
+        audio.playMusic("MAIN-THEME");
 
         this.setContentPane(contentPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,6 +78,7 @@ public class MainMenu extends JFrame {
         continueButton.setEnabled(false);
 
         exitButton.addActionListener(e -> {
+            AudioManager.getInstance().stopMusic();
             System.out.println("...Exiting Application");
             // stop timers before killing JVM for some reason
             VisualEffectsManager.getInstance().stopAllTimers();
@@ -80,6 +86,7 @@ public class MainMenu extends JFrame {
         });
 
         startButton.addActionListener(e -> {
+            AudioManager.getInstance().stopMusic();
             manager.startNewGame(this);
         });
     }

@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.io.File;
+
 public class AudioManager {
     private static final AudioManager INSTANCE = new AudioManager();
     private final Map<String, String> audioRegistry = new HashMap<>();
@@ -95,24 +97,46 @@ public class AudioManager {
     }
 
     private Clip loadClip(String filePath) throws Exception {
-        URL url = getClass().getResource(filePath);
-        String resourcePath = filePath;
-//        if (!resourcePath.startsWith("/")) {
-//            resourcePath = "/" + resourcePath;
-//        }
-//        LogManager.log("Looking for audio file at: " + resourcePath);
+        AudioInputStream audioStream = null;
 
-        if (url == null) {
-            LogManager.log("Audio file missing: " + filePath, Color.red);
+        File file = new File(filePath);
+        if (file.exists()) {
+            audioStream = AudioSystem.getAudioInputStream(file);
+        } else {
+            URL url = getClass().getResource(filePath.startsWith("/") ? filePath : "/" + filePath);
+
+            if (url != null) {
+                audioStream = AudioSystem.getAudioInputStream(url);
+            }
+        }
+
+        if (audioStream == null) {
+            System.err.println("DEBUG: check for file at: " + file.getAbsolutePath());
             return null;
         }
-        AudioInputStream audioStream = AudioSystem.getAudioInputStream(url);
+
         Clip clip = AudioSystem.getClip();
         clip.open(audioStream);
         return clip;
+
+//        URL url = getClass().getResource(filePath);
+//        String resourcePath = filePath;
+////        if (!resourcePath.startsWith("/")) {
+////            resourcePath = "/" + resourcePath;
+////        }
+////        LogManager.log("Looking for audio file at: " + resourcePath);
+//
+//        if (url == null) {
+//            LogManager.log("Audio file missing: " + filePath, Color.red);
+//            return null;
+//        }
+//        AudioInputStream audioStream = AudioSystem.getAudioInputStream(url);
+//        Clip clip = AudioSystem.getClip();
+//        clip.open(audioStream);
+//        return clip;
     }
 
-    private void setVolume(Clip clip, float decibels) {
+    public void setVolume(Clip clip, float decibels) {
         if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
             FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
             gainControl.setValue(decibels);
