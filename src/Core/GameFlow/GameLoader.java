@@ -3,7 +3,6 @@ package Core.GameFlow;
 import Abilities.Jobs.*;
 import Characters.Base.Enemy;
 import Characters.Base.Hero;
-import Characters.Character;
 import Characters.Enemies.*;
 import Characters.Party;
 import Core.GameManager;
@@ -14,7 +13,6 @@ import Core.Utils.LogManager;
 import Core.Utils.LogFormat;
 import Items.*;
 
-import java.sql.Array;
 import java.util.*;
 import java.util.function.Function;
 
@@ -43,7 +41,7 @@ public class GameLoader {
                 "The Gates",
                 "Assets/Images/Backgrounds/sample.jpg",
                 "A swarm of goblins surround you!",
-                buildEnemyGroup(Goblin::new, Goblin::new),
+                buildEnemyGroup(Goblin::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion()
@@ -80,36 +78,36 @@ public class GameLoader {
     public static Party loadStarterParty(String partyName) {
         Party heroParty = new Party(partyName);
 
-        /*
-         *TEMPORARY HERO SETUP
-        heroParty = new Party("The Godslayers");
 
-        Warrior warrior = new Warrior();
-        Character charlie = new Hero("Charlie",150,50,100,1,warrior);
+        //TEMPORARY HERO SETUP
+//        heroParty = new Party("The Godslayers");
 
-        Paladin paladin = new Paladin();
-        Character antot = new Hero("Antot",150,50,100,1,paladin);
+//        Warrior warrior = new Warrior();
+//        Character charlie = new Hero("Charlie",150,50,100,1,warrior);
+//
+//        Paladin paladin = new Paladin();
+//        Character antot = new Hero("Antot",150,50,100,1,paladin);
+//
+//        Rogue rogue = new Rogue();
+//        Character elyi = new Hero("Ely",80,50,100,1,rogue);
+//
+//        FireMage fireMage = new FireMage();
+//        Character chaniy = new Hero("Chaniy the doubter",100,60,120,1,fireMage);
+//
+//        CryoMancer iceMage = new CryoMancer();
+//        Character sammy = new Hero("Sammy", 100, 60, 120, 1, iceMage);
+//
+//        EarthMage earthMage = new EarthMage();
+//        Character ythan = new Hero("Ythanny W", 100, 60, 120, 1, earthMage);
+//
+//        Cleric cleric = new Cleric();
+//        Character erick = new Hero("Erick the cleric", 100, 60, 120, 1, cleric);
 
-        Rogue rogue = new Rogue();
-        Character elyi = new Hero("Ely",80,50,100,1,rogue);
-
-        FireMage fireMage = new FireMage();
-        Character chaniy = new Hero("Chaniy the doubter",100,60,120,1,fireMage);
-
-        CryoMancer iceMage = new CryoMancer();
-        Character sammy = new Hero("Sammy", 100, 60, 120, 1, iceMage);
-
-        EarthMage earthMage = new EarthMage();
-        Character ythan = new Hero("Ythanny W", 100, 60, 120, 1, earthMage);
-
-        Cleric cleric = new Cleric();
-        Character erick = new Hero("Erick the cleric", 100, 60, 120, 1, cleric);
-
-        Archer archer = new Archer();
-        Character gianmeni = new Hero("Gian Meni",80,70,100,1,archer);
-
-        AeroMancer aeromancer = new AeroMancer();
-        Character kervs = new Hero("Kurtis", 100, 60, 120, 1, aeromancer);
+//        Archer archer = new Archer();
+//        Character gianmeni = new Hero("Gian Meni",80,70,100,1,archer);
+//
+//        AeroMancer aeromancer = new AeroMancer();
+//        Character kervs = new Hero("Kurtis", 100, 60, 120, 1, aeromancer);
 
 //        TODO: add max amount of party members
 //        heroParty.addPartyMember(charlie);
@@ -118,10 +116,10 @@ public class GameLoader {
 //        heroParty.addPartyMember(sammy);
 //        heroParty.addPartyMember(gianmeni);
 //        heroParty.addPartyMember(kervs);
-        heroParty.addPartyMember(chaniy);
+//        heroParty.addPartyMember(chaniy);
 //        heroParty.addPartyMember(elyi);
 //        heroParty.addPartyMember(antot);
-*/
+
 
         loadStartingInventory(heroParty);
 

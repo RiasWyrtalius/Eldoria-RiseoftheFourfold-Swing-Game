@@ -8,6 +8,7 @@ import Core.Battle.TargetType;
 import Core.Utils.Dice;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
+import Core.Utils.ScalingLogic;
 import Core.Visuals.VisualEffectsManager;
 import Resource.Animation.AnimationLoopType;
 import Resource.Animation.AssetManager;
@@ -20,7 +21,16 @@ public class Spider extends Enemy {
     }
 
     public Spider(int level) {
-        super("Demon Spider", 500, 30, 0, 1, "Slime", 10, "Best web designer around", "SPIDER_IDLE");
+        super(
+                "Demon Spider",
+                ScalingLogic.calculateStat(level,100, 10, 0.05),
+                ScalingLogic.calculateStat(level,30, 10, 0.1),
+                0,
+                1,
+                "Slime",
+                10,
+                "Best web designer around",
+                "SPIDER_IDLE");
     }
 
     @Override

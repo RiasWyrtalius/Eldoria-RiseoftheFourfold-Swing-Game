@@ -13,6 +13,8 @@ import UI.Components.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
@@ -50,8 +52,8 @@ public class BattleInterface extends JPanel {
 
     private JPanel descendPanel;
 
-    private List<JPanel> heroPartyPanels;
-    private List<JPanel> enemyPartyPanels;
+    private final List<JPanel> heroPartyPanels;
+    private final List<JPanel> enemyPartyPanels;
 
     private JScrollPane CharacterInspector_JSP;
     private JTextPane inspectorText;
@@ -162,6 +164,32 @@ public class BattleInterface extends JPanel {
                 GameManager.getInstance().loadNextLevel();
             });
         }
+        battlePanel.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                resetSelectionState();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
     }
 
     public void refreshUI() {
@@ -192,6 +220,8 @@ public class BattleInterface extends JPanel {
     }
 
     private void updateControls() {
+//        LogManager.log("current mode: " + currentMode.toString());
+
         BattlePhase phase = battleController.getCurrentPhase();
         boolean isPlayerTurn = (phase == BattlePhase.HERO_ACTION_WAIT);
         endTurnButton.setEnabled(isPlayerTurn);
@@ -383,49 +413,6 @@ public class BattleInterface extends JPanel {
         hideTargetConfirmMenu();
         resetSelectionState();
         refreshUI();
-
-//        if (currentMode != BattleUIMode.TARGET_SELECT) return;
-//
-//        // TODO: sometimes items or skills require no targets
-//
-//        if (selectedTargets.isEmpty()) {
-//            LogManager.log("Cannot confirm: No targets selected.");
-//            return;
-//        }
-//        if (currentMode == BattleUIMode.ITEM_SELECT) {
-//            battleController.executeItemActionFromUI(selectedItem, selectedTargets);
-//        } else {
-//            battleController.executeActionFromUI(activeHero, selectedSkill, selectedTargets);
-//        }
-//
-//        hideTargetConfirmMenu();
-//
-//        resetSelectionState();
-//        refreshUI();
-
-//        TargetType type = null;
-//        if (selectedSkill != null) type = selectedSkill.getTargetType();
-//        else if (selectedItem != null) type = selectedItem.getTargetType();
-//
-//        // Only block empty selection if the type REQUIRES targets
-//        boolean requiresSelection = (type == TargetType.SINGLE_TARGET ||
-//                type == TargetType.AOE_TWO_TARGETS ||
-//                type == TargetType.AOE_THREE_TARGETS);
-//
-//        if (requiresSelection && selectedTargets.isEmpty()) {
-//            LogManager.log("Cannot confirm: No targets selected.");
-//            return;
-//        }
-//
-//        if (selectedSkill != null) {
-//            battleController.executeActionFromUI(activeHero, selectedSkill, selectedTargets);
-//        } else if (selectedItem != null) {
-//            battleController.executeItemActionFromUI(selectedItem, selectedTargets);
-//        }
-//
-//        hideTargetConfirmMenu();
-////        resetSelectionState();
-//        refreshUI();
     }
 
     public void onHeroSelect(Hero clickedHero) {
@@ -547,8 +534,6 @@ public class BattleInterface extends JPanel {
 
             @Override
             public void popupMenuCanceled(PopupMenuEvent e) {
-//                resetSelectionState();
-
             }
         });
 
@@ -608,12 +593,12 @@ public class BattleInterface extends JPanel {
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
             @Override
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
-
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+            }
             @Override
             public void popupMenuCanceled(PopupMenuEvent e) {
-//                LogManager.log("Skill selection cancelled");
-                resetSelectionState();
+                if (selectedTargets.isEmpty())
+                    resetSelectionState();
             }
         });
 

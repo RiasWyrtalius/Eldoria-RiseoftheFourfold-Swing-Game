@@ -8,6 +8,7 @@ import Core.Battle.TargetType;
 import Core.Utils.Dice;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
+import Core.Utils.ScalingLogic;
 import Core.Visuals.VisualEffectsManager;
 import Resource.Animation.AnimationLoopType;
 import Resource.Animation.AssetManager;
@@ -20,7 +21,7 @@ public class Vampire extends Enemy {
     }
 
     public Vampire(int level) {
-        super("Vampire", 500, 30, 0, 1, "Vampire", 10, "Blood Thirsty", "VAMPIRE_IDLE");
+        super("Vampire", ScalingLogic.calculateStat(level,100, 10, 0.05), ScalingLogic.calculateStat(level,30, 10, 0.1), 0, 1, "Vampire", 10, "Blood Thirsty", "VAMPIRE_IDLE");
     }
 
     @Override

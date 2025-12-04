@@ -23,7 +23,7 @@ public class Slime extends Enemy {
     public Slime(int level) {
         super(
                 "Demon Slime",
-                ScalingLogic.calculateStat(level,40, 5, 0.1),
+                ScalingLogic.calculateStat(level,30, 15, 0.1),
                 ScalingLogic.calculateStat(level,30, 2, 0.2),
                 0,
                 "Slime",
