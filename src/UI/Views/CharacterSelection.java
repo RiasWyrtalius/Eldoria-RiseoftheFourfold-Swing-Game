@@ -40,6 +40,15 @@ public class CharacterSelection extends JFrame {
     private Animation currentAnimation;
 
     public CharacterSelection() {
+
+        CharacterPreview.addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                System.out.println("Panel Size: " +
+                        CharacterPreview.getWidth() + " x " + CharacterPreview.getHeight());
+            }
+        });
+
         this.setContentPane(CharacterSelection);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Character Selection");

@@ -82,6 +82,18 @@ public class BattleInterface extends JPanel {
     private JSplitPane SplitPane_2;
 
     public BattleInterface() {
+
+        if (battlePanel != null) {
+            battlePanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+                @Override
+                public void componentResized(java.awt.event.ComponentEvent e) {
+                    int w = battlePanel.getWidth();
+                    int h = battlePanel.getHeight();
+                    System.out.println("BATTLE BACKGROUND SIZE needed: " + w + " x " + h);
+                }
+            });
+        }
+
         this.setLayout(new BorderLayout());
         if (contentPanel != null) {
             this.add(contentPanel, BorderLayout.CENTER);
