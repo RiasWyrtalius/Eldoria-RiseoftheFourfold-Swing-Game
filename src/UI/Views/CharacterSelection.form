@@ -132,7 +132,7 @@
         <properties>
           <background color="-2838729"/>
           <foreground color="-13750738"/>
-          <text value="Next"/>
+          <text value="&gt;"/>
         </properties>
       </component>
       <component id="11b30" class="javax.swing.JButton" binding="previousButton" default-binding="true">
@@ -142,7 +142,7 @@
         <properties>
           <background color="-2838729"/>
           <foreground color="-13750738"/>
-          <text value="Previous"/>
+          <text value="&lt;"/>
         </properties>
       </component>
     </children>

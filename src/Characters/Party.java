@@ -27,6 +27,10 @@ public class Party {
         this.inventory = new Inventory();
     }
 
+    public Party() {
+        this("default party name");
+    }
+
     public void addPartyMember(Character member) {
         if (member != null) {
             this.partyMembers.add(member);
@@ -142,5 +146,9 @@ public class Party {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public void setPartyName(String partyName) {
+        this.partyName = partyName;
     }
 }

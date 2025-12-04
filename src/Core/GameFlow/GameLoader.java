@@ -6,6 +6,7 @@ import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Enemies.*;
 import Characters.Party;
+import Core.GameManager;
 import Core.Story.StorySlide;
 import Core.Utils.Dice;
 import Resource.Audio.AudioManager;
@@ -76,10 +77,11 @@ public class GameLoader {
 
     // TODO: Link up with character creation later!!!
     // TODO: optimize character creation using factories (maybe)
-    public static Party loadStarterParty() {
-        Party heroParty = new Party("The Godslayers");
+    public static Party loadStarterParty(String partyName) {
+        Party heroParty = new Party(partyName);
 
-        //TEMPORARY HERO SETUP
+        /*
+         *TEMPORARY HERO SETUP
         heroParty = new Party("The Godslayers");
 
         Warrior warrior = new Warrior();
@@ -119,6 +121,7 @@ public class GameLoader {
         heroParty.addPartyMember(chaniy);
 //        heroParty.addPartyMember(elyi);
 //        heroParty.addPartyMember(antot);
+*/
 
         loadStartingInventory(heroParty);
 
@@ -249,17 +252,33 @@ public class GameLoader {
                         "The birds sang, and the wind blew gently."
                 ),
                 null
-//                () -> AudioManager.getInstance().playMusic("MUSIC_PEACEFUL")
         ));
 
         slides.add(new StorySlide(
                 "Assets/Images/Backgrounds/dungeon_bg.png",
                 List.of(
                         "sadfhsadifhsadufsadhfusadhfsadf.",
-                        "The birds sang, and the wind blew gently."
+                        "WHO WILL STAND AGAINST THE DARKNESS?"
                 ),
                 null
-//                () -> AudioManager.getInstance().playMusic("MUSIC_PEACEFUL")
+        ));
+
+        slides.add(new StorySlide(
+                "Assets/Images/Backgrounds/volcano_bg.png",
+                List.of(
+                        "IT IS HE OR SOMETHING"
+                ),
+                () ->  GameManager.getInstance().showCharacterSelectionScreen()
+        ));
+
+
+        slides.add(new StorySlide(
+                "Assets/Images/Backgrounds/volcano_bg.png",
+                List.of(
+                        "now...",
+                        "leZGOOOO"
+                ),
+                null
         ));
 
         return slides;

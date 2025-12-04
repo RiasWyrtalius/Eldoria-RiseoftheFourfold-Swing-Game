@@ -262,4 +262,5 @@ public abstract class Character {
     public abstract List<Skill> getSkills();
     public abstract String getDescription();
     public abstract String getIdleImageKey();
+    public void setName(String name) { this.name = name; }
 }
