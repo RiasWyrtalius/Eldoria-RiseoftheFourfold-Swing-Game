@@ -23,7 +23,7 @@ public class FireMage extends JobClass {
 
     public FireMage() {
 
-        super("Fire Mage", description, 0, 0,"MAGE_IDLE");
+        super("Fire Mage", description, 0, 20,"MAGE_IDLE");
 
 
         AssetManager.getInstance().registerAnimation(

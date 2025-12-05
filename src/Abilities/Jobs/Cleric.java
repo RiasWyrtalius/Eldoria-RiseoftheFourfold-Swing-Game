@@ -21,7 +21,7 @@ public class Cleric extends JobClass {
 
     public Cleric() {
 
-        super("Cleric", description, 10, 0,"CLERIC_IDLE");
+        super("Cleric", description, 10, 20,"CLERIC_IDLE");
 
         AssetManager.getInstance().registerAnimation(
                 "CLERIC_IDLE",

@@ -24,7 +24,7 @@ public class CryoMancer extends JobClass {
 
     public CryoMancer(){
 
-        super("CryoMancer", description, 0, 0,"MAGE_ICE-IDLE");
+        super("CryoMancer", description, 0, 20,"MAGE_ICE-IDLE");
 
         AssetManager.getInstance().registerAnimation(
                 "MAGE_ICE-IDLE",

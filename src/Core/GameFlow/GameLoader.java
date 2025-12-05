@@ -39,7 +39,7 @@ public class GameLoader {
         fixedLevels.put(1, createSpecificLevel(
                 1,
                 "The Gates",
-                "Assets/Images/Backgrounds/sample.jpg",
+                "Assets/Images/Backgrounds/Level_BG/sample.jpg",
                 "A swarm of goblins surround you!",
                 buildEnemyGroup(Goblin::new),
                 buildLoot(
@@ -184,7 +184,7 @@ public class GameLoader {
         if (minEnemies > maxEnemies) minEnemies = maxEnemies;
 
         String bg = "";
-        List<String> bg_List = new ArrayList<String>();
+        List<String> bg_List = new ArrayList<>();
         bg_List.add("Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png");
         bg_List.add("Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png");
         bg_List.add("Assets/Images/Backgrounds/Level_BG/Snow_Biome/sprite_0.png");

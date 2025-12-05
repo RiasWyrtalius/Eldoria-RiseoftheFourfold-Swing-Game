@@ -22,7 +22,7 @@ public class AeroMancer extends JobClass {
     private static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Wind/Idle/sprite_%d.png";
 
     public AeroMancer(){
-        super("AeroMancer", description,0,0,"MAGE_WIND-IDLE");
+        super("AeroMancer", description,0,20,"MAGE_WIND-IDLE");
         AssetManager.getInstance().registerAnimation(
                 "MAGE_WIND-IDLE",
                 IDLE_PATH,

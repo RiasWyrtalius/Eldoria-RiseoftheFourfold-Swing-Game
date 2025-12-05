@@ -23,7 +23,7 @@ public class Archer extends JobClass {
     private static final String IDLE_PATH = "Assets/Animations/Heroes/Archer/Idle/sprite_%d.png";
 
     public Archer(){
-        super("Archer", description, 0, 0,"ARCHER_IDLE");
+        super("Archer", description, 20, 0,"ARCHER_IDLE");
 
         AssetManager.getInstance().registerAnimation(
                 "ARCHER_IDLE",
