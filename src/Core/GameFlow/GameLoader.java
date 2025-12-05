@@ -351,14 +351,20 @@ public class GameLoader {
         slides.add(new StorySlide(
                 "Assets/Images/Backgrounds/heroes.png",
                 List.of(
-                        "Now, the fate of Eldoria rests with you. WHO WILL STAND AGAINST THE DARKNESS?",
+                        "WHO WILL STAND AGAINST THE DARKNESS?",
                         "Form your party and become the prophecy."
+                ), null
+        ));
+
+        slides.add(new StorySlide(
+                "Assets/Images/Backgrounds/heroes.png",
+                List.of(
+                        "Now, the fate of Eldoria rests with you."
                 ),
                 () -> {
                     BiConsumer<Hero, String> onCharacterPicked = (selectedHero, partyName) -> {
                         GameManager.getInstance().createPartyFromSelection(selectedHero, partyName);
                         GameManager.getInstance().closeOverlay();
-                        GameManager.getInstance().startGameLoop();
                     };
 
                     GameManager.getInstance().showCharacterSelectionScreen(
@@ -368,15 +374,16 @@ public class GameLoader {
                 }
         ));
 
-//        slides.add(new StorySlide(
-//                "Assets/Images/Backgrounds/volcano_bg.png",
-//                List.of(
-//                        "now...",
-//                        "leZGOOOO"
-//                ),
-//                null
-//        ));
-
+        slides.add(new StorySlide(
+                "Assets/Images/Backgrounds/heroes.png",
+                List.of(
+                        "Good luck."
+                ),
+                () -> {
+                    GameManager.getInstance().startGameLoop();
+                }
+        ));
+            
         return slides;
     }
 
