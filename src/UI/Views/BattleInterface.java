@@ -8,6 +8,7 @@ import Core.GameManager;
 import Core.Utils.LogManager;
 import Items.Inventory;
 import Items.Item;
+import Resource.Audio.AudioManager;
 import UI.Components.*;
 
 import java.awt.*;
@@ -84,6 +85,9 @@ public class BattleInterface extends JPanel {
     private JSplitPane SplitPane_2;
 
     public BattleInterface() {
+
+        //just to stop the storyview bgm
+        AudioManager.getInstance().stopMusic();
 
         if (battlePanel != null) {
             battlePanel.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -620,7 +624,7 @@ public class BattleInterface extends JPanel {
         inspector_HpBar = new AnimatedStatBar(100, Color.GREEN, "HP:");
         inspector_MpBar = new AnimatedStatBar(100, new Color(100, 149, 237), "MP:");
 
-        inspector_XPBar.setPreferredSize(new Dimension(180, 25));
+        inspector_XPBar.setPreferredSize(new Dimension(180, 15));
         inspector_HpBar.setPreferredSize(new Dimension(180, 25));
         inspector_MpBar.setPreferredSize(new Dimension(180, 25));
 

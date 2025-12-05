@@ -368,7 +368,6 @@ public class GameLoader {
                 }
         ));
 
-
 //        slides.add(new StorySlide(
 //                "Assets/Images/Backgrounds/volcano_bg.png",
 //                List.of(

@@ -7,6 +7,7 @@ import Characters.HeroRepository;
 import Core.GameFlow.CharacterSelectionMode;
 import Resource.Animation.Animation;
 import Resource.Animation.AssetManager;
+import Resource.Audio.AudioManager;
 import UI.Components.AnimatedStatBar;
 import UI.Components.BackgroundPanel;
 import Characters.CharacterDisplayData;

@@ -8,6 +8,7 @@ import Core.Story.StorySlide;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
+import Resource.Audio.AudioManager;
 import UI.Views.BattleInterface;
 import UI.Views.CharacterSelection;
 import UI.Views.MainMenu;
@@ -106,6 +107,10 @@ public class GameManager {
         this.gameWindow = currentWindow;
 
         List<StorySlide> introScript = GameLoader.loadIntroSequence();
+
+        AudioManager audio = AudioManager.getInstance();
+        audio.registerSound("STORYVIEW", "Assets/Audio/SFX/StoryView/storyview_bgm.wav");
+        audio.playMusic("STORYVIEW");
 
         StoryView storyView = new StoryView();
 
