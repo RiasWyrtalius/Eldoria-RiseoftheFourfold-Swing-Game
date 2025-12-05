@@ -112,6 +112,9 @@ public class StoryView extends JPanel {
         }
     }
 
+    // TODO: fix issue wherein if u press too fast
+    // the index would go out of bouds
+    // might implement a fadein timer
     private void handleInput() {
         if (sequence == null || sequence.isEmpty()) return;
         if (isTyping) {

@@ -26,23 +26,14 @@ public class Hero extends Character {
 
         this.baseXP = 100;
         this.incrementXP = 50;
+        // lvl 1 needs 100, level 2 needs 150, level 3 needs 200. etc......
         this.requiredXP = baseXP + (incrementXP * (this.level - 1));
-
-        recalculateStats();
 
         this.reactions.addAll(job.createReactions());
     }
 
     public Hero(String name, int baseHealth, int baseAtk, int maxMana, int level, JobClass job) {
-        super(name, baseHealth + job.getHpBonus(), baseAtk, maxMana, level);
-        this.job = job;
-        this.XP = 0;
-        this.baseXP = 100;
-        this.incrementXP = 50;
-        // lvl 1 needs 100, level 2 needs 150, level 3 needs 200. etc......
-        this.requiredXP = baseXP + (incrementXP * (this.level - 1));
-
-        this.reactions.addAll(job.createReactions());
+        this(name, baseHealth, baseAtk, maxMana, 0, level, job);
     }
 
     public Hero(String name, int health, int baseAtk, int maxMana, JobClass job) {

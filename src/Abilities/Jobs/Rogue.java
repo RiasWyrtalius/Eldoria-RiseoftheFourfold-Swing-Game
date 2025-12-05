@@ -19,7 +19,7 @@ public class Rogue extends JobClass{
         public static final String description = "A shadow in the night, the Rogue moves with silent precision and deadly intent. Master of stealth and deception, she strikes from the shadows before vanishing without a trace. Agile and cunning, she excels at disabling traps, picking locks, and exploiting enemy weaknesses. Her loyalty lies with the mission—and her own code.";
         private static final String IDLE_PATH = "Assets/Animations/Heroes/Rogue/Idle/sprite_%d.png";
         public Rogue() {
-            super("Rogue", description, "ROGUE_IDLE", -20, 0);
+            super("Rogue", description, "ROGUE_IDLE", 0, 0, 0, 0, 0, 0);
         }
 
         @Override
