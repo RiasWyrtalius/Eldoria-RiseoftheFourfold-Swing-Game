@@ -24,7 +24,7 @@ public class Goblin extends Enemy {
         super(
                 "Goblin Grunt",
                 ScalingLogic.calculateStat(level, 30, 10, 0.15),
-                ScalingLogic.calculateStat(level, 20, 5, 0.05),
+                ScalingLogic.calculateStat(level, 10, 5, 0.05),
                 0,
                 level,
                 "Goblin",
@@ -73,20 +73,21 @@ public class Goblin extends Enemy {
         };
 
         SkillLogicConsumer throwCoinsLogic = (self, user, targets, onSkillComplete) -> {
-            int coins = Dice.getInstance().roll(1,5);
-            int calculateDamage = ScalingLogic.calculateDamage(user,baseAtk,0.2,0.1) * coins;
+            int coins = Dice.getInstance().roll(1, 5);
+            int baseDamage = ScalingLogic.calculateDamage(user, baseAtk, 0.2, 0.1);
+            int calculateDamage = (int)(baseDamage * Math.sqrt(coins));
 
             Character target = Dice.getInstance().pickRandom(targets);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.ENEMY_ACTION);
             // TODO: panel should be empty during the swinging
 //            VisualEffectsManager.getInstance().hideCharacterVisual(user);
-//            VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", target, () -> {
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", user, () -> {
             target.receiveDamage(calculateDamage, user, self);
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                     VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                 }
-//            }, true);
+            }, true);
         };
 
         Skill skirmish = new Skill(
