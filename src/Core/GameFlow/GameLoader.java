@@ -203,7 +203,7 @@ public class GameLoader {
         bg_List.add("Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png");
         bg_List.add("Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png");
         bg_List.add("Assets/Images/Backgrounds/Level_BG/Snow_Biome/sprite_0.png");
-        bg = Dice.getInstance().pickRandom(bg_List);
+        bg = Dice.getInstance().pickRandom(bg_List, rng);
 //        for(int i = 0; i < 20 ; i++){
 //            int separator = (i - 2) / 5;
 //            bg = bg_List.get(separator % bg_List.size());
