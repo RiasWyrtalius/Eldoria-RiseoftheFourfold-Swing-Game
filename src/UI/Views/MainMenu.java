@@ -1,25 +1,18 @@
 package UI.Views;
 
 import java.io.File;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.AudioInputStream;
-import java.net.URL;
 
+import Core.GameFlow.SaveManager;
 import Core.GameManager;
-import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import Resource.Audio.AudioManager;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.InputStream;
 
-public class MainMenu extends JFrame {
+public class MainMenu extends JPanel {
     private final GameManager manager;
 
     private JPanel contentPanel;
@@ -34,14 +27,20 @@ public class MainMenu extends JFrame {
     public MainMenu(GameManager manager) {
         this.manager = manager;
 
+        this.setLayout(new BorderLayout());
+        if (contentPanel != null) {
+            this.add(contentPanel, BorderLayout.CENTER);
+        }
+
         AudioManager audio = AudioManager.getInstance();
         audio.registerSound("MAIN-THEME", "Assets/Audio/SFX/mainMenu_bgm.wav");
         audio.playMusic("MAIN-THEME");
 
-        this.setContentPane(contentPanel);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setTitle("Eldoria: Rise of the Fourfold");
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        if (SaveManager.hasSaveFile()) {
+            continueButton.setEnabled(true);
+        } else {
+            continueButton.setEnabled(false);
+        }
 
         try {
             File fontFile = new File("Assets/Fonts/Vecna.ttf");
@@ -63,7 +62,6 @@ public class MainMenu extends JFrame {
             }
         } catch (IOException | FontFormatException e) {
             System.err.println("Error loading font: " + e.getMessage());
-            e.printStackTrace();
         }
 
         contentPanel.setOpaque(true);
@@ -74,8 +72,10 @@ public class MainMenu extends JFrame {
 
         // TODO: play music HERE!
 
-        //  TODO: enable continue button only if content save file is available
-        continueButton.setEnabled(false);
+        continueButton.addActionListener(e -> {
+            AudioManager.getInstance().stopMusic();
+            manager.loadSavedGame();
+        });
 
         exitButton.addActionListener(e -> {
             AudioManager.getInstance().stopMusic();
@@ -87,7 +87,8 @@ public class MainMenu extends JFrame {
 
         startButton.addActionListener(e -> {
             AudioManager.getInstance().stopMusic();
-            manager.startNewGame(this);
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            manager.startNewGame(parentFrame);
         });
     }
 

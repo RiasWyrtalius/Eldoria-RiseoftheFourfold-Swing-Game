@@ -116,7 +116,7 @@ public class Goblin extends Enemy {
     protected void initializeReactions() {
         // panics at 50%
         ReactionLogic cowardiceLogic = (defender, attacker, skill, incomingDamage) -> {
-            double healthPercent = (double) defender.getHealth() / defender.getInitialHealth();
+            double healthPercent = (double) defender.getHealth() / defender.getMaxHealth();
             if (healthPercent > 0.50) {
                 return -1;
             }

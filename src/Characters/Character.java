@@ -13,32 +13,39 @@ import java.util.List;
 public abstract class Character {
     protected String name;
 
-    protected int initialHealth;
-    protected int health;
-    protected boolean isAlive = true;
-
     protected int level;
+    protected int health;
+    protected int mana;
+
+    protected int baseMaxHealth;
+    protected int baseMaxMana;
     protected int baseAtk;
 
-    protected int mana;
+    protected int maxHealth;
     protected int maxMana;
 
+    protected boolean isAlive = true;
     protected boolean isExhausted = false;
 
     protected List<ReactionSkill> reactions = new ArrayList<>();
 
-    public Character(String name, int initialHealth, int baseAtk, int maxMana, int level) {
+    public Character(String name, int baseHealth, int baseAtk, int baseMana, int level) {
         this.name = name;
-        this.initialHealth = initialHealth;
-        this.health = initialHealth;
+
+        this.baseMaxHealth = baseHealth;
+        this.baseMaxMana = baseMana;
         this.baseAtk = baseAtk;
-        this.maxMana = maxMana;
-        this.mana = maxMana;
+
         this.level = level;
+
+        this.maxHealth = baseHealth;
+        this.maxMana = baseMana;
+        this.health = maxHealth;
+        this.mana = maxMana;
     }
 
-    public Character(String name, int health, int baseAtk, int maxMana) {
-        this(name, health, baseAtk, maxMana, 1);
+    public Character(String name, int baseHealth, int baseAtk, int maxMana) {
+        this(name, baseHealth, baseAtk, maxMana, 1);
     }
 
     public void receiveDamage(int rawDamage, Character attacker, Skill incomingSkill) {
@@ -84,7 +91,7 @@ public abstract class Character {
     protected void onDefeat(Character attacker) {
         if (attacker == null) return;
         LogManager.log(this.name + " is killed by " + attacker.getName() + "!", LogFormat.ENEMY_ACTION);
-    };
+    }
 
     public boolean canCast(int manaCost) {
         return this.mana >= manaCost;
@@ -141,8 +148,8 @@ public abstract class Character {
     }
 
     public void setHealth(int newHealth, Character source) {
-        if(newHealth > initialHealth){
-            newHealth = initialHealth;
+        if(newHealth > maxHealth){
+            newHealth = maxHealth;
         }
         if (newHealth < 0) {
             newHealth = 0;
@@ -173,7 +180,7 @@ public abstract class Character {
         onRevive();
     }
 
-    public void setInitialHealth(int initialHealth){this.initialHealth = initialHealth;}
+    public void setMaxHealth(int maxHealth){this.maxHealth = maxHealth;}
     public void setMaxMana(int maxMana){this.maxMana = maxMana;}
 
     public void addReaction(ReactionSkill reaction) {
@@ -220,29 +227,44 @@ public abstract class Character {
         return currentValue;
     }
 
-    // =============== PUBLIC GETTERS FOR UI ===============
-    public int getInitialHealth() {
-        return initialHealth;
+    // =============== PUBLIC GETTERS AND SETTERS ===============
+    public int getMaxHealth() {
+        return maxHealth;
     }
+
     public String getName() {
         return name;
     }
+
     public int getHealth() {
         return health;
     }
+
     public boolean isAlive() {
         return isAlive;
     }
+
     public int getBaseAtk() {
         return baseAtk;
     }
+
     public int getLevel() {
         return level;
     }
+
     public int getMana() { return mana; }
+
     public int getMaxMana() {
         return maxMana;
     }
+    public int getBaseMaxHealth() {
+        return baseMaxHealth;
+    }
+
+    public int getBaseMaxMana() {
+        return baseMaxMana;
+    }
+
     public boolean isExhausted() {
         return isExhausted;
     }
@@ -250,6 +272,7 @@ public abstract class Character {
     public void setExhausted(boolean exhausted) {
         isExhausted = exhausted;
     }
+
     public void setMana(int newMana) {
         if (newMana > maxMana) {
             newMana = maxMana;
@@ -259,8 +282,12 @@ public abstract class Character {
         }
         this.mana = newMana;
     }
+
     public abstract List<Skill> getSkills();
+
     public abstract String getDescription();
+
     public abstract String getIdleImageKey();
+
     public void setName(String name) { this.name = name; }
 }

@@ -23,8 +23,11 @@ public class Archer extends JobClass {
     private static final String IDLE_PATH = "Assets/Animations/Heroes/Archer/Idle/sprite_%d.png";
 
     public Archer(){
-        super("Archer", description, 20, 0,"ARCHER_IDLE");
+        super("Archer", description, "ARCHER_IDLE");
+    }
 
+    @Override
+    public void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "ARCHER_IDLE",
                 "Assets/Animations/Heroes/Archer/Idle/sprite_%d.png",
@@ -62,7 +65,7 @@ public class Archer extends JobClass {
     @Override
     public List<ReactionSkill> createReactions() {
         ReactionLogic dodgeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
-            double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
+            double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
             if (Dice.getInstance().chance(0.3) && hp_percent < 0.60) {
                 LogManager.log(defender.getName() + " swiftly dodges the attack!", LogFormat.ENEMY_ACTION);
                 VisualEffectsManager.getInstance().playAnimation("ARCHER_DODGE", defender, null, true);
@@ -77,6 +80,7 @@ public class Archer extends JobClass {
 
     }
 
+    @Override
     public List<Skill> createSkills() {
         SkillLogicConsumer rapidFireLogic = (self, user, targets, onSkillComplete) -> {
             int dmg = ScalingLogic.calculateDamage(user, 20, 15, 1.2, 0.05);

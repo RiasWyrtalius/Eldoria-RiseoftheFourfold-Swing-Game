@@ -648,7 +648,7 @@ public class BattleInterface extends JPanel {
             inspector_XPBar.setValue(h.getXP());
         }
 
-        inspector_HpBar.setMaxValue(c.getInitialHealth());
+        inspector_HpBar.setMaxValue(c.getMaxHealth());
         inspector_HpBar.setValue(c.getHealth());
 
         inspector_MpBar.setMaxValue(c.getMaxMana());

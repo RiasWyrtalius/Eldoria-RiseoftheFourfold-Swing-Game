@@ -23,9 +23,11 @@ public class CryoMancer extends JobClass {
     private static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png";
 
     public CryoMancer(){
+        super("CryoMancer", description, "MAGE_ICE-IDLE");
+    }
 
-        super("CryoMancer", description, 0, 20,"MAGE_ICE-IDLE");
-
+    @Override
+    public void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "MAGE_ICE-IDLE",
                 "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png",
@@ -50,7 +52,7 @@ public class CryoMancer extends JobClass {
     @Override
     public List<ReactionSkill> createReactions() {
         ReactionLogic reflectIceSpikeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
-            double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
+            double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
             int calculateDmg = ScalingLogic.calculateDamage(defender,30,15,1.2,0.05);
             int calculateDamage = (int)(calculateDmg * 0.4);
             if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
@@ -67,6 +69,7 @@ public class CryoMancer extends JobClass {
         return List.of(ReflectIceSpike);
     }
 
+    @Override
     public List<Skill> createSkills() {
 
         SkillLogicConsumer iceSpikeLogic = (self, user, targets, onSkillComplete) -> {

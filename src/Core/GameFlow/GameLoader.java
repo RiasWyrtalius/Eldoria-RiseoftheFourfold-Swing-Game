@@ -1,5 +1,7 @@
 package Core.GameFlow;
 
+import Abilities.JobClass;
+import Abilities.JobFactory;
 import Abilities.Jobs.*;
 import Characters.Base.Enemy;
 import Characters.Base.Hero;
@@ -14,13 +16,14 @@ import Core.Utils.LogFormat;
 import Items.*;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
  * Loads and saves levels
  */
 public class GameLoader {
-    private Queue<Level> campaignQueue;
+    private final Queue<Level> campaignQueue;
     private long currentSeed;
     private int levelsCompleted;
     private final List<EnemySpawnRule> allEnemyTypes = new ArrayList<>();
@@ -73,56 +76,68 @@ public class GameLoader {
         );
     }
 
+    /**
+     *  Reconstructs the entire party from save state
+     * @param state state from savefile
+     * @return party
+     */
+    public Party loadPartyFromSave(GameState state) {
+        Party party = new Party(state.partyName);
+
+        for (HeroSaveData data : state.partyMembers) {
+            JobClass job = JobFactory.getJob(data.jobClassName);
+            Hero hero = new Hero(
+                    data.name,
+                    data.baseHP,
+                    data.baseAtk,
+                    data.baseMP,
+                    data.level,
+                    job
+            );
+
+            // TODO: what about xp ??
+            hero.setHealth(data.currentHP, null);
+            hero.setMana(data.currentMP);
+
+            party.addPartyMember(hero);
+        }
+
+        restoreInventory(party, state.inventoryCounts);
+
+        return party;
+    }
+
+    private void restoreInventory(Party party, Map<String, Integer> counts) {
+        Inventory inv = party.getInventory();
+
+        for (Map.Entry<String, Integer> entry : counts.entrySet()) {
+            String itemName = entry.getKey();
+            int qty = entry.getValue();
+
+            Item item = ItemFactory.getItemByName(itemName);
+
+            if (item != null) {
+                inv.addItem(item, qty);
+            }
+        }
+    }
+
     // TODO: Link up with character creation later!!!
     // TODO: optimize character creation using factories (maybe)
-    public static Party loadStarterParty(String partyName) {
+    public static Party createInitialParty(String partyName) {
         Party heroParty = new Party(partyName);
 
-
-        //TEMPORARY HERO SETUP
-//        heroParty = new Party("The Godslayers");
-
-//        Warrior warrior = new Warrior();
-//        Character charlie = new Hero("Charlie",150,50,100,1,warrior);
-//
-//        Paladin paladin = new Paladin();
-//        Character antot = new Hero("Antot",150,50,100,1,paladin);
-//
-//        Rogue rogue = new Rogue();
-//        Character elyi = new Hero("Ely",80,50,100,1,rogue);
-//
-//        FireMage fireMage = new FireMage();
-//        Character chaniy = new Hero("Chaniy the doubter",100,60,120,1,fireMage);
-//
-//        CryoMancer iceMage = new CryoMancer();
-//        Character sammy = new Hero("Sammy", 100, 60, 120, 1, iceMage);
-//
-//        EarthMage earthMage = new EarthMage();
-//        Character ythan = new Hero("Ythanny W", 100, 60, 120, 1, earthMage);
-//
-//        Cleric cleric = new Cleric();
-//        Character erick = new Hero("Erick the cleric", 100, 60, 120, 1, cleric);
-
-//        Archer archer = new Archer();
-//        Character gianmeni = new Hero("Gian Meni",80,70,100,1,archer);
-//
-//        AeroMancer aeromancer = new AeroMancer();
-//        Character kervs = new Hero("Kurtis", 100, 60, 120, 1, aeromancer);
-
-//        TODO: add max amount of party members
-//        heroParty.addPartyMember(charlie);
-//        heroParty.addPartyMember(ythan);
-//        heroParty.addPartyMember(erick);
-//        heroParty.addPartyMember(sammy);
-//        heroParty.addPartyMember(gianmeni);
-//        heroParty.addPartyMember(kervs);
-//        heroParty.addPartyMember(chaniy);
-//        heroParty.addPartyMember(elyi);
-//        heroParty.addPartyMember(antot);
-
+//        heroParty.addPartyMember(new Hero("Charlie",150,50,100,1, JobFactory.getJob("Warrior")));
+//        heroParty.addPartyMember(new Hero("Ythanny W", 100, 60, 120, 1, JobFactory.getJob("EarthMage")));
+//        heroParty.addPartyMember(new Hero("Erick the cleric", 100, 60, 120, 1, JobFactory.getJob("Cleric")));
+//        heroParty.addPartyMember(new Hero("Sammy", 100, 60, 120, 1, JobFactory.getJob("CryoMancer")));
+//        heroParty.addPartyMember(new Hero("Gian Meni",80,70,100,1, JobFactory.getJob("Archer")));
+//        heroParty.addPartyMember(new Hero("Kurtis", 100, 60, 120, 1, JobFactory.getJob("AeroMancer")));
+//        heroParty.addPartyMember(new Hero("Chaniy the doubter",100,60,120,1, JobFactory.getJob("Fire Mage")));
+//        heroParty.addPartyMember(new Hero("Ely",80,50,100,1, JobFactory.getJob("Rogue")));
+//        heroParty.addPartyMember(new Hero("Antot",150,50,100,1, JobFactory.getJob("Paladin")));
 
         loadStartingInventory(heroParty);
-
         return heroParty;
     }
 
@@ -339,7 +354,18 @@ public class GameLoader {
                         "Now, the fate of Eldoria rests with you. WHO WILL STAND AGAINST THE DARKNESS?",
                         "Form your party and become the prophecy."
                 ),
-                () ->  GameManager.getInstance().showCharacterSelectionScreen()
+                () -> {
+                    BiConsumer<Hero, String> onCharacterPicked = (selectedHero, partyName) -> {
+                        GameManager.getInstance().createPartyFromSelection(selectedHero, partyName);
+                        GameManager.getInstance().closeOverlay();
+                        GameManager.getInstance().startGameLoop();
+                    };
+
+                    GameManager.getInstance().showCharacterSelectionScreen(
+                            CharacterSelectionMode.CREATE_NEW_PARTY,
+                            onCharacterPicked
+                    );
+                }
         ));
 
 
@@ -391,5 +417,9 @@ public class GameLoader {
         // read seed
         // generateCampaign(seed)
         // pool
+    }
+
+    public long getCurrentSeed() {
+        return currentSeed;
     }
 }

@@ -1,6 +1,7 @@
     package UI.Components;
 
     import Characters.Character;
+    import Core.GameFlow.CharacterSelectionMode;
     import Core.Visuals.VisualAsset;
     import Core.Visuals.VisualEffectsManager;
     import Resource.Animation.AssetManager;
@@ -121,11 +122,11 @@
             nameLabel.setText("Lv. " + character.getLevel() + " - " + character.getName());
             nameLabel.setForeground(Color.WHITE);
 
-            hpBar.setMaximum(character.getInitialHealth());
+            hpBar.setMaximum(character.getMaxHealth());
             hpBar.setValue(character.getHealth());
             hpBar.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
-            hpBar.setString("HP " + character.getHealth() + "/" + character.getInitialHealth());
-            hpBar.setForeground(barState(character.getHealth(), character.getInitialHealth()));
+            hpBar.setString("HP " + character.getHealth() + "/" + character.getMaxHealth());
+            hpBar.setForeground(barState(character.getHealth(), character.getMaxHealth()));
 
             String visualId = character.getIdleImageKey();
             VisualAsset assetData = AssetManager.getInstance().getVisualAssetData(visualId);

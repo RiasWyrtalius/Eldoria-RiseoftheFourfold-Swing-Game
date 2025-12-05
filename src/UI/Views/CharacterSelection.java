@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import Characters.Base.Hero;
 import Characters.HeroRepository;
+import Core.GameFlow.CharacterSelectionMode;
 import Resource.Animation.Animation;
 import Resource.Animation.AssetManager;
 import UI.Components.AnimatedStatBar;
@@ -18,6 +19,7 @@ import UI.Components.StatsRenderer;
 import Abilities.JobClass;
 
 public class CharacterSelection extends JPanel {
+    private CharacterSelectionMode mode;
     private JPanel CharacterSelection;
     private JPanel CharacterPreview;
     private JButton selectCharacterButton;
@@ -43,7 +45,8 @@ public class CharacterSelection extends JPanel {
 
     private final BiConsumer<Hero, String> onSelectionComplete;
 
-    public CharacterSelection(BiConsumer<Hero, String> onSelectionComplete) {
+    public CharacterSelection(CharacterSelectionMode mode, BiConsumer<Hero, String> onSelectionComplete) {
+        this.mode = mode;
         this.onSelectionComplete = onSelectionComplete;
 
         this.setLayout(new BorderLayout());
@@ -81,9 +84,20 @@ public class CharacterSelection extends JPanel {
         CharacterPreview.add(characterImageLabel);
 
         //Logic Setup
+        setupMode();
         setupListeners();
         updateView();
+    }
 
+    private void setupMode() {
+        if (textField2 == null) return;
+
+        // If we are just adding to a party, we don't need to name it.
+        if (mode == CharacterSelectionMode.ADD_TO_EXISTING_PARTY) {
+            textField2.setVisible(false);
+        } else {
+            textField2.setVisible(true);
+        }
     }
 
     private void setupStatBar() {
@@ -180,7 +194,7 @@ public class CharacterSelection extends JPanel {
                 statsRenderer.updateDisplay(myHero);
             }
 
-            hpBar.setValue(myHero.getInitialHealth());
+            hpBar.setValue(myHero.getMaxHealth());
             mpBar.setValue(myHero.getMaxMana());
 
             updateAnimation(myHero);

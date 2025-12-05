@@ -22,9 +22,11 @@ public class Paladin extends JobClass {
     private static boolean hasRevived = false;
 
     public Paladin() {
+        super("Paladin", description, "PALADIN_IDLE", 30, 0);
+    }
 
-        super("Paladin", description, 30, 0, "PALADIN_IDLE");
-
+    @Override
+    public void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "PALADIN_IDLE",
                 IDLE_PATH,
@@ -43,18 +45,16 @@ public class Paladin extends JobClass {
                 4, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );
-
-
     }
 
     @Override
     public List<ReactionSkill> createReactions() {
         ReactionLogic ReviveLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
-            double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
+            double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
             if(defender.getHealth() - incomingDamage > 0){
                 return -1;
             }
-            int revive_health= (int)(defender.getInitialHealth() * 0.30);
+            int revive_health= (int)(defender.getMaxHealth() * 0.30);
             int reset_mana= (int)(defender.getMaxMana() * 0.50);
             if (Dice.getInstance().chance(0.75) && hp_percent <= 0 && !hasRevived) {
                 defender.setHealth(revive_health, defender);
@@ -73,6 +73,7 @@ public class Paladin extends JobClass {
         return List.of(Revive);
     }
 
+    @Override
     public List<Skill> createSkills() {
         SkillLogicConsumer healSelfLogic = (self, user, targets, onSkillComplete) -> {
             LogManager.log(self.getActionLog(user, " Heals", targets), LogFormat.HERO_ACTION);

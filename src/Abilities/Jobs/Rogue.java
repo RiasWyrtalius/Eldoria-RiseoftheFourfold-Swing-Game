@@ -19,8 +19,11 @@ public class Rogue extends JobClass{
         public static final String description = "A shadow in the night, the Rogue moves with silent precision and deadly intent. Master of stealth and deception, she strikes from the shadows before vanishing without a trace. Agile and cunning, she excels at disabling traps, picking locks, and exploiting enemy weaknesses. Her loyalty lies with the mission—and her own code.";
         private static final String IDLE_PATH = "Assets/Animations/Heroes/Rogue/Idle/sprite_%d.png";
         public Rogue() {
-            super("Rogue", description, 0, 0, "ROGUE_IDLE");
-            
+            super("Rogue", description, "ROGUE_IDLE", -20, 0);
+        }
+
+        @Override
+        public void registerAssets() {
             AssetManager.getInstance().registerAnimation(
                     "ROGUE_IDLE",
                     IDLE_PATH,
@@ -39,13 +42,12 @@ public class Rogue extends JobClass{
                     6, 100, 100 , 200,
                     AnimationLoopType.ONE_CYCLE
             );
-
-
         }
+
         @Override
         public List<ReactionSkill> createReactions() {
             ReactionLogic dodgeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
-                double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
+                double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
 
                 if (hp_percent < 0.60) {
                     // Scale chance from 10% at 60% HP up to 40% at 0% HP
@@ -77,6 +79,7 @@ public class Rogue extends JobClass{
             return List.of(dodge);
         }
 
+        @Override
         public List<Skill> createSkills() {
 
             // FIXME: turn doesn't end when animation is finished

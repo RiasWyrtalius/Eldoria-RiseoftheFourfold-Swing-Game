@@ -6,6 +6,8 @@ import Characters.Character;
  * This is some genius stuff sam O_o
  */
 public class ScalingLogic {
+    private ScalingLogic() {}
+
     /**
      * Calculates user damage based on flurgerburger's standard formula:
      * Dmg = Sb + Sp + (L * Sf) + (Sb * (L * Lm))

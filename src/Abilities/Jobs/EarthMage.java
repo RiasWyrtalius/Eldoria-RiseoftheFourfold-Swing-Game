@@ -23,9 +23,11 @@ public class EarthMage extends JobClass {
     public static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Earth/Idle/sprite_%d.png";
 
     public EarthMage(){
-        super("Earth Mage", description,0,20,"MAGE_EARTH-IDLE");
+        super("EarthMage", description,"MAGE_EARTH-IDLE");
+    }
 
-
+    @Override
+    public void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "MAGE_EARTH-IDLE",
                 "Assets/Animations/Heroes/Mage-Earth/Idle/sprite_%d.png",
@@ -51,13 +53,12 @@ public class EarthMage extends JobClass {
                 7, 100, 100 , 100,
                 AnimationLoopType.TWO_CYCLES
         );
-
     }
 
     @Override
     public List<ReactionSkill> createReactions() {
         ReactionLogic reflectStoneHailLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
-            double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
+            double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
             int calculateDmg = ScalingLogic.calculateDamage(defender,20,10,1.2,0.05);
             int calculateDamage = (int)(calculateDmg * 0.4);
             if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
@@ -75,6 +76,7 @@ public class EarthMage extends JobClass {
         return List.of(ReflectStoneHail);
     }
 
+    @Override
     public List<Skill> createSkills() {
         SkillLogicConsumer earthAttackLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,50,28,1.2,0.05);

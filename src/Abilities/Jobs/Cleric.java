@@ -20,9 +20,11 @@ public class Cleric extends JobClass {
     private static final String IDLE_PATH = "Assets/Animations/Heroes/Cleric/Idle/sprite_%d.png";
 
     public Cleric() {
+        super("Cleric", description, "CLERIC_IDLE", 10, 0);
+    }
 
-        super("Cleric", description, 10, 20,"CLERIC_IDLE");
-
+    @Override
+    public void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "CLERIC_IDLE",
                 "Assets/Animations/Heroes/Cleric/Idle/sprite_%d.png",
@@ -35,7 +37,6 @@ public class Cleric extends JobClass {
                 4, 100, 100 , 200,
                 AnimationLoopType.ONE_CYCLE
         );
-
     }
 
     @Override
@@ -43,6 +44,7 @@ public class Cleric extends JobClass {
         return List.of();
     }
 
+    @Override
     public List<Skill> createSkills() {
         SkillLogicConsumer healSelfLogic = (self, user, targets, onSkillComplete) -> {
             LogManager.log(self.getActionLog(user, " Heals", targets), LogFormat.HERO_ACTION);
@@ -78,7 +80,7 @@ public class Cleric extends JobClass {
         SkillLogicConsumer reviveLogic = (self, user, targets, onSkillComplete) -> {
             Character target = targets.getFirst();
 
-            int revive_health= (int)(target.getInitialHealth() * 0.30);
+            int revive_health= (int)(target.getMaxHealth() * 0.30);
             int reset_mana= (int)(target.getMaxMana() * 0.50);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("CLERIC_HEAL", user, () -> {

@@ -3,8 +3,7 @@ package Core;
 import Characters.Base.Hero;
 import Characters.Party;
 import Core.Battle.BattleController;
-import Core.GameFlow.GameLoader;
-import Core.GameFlow.Level;
+import Core.GameFlow.*;
 import Core.Story.StorySlide;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
@@ -18,17 +17,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class GameManager {
+    private JFrame gameWindow;
+    private MainMenu mainMenuView;
+
     private static final GameManager INSTANCE = new GameManager();
 
     private BattleController battleController;
     private GameLoader gameLoader;
     private Party heroParty;
     private BattleInterface mainView;
-
-    private JFrame activeWindow;
 
     private GameManager() {
         this.gameLoader = new GameLoader();
@@ -40,12 +39,81 @@ public class GameManager {
 
     public void startApplication() {
         // run all UI initialization safely on the swing thread
-        // cuz swing runs on a separate thread for some reason lol
-        SwingUtilities.invokeLater(this::initializeApplication);
+        // cuz swing     runs on a separate thread for some reason lol
+        SwingUtilities.invokeLater(() -> {
+            this.gameWindow = new JFrame("Elordia: Rise of the Fourfold");
+            gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            gameWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+            showMainMenu();
+        });
     }
 
-    private void initializeApplication() {
-        new MainMenu(this);
+    public void showMainMenu() {
+        if (mainMenuView == null) {
+            mainMenuView = new MainMenu(this);
+        }
+
+        // Swap the content to the menu panel
+        gameWindow.setContentPane(mainMenuView);
+        gameWindow.revalidate();
+        gameWindow.repaint();
+        gameWindow.setVisible(true);
+    }
+
+    public void loadSavedGame() {
+        GameState state = SaveManager.loadGame();
+
+        if (state == null) {
+            LogManager.log("Failed to load save file.", LogFormat.SYSTEM_ERROR);
+
+            JOptionPane.showMessageDialog(
+                    gameWindow,
+                    "Could not load the save file. It may be corrupted.",
+                    "Load Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+            showMainMenu();
+        }
+
+        LogManager.log("Save file loaded...", LogFormat.SYSTEM);
+
+        // setup battle view
+        mainView = new BattleInterface();
+        gameWindow.setContentPane(mainView);
+        gameWindow.revalidate();
+        gameWindow.repaint();
+
+        // re link infrastructure
+        LogManager.initialize(mainView.getGameLogPanelTextPane(), mainView.getGameLogHighlightPanelTextPane());
+        VisualEffectsManager.getInstance().setMainView(mainView);
+
+        // reload party
+        this.heroParty = gameLoader.loadPartyFromSave(state);
+        gameLoader.generateCampaign(state.seed, 20); // Regenerate same campaign
+
+        // skip done levels
+        for (int i = 0; i < state.levelsCompleted; i++) {
+            gameLoader.loadNextLevel();
+        }
+
+        // start game from savepoint
+        loadNextLevel();
+    }
+
+    public void startNewGame(JFrame currentWindow) {
+        this.gameWindow = currentWindow;
+
+        List<StorySlide> introScript = GameLoader.loadIntroSequence();
+
+        StoryView storyView = new StoryView();
+
+        gameWindow.setContentPane(storyView);
+        gameWindow.revalidate();
+        gameWindow.repaint();
+
+        storyView.startSequence(introScript, null);
     }
 
     public void loadNextLevel() {
@@ -69,48 +137,46 @@ public class GameManager {
 
         battleController.setMainView(mainView);
         mainView.linkControllerAndData(battleController);
+
+        LogManager.log("Creating save point...");
+        saveCurrentGame();
+
     }
 
-    public void startNewGame(JFrame currentWindow) {
-        this.activeWindow = currentWindow;
+    public void saveCurrentGame() {
+        if (battleController == null) {
+            LogManager.log("Cannot save: No active battle.", LogFormat.SYSTEM);
+            return;
+        }
 
-        List<StorySlide> introScript = GameLoader.loadIntroSequence();
+        int levelNum = battleController.getLevelNumber();
+        // Number of levels COMPLETED is the current level number - 1
+        int levelsDone = Math.max(0, levelNum - 1);
 
-        StoryView storyView = new StoryView();
+        // Create the DTO snapshot
+        GameState currentState = new GameState(
+                gameLoader.getCurrentSeed(),
+                levelsDone,
+                heroParty
+        );
 
-        activeWindow.setContentPane(storyView);
-        activeWindow.revalidate();
-        activeWindow.repaint();
-
-        storyView.startSequence(introScript, this::initializeGameplay);
-
-//        // dummy view to get the text area for synchronization reasons
-//        mainView = new BattleInterface();
-//
-//        LogManager.initialize(mainView.getGameLogPanelTextPane(), mainView.getGameLogHighlightPanelTextPane());
-//        LogManager.log("Logger initialized with UI component", LogFormat.SYSTEM);
-//        VisualEffectsManager.getInstance().setMainView(mainView);
-//
-//        this.heroParty = GameLoader.loadStarterParty();
-//        long seed = System.currentTimeMillis();
-//        // DONT DELETE! DEBUG to check if seed generation works properly
-//        // 2 goblins -> 2 slimes -> 1 goblin 1 spider -> etc. etc.
-//        // seed = 1764436935686L;
-//        gameLoader.generateCampaign(seed, 20); // Generate n levels
-//
-//        loadNextLevel();
+        SaveManager.saveGame(currentState);
     }
+
+    // TODO: character summoning
+//    public void onCharacterSummon() {
+//
+//    }
 
     /**
-     * The actual game initialization.
-     * Runs after the intro cutscene.
+     * Called after a party has been created (either new or loaded).
+     * This method generates the campaign and transitions the UI to the first battle.
      */
-    private void initializeGameplay() {
+    public void startGameLoop() {
         mainView = new BattleInterface();
-
-        activeWindow.setContentPane(mainView);
-        activeWindow.revalidate(); // Tell layout manager to recalculate
-        activeWindow.repaint();    // Draw the new pixels
+        gameWindow.setContentPane(mainView);
+        gameWindow.revalidate();
+        gameWindow.repaint();
 
         LogManager.initialize(mainView.getGameLogPanelTextPane(), mainView.getGameLogHighlightPanelTextPane());
         VisualEffectsManager.getInstance().setMainView(mainView);
@@ -121,51 +187,35 @@ public class GameManager {
         loadNextLevel();
     }
 
-    public void showCharacterSelectionScreen() {
-        BiConsumer<Hero, String> onCharacterPicked = (selectedHero, partyName) -> {
-            System.out.println("Character Selected. Resuming flow...");
+    public void showCharacterSelectionScreen(CharacterSelectionMode mode, BiConsumer<Hero, String> onCharacterPicked) {
+        CharacterSelection selectionView = new CharacterSelection(mode, onCharacterPicked);
 
-            this.heroParty = GameLoader.loadStarterParty(partyName);
-
-            heroParty.addPartyMember(selectedHero);
-
-            if (partyName != null && !partyName.isEmpty()) {
-                heroParty.setPartyName(partyName);
-                LogManager.log("Party renamed to: " + partyName, LogFormat.SYSTEM);
-            }
-
-            LogManager.log(selectedHero.getName() + " joined the adventure!", LogFormat.PLAYER_JOIN);
-
-            closeOverlay(activeWindow);
-
-            loadNextLevel();
-        };
-
-        CharacterSelection selectionView = new CharacterSelection(onCharacterPicked);
-
-        JLayeredPane layeredPane = activeWindow.getLayeredPane();
-
-        selectionView.setBounds(0, 0, activeWindow.getWidth(), activeWindow.getHeight());
-
-        // pop up layers are so cool
-        // make other UI components popup layers as well
+        JLayeredPane layeredPane = gameWindow.getLayeredPane();
+        selectionView.setBounds(0, 0, gameWindow.getWidth(), gameWindow.getHeight());
         layeredPane.add(selectionView, JLayeredPane.POPUP_LAYER);
 
-        activeWindow.revalidate();
-        activeWindow.repaint();
+        gameWindow.revalidate();
+        gameWindow.repaint();
     }
 
-    private void closeOverlay(JFrame frame) {
-        JLayeredPane layeredPane = frame.getLayeredPane();
+    public void createPartyFromSelection(Hero selectedHero, String partyName) {
+        this.heroParty = GameLoader.createInitialParty(partyName);
+        this.heroParty.addPartyMember(selectedHero);
+        LogManager.log(selectedHero.getName() + " begins their adventure!", LogFormat.PLAYER_JOIN);
+    }
 
+    public void closeOverlay() { // <-- Removed parameter
+        if (gameWindow == null) return;
+
+        JLayeredPane layeredPane = gameWindow.getLayeredPane();
         Component[] comps = layeredPane.getComponentsInLayer(JLayeredPane.POPUP_LAYER);
         for (Component c : comps) {
             if (c instanceof CharacterSelection) {
                 layeredPane.remove(c);
             }
         }
-
-        frame.revalidate();
-        frame.repaint();
+        gameWindow.revalidate();
+        gameWindow.repaint();
     }
+
 }

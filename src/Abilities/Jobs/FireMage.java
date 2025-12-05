@@ -22,10 +22,11 @@ public class FireMage extends JobClass {
     public static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png";
 
     public FireMage() {
+        super("FireMage", description, "MAGE_IDLE");
+    }
 
-        super("Fire Mage", description, 0, 20,"MAGE_IDLE");
-
-
+    @Override
+    public void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "MAGE_IDLE",
                 "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png",
@@ -51,7 +52,7 @@ public class FireMage extends JobClass {
     @Override
     public List<ReactionSkill> createReactions() {
         ReactionLogic reflectFireballLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
-            double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
+            double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
             int calculateDmg = ScalingLogic.calculateDamage(defender,25,15,1.2,0.05);
             int calculateDamage = (int)(calculateDmg * 0.4);
             if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
@@ -69,6 +70,7 @@ public class FireMage extends JobClass {
         return List.of(ReflectFireball);
     }
 
+    @Override
     public List<Skill> createSkills() {
 
         // FIXME: turn doesn't end when animation is finished

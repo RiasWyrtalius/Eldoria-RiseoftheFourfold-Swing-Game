@@ -22,7 +22,11 @@ public class AeroMancer extends JobClass {
     private static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Wind/Idle/sprite_%d.png";
 
     public AeroMancer(){
-        super("AeroMancer", description,0,20,"MAGE_WIND-IDLE");
+        super("AeroMancer", description,"MAGE_WIND-IDLE");
+    }
+
+    @Override
+    public void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "MAGE_WIND-IDLE",
                 IDLE_PATH,
@@ -53,7 +57,7 @@ public class AeroMancer extends JobClass {
     @Override
     public List<ReactionSkill> createReactions() {
         ReactionLogic reflectWindPierceLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
-            double hp_percent = (double)defender.getHealth() / defender.getInitialHealth();
+            double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
             int calculateDmg = ScalingLogic.calculateDamage(defender,20,15,1.2,0.05);
             int calculateDamage = (int)(calculateDmg * 0.4);
             if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
@@ -70,6 +74,7 @@ public class AeroMancer extends JobClass {
         return List.of(ReflectWindPierce);
     }
 
+    @Override
     public List<Skill> createSkills() {
         SkillLogicConsumer windTornadoLogic = (self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,30,(int)18.5,1.2,0.05);
