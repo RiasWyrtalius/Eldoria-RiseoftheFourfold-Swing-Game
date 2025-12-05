@@ -9,11 +9,14 @@ import UI.Components.FantasyDialogPanel;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class StoryView extends JPanel {
@@ -62,10 +65,23 @@ public class StoryView extends JPanel {
         narrationStyle = new SimpleAttributeSet();
         StyleConstants.setForeground(narrationStyle, TEXT_COLOR);
 
-        StyleConstants.setFontFamily(narrationStyle, "Georgia");
-        StyleConstants.setFontSize(narrationStyle, 26);
-        StyleConstants.setItalic(narrationStyle, true);
-        StyleConstants.setAlignment(narrationStyle, StyleConstants.ALIGN_CENTER);
+
+        int fontSize = 36; // base size
+        try {
+            File fontFile = new File("Assets/Fonts/Vecna.ttf");
+            if (fontFile.exists()) {
+                Font vecna = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont((float)fontSize);
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                ge.registerFont(vecna);
+                StyleConstants.setFontFamily(narrationStyle, vecna.getFamily());
+                StyleConstants.setFontSize(narrationStyle, fontSize);
+            }
+        } catch(IOException | FontFormatException FFE) {
+            StyleConstants.setFontFamily(narrationStyle, "Georgia");
+            StyleConstants.setFontSize(narrationStyle, 26);
+            StyleConstants.setItalic(narrationStyle, true);
+            StyleConstants.setAlignment(narrationStyle, StyleConstants.ALIGN_CENTER);
+        }
 
         typeTimer = new Timer(30, e -> updateTypewriter());
 
