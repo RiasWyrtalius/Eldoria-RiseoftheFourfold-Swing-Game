@@ -1,5 +1,7 @@
 package UI.Views;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 
 import Core.GameFlow.SaveManager;
@@ -24,6 +26,9 @@ public class MainMenu extends JPanel {
     private JPanel exit_Panel;
     private JLabel titleLabel;
 
+    private final Color INACTIVE_STATE = new Color(169, 169, 169);
+    private final Color ACTIVE_STATE = new Color(211, 211, 211);
+
     public MainMenu(GameManager manager) {
         this.manager = manager;
 
@@ -33,8 +38,25 @@ public class MainMenu extends JPanel {
         }
 
         AudioManager audio = AudioManager.getInstance();
-        audio.registerSound("MAIN-THEME", "Assets/Audio/SFX/mainMenu_bgm.wav");
+        audio.registerSound("MAIN-THEME", "Assets/Audio/SFX/MainUI/mainMenu_bgm.wav");
+        audio.registerSound("BUTTON_HOVER", "Assets/Audio/SFX/MainUI/button_hover.wav");
+        audio.registerSound("BUTTON_SELECT", "Assets/Audio/SFX/MainUI/button_select.wav");
         audio.playMusic("MAIN-THEME");
+
+        try {
+            File fontFile = new File("Assets/Fonts/Vecna.ttf");
+            if (fontFile.exists()) {
+                Font fontBase = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+
+                Font buttonFont = fontBase.deriveFont(50f);
+
+                addHoverEffect(startButton, buttonFont);
+                addHoverEffect(continueButton, buttonFont);
+                addHoverEffect(exitButton, buttonFont);
+            }
+        } catch (IOException | FontFormatException FFE) {
+            FFE.printStackTrace();
+        }
 
         if (SaveManager.hasSaveFile()) {
             continueButton.setEnabled(true);
@@ -51,7 +73,6 @@ public class MainMenu extends JPanel {
 
                 GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
                 ge.registerFont(elordiaFont);
-
 
                 titleLabel.setFont(elordiaFont);
                 titleLabel.setForeground(new Color(255, 215, 0));
@@ -73,22 +94,53 @@ public class MainMenu extends JPanel {
         // TODO: play music HERE!
 
         continueButton.addActionListener(e -> {
+            audio.playSound("BUTTON_SELECT");
             AudioManager.getInstance().stopMusic();
             manager.loadSavedGame();
         });
 
         exitButton.addActionListener(e -> {
+            audio.playSound("BUTTON_SELECT");
             AudioManager.getInstance().stopMusic();
-            System.out.println("...Exiting Application");
+            Timer exitTimer = new Timer(500, evt -> {
+                System.out.println("...Exiting Application");
+                System.exit(0);
+            });
             // stop timers before killing JVM for some reason
             VisualEffectsManager.getInstance().stopAllTimers();
             System.exit(0);
         });
 
         startButton.addActionListener(e -> {
+            audio.playSound("BUTTON_SELECT");
             AudioManager.getInstance().stopMusic();
             JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
             manager.startNewGame(parentFrame);
+        });
+    }
+
+    private void addHoverEffect(JButton button, Font font) {
+        button.setFont(font);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        String originalText = button.getText();
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (button.isEnabled()) {
+                    AudioManager.getInstance().playSound("BUTTON_HOVER");
+                    button.setForeground(ACTIVE_STATE);
+                    button.setText("> " + originalText + " <"); // Add symbols
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (button.isEnabled()) {
+                    button.setForeground(INACTIVE_STATE);
+                    button.setText(originalText); // Restore text
+                }
+            }
         });
     }
 
