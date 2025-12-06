@@ -1,4 +1,5 @@
 package UI.Views;
+import Core.Visuals.VisualEffectsManager;
 import UI.Components.*;
 
 import Abilities.Skill;
@@ -289,7 +290,7 @@ public class BattleInterface extends JPanel {
                     if (hero.isAlive() && !hero.isExhausted()) {
                         onHeroSelect(hero);
                     } else {
-                        showFloatingText(hero, "Exhausted!", Color.RED);
+                        VisualEffectsManager.getInstance().showFloatingText(hero, "Exhausted!", Color.RED);
                     }
                 }
 //                else LogManager.log("Enemy is Selected!");
@@ -354,49 +355,6 @@ public class BattleInterface extends JPanel {
 //                LogManager.log("IDLE");
                 break;
         }
-    }
-
-    private void showFloatingText(Character target, String text, Color color) {
-        JPanel targetPanel = characterToPanelMap.get(target);
-        if (targetPanel == null) return;
-
-        JRootPane root = SwingUtilities.getRootPane(this);
-        if (root == null) return;
-        JLayeredPane layeredPane = root.getLayeredPane();
-
-        OutlinedLabel label = new OutlinedLabel(text, SwingConstants.CENTER);
-        label.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        label.setForeground(color);
-        label.setOutlineColor(Color.BLACK);
-        label.setStrokeWidth(3f);
-
-        Point panelLoc = SwingUtilities.convertPoint(targetPanel, 0, 0, layeredPane);
-        Dimension labelSize = label.getPreferredSize();
-
-        int x = panelLoc.x + (targetPanel.getWidth() - labelSize.width) / 2;
-        int y = panelLoc.y - (labelSize.height / 2);
-
-        label.setBounds(x, y, labelSize.width, labelSize.height);
-
-        layeredPane.add(label, JLayeredPane.POPUP_LAYER);
-
-        Timer timer = new Timer(20, null);
-        final int[] duration = {0};
-
-        timer.addActionListener(e -> {
-            duration[0]++;
-
-            // Move the label up by 1 pixel per tick
-            label.setLocation(label.getX(), label.getY() - 1);
-
-            // After ~1.2 seconds (60 ticks), remove it
-            if (duration[0] > 60) {
-                timer.stop();
-                layeredPane.remove(label);
-                layeredPane.repaint(label.getBounds()); // Clean up artifacts
-            }
-        });
-        timer.start();
     }
 
     private class VictoryPanel extends JPanel {

@@ -5,6 +5,7 @@ import Core.Utils.LogManager;
 import Resource.Animation.Animation;
 import Resource.Animation.AssetManager;
 import UI.Components.CharacterStatusPanel;
+import UI.Components.OutlinedLabel;
 import UI.Views.BattleInterface;
 
 import Characters.Character;
@@ -268,6 +269,8 @@ public class VisualEffectsManager {
         restoreVisual(display);
     }
 
+
+
     public JLabel getDisplayComponent(Character character) {
         if (mainView == null) {
             LogManager.log("ERROR: VEM is not linked to BattleInterface (mainView is null).", LogFormat.SYSTEM_ERROR);
@@ -472,6 +475,55 @@ public class VisualEffectsManager {
 
         timer.start();
     }
+
+    public void showFloatingText(Character target, String text, Color color) {
+        JPanel targetPanel = mainView.getCharacterPanel(target);
+        if (targetPanel == null) return;
+
+        JRootPane root = SwingUtilities.getRootPane(mainView);
+        if (root == null) return;
+        JLayeredPane layeredPane = root.getLayeredPane();
+
+        OutlinedLabel label = new OutlinedLabel(text, SwingConstants.CENTER);
+        label.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        label.setForeground(color);
+        label.setOutlineColor(Color.BLACK);
+        label.setStrokeWidth(3f);
+
+        Point panelLoc = SwingUtilities.convertPoint(targetPanel, 0, 0, layeredPane);
+        Dimension labelSize = label.getPreferredSize();
+
+        int x = panelLoc.x + (targetPanel.getWidth() - labelSize.width) / 2;
+        int y = panelLoc.y - (labelSize.height / 2);
+
+        label.setBounds(x, y, labelSize.width, labelSize.height);
+
+        layeredPane.add(label, JLayeredPane.POPUP_LAYER);
+
+        Timer timer = getTimer(label, layeredPane);
+        timer.start();
+    }
+
+    private static Timer getTimer(OutlinedLabel label, JLayeredPane layeredPane) {
+        Timer timer = new Timer(20, null);
+        final int[] duration = {0};
+
+        timer.addActionListener(e -> {
+            duration[0]++;
+
+            // Move the label up by 1 pixel per tick
+            label.setLocation(label.getX(), label.getY() - 1);
+
+            // After ~1.2 seconds (60 ticks), remove it
+            if (duration[0] > 60) {
+                timer.stop();
+                layeredPane.remove(label);
+                layeredPane.repaint(label.getBounds()); // Clean up artifacts
+            }
+        });
+        return timer;
+    }
+
     public void setMainView(BattleInterface mainView) {
         this.mainView = mainView;
     }
