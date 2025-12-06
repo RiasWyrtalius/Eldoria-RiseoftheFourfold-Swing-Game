@@ -15,9 +15,11 @@ import Core.Utils.LogManager;
 import Core.Utils.LogFormat;
 import Items.*;
 
+import javax.swing.*;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import UI.Views.BattleInterface;
 
 /**
  * Loads and saves levels
@@ -27,6 +29,7 @@ public class GameLoader {
     private long currentSeed;
     private int levelsCompleted;
     private final List<EnemySpawnRule> allEnemyTypes = new ArrayList<>();
+    private BattleInterface battleInterface;
 
     public GameLoader() {
         this.campaignQueue = new LinkedList<>();
@@ -378,14 +381,12 @@ public class GameLoader {
         return slides;
     }
 
-    public Level loadNextLevel() {
-        return campaignQueue.poll();
+    public void finishCampaign() {
+        LogManager.log("You have cleared all stages!", LogFormat.VICTORY);
     }
 
-    // TODO: end level
-    public void finishCampaign() {
-        LogManager.logHighlight("CAMPAIGN COMPLETE!", LogFormat.VICTORY, LogFormat.SIZE_HEADER, true);
-        LogManager.log("You have cleared all stages!", LogFormat.VICTORY);
+    public Level loadNextLevel() {
+        return campaignQueue.poll();
     }
 
     // TODO: Refine this stuff
@@ -417,5 +418,9 @@ public class GameLoader {
 
     public long getCurrentSeed() {
         return currentSeed;
+    }
+
+    public void setBattleInterface(BattleInterface battleInterface) {
+        this.battleInterface = battleInterface;
     }
 }

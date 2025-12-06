@@ -1,4 +1,5 @@
 package UI.Views;
+import UI.Components.*;
 
 import Abilities.Skill;
 import Core.Battle.*;
@@ -19,6 +20,7 @@ import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -28,6 +30,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.JTextPane;
 import javax.swing.text.*;
 import java.awt.Color;
+import Core.GameFlow.VictoryPanel;
 
 // TODO: DESCEND calls battle controller->game manager for next battle
 public class BattleInterface extends JPanel {
@@ -104,11 +107,7 @@ public class BattleInterface extends JPanel {
             SplitPane_1.setUI(new BasicSplitPaneUI() {
                 @Override
                 public BasicSplitPaneDivider createDefaultDivider() {
-                    return new BasicSplitPaneDivider(this) {
-                        @Override
-                        public void setBorder(Border b) {
-                        }
-                    };
+                    return new BasicSplitPaneDivider(this) { @Override public void setBorder(Border b) {} };
                 }
             });
             SplitPane_1.setBackground(new Color(44, 44, 44));
@@ -118,11 +117,7 @@ public class BattleInterface extends JPanel {
             SplitPane_2.setUI(new BasicSplitPaneUI() {
                 @Override
                 public BasicSplitPaneDivider createDefaultDivider() {
-                    return new BasicSplitPaneDivider(this) {
-                        @Override
-                        public void setBorder(Border b) {
-                        }
-                    };
+                    return new BasicSplitPaneDivider(this) { @Override public void setBorder(Border b) {} };
                 }
             });
             SplitPane_2.setBackground(new Color(44, 44, 44));
@@ -163,30 +158,11 @@ public class BattleInterface extends JPanel {
             });
         }
         battlePanel.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                resetSelectionState();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
+            @Override public void mouseClicked(MouseEvent e) { resetSelectionState();}
+            @Override public void mousePressed(MouseEvent e) {}
+            @Override public void mouseReleased(MouseEvent e) {}
+            @Override public void mouseEntered(MouseEvent e) {}
+            @Override public void mouseExited(MouseEvent e) {}
         });
     }
 
@@ -313,7 +289,7 @@ public class BattleInterface extends JPanel {
                     if (hero.isAlive() && !hero.isExhausted()) {
                         onHeroSelect(hero);
                     } else {
-                        LogManager.logHighlight(hero.getName() + " is exhausted", false);
+                        showFloatingText(hero, "Exhausted!", Color.RED);
                     }
                 }
 //                else LogManager.log("Enemy is Selected!");
@@ -378,6 +354,121 @@ public class BattleInterface extends JPanel {
 //                LogManager.log("IDLE");
                 break;
         }
+    }
+
+    private void showFloatingText(Character target, String text, Color color) {
+        JPanel targetPanel = characterToPanelMap.get(target);
+        if (targetPanel == null) return;
+
+        JRootPane root = SwingUtilities.getRootPane(this);
+        if (root == null) return;
+        JLayeredPane layeredPane = root.getLayeredPane();
+
+        OutlinedLabel label = new OutlinedLabel(text, SwingConstants.CENTER);
+        label.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        label.setForeground(color);
+        label.setOutlineColor(Color.BLACK);
+        label.setStrokeWidth(3f);
+
+        Point panelLoc = SwingUtilities.convertPoint(targetPanel, 0, 0, layeredPane);
+        Dimension labelSize = label.getPreferredSize();
+
+        int x = panelLoc.x + (targetPanel.getWidth() - labelSize.width) / 2;
+        int y = panelLoc.y - (labelSize.height / 2);
+
+        label.setBounds(x, y, labelSize.width, labelSize.height);
+
+        layeredPane.add(label, JLayeredPane.POPUP_LAYER);
+
+        Timer timer = new Timer(20, null);
+        final int[] duration = {0};
+
+        timer.addActionListener(e -> {
+            duration[0]++;
+
+            // Move the label up by 1 pixel per tick
+            label.setLocation(label.getX(), label.getY() - 1);
+
+            // After ~1.2 seconds (60 ticks), remove it
+            if (duration[0] > 60) {
+                timer.stop();
+                layeredPane.remove(label);
+                layeredPane.repaint(label.getBounds()); // Clean up artifacts
+            }
+        });
+        timer.start();
+    }
+
+    private class VictoryPanel extends JPanel {
+        public VictoryPanel(ActionListener onExit) {
+            setLayout(new GridBagLayout()); // Centers everything in the middle of the screen
+            setOpaque(false); // Allows us to paint the transparent background manually
+
+            // Create a vertical box to hold Text -> Space -> Button
+            JPanel contentBox = new JPanel();
+            contentBox.setLayout(new BoxLayout(contentBox, BoxLayout.Y_AXIS));
+            contentBox.setOpaque(false);
+
+            //Title
+            OutlinedLabel title = new OutlinedLabel("CAMPAIGN COMPLETE", SwingConstants.CENTER);
+            title.setFont(new Font("Segoe UI", Font.BOLD, 48));
+            title.setForeground(new Color(255, 215, 0)); // Gold text
+            title.setOutlineColor(Color.BLACK);
+            title.setStrokeWidth(4f);
+            title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            //ubtitle
+            JLabel subTitle = new JLabel("You have cleared all stages!");
+            subTitle.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            subTitle.setForeground(Color.WHITE);
+            subTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            //Exit
+            JButton exitBtn = new JButton("Return to Title");
+            exitBtn.setFont(new Font("Segoe UI", Font.BOLD, 16));
+            exitBtn.setFocusPainted(false);
+            exitBtn.setBackground(Color.WHITE);
+            exitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+            exitBtn.addActionListener(onExit);
+
+            //title, sub, exit
+            contentBox.add(title);
+            contentBox.add(Box.createVerticalStrut(15));
+            contentBox.add(subTitle);
+            contentBox.add(Box.createVerticalStrut(40));
+            contentBox.add(exitBtn);
+
+            add(contentBox);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            g.setColor(new Color(0, 0, 0, 200));
+            g.fillRect(0, 0, getWidth(), getHeight());
+
+            super.paintComponent(g);
+        }
+    }
+
+    public void showCampaignVictoryScreen() {
+        JRootPane root = SwingUtilities.getRootPane(this);
+        if (root == null) return;
+
+        JLayeredPane layeredPane = root.getLayeredPane();
+
+        VictoryPanel victoryOverlay = new VictoryPanel(e -> {
+            // TODO: Add logic here to load the Main Menu
+            System.out.println("Returning to title...");
+            System.exit(0);
+        });
+
+        // Size it to match the window
+        victoryOverlay.setBounds(0, 0, root.getWidth(), root.getHeight());
+
+        layeredPane.add(victoryOverlay, JLayeredPane.MODAL_LAYER);
+
+        layeredPane.revalidate();
+        layeredPane.repaint();
     }
 
     private void clearAllSelectionOverlays() {

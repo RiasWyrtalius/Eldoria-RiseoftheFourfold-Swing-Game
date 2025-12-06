@@ -40,7 +40,6 @@ public class LogFormat {
     public static final Color DEFEAT = new Color(66, 66, 66);
     public static final Color TIE = new Color(192, 192, 192);
 
-    public static final int ICON_SIZE = 100;
     public static final Color HP = new Color(0, 255, 0);
     public static final Color MP = new Color(138, 216, 244);
     public static final Color DEAD = Color.GRAY;

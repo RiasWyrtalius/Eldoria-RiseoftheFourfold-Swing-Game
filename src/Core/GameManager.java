@@ -78,6 +78,7 @@ public class GameManager {
             );
 
             showMainMenu();
+            return;
         }
 
         LogManager.log("Save file loaded...", LogFormat.SYSTEM);
@@ -87,6 +88,8 @@ public class GameManager {
         gameWindow.setContentPane(mainView);
         gameWindow.revalidate();
         gameWindow.repaint();
+
+        gameLoader.setBattleInterface(mainView);
 
         // re link infrastructure
         LogManager.initialize(mainView.getGameLogPanelTextPane(), mainView.getGameLogHighlightPanelTextPane());
@@ -126,12 +129,12 @@ public class GameManager {
     public void loadNextLevel() {
         Level nextLevel = gameLoader.loadNextLevel();
 
-        if (nextLevel == null && battleController == null) {
-            return;
-        }
-
         if (nextLevel == null) {
-            gameLoader.finishCampaign();
+            gameLoader.finishCampaign(); // Logs the victory
+
+            if (mainView != null) {
+                mainView.showCampaignVictoryScreen();
+            }
             return;
         }
 
@@ -140,6 +143,7 @@ public class GameManager {
         mainView.setBattleBackground(nextLevel.battleBackground());
 
         Party enemyParty = nextLevel.buildEnemyParty();
+
         this.battleController = new BattleController(heroParty, enemyParty, nextLevel);
 
         battleController.setMainView(mainView);
@@ -147,7 +151,6 @@ public class GameManager {
 
         LogManager.log("Creating save point...");
         saveCurrentGame();
-
     }
 
     public void saveCurrentGame() {
@@ -184,6 +187,8 @@ public class GameManager {
         gameWindow.setContentPane(mainView);
         gameWindow.revalidate();
         gameWindow.repaint();
+
+        gameLoader.setBattleInterface(mainView);
 
         LogManager.initialize(mainView.getGameLogPanelTextPane(), mainView.getGameLogHighlightPanelTextPane());
         VisualEffectsManager.getInstance().setMainView(mainView);
