@@ -2,7 +2,6 @@ package Core.GameFlow;
 
 import Abilities.JobClass;
 import Abilities.JobFactory;
-import Abilities.Jobs.*;
 import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Enemies.*;
@@ -50,7 +49,8 @@ public class GameLoader {
                 buildEnemyGroup(Goblin::new,Goblin::new,Goblin::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
-                        ItemFactory.smallManaPotion()
+                        ItemFactory.smallManaPotion(),
+                        ItemFactory.summoningScroll()
                 )
         ));
         fixedLevels.put(5, createSpecificLevel(
@@ -256,6 +256,8 @@ public class GameLoader {
 
         if (minEnemies > maxEnemies) minEnemies = maxEnemies;
 
+        // TODO: ADD MORE VARIETY
+
         String bg = "";
         List<String> bg_List = new ArrayList<>();
         bg_List.add("Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png");
@@ -432,7 +434,17 @@ public class GameLoader {
                     );
                 }
         ));
-            
+
+        slides.add(new StorySlide(
+                "Assets/Images/Backgrounds/heroes.png",
+                List.of(
+                        "Good luck."
+                ),
+                () -> {
+                    GameManager.getInstance().startGameLoop();
+                }
+        ));
+
         return slides;
     }
 

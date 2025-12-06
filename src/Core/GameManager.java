@@ -216,7 +216,7 @@ public class GameManager {
         LogManager.log(selectedHero.getName() + " begins their adventure!", LogFormat.PLAYER_JOIN);
     }
 
-    public void closeOverlay() { // <-- Removed parameter
+    public void closeOverlay() {
         if (gameWindow == null) return;
 
         JLayeredPane layeredPane = gameWindow.getLayeredPane();
@@ -230,4 +230,7 @@ public class GameManager {
         gameWindow.repaint();
     }
 
+    public Party getHeroParty() {
+        return heroParty;
+    }
 }
