@@ -14,7 +14,11 @@ import Resource.Animation.AssetManager;
 import java.util.List;
 
 public class DragonBoss extends Boss {
+    public DragonBoss(){this(1);}
 
+    public DragonBoss(int level){
+        this("Golem",200,50,300,level,"Boss",250,(int)(1.6));
+    }
     public DragonBoss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
         super(
                 name, initialHealth, baseAtk, maxMana, level, type, rewardXP,  healthMultiplier, "DRAGON_BOSS-IDLE", "boss of the level");

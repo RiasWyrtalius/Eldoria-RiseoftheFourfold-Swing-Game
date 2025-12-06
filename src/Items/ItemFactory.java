@@ -80,7 +80,6 @@ public class ItemFactory {
                 }
         ));
 
-
     }
 
     public static void register(Item item) {

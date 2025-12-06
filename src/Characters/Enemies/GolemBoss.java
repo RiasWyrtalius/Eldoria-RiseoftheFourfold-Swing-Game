@@ -14,8 +14,11 @@ import Resource.Animation.AssetManager;
 import java.util.List;
 
 public class GolemBoss extends Boss {
+    public GolemBoss(){this(1);}
 
-
+    public GolemBoss(int level){
+        this("Golem",150,50,300,level,"Boss",200,2);
+    }
     public GolemBoss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
         super(name, initialHealth, baseAtk, maxMana, level, type, rewardXP, healthMultiplier, "GOLEM_BOSS-IDLE", "boss of the level");
     }

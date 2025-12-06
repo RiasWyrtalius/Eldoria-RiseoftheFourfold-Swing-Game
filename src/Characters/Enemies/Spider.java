@@ -26,9 +26,9 @@ public class Spider extends Enemy {
                 ScalingLogic.calculateStat(level,100, 10, 0.05),
                 ScalingLogic.calculateStat(level,20, 10, 0.1),
                 0,
-                1,
+                level,
                 "Slime",
-                10,
+                50 * level,
                 "Best web designer around",
                 "SPIDER_IDLE");
     }
