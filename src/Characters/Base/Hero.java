@@ -15,7 +15,7 @@ public class Hero extends Character {
     protected int XP;
     protected int baseXP;
     protected int requiredXP;
-    protected final int incrementXP;
+    protected double growthRate;
     protected JobClass job;
 
     public Hero(String name, int baseHealth, int baseAtk, int maxMana, int xp, int level, JobClass job) {
@@ -25,9 +25,8 @@ public class Hero extends Character {
         this.XP = xp;
 
         this.baseXP = 100;
-        this.incrementXP = 50;
-        // lvl 1 needs 100, level 2 needs 150, level 3 needs 200. etc......
-        this.requiredXP = baseXP + (incrementXP * (this.level - 1));
+        this.growthRate = 1.15;
+        this.requiredXP = (int)(baseXP * Math.pow(growthRate,this.level - 1));
 
         this.reactions.addAll(job.createReactions());
     }
@@ -86,7 +85,7 @@ public class Hero extends Character {
 //        super.setMaxMana(new_mana);
 
         this.level++;
-        this.requiredXP = baseXP + (incrementXP * (level - 1));
+        this.requiredXP = (int)(baseXP * Math.pow(growthRate,this.level - 1));
 
         int oldMaxHp = this.maxHealth;
         int oldMaxMp = this.maxMana;
