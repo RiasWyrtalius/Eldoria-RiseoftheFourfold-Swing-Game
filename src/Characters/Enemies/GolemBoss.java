@@ -7,6 +7,7 @@ import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
+import Core.Utils.ScalingLogic;
 import Core.Visuals.VisualEffectsManager;
 import Resource.Animation.AnimationLoopType;
 import Resource.Animation.AssetManager;
@@ -17,7 +18,15 @@ public class GolemBoss extends Boss {
     public GolemBoss(){this(1);}
 
     public GolemBoss(int level){
-        this("Golem",150,50,300,level,"Boss",200,2);
+        this(
+                "Golem",
+                ScalingLogic.calculateStat(level,125,30,0.1),
+                ScalingLogic.calculateStat(level,50,20,0.05),
+                ScalingLogic.calculateStat(level,300,50,0.2),
+                level,
+                "Boss"
+                ,ScalingLogic.calculateStat(level,250,30,0.1),
+                (int)(2.5));
     }
     public GolemBoss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
         super(name, initialHealth, baseAtk, maxMana, level, type, rewardXP, healthMultiplier, "GOLEM_BOSS-IDLE", "boss of the level");

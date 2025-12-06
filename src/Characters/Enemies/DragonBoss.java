@@ -17,7 +17,14 @@ public class DragonBoss extends Boss {
     public DragonBoss(){this(1);}
 
     public DragonBoss(int level){
-        this("Golem",200,50,300,level,"Boss",250,(int)(1.6));
+        this(
+                "Baby Dragon",
+                ScalingLogic.calculateStat(level,200,30,0.1),
+                ScalingLogic.calculateStat(level,50,20,0.05),
+                ScalingLogic.calculateStat(level,300,50,0.2),
+                level,"Boss"
+                ,ScalingLogic.calculateStat(level,250,30,0.09),
+                (int)(1.6));
     }
     public DragonBoss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
         super(
