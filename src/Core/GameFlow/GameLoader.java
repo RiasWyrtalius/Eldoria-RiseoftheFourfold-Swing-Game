@@ -47,13 +47,54 @@ public class GameLoader {
                 "The Gates",
                 "Assets/Images/Backgrounds/Level_BG/sample.jpg",
                 "A swarm of goblins surround you!",
-                buildEnemyGroup(Goblin::new),
+                buildEnemyGroup(Goblin::new,Goblin::new,Goblin::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion()
                 )
         ));
-
+        fixedLevels.put(5, createSpecificLevel(
+                5,
+                "The transition",
+                "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
+                "A Strong Enemies Stops you!",
+                buildEnemyGroup(Vampire::new, Vampire::new),
+                buildLoot(
+                        ItemFactory.smallHealthPotion(),
+                        ItemFactory.smallHealthPotion(),
+                        ItemFactory.smallManaPotion(),
+                        ItemFactory.smallManaPotion(),
+                        ItemFactory.revivePotion()
+                )
+        ));
+        fixedLevels.put(10, createSpecificLevel(
+                10,
+                "Corrupted Forest",
+                "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
+                "A Strong Enemies Stops you!",
+                buildEnemyGroup(Vampire::new,Spider::new,Spider::new, Vampire::new),
+                buildLoot(
+                        ItemFactory.smallHealthPotion(),
+                        ItemFactory.smallHealthPotion(),
+                        ItemFactory.smallManaPotion(),
+                        ItemFactory.smallManaPotion(),
+                        ItemFactory.revivePotion()
+                )
+        ));
+        fixedLevels.put(15, createSpecificLevel(
+                15,
+                "The transition",
+                "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
+                "A Boss Stops you!",
+                buildEnemyGroup(Slime::new,GolemBoss::new,Slime::new),
+                buildLoot(
+                        ItemFactory.smallHealthPotion(),
+                        ItemFactory.smallHealthPotion(),
+                        ItemFactory.smallManaPotion(),
+                        ItemFactory.smallManaPotion(),
+                        ItemFactory.revivePotion()
+                )
+        ));
         return fixedLevels;
     }
 
@@ -396,6 +437,8 @@ public class GameLoader {
         allEnemyTypes.add(new EnemySpawnRule(Skull::new, 2));
         allEnemyTypes.add(new EnemySpawnRule(Spider::new, 3));
         allEnemyTypes.add(new EnemySpawnRule(Vampire::new, 5));
+        allEnemyTypes.add(new EnemySpawnRule(GolemBoss::new, 1));
+        allEnemyTypes.add(new EnemySpawnRule(DragonBoss::new, 1));
     }
 
     private void registerAudioAssets() {

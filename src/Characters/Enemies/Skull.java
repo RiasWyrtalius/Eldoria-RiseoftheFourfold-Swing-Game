@@ -28,7 +28,7 @@ public class Skull extends Enemy {
                 0,
                 level,
                 "Skull",
-                15 * level,
+                25 * level,
                 "Cursed Bone",
                 "SKULL_IDLE"
         );
