@@ -7,7 +7,6 @@ import Characters.HeroRepository;
 import Core.GameFlow.CharacterSelectionMode;
 import Resource.Animation.Animation;
 import Resource.Animation.AssetManager;
-import Resource.Audio.AudioManager;
 import UI.Components.AnimatedStatBar;
 import UI.Components.BackgroundPanel;
 import Characters.CharacterDisplayData;
@@ -31,6 +30,7 @@ public class CharacterSelection extends JPanel {
     private JTextField textField1;
     private JTextField textField2;
     private JTextPane statsTA;
+    private JPanel barsPanel;
 
     private JLabel classLabel;
     private AnimatedStatBar hpBar;
@@ -52,21 +52,18 @@ public class CharacterSelection extends JPanel {
 
         this.setLayout(new BorderLayout());
         this.setBackground(new Color(0, 0, 0, 200)); // 80% Black Overlay
-        this.setOpaque(false); // Ensure background color is drawn
+        this.setOpaque(false);
 
-        JPanel modalContainer = new JPanel();
-        modalContainer.setLayout(new BorderLayout());
+        JPanel modalContainer = new JPanel(new BorderLayout());
         modalContainer.setBorder(new LineBorder(new Color(0xD4AF37), 3)); // Gold Border
 
         if (CharacterSelection != null) {
             modalContainer.add(CharacterSelection, BorderLayout.CENTER);
         }
 
-
         JPanel centerWrapper = new JPanel(new GridBagLayout());
         centerWrapper.setOpaque(false);
         centerWrapper.add(modalContainer);
-
         this.add(centerWrapper, BorderLayout.CENTER);
 
         setupPanels();
@@ -79,7 +76,6 @@ public class CharacterSelection extends JPanel {
         }
 
         characterList = HeroRepository.getHeroes();
-
         CharacterPreview.setLayout(new GridBagLayout());
         characterImageLabel = new JLabel();
         CharacterPreview.add(characterImageLabel);
@@ -92,20 +88,10 @@ public class CharacterSelection extends JPanel {
 
     private void setupMode() {
         if (textField2 == null) return;
-
-        // If we are just adding to a party, we don't need to name it.
-        if (mode == CharacterSelectionMode.ADD_TO_EXISTING_PARTY) {
-            textField2.setVisible(false);
-        } else {
-            textField2.setVisible(true);
-        }
+        textField2.setVisible(mode != CharacterSelectionMode.ADD_TO_EXISTING_PARTY);
     }
 
     private void setupStatBar() {
-        classLabel = new JLabel("Class: ");
-        classLabel.setFont(new Font("Georgia", Font.BOLD, 16));
-        classLabel.setForeground(new Color(0x000000)); // Gold color
-        classLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         hpBar = new AnimatedStatBar(500, new Color(220, 50, 50), "HP: ");
         mpBar = new AnimatedStatBar(300, new Color(50, 150, 255), "MP: ");
@@ -116,9 +102,6 @@ public class CharacterSelection extends JPanel {
         hpBar.setAlignmentX(Component.LEFT_ALIGNMENT);
         mpBar.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        //boxlayout is used to stack text & bars vertically
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-
         if (textField1 != null) {
             textField1.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
             textField1.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -128,40 +111,14 @@ public class CharacterSelection extends JPanel {
             textField2.setAlignmentX(Component.LEFT_ALIGNMENT);
         }
 
-        // idk the fix but like were going to remove everything cause it breaks...
-        infoPanel.removeAll();
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        if (barsPanel != null) {
+            barsPanel.setOpaque(false);
+            barsPanel.setLayout(new BoxLayout(barsPanel, BoxLayout.Y_AXIS));
 
-        //Name Section
-        infoPanel.add(createHeaderLabel("Name:"));
-        if (textField1 != null) infoPanel.add(textField1);
-        infoPanel.add(Box.createVerticalStrut(10));
-
-        //Party Name Section
-        infoPanel.add(createHeaderLabel("Party Name:"));
-        if (textField2 != null) infoPanel.add(textField2);
-        infoPanel.add(Box.createVerticalStrut(15));
-
-        //Stats Header
-        infoPanel.add(createHeaderLabel("Stats:"));
-
-        //Class Label
-        infoPanel.add(classLabel);
-        infoPanel.add(Box.createVerticalStrut(5));
-
-        //Bars
-        infoPanel.add(hpBar);
-        infoPanel.add(Box.createVerticalStrut(5));
-        infoPanel.add(mpBar);
-        infoPanel.add(Box.createVerticalStrut(15));
-
-        //Description (statsTA)
-        if (statsTA != null) {
-            infoPanel.add(statsTA);
+            barsPanel.add(hpBar);
+            barsPanel.add(Box.createVerticalStrut(5));
+            barsPanel.add(mpBar);
         }
-
-        infoPanel.revalidate();
-        infoPanel.repaint();
     }
 
     @Override
@@ -189,7 +146,10 @@ public class CharacterSelection extends JPanel {
         if (myChar instanceof Hero) {
             Hero myHero = (Hero) myChar;
             JobClass job = myHero.getJob();
-            classLabel.setText("<html>Class: <font color='blue'>" + job.getName() + "</font></html>");
+
+            if (classLabel != null) {
+                classLabel.setText("<html>Class: <font color='blue'>" + job.getName() + "</font></html>");
+            }
 
             if (statsRenderer != null) {
                 statsRenderer.updateDisplay(myHero);
