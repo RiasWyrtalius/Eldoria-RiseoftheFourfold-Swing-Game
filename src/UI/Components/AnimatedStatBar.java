@@ -90,7 +90,7 @@ public class AnimatedStatBar extends JPanel {
         g2.drawRoundRect(0, 0, width, height, 10, 10);
 
         //text
-        String text = labelText + " " + currentValue; // + " / " + maxValue
+        String text = labelText + " " + currentValue + " / " + maxValue;
         g2.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
         FontMetrics fm = g2.getFontMetrics();
 

@@ -113,6 +113,7 @@ public class StoryView extends JPanel {
         if (currentSlideIndex >= sequence.size()) return;
         StorySlide slide = sequence.get(currentSlideIndex);
         ((BackgroundPanel)backgroundPanel).setBackgroundImage(slide.imageKey());
+        System.out.println("REQUIRED IMAGE SIZE: " + getWidth() + "x" + getHeight());
         if (slide.onStart() != null) {
             try { slide.onStart().run(); }
             catch (Exception e) { LogManager.log(e.getMessage(), LogFormat.DEBUG_INFO); }

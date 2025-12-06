@@ -40,22 +40,16 @@ public class BattleInterface extends JPanel {
     private JPanel inventoryPanel;
 
     private JLabel heroPartyLabel;
-    private JPanel heroPartyPanel1;
-    private JPanel heroPartyPanel2;
-    private JPanel heroPartyPanel3;
-    private JPanel heroPartyPanel4;
-
+        private JPanel heroPartyPanel1; private JPanel heroPartyPanel2; private JPanel heroPartyPanel3; private JPanel heroPartyPanel4;
     private JLabel enemyPartyLabel;
-    private JPanel enemyPartyPanel1;
-    private JPanel enemyPartyPanel2;
-    private JPanel enemyPartyPanel3;
-    private JPanel enemyPartyPanel4;
+        private JPanel enemyPartyPanel1; private JPanel enemyPartyPanel2; private JPanel enemyPartyPanel3; private JPanel enemyPartyPanel4;
 
     private JPanel descendPanel;
 
     private final List<JPanel> heroPartyPanels;
     private final List<JPanel> enemyPartyPanels;
 
+    // Character Inspector Components
     private JScrollPane CharacterInspector_JSP;
     private JTextPane inspectorText;
 
@@ -690,6 +684,9 @@ public class BattleInterface extends JPanel {
         SimpleAttributeSet defaultStyle = new SimpleAttributeSet();
         StyleConstants.setForeground(defaultStyle, Color.BLACK);
 
+        SimpleAttributeSet spacerStyle = new SimpleAttributeSet();
+        StyleConstants.setFontSize(spacerStyle, 10);
+
         try {
             //NAME & CLASS
             doc.insertString(doc.getLength(), c.getName().toUpperCase() + "\n", titleStyle);
@@ -698,20 +695,23 @@ public class BattleInterface extends JPanel {
                 doc.insertString(doc.getLength(), ((Hero) c).getJob().getName() + "\n", defaultStyle);
             }
 
-            doc.insertString(doc.getLength(), "\n──────────────── ⋆⋅☆⋅⋆ ────────────────\n\n", grayStyle);
-
-            //STATS
             doc.insertString(doc.getLength(), "LVL: " + c.getLevel() + "\n", levelStyle);
 
             //XP, HP, & MANA
+            if (c instanceof Hero) {
+                Hero h = (Hero) c;
+                inspector_XPBar.setMaxValue(h.getRequiredXP());
+                inspector_XPBar.setValue(h.getXP());
+            }
+
             inspectorText.setCaretPosition(doc.getLength());
             inspectorText.insertComponent(inspector_XPBar);
+            doc.insertString(doc.getLength(), "\n", spacerStyle);
 
-            doc.insertString(doc.getLength(), "\n", defaultStyle);
             inspectorText.setCaretPosition(doc.getLength());
             inspectorText.insertComponent(inspector_HpBar);
-            
-            doc.insertString(doc.getLength(), "\n", defaultStyle);
+            //doc.insertString(doc.getLength(), "\n", spacerStyle);
+
             inspectorText.setCaretPosition(doc.getLength());
             inspectorText.insertComponent(inspector_MpBar);
 

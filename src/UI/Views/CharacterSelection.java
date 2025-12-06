@@ -40,9 +40,13 @@ public class CharacterSelection extends JPanel {
     private List<CharacterDisplayData> characterList;
 
     private JLabel characterImageLabel;
+    private List<ImageIcon> cacheScaledFrames;
     private int currentIndex = 0;
     private Timer animationTimer;
     private Animation currentAnimation;
+
+    private static final int PREVIEW_SIZE = 250;
+    private static final Color GOLD_COLOR = new Color(0xD4AF37);
 
     private final BiConsumer<Hero, String> onSelectionComplete;
 
