@@ -52,23 +52,23 @@ public class GameLoader {
         ));
         fixedLevels.put(5, createSpecificLevel(
                 5,
-                "The transition",
+                "The Coven",
                 "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
-                "A Strong Enemies Stops you!",
+                "Two shadows peel from the darkness",
                 buildEnemyGroup(Vampire::new, Vampire::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion(),
                         ItemFactory.smallManaPotion(),
-                        ItemFactory.revivePotion()
+                        ItemFactory.smallManaPotion()
                 )
         ));
         fixedLevels.put(10, createSpecificLevel(
                 10,
-                "Corrupted Forest",
+                "The Critters and Fangs",
                 "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
-                "A Strong Enemies Stops you!",
+                "The brood and the Coven",
                 buildEnemyGroup(Vampire::new,Spider::new,Spider::new, Vampire::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
@@ -80,10 +80,24 @@ public class GameLoader {
         ));
         fixedLevels.put(15, createSpecificLevel(
                 15,
-                "The transition",
+                "The Acid and Rock",
                 "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
-                "A Boss Stops you!",
+                "Solid strength and shifting sludge",
                 buildEnemyGroup(Slime::new,GolemBoss::new,Slime::new),
+                buildLoot(
+                        ItemFactory.smallHealthPotion(),
+                        ItemFactory.smallHealthPotion(),
+                        ItemFactory.smallManaPotion(),
+                        ItemFactory.smallManaPotion(),
+                        ItemFactory.revivePotion()
+                )
+        ));
+        fixedLevels.put(20, createSpecificLevel(
+                20,
+                "The Rage of rock and flame",
+                "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
+                "Wrath of sky and earth stops you",
+                buildEnemyGroup(GolemBoss::new,DragonBoss::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallHealthPotion(),
