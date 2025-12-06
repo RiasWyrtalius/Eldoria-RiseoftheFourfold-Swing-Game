@@ -9,6 +9,7 @@ import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import Resource.Audio.AudioManager;
+import UI.Components.IconLoader;
 import UI.Views.BattleInterface;
 import UI.Views.CharacterSelection;
 import UI.Views.MainMenu;
@@ -43,6 +44,7 @@ public class GameManager {
         // cuz swing     runs on a separate thread for some reason lol
         SwingUtilities.invokeLater(() -> {
             this.gameWindow = new JFrame("Elordia: Rise of the Fourfold");
+            IconLoader.setIcons(gameWindow);
             gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             gameWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
 

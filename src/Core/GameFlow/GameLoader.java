@@ -365,22 +365,13 @@ public class GameLoader {
                     BiConsumer<Hero, String> onCharacterPicked = (selectedHero, partyName) -> {
                         GameManager.getInstance().createPartyFromSelection(selectedHero, partyName);
                         GameManager.getInstance().closeOverlay();
+                        GameManager.getInstance().startGameLoop();
                     };
 
                     GameManager.getInstance().showCharacterSelectionScreen(
                             CharacterSelectionMode.CREATE_NEW_PARTY,
                             onCharacterPicked
                     );
-                }
-        ));
-
-        slides.add(new StorySlide(
-                "Assets/Images/Backgrounds/heroes.png",
-                List.of(
-                        "Good luck."
-                ),
-                () -> {
-                    GameManager.getInstance().startGameLoop();
                 }
         ));
             
@@ -408,7 +399,6 @@ public class GameLoader {
 
     private void registerAudioAssets() {
         AudioManager am = AudioManager.getInstance();
-
         am.registerSound("VICTORY_MUSIC_1", "/Audio/SFX/victory_sound_1.wav");
     }
     
