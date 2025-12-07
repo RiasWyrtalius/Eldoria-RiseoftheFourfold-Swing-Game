@@ -21,7 +21,7 @@ public class Warrior extends JobClass {
     public static final String IDLE_PATH = "Assets/Animations/Heroes/Warrior/Idle/sprite_%d.png";
 
     public Warrior() {
-        super("Warrior", description, "WARRIOR_IDLE", 10, 0);
+        super("Warrior", description, "WARRIOR_IDLE", 0, 0);
     }
 
     @Override

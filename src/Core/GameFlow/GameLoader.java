@@ -64,7 +64,11 @@ public class GameLoader {
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion(),
                         ItemFactory.smallManaPotion(),
-                        ItemFactory.smallManaPotion()
+                        ItemFactory.splashHealthPotion(),
+                        ItemFactory.splashHealthPotion(),
+                        ItemFactory.splashManaPotion(),
+                        ItemFactory.splashManaPotion(),
+                        ItemFactory.summoningScroll()
                 )
         ));
         fixedLevels.put(10, createSpecificLevel(
@@ -86,7 +90,7 @@ public class GameLoader {
                 "The Acid and Rock",
                 "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
                 "Solid strength and shifting sludge",
-                buildEnemyGroup(Slime::new,GolemBoss::new,Slime::new),
+                buildEnemyGroup(Slime::new,(_) -> new GolemBoss(3),Slime::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallHealthPotion(),
@@ -100,7 +104,7 @@ public class GameLoader {
                 "The Rage of rock and flame",
                 "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
                 "Wrath of sky and earth stops you",
-                buildEnemyGroup(GolemBoss::new,DragonBoss::new),
+                buildEnemyGroup((_) -> new GolemBoss(5),(_) -> new DragonBoss(5)),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallHealthPotion(),
@@ -452,8 +456,6 @@ public class GameLoader {
         allEnemyTypes.add(new EnemySpawnRule(Skull::new, 2));
         allEnemyTypes.add(new EnemySpawnRule(Spider::new, 3));
         allEnemyTypes.add(new EnemySpawnRule(Vampire::new, 5));
-        allEnemyTypes.add(new EnemySpawnRule(GolemBoss::new, 1));
-        allEnemyTypes.add(new EnemySpawnRule(DragonBoss::new, 1));
     }
 
     private void registerAudioAssets() {
