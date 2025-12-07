@@ -21,7 +21,7 @@ public class GolemBoss extends Boss {
         this(
                 "Golem",
                 ScalingLogic.calculateStat(level,125,30,0.1),
-                ScalingLogic.calculateStat(level,50,20,0.05),
+                ScalingLogic.calculateStat(level,20,8,0.05),
                 ScalingLogic.calculateStat(level,300,50,0.2),
                 level,
                 "Boss"

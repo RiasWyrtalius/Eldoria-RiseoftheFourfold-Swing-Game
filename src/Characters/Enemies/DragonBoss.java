@@ -20,7 +20,7 @@ public class DragonBoss extends Boss {
         this(
                 "Baby Dragon",
                 ScalingLogic.calculateStat(level,200,30,0.1),
-                ScalingLogic.calculateStat(level,50,20,0.05),
+                ScalingLogic.calculateStat(level,20,8,0.05),
                 ScalingLogic.calculateStat(level,300,50,0.2),
                 level,"Boss"
                 ,ScalingLogic.calculateStat(level,250,30,0.09),

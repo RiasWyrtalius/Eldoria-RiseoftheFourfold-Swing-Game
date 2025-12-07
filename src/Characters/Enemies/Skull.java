@@ -23,8 +23,8 @@ public class Skull extends Enemy {
     public Skull(int level) {
         super(
                 "Skeletal Skull",
-                ScalingLogic.calculateStat(level, 60, 20, 0.10),
-                ScalingLogic.calculateStat(level, 20, 10, 0.05),
+                ScalingLogic.calculateStat(level, 30, 20, 0.1),
+                ScalingLogic.calculateStat(level, 10, 5, 0.05),
                 0,
                 level,
                 "Skull",
@@ -68,7 +68,7 @@ public class Skull extends Enemy {
     @Override
     protected void initializeSkills() {
         SkillLogicConsumer fireBreath = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user, baseAtk, 0.2, 0.1);
+            int calculateDamage = user.getBaseAtk();
 
             Character target = Dice.getInstance().pickRandom(targets);
             LogManager.log(self.getName() + " attacks " + target.getName() + "!", LogFormat.ENEMY_ACTION);

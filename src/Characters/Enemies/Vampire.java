@@ -24,7 +24,7 @@ public class Vampire extends Enemy {
         super(
                 "Vampire",
                 ScalingLogic.calculateStat(level,100, 10, 0.05),
-                ScalingLogic.calculateStat(level,20, 10, 0.1),
+                ScalingLogic.calculateStat(level,10, 10, 0.1),
                 0,
                 level,
                 "Vampire",

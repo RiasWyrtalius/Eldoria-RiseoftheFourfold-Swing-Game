@@ -82,6 +82,7 @@ public class GameLoader {
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion(),
                         ItemFactory.smallManaPotion(),
+                        ItemFactory.summoningScroll(),
                         ItemFactory.revivePotion()
                 )
         ));
@@ -262,16 +263,7 @@ public class GameLoader {
 
         // TODO: ADD MORE VARIETY
 
-        String bg = "";
-        List<String> bg_List = new ArrayList<>();
-        bg_List.add("Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png");
-        bg_List.add("Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png");
-        bg_List.add("Assets/Images/Backgrounds/Level_BG/Snow_Biome/sprite_0.png");
-        bg = Dice.getInstance().pickRandom(bg_List, rng);
-//        for(int i = 0; i < 20 ; i++){
-//            int separator = (i - 2) / 5;
-//            bg = bg_List.get(separator % bg_List.size());
-//        }
+        String bg = getBackgroundForLevel(levelNum);
 
         return new Level(
                 levelNum,
@@ -482,5 +474,16 @@ public class GameLoader {
 
     public void setBattleInterface(BattleInterface battleInterface) {
         this.battleInterface = battleInterface;
+    }
+    private String getBackgroundForLevel(int levelNum) {
+        List<String> bg_List = new ArrayList<>();
+        bg_List.add("Assets/Images/Backgrounds/Level_BG/sample.jpg");
+        bg_List.add("Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png");
+        bg_List.add("Assets/Images/Backgrounds/Level_BG/Snow_Biome/sprite_0.png");
+        bg_List.add("Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png");
+
+        // Determine which background index to use
+        int index = (levelNum - 1) / 5 % bg_List.size();
+        return bg_List.get(index);
     }
 }
