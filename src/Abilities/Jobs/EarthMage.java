@@ -23,7 +23,7 @@ public class EarthMage extends JobClass {
     public static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Earth/Idle/sprite_%d.png";
 
     public EarthMage(){
-        super("EarthMage", description,"MAGE_EARTH-IDLE");
+        super("EarthMage", description,"MAGE_EARTH-IDLE",0,30);
     }
 
     @Override

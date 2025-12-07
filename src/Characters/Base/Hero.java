@@ -19,7 +19,7 @@ public class Hero extends Character {
     protected JobClass job;
 
     public Hero(String name, int baseHealth, int baseAtk, int maxMana, int xp, int level, JobClass job) {
-        super(name, baseHealth + job.getHpBonus(), baseAtk, maxMana, level);
+        super(name, baseHealth + job.getHpBonus(), baseAtk, maxMana + job.getManaBonus(), level);
         this.job = job;
 
         this.XP = xp;
@@ -66,43 +66,32 @@ public class Hero extends Character {
     }
 
     protected void levelUp() {
-//        this.level++;
-//        this.requiredXP = baseXP + (incrementXP * (level - 1));
-//
-//        int prev_mana = getMaxMana();
-//        int new_health = (int)(maxHealth + ((this.level) * 4) + (maxHealth * 0.05 * (this.level - 1)));
-//
-//        // increase logs
-//        LogManager.log(this.name + " has leveled up to level " + this.level + "!");
-//        LogManager.log(this.name + " increased their health from " + getMaxHealth() + " to " + new_health + "!");
-//        super.setInitialHealth(new_health);
-//        //if it stayed the same its redundant ignore
-//        int new_mana = (int)(maxMana + ((this.level) * 2) + (maxMana * 0.009 * (this.level - 1)));
-//        if(prev_mana == new_mana){
-//            return;
-//        }
-//        LogManager.log(this.name + " increased their Mana from " + getMaxMana() + " to " + new_mana + "!");
-//        super.setMaxMana(new_mana);
-
         this.level++;
         this.requiredXP = (int)(baseXP * Math.pow(growthRate,this.level - 1));
+        int prev_health = getMaxHealth();
+        int prev_mana = getMaxMana();
+        int new_health = (int)(maxHealth + ((this.level) * 4) + (maxHealth * 0.05 * (this.level - 1)));
 
-        int oldMaxHp = this.maxHealth;
-        int oldMaxMp = this.maxMana;
+        // increase logs
+        LogManager.log(this.name + " has leveled up to level " + this.level + "!");
+        LogManager.log(this.name + " increased their health from " + prev_health + " to " + new_health + "!");
+        int hpGained = this.maxHealth - prev_health;
+        if (hpGained > 0) LogManager.log(this.name + " gained +" + hpGained + " Max Health!");
+        super.setMaxHealth(new_health);
+        //if it stayed the same its redundant ignore
 
-        recalculateStats();
+        int new_mana = (int)(maxMana + ((this.level) * 2) + (maxMana * 0.009 * (this.level - 1)));
+        int mpGained = this.maxMana - prev_mana;
+        if(prev_mana != new_mana){
+            LogManager.log(this.name + " increased their Mana from " + prev_mana + " to " + new_mana + "!");
+        }
+        if (mpGained > 0) LogManager.log(this.name + " gained +" + mpGained + " Max Mana!");
+        super.setMaxMana(new_mana);
 
-        int hpGained = this.maxHealth - oldMaxHp;
-        int mpGained = this.maxMana - oldMaxMp;
 
         this.receiveHealing(hpGained, null);
         this.receiveMana(mpGained, null);
-
         LogManager.log(this.name + " reached Level " + this.level + "!", LogFormat.HIGHLIGHT_BUFF);
-
-        // Log gains only if they happened
-        if (hpGained > 0) LogManager.log(this.name + " gained +" + hpGained + " Max Health!");
-        if (mpGained > 0) LogManager.log(this.name + " gained +" + mpGained + " Max Mana!");
     }
 
 
@@ -113,14 +102,14 @@ public class Hero extends Character {
 
         if (getHealth() < getMaxHealth()) {
             
-            int passiveHP = (int) (getMaxHealth() * 0.05);
+            int passiveHP = (int) (getMaxHealth() * 0.08);
             if (passiveHP < 1) passiveHP = 1;
 
             this.receiveHealing(passiveHP, null);
         }
 
         if (getMana() < getMaxMana()) {
-            int passiveMana = (int) (getMaxMana() * 0.03); // 3% max MP
+            int passiveMana = (int) (getMaxMana() * 0.05); // 3% max MP
 
             this.receiveMana(passiveMana, null);
         }

@@ -46,7 +46,7 @@ public class GameLoader {
                 "The Gates",
                 "Assets/Images/Backgrounds/Level_BG/sample.jpg",
                 "A swarm of goblins surround you!",
-                buildEnemyGroup(Goblin::new,Goblin::new,Goblin::new),
+                buildEnemyGroup(Goblin::new,Goblin::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion(),

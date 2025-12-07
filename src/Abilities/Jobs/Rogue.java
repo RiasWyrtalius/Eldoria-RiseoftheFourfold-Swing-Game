@@ -19,7 +19,7 @@ public class Rogue extends JobClass{
         public static final String description = "A shadow in the night, the Rogue moves with silent precision and deadly intent. Master of stealth and deception, she strikes from the shadows before vanishing without a trace. Agile and cunning, she excels at disabling traps, picking locks, and exploiting enemy weaknesses. Her loyalty lies with the mission—and her own code.";
         private static final String IDLE_PATH = "Assets/Animations/Heroes/Rogue/Idle/sprite_%d.png";
         public Rogue() {
-            super("Rogue", description, "ROGUE_IDLE", 0, 0, 20, 0.1, 10, 0.05);
+            super("Rogue", description, "ROGUE_IDLE", 0, 30);
         }
 
         @Override
@@ -85,7 +85,7 @@ public class Rogue extends JobClass{
             // FIXME: turn doesn't end when animation is finished
             SkillLogicConsumer assassinateLogic = (self, user, targets, onSkillComplete) -> {
 
-                int calculateDamage = ScalingLogic.calculateDamage(user,100000,40,1.3,0.05);
+                int calculateDamage = ScalingLogic.calculateDamage(user,10,40,1.3,0.05);
                 Characters.Character target = targets.getFirst();
                 LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);
@@ -100,7 +100,7 @@ public class Rogue extends JobClass{
             };
 
             SkillLogicConsumer cloneAttackLogic = (self, user, targets, onSkillComplete) -> {
-                int calculateDamage = ScalingLogic.calculateDamage(user,100000,30,1.2,0.05);
+                int calculateDamage = ScalingLogic.calculateDamage(user,10,30,1.2,0.05);
                 LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
                 for(Character t : targets) {
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);
