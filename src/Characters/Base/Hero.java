@@ -21,7 +21,7 @@ public class Hero extends Character {
     protected JobClass job;
 
     public Hero(String name, int baseHealth, int baseAtk, int maxMana, int xp, int level, JobClass job) {
-        super(name, baseHealth + job.getHpBonus(), baseAtk, maxMana + job.getManaBonus(), level);
+        super(name, baseHealth, baseAtk, maxMana + job.getManaBonus(), level);
         this.job = job;
 
         this.XP = xp;

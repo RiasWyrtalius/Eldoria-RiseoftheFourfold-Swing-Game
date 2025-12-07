@@ -88,11 +88,22 @@ public class BattleController {
             return;
         }
 
+        List<Character> finalTargets = (targets == null) ? new ArrayList<>() : new ArrayList<>(targets);
+        if (finalTargets.isEmpty() && skill.getTargetType() == TargetType.AOE_ALL_TARGETS) {
+
+            TargetCondition condition = skill.getTargetCondition();
+
+            LogManager.log("Auto-populating targets for AOE skill...");
+
+            heroParty.getPartyMembers().stream().filter(condition::isValid).forEach(finalTargets::add);
+            enemyParty.getPartyMembers().stream().filter(condition::isValid).forEach(finalTargets::add);
+        }
+
         Runnable onSkillComplete = () -> {
             advanceTurnCycle(false);
         };
 
-        hero.useSkill(this, skill, targets, onSkillComplete);
+        hero.useSkill(this, skill, finalTargets, onSkillComplete);
         hero.setExhausted(true);
 
         if (this.mainView != null)
@@ -317,6 +328,7 @@ public class BattleController {
     public void applyGroupDamage(Character user, Skill skill, List<Character> targets, int damage, Runnable onAllDamageResolved) {
         if (targets == null || targets.isEmpty()) {
             if (onAllDamageResolved != null) onAllDamageResolved.run();
+            LogManager.log("no targets!");
             return;
         }
 
