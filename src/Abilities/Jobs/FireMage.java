@@ -81,6 +81,7 @@ public class FireMage extends JobClass {
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
                 target.receiveDamage(calculateDamage, user, self);
+                target.applyStatusEffect(StatusEffectFactory.burn(2, 3));
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                 }

@@ -78,7 +78,6 @@ public class BattleController {
     }
 
     private void resetTurnReadiness() {
-//        LogManager.log("Turn " + turnCounter, LogFormat.TURN_INDICATOR);
         heroParty.setPartyExhaustion(false);
         enemyParty.setPartyExhaustion(false);
     }
@@ -226,26 +225,23 @@ public class BattleController {
         LogManager.log("│     Turn Recovery     │", LogFormat.TURN_INDICATOR);
         LogManager.log("└──── °∘❉ - ❉∘° ────┘", LogFormat.TURN_INDICATOR);
 
-        List<Character> aliveMembers = heroParty.getPartyMembers();
+        List<Character> allCharacters = new ArrayList<>();
+        allCharacters.addAll(heroParty.getPartyMembers());
+        allCharacters.addAll(enemyParty.getPartyMembers());
 
-        if (aliveMembers == null) {
-            if (this.mainView != null) { this.mainView.refreshUI(); }
-            return;
-        }
-
-
-        for (Character member : aliveMembers) {
-//
-            if (member instanceof Hero h) {
-                //
-//                String result = h.regenerateTurnResources();
-                h.regenerateTurnResources();
-
-//                if (result != null && !result.isEmpty()) { LogManager.log(result); }
+        // only process effects for alive characters
+        for (Character character : allCharacters) {
+            if (character.isAlive()) {
+                character.processTurnEffects();
+                if (character instanceof Hero) {
+                    ((Hero) character).regenerateTurnResources();
+                }
             }
         }
 
-        if (this.mainView != null) { this.mainView.refreshUI(); }
+        if (this.mainView != null) {
+            this.mainView.refreshUI();
+        }
     }
 
     public void endBattle() {
