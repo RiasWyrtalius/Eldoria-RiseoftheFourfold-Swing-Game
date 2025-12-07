@@ -64,6 +64,19 @@ public class GameManager {
         gameWindow.setVisible(true);
     }
 
+    public void loadMainMenu() {
+        Resource.Audio.AudioManager.getInstance().stopMusic(); //for battle music if implemented.
+
+        this.mainMenuView = new MainMenu(this);
+
+        if (gameWindow != null) {
+            gameWindow.setContentPane(mainMenuView);
+            gameWindow.revalidate();
+            gameWindow.repaint();
+            gameWindow.setVisible(true);
+        }
+    }
+
     public void loadSavedGame() {
         GameState state = SaveManager.loadGame();
 
@@ -216,7 +229,7 @@ public class GameManager {
         LogManager.log(selectedHero.getName() + " begins their adventure!", LogFormat.PLAYER_JOIN);
     }
 
-    public void closeOverlay() { // <-- Removed parameter
+    public void closeOverlay() {
         if (gameWindow == null) return;
 
         JLayeredPane layeredPane = gameWindow.getLayeredPane();
@@ -230,4 +243,7 @@ public class GameManager {
         gameWindow.repaint();
     }
 
+    public Party getHeroParty() {
+        return heroParty;
+    }
 }

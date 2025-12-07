@@ -2,7 +2,6 @@ package Core.GameFlow;
 
 import Abilities.JobClass;
 import Abilities.JobFactory;
-import Abilities.Jobs.*;
 import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Enemies.*;
@@ -50,7 +49,8 @@ public class GameLoader {
                 buildEnemyGroup(Goblin::new,Goblin::new,Goblin::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
-                        ItemFactory.smallManaPotion()
+                        ItemFactory.smallManaPotion(),
+                        ItemFactory.summoningScroll()
                 )
         ));
         fixedLevels.put(5, createSpecificLevel(
@@ -256,6 +256,8 @@ public class GameLoader {
 
         if (minEnemies > maxEnemies) minEnemies = maxEnemies;
 
+        // TODO: ADD MORE VARIETY
+
         String bg = "";
         List<String> bg_List = new ArrayList<>();
         bg_List.add("Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png");
@@ -321,9 +323,7 @@ public class GameLoader {
                 //Image should be Eldoria Map
                 "Assets/Images/Backgrounds/eldoria_map.png",
                 List.of(
-                        "In the mythic land of ELDORIA, four elemental forces weave the fate of mortals.",
-                        "Fire, wind, earth, and water...",
-                        "These primal powers have always felt like magic."
+                        "In the mythic land of ELDORIA, four elemental forces weave the fate of mortals. Fire, wind, earth, and water- these primal powers have always felt like magic."
                 ),
                 null
         ));
@@ -333,8 +333,7 @@ public class GameLoader {
                 // Image should be like a city pwede ra we call it Avendale City
                 "Assets/Images/Backgrounds/avendale_city.png",
                 List.of(
-                        "For generations, the great kingdoms knew peace. The Empire of AVENDALE stood strong at the center,",
-                        "while elf academies and dwarf clans thrived. But even the calmest days whisper of storms ahead..."
+                        "For generations, peace reigned in Avendale and beyond. But now, a shadow falls. The court mage VAROTH has turned to darkness. He has become DREADLORD VAROTH, and his corruption spreads."
                 ),
                 null
         ));
@@ -342,10 +341,9 @@ public class GameLoader {
         // Slide 3: The Corruption Begins
         slides.add(new StorySlide(
                 // Image should be the Blackspire Mountain
-                "Assets/Images/Backgrounds/blackspire.png",
+                "Assets/Images/Backgrounds/corrupted_forest.png",
                 List.of(
-                        "The peace ended when VAROTH, a court mage, ascended the BLACKSPIRE peak.",
-                        "He communed with an ancient evil and returned as DREADLORD VAROTH."
+                        "Forests wilt under unnatural frost. Fields lie fallow. Goblins, orcs, and undead now prowl freely. The kingdoms are divided, their champions scattered."
                 ),
                 null
         ));
@@ -353,10 +351,10 @@ public class GameLoader {
         // Slide 4: The Darkness Spreads
         slides.add(new StorySlide(
                 // Image should be the Corrupted Forest
-                "Assets/Images/Backgrounds/corrupted_forest.png",
+                "Assets/Images/Backgrounds/ancient_scroll.png",
                 List.of(
-                        "Now, a pall of dread covers the land. Forests wilt under unnatural frost.",
-                        "Fields lie fallow beneath a cursed blight. Goblins, orcs, and undead prowl the borderlands."
+                        "In this dark hour, an ancient prophecy is remembered: when darkness ascends Blackspire's peak, FOURFOLD PARTY must unite to seek:",
+                        "A WARRIOR, shield of the land. An ARCHER, swift as the wind. A CLERIC, healer and protector. and a MAGE, master of four elements. Alone they falter, together they fight."
                 ),
                 null
         ));
@@ -364,13 +362,9 @@ public class GameLoader {
         // Slide 5: The Prophecy
         slides.add(new StorySlide(
                 // Image should be the ancient scroll.
-                "Assets/Images/Backgrounds/ancient_scroll.png",
+                "Assets/Images/Backgrounds/fourfolds_bg.png",
                 List.of(
-                        "Yet an ancient prophecy endures. It speaks of a FOURFOLD PARTY:",
-                        "• A WARRIOR, shield of the land",
-                        "• An ARCHER, swift as the wind",
-                        "• A CLERIC, healer and protector",
-                        "• A MAGE, master of four elements"
+                        "But the four champions are scattered across Eldoria. The journey begins with ONE - the first to heed the call. Alone, you must brave the corrupted lands and find the others who share this fate."
                 ),
                 null
         ));
@@ -379,8 +373,7 @@ public class GameLoader {
         slides.add(new StorySlide(
                 "Assets/Images/Backgrounds/fourfolds_bg.png",
                 List.of(
-                        "Only when these four stand together can the balance of Eldoria be restored.",
-                        "But first, they must brave the heart of darkness. The corrupted dungeons beneath Blackspire itself."
+                        "Your quest is twofold: First, survive the perils of the wilds and dungeons. Second, seek out the other prophesied heroes, earning their trust through shared trials."
                 ),
                 null
         ));
@@ -389,8 +382,7 @@ public class GameLoader {
         slides.add(new StorySlide(
                 "Assets/Images/Backgrounds/dungeon_entrance.png",
                 List.of(
-                        "The path now leads into ancient, twisted passages where dark magic chokes the air.",
-                        "Every shadowed corridor is a trial, every chamber, a test of unity and strength."
+                        "Beneath Blackspire Mountain lies your proving ground: ancient dungeons twisted by Vargoth's magic. Here, you will grow stronger, level by level, and here, you will find allies worthy of the prophecy."
                 ),
                 null
         ));
@@ -399,8 +391,7 @@ public class GameLoader {
         slides.add(new StorySlide(
                 "Assets/Images/Backgrounds/throne_room.png",
                 List.of(
-                        "At the peak, in an obsidian throne room, Dreadlord Varoth awaits.",
-                        "Victory depends on unity, strategy, and the combined gifts of the Fourfold Party."
+                        "Only when the FOURFOLD PARTY is complete, each hero tested and tempered, can you ascend to the throne room above, and face Dreadlord Vargoth as one united force."
                 ),
                 null
         ));
@@ -409,7 +400,7 @@ public class GameLoader {
         slides.add(new StorySlide(
                 "Assets/Images/Backgrounds/heroes.png",
                 List.of(
-                        "WHO WILL STAND AGAINST THE DARKNESS?",
+                        "Your journey begins now. WHO WILL BE THE FIRST? Choose your starting hero wisely. The others will join you... in time.",
                         "Form your party and become the prophecy."
                 ), null
         ));
@@ -432,7 +423,17 @@ public class GameLoader {
                     );
                 }
         ));
-            
+
+//        slides.add(new StorySlide(
+//                "Assets/Images/Backgrounds/heroes.png",
+//                List.of(
+//                        "Good luck."
+//                ),
+//                () -> {
+//                    GameManager.getInstance().startGameLoop();
+//                }
+//        ));
+
         return slides;
     }
 

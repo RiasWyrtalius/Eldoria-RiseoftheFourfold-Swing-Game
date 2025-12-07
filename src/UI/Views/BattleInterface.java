@@ -1,4 +1,5 @@
 package UI.Views;
+import Core.Visuals.VisualEffectsManager;
 import UI.Components.*;
 
 import Abilities.Skill;
@@ -195,8 +196,8 @@ public class BattleInterface extends JPanel {
 
     private void updateControls() {
 //        LogManager.log("current mode: " + currentMode.toString());
-
         BattlePhase phase = battleController.getCurrentPhase();
+
         boolean isPlayerTurn = (phase == BattlePhase.HERO_ACTION_WAIT);
         endTurnButton.setEnabled(isPlayerTurn);
         boolean canUseItems = isPlayerTurn && (currentMode == BattleUIMode.HERO_SELECT);
@@ -209,12 +210,69 @@ public class BattleInterface extends JPanel {
             // TODO: set battleOutcome JLabel to victory, or tie
             BattleResult result = battleController.getFinalResult();
             endTurnButton.setVisible(false);
-            if (result == BattleResult.VICTORY)
-                descendPanel.setVisible(true);
+
+            if (result == BattleResult.VICTORY || result == BattleResult.DEFEAT) {
+                showSummaryScreen(result);
+            }
+
+            if (descendPanel != null) descendPanel.setVisible(false);
+
+            if (result == BattleResult.VICTORY){
+                showSummaryScreen(result);
+            }
         } else {
             endTurnButton.setVisible(true);
             descendPanel.setVisible(false);
         }
+    }
+
+    private void showSummaryScreen(BattleResult result) {
+        if (currentMode == BattleUIMode.IDLE) return;
+        currentMode = BattleUIMode.IDLE; // Lock logic
+
+        BattleSummary summary = new BattleSummary();
+        StringBuilder sb = new StringBuilder();
+
+        if (result == BattleResult.VICTORY) {
+
+            int xp = battleController.getEarnedXP();
+            sb.append("XP Gained: ").append(xp).append("\n");
+
+            java.util.List<Items.Item> items = battleController.getEarnedItems();
+            if (!items.isEmpty()) {
+                sb.append("Items Found:\n");
+                for (Items.Item item : items) {
+                    sb.append(" - ").append(item.getName()).append("\n");
+                }
+            } else {
+                sb.append("No items found.\n");
+            }
+
+            summary.setSummaryData("VICTORY!", sb.toString());
+            summary.configureButton("Descend", () -> {
+                GameManager.getInstance().loadNextLevel();
+            });
+
+        } else if (result == BattleResult.DEFEAT) {
+            sb.append("The party has fallen.\n\n");
+            sb.append("Your journey ends on Floor ").append(battleController.getLevelNumber()).append(".");
+            summary.setSummaryData("DEFEAT", sb.toString());
+            summary.configureButton("Return to Title", () -> {
+                GameManager.getInstance().loadMainMenu();
+            });
+        }
+
+        JRootPane root = SwingUtilities.getRootPane(this);
+
+        JPanel glassOverlay = new JPanel(new GridBagLayout());//centers it
+        glassOverlay.setOpaque(false);
+        glassOverlay.addMouseListener(new java.awt.event.MouseAdapter() {});
+        JPanel summaryBox = summary.getPanel();
+        summaryBox.setPreferredSize(new Dimension(400, 300));
+        summaryBox.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 100), 1));
+        glassOverlay.add(summaryBox);
+        root.setGlassPane(glassOverlay);
+        glassOverlay.setVisible(true);
     }
 
     private void setPartyUI(List<Character> party, List<JPanel> setupPanel) {
@@ -289,7 +347,7 @@ public class BattleInterface extends JPanel {
                     if (hero.isAlive() && !hero.isExhausted()) {
                         onHeroSelect(hero);
                     } else {
-                        showFloatingText(hero, "Exhausted!", Color.RED);
+                        VisualEffectsManager.getInstance().showFloatingText(hero, "Exhausted!", Color.RED);
                     }
                 }
 //                else LogManager.log("Enemy is Selected!");
@@ -354,49 +412,6 @@ public class BattleInterface extends JPanel {
 //                LogManager.log("IDLE");
                 break;
         }
-    }
-
-    private void showFloatingText(Character target, String text, Color color) {
-        JPanel targetPanel = characterToPanelMap.get(target);
-        if (targetPanel == null) return;
-
-        JRootPane root = SwingUtilities.getRootPane(this);
-        if (root == null) return;
-        JLayeredPane layeredPane = root.getLayeredPane();
-
-        OutlinedLabel label = new OutlinedLabel(text, SwingConstants.CENTER);
-        label.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        label.setForeground(color);
-        label.setOutlineColor(Color.BLACK);
-        label.setStrokeWidth(3f);
-
-        Point panelLoc = SwingUtilities.convertPoint(targetPanel, 0, 0, layeredPane);
-        Dimension labelSize = label.getPreferredSize();
-
-        int x = panelLoc.x + (targetPanel.getWidth() - labelSize.width) / 2;
-        int y = panelLoc.y - (labelSize.height / 2);
-
-        label.setBounds(x, y, labelSize.width, labelSize.height);
-
-        layeredPane.add(label, JLayeredPane.POPUP_LAYER);
-
-        Timer timer = new Timer(20, null);
-        final int[] duration = {0};
-
-        timer.addActionListener(e -> {
-            duration[0]++;
-
-            // Move the label up by 1 pixel per tick
-            label.setLocation(label.getX(), label.getY() - 1);
-
-            // After ~1.2 seconds (60 ticks), remove it
-            if (duration[0] > 60) {
-                timer.stop();
-                layeredPane.remove(label);
-                layeredPane.repaint(label.getBounds()); // Clean up artifacts
-            }
-        });
-        timer.start();
     }
 
     private class VictoryPanel extends JPanel {

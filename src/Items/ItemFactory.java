@@ -1,11 +1,16 @@
 package Items;
 
+import Characters.Base.Hero;
+import Characters.Party;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
+import Core.GameFlow.CharacterSelectionMode;
+import Core.GameManager;
 import Core.Visuals.VisualEffectsManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 // flyweight class
 public class ItemFactory {
@@ -80,6 +85,22 @@ public class ItemFactory {
                 }
         ));
 
+        register(new UtilityItem(
+                "Summoning Scroll",
+                "Summon a party member of your choice",
+                TargetType.NO_TARGETS,
+                TargetCondition.ANY,
+                null,
+                Rarity.LEGENDARY,
+                (item, user, targets, onItemComplete) -> {
+                    BiConsumer<Hero, String> onCharacterPicked = (selectedHero, partyName) -> {
+                        Party heroParty = GameManager.getInstance().getHeroParty();
+                        heroParty.addPartyMember(selectedHero);
+                        GameManager.getInstance().closeOverlay();
+                    };
+                    GameManager.getInstance().showCharacterSelectionScreen(CharacterSelectionMode.ADD_TO_EXISTING_PARTY, onCharacterPicked);
+                }
+        ));
     }
 
     public static void register(Item item) {
@@ -113,12 +134,16 @@ public class ItemFactory {
         return itemRegistry.get("Medium Health Potion");
     }
 
-    public static Item getMediumManaPotion() {
+    public static Item mediumManaPotion() {
         return itemRegistry.get("Medium Mana Potion");
     }
 
     public static Item revivePotion() {
         return itemRegistry.get("Revive Potion");
+    }
+
+    public static Item summoningScroll() {
+        return itemRegistry.get("Summoning Scroll");
     }
 
 }

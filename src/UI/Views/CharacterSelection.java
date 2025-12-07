@@ -11,6 +11,8 @@ import UI.Components.AnimatedStatBar;
 import UI.Components.BackgroundPanel;
 import Characters.CharacterDisplayData;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -31,6 +33,7 @@ public class CharacterSelection extends JPanel {
     private JTextField textField2;
     private JTextPane statsTA;
     private JPanel barsPanel;
+    private JLabel partyNameLabel;
 
     private JLabel classLabel;
     private AnimatedStatBar hpBar;
@@ -57,6 +60,12 @@ public class CharacterSelection extends JPanel {
         this.setLayout(new BorderLayout());
         this.setBackground(new Color(0, 0, 0, 200)); // 80% Black Overlay
         this.setOpaque(false);
+
+//        this.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//            }
+//        });
 
         JPanel modalContainer = new JPanel(new BorderLayout());
         modalContainer.setBorder(new LineBorder(new Color(0xD4AF37), 3)); // Gold Border
@@ -92,7 +101,15 @@ public class CharacterSelection extends JPanel {
 
     private void setupMode() {
         if (textField2 == null) return;
-        textField2.setVisible(mode != CharacterSelectionMode.ADD_TO_EXISTING_PARTY);
+
+        // If we are just adding to a party, we don't need to name it.
+        if (mode == CharacterSelectionMode.ADD_TO_EXISTING_PARTY) {
+            textField2.setVisible(false);
+            partyNameLabel.setVisible(false);
+        } else {
+            partyNameLabel.setVisible(true);
+            textField2.setVisible(true);
+        }
     }
 
     private void setupStatBar() {
@@ -206,14 +223,14 @@ public class CharacterSelection extends JPanel {
             String partyNameInput = textField2.getText().trim();
             String partyName = partyNameInput.isEmpty() ? null : partyNameInput;
 
-            if (nameInput.isEmpty() && partyNameInput.isEmpty()) {
+            if (nameInput.isEmpty() && (partyNameInput.isEmpty() && mode == CharacterSelectionMode.CREATE_NEW_PARTY)) {
                 JOptionPane.showMessageDialog(this, "Please enter a Hero Name and a Party Name!", "Validation Error", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             else if (nameInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please enter a Hero Name!", "Validation Error", JOptionPane.WARNING_MESSAGE);
                 return;
-            } else if (partyNameInput.isEmpty()) {
+            } else if (partyNameInput.isEmpty() && mode == CharacterSelectionMode.CREATE_NEW_PARTY) {
                 JOptionPane.showMessageDialog(this, "Please enter a Party Name!", "Validation Error", JOptionPane.WARNING_MESSAGE);
                 return;
             }

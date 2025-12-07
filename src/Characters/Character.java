@@ -1,13 +1,13 @@
 package Characters;
 
-import Abilities.ReactionSkill;
-import Abilities.ReactionTrigger;
-import Abilities.Skill;
+import Abilities.*;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class Character {
@@ -28,6 +28,7 @@ public abstract class Character {
     protected boolean isExhausted = false;
 
     protected List<ReactionSkill> reactions = new ArrayList<>();
+    protected List<StatusEffect> activeStatusEffects = new ArrayList<>();
 
     public Character(String name, int baseHealth, int baseAtk, int baseMana, int level) {
         this.name = name;
@@ -55,6 +56,7 @@ public abstract class Character {
             LogManager.log(this.name + " took no damage (Mitigated)!");
         } else {
             LogManager.log(this.name + " takes " + finalDamage + " damage.");
+            VisualEffectsManager.getInstance().showFloatingText(this, "-" + finalDamage +"HP", LogFormat.DAMAGE_TAKEN);
         }
 
         int potentialHealth = this.health - finalDamage;
@@ -103,6 +105,7 @@ public abstract class Character {
 
         if (amount > 0) {
             Core.Utils.LogManager.log(this.name + " recovered " + amount + " MP.", LogFormat.MP);
+            VisualEffectsManager.getInstance().showFloatingText(this, "+" + amount +"MP", LogFormat.MP);
         }
     }
 
@@ -111,6 +114,7 @@ public abstract class Character {
         //      subclass method called
         if (canCast(manaCost)) {
             setMana(this.mana - manaCost);
+            VisualEffectsManager.getInstance().showFloatingText(this, "-" + manaCost +"MP", LogFormat.MP);
             return true;
         } else {
             return false;
@@ -128,6 +132,7 @@ public abstract class Character {
 
         if (finalAmount > 0) {
             LogManager.log(this.name + " recovers " + finalAmount + " HP.", LogFormat.HP);
+            VisualEffectsManager.getInstance().showFloatingText(this, "+" + finalAmount +"HP", LogFormat.HP);
         }
     }
 
@@ -225,6 +230,35 @@ public abstract class Character {
         if (trigger == ReactionTrigger.ON_FATAL_DAMAGE) return 0;
 
         return currentValue;
+    }
+
+    public void applyStatusEffect(StatusEffect effect) {
+        activeStatusEffects.add(effect);
+
+        Color color = (effect.getType() == StatusEffectType.BUFF) ? LogFormat.HIGHLIGHT_BUFF : LogFormat.HIGHLIGHT_DEBUFF;
+
+        LogManager.log(this.name + " is afflicted with " + effect.getName() + "!", color);
+    }
+
+    public void removeStatusEffect(StatusEffect effect) {
+        if (activeStatusEffects.remove(effect)) {
+            LogManager.log(this.name + " has been cleansed from " + effect.getName() + "!", LogFormat.DEFEAT);
+        }
+    }
+
+    public void processTurnEffects() {
+        if (activeStatusEffects.isEmpty()) return;
+        // just discovered u can use this to safely remove   items while looping
+        // so we dont gotta do like i = 0, needs java 24 tho
+        Iterator<StatusEffect> iterator = activeStatusEffects.iterator();
+        while (iterator.hasNext()) {
+            StatusEffect effect = iterator.next();
+            effect.tick(this);
+            if (effect.getDuration() <= 0) {
+                LogManager.log(effect.getName() + " wore off of " + this.name + ".", LogFormat.SYSTEM);
+                iterator.remove();
+            }
+        }
     }
 
     // =============== PUBLIC GETTERS AND SETTERS ===============
