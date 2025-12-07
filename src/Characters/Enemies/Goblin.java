@@ -3,6 +3,7 @@ package Characters.Enemies;
 import Abilities.*;
 import Characters.Base.Enemy;
 import Characters.Character;
+import Core.Battle.BattleController;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.Dice;
@@ -56,7 +57,7 @@ public class Goblin extends Enemy {
 
     @Override
     protected void initializeSkills() {
-        SkillLogicConsumer skirmishLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer skirmishLogic = (controller, self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,baseAtk,0.2,0.1);
 
             Character target = Dice.getInstance().pickRandom(targets);
@@ -64,15 +65,14 @@ public class Goblin extends Enemy {
             // TODO: panel should be empty during the swinging
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", target, () -> {
-                target.receiveDamage(calculateDamage, user, self);
-                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                }
+                target.receiveDamage(calculateDamage, user, self, () -> {
+                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+                    if (onSkillComplete != null)  onSkillComplete.run();
+                });
             }, true);
         };
 
-        SkillLogicConsumer throwCoinsLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer throwCoinsLogic = (controller, self, user, targets, onSkillComplete) -> {
             int coins = Dice.getInstance().roll(1, 5);
             int baseDamage = ScalingLogic.calculateDamage(user, baseAtk, 0.2, 0.1);
             int calculateDamage = (int)(baseDamage * Math.sqrt(coins));
@@ -82,11 +82,10 @@ public class Goblin extends Enemy {
             // TODO: panel should be empty during the swinging
 //            VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", user, () -> {
-            target.receiveDamage(calculateDamage, user, self);
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                }
+            target.receiveDamage(calculateDamage, user, self, () -> {
+                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+                if (onSkillComplete != null) onSkillComplete.run();
+            });
             }, true);
         };
 
@@ -107,47 +106,49 @@ public class Goblin extends Enemy {
 
 //    TODO: replace this with randomly use skill function
     @Override
-    public void makeAttack(List<Character> targets, Runnable onSkillComplete) {
+    public void makeAttack(BattleController controller, List<Character> targets, Runnable onSkillComplete) {
         // TODO: randomly select skill
         // TODO: add AI that checks if skill has enough mana or not
         Skill skill = Dice.getInstance().pickRandom(skills);
-        skill.execute(this, targets, onSkillComplete);
+        skill.execute(controller, this, targets, onSkillComplete);
     }
 
     protected void initializeReactions() {
         // panics at 50%
-        ReactionLogic cowardiceLogic = (defender, attacker, skill, incomingDamage) -> {
+        ReactionLogic cowardiceLogic = (defender, attacker, skill, incomingDamage, onComplete) -> {
             double healthPercent = (double) defender.getHealth() / defender.getMaxHealth();
             if (healthPercent > 0.50) {
-                return -1;
+                onComplete.accept(incomingDamage);
+                return;
             }
 
             if (Dice.getInstance().chance(0.30)) {
                 LogManager.log(defender.getName() + " panics and dodges the attack!", LogFormat.ENEMY_ACTION);
 
 //                TODO: Trigger pop up or sound or something
-                return 0;
+                onComplete.accept(0);
+                return;
             }
 
-            return -1;
+            onComplete.accept(incomingDamage);
         };
 
-        // TODO: huge refractoring fix here but damn, necessary hack for bad animation locking mechanism
-        ReactionLogic DeathLogic = (user,_,_,_) -> {
+//        ReactionLogic DeathLogic = (user,_,_,_, onComplete) -> {
 //            VisualEffectsManager.getInstance().hideCharacterVisual(user);
-//            VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", user, () -> {
-////                // TODO: it seems redundant but pause character animation is called before this so..
-//                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-//                VisualEffectsManager.getInstance().pauseCharacterAnimation(user);
-//            }, true);
-            return -1; // should die, 0 and 1 is dont die
-        };
+    //            VisualEffectsManager.getInstance().playAnimationOnCharacter("GOBLIN_SWING-ATTACK", user, () -> {
+    ////                // TODO: it seems redundant but pause character animation is called before this so..
+    //                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+    //                VisualEffectsManager.getInstance().pauseCharacterAnimation(user);
+    //            }, true);
+    //            onComplete.accept(0);
+//                return; // should die, 0 and 1 is dont die
+//        };
 
         ReactionSkill cowardice = new ReactionSkill("Cowardice", ReactionTrigger.ON_RECEIVE_DAMAGE, cowardiceLogic);
-        ReactionSkill death = new ReactionSkill("death", ReactionTrigger.ON_FATAL_DAMAGE, DeathLogic);
+//        ReactionSkill death = new ReactionSkill("death", ReactionTrigger.ON_FATAL_DAMAGE, DeathLogic);
 
         this.addReaction(cowardice);
-        this.addReaction(death);
+//        this.addReaction(death);
     }
 
     @Override

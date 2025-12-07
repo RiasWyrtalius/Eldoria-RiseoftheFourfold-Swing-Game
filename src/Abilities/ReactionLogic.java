@@ -2,6 +2,9 @@ package Abilities;
 
 import Characters.Character;
 
+import java.util.function.Consumer;
+
+@FunctionalInterface
 public interface ReactionLogic {
-    int tryReact(Character user, Character target, Skill incomingSkill, int incomingDamage);
+    void tryReact(Character user, Character target, Skill incomingSkill, int incomingDamage, Consumer<Integer> onComplete);
 }

@@ -2,6 +2,7 @@ package Abilities.Jobs;
 
 import Abilities.*;
 import Characters.Character;
+import Core.Battle.BattleController;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.Dice;
@@ -46,32 +47,34 @@ public class Rogue extends JobClass{
 
         @Override
         public List<ReactionSkill> createReactions() {
-            ReactionLogic dodgeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+            ReactionLogic dodgeLogic = (defender, _, _, incomingDamage, onComplete) -> {
                 double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
-
-                if (hp_percent < 0.60) {
-                    // Scale chance from 10% at 60% HP up to 40% at 0% HP
-                    double dodgeChance = 0.10 + (0.60 - hp_percent) * 0.50;
-
-                    // Clamp so it never goes above 40%
-                    if (dodgeChance > 0.40) {
-                        dodgeChance = 0.40;
-                    }
-
-                    if (Dice.getInstance().chance(dodgeChance)) {
-                        LogManager.log(defender.getName() + " skillfully dodges the attack!", LogFormat.ENEMY_ACTION);
-                        VisualEffectsManager.getInstance().playAnimation("ROGUE_DODGE", defender, null, true);
-                        return 0;
-                    }
+                if (hp_percent >= 0.60) {
+                    onComplete.accept(incomingDamage);
+                    return;
                 }
-                return -1;
+
+                // Scale chance from 10% at 60% HP up to 40% at 0% HP
+                double dodgeChance = 0.10 + (0.60 - hp_percent) * 0.50;
+                // Clamp so it never goes above 40%
+                if (dodgeChance > 0.40) {
+                    dodgeChance = 0.40;
+                }
+
+                if (Dice.getInstance().chance(dodgeChance)) {
+                    LogManager.log(defender.getName() + " skillfully dodges the attack!", LogFormat.ENEMY_ACTION);
+                    VisualEffectsManager.getInstance().playAnimation("ROGUE_DODGE", defender, () -> {
+                        onComplete.accept(0);
+                    }, true);
+                } else {
+                    onComplete.accept(incomingDamage);
+                }
             };
 
 //            ReactionLogic receiveManaLogic = (_,_,_,_) -> {
 //                LogManager.log("Recieved mana");
 //                return -1;
 //            };
-
 
 //            ReactionSkill receiveMana = new ReactionSkill("receiveMana", ReactionTrigger.ON_RECEIVE_MANA, receiveManaLogic);
             ReactionSkill dodge = new ReactionSkill("Dodge", ReactionTrigger.ON_RECEIVE_DAMAGE, dodgeLogic);
@@ -81,41 +84,33 @@ public class Rogue extends JobClass{
 
         @Override
         public List<Skill> createSkills() {
-
             // FIXME: turn doesn't end when animation is finished
-            SkillLogicConsumer assassinateLogic = (self, user, targets, onSkillComplete) -> {
-
+            SkillLogicConsumer assassinateLogic = (_,self, user, targets, onSkillComplete) -> {
                 int calculateDamage = ScalingLogic.calculateDamage(user,10,40,1.3,0.05);
                 Characters.Character target = targets.getFirst();
                 LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
+
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("ROGUE_ATTACK", target, () -> {
-                    target.receiveDamage(calculateDamage, user, self);
-                    if (onSkillComplete != null) {
-                        onSkillComplete.run();
+                    target.receiveDamage(calculateDamage, user, self, () -> {
                         VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                    }
+                        if (onSkillComplete != null) onSkillComplete.run();
+                    });
                 }, true);
-
             };
 
-            SkillLogicConsumer cloneAttackLogic = (self, user, targets, onSkillComplete) -> {
+            SkillLogicConsumer cloneAttackLogic = (controller, self, user, targets, onSkillComplete) -> {
                 int calculateDamage = ScalingLogic.calculateDamage(user,10,30,1.2,0.05);
                 LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
-                for(Character t : targets) {
-                VisualEffectsManager.getInstance().hideCharacterVisual(user);
-                VisualEffectsManager.getInstance().playAnimationOnCharacter("ROGUE_ATTACK", t, () -> {
-                    t.receiveDamage(calculateDamage, user, self);
-                    if (onSkillComplete != null) {
-                        onSkillComplete.run();
-                        VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                    }
-                }, true);
-                }
 
+                VisualEffectsManager.getInstance().hideCharacterVisual(user);
+                VisualEffectsManager.getInstance().playGroupAnimation("ROGUE_ATTACK", targets, () -> {
+                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+                    controller.applyGroupDamage(user, self, targets, calculateDamage, onSkillComplete);
+                }, true);
             };
 
-            Skill Assassiante = new Skill(
+            Skill Assassinate = new Skill(
                     "Assassinate", "Single-target physical", 20, 40,
                     SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                     assassinateLogic
@@ -129,7 +124,7 @@ public class Rogue extends JobClass{
 
 
 
-            return List.of(Assassiante,CloneAttack);
+            return List.of(Assassinate,CloneAttack);
         }
 
 }

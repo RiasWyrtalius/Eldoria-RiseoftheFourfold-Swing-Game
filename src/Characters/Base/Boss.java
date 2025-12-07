@@ -1,6 +1,7 @@
 package Characters.Base;
 
 import Characters.Character;
+import Core.Battle.BattleController;
 
 import java.util.List;
 
@@ -34,7 +35,6 @@ public abstract class Boss extends Enemy {
     }
 
     @Override
-    public void makeAttack(List<Character> targets, Runnable onSkillComplete) {
-
+    public void makeAttack(BattleController controller, List<Character> targets, Runnable onSkillComplete) {
     }
 }

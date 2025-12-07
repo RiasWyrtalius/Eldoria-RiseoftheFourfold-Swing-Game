@@ -454,19 +454,6 @@ public class GameLoader {
         AudioManager am = AudioManager.getInstance();
         am.registerSound("VICTORY_MUSIC_1", "/Audio/SFX/victory_sound_1.wav");
     }
-    
-    // TODO: File handling stuff here
-    public void saveGame() {
-        // write to json or object buffer
-        // save level completed
-        // save current seed
-    }
-
-    public void loadGame() {
-        // read seed
-        // generateCampaign(seed)
-        // pool
-    }
 
     public long getCurrentSeed() {
         return currentSeed;

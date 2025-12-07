@@ -51,18 +51,20 @@ public class FireMage extends JobClass {
 
     @Override
     public List<ReactionSkill> createReactions() {
-        ReactionLogic reflectFireballLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+        ReactionLogic reflectFireballLogic = (defender, attacker, incomingSkill, incomingDamage, onComplete) -> {
             double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
             int calculateDmg = ScalingLogic.calculateDamage(defender,25,15,1.2,0.05);
             int calculateDamage = (int)(calculateDmg * 0.4);
             if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
                 LogManager.log(defender.getName() + " Attacks them back", LogFormat.ENEMY_ACTION);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", attacker, () ->{
-                    attacker.receiveDamage(calculateDamage, defender, incomingSkill);
+                    attacker.receiveDamage(calculateDamage, defender, incomingSkill, () -> {
+                        onComplete.accept(0);
+                    });
                 }, true);
-                return 0;
+            } else {
+                onComplete.accept(incomingDamage);
             }
-            return -1;
         };
 
         ReactionSkill ReflectFireball = new ReactionSkill("Reflect Fireball", ReactionTrigger.ON_RECEIVE_DAMAGE, reflectFireballLogic);
@@ -74,48 +76,31 @@ public class FireMage extends JobClass {
     public List<Skill> createSkills() {
 
         // FIXME: turn doesn't end when animation is finished
-        SkillLogicConsumer fireBallLogic = (self, user, targets, onSkillComplete) -> {
-
+        SkillLogicConsumer fireBallLogic = (_, self, user, targets, onComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,25,15,1.2,0.05);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
-                target.receiveDamage(calculateDamage, user, self);
                 target.applyStatusEffect(StatusEffectFactory.burn(2, 3));
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                }
+                target.receiveDamage(calculateDamage, user, self,onComplete);
             }, true);
-
         };
 
-        SkillLogicConsumer fireCycloneLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer fireCycloneLogic = (controller, self, user, targets, onComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,50,30,1.2,0.05);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
-            for(Character t : targets) {
-                VisualEffectsManager.getInstance().playAnimationOnCharacter("FIRE_CYCLONE", t, () -> {
-
-                        t.receiveDamage(calculateDamage, user, self);
-
-                    if (onSkillComplete != null) {
-                        onSkillComplete.run();
-                    }
-                }, true);
-            }
-
-
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
+            Runnable afterAllAnimations = () -> {
+                controller.applyGroupDamage(user, self, targets, calculateDamage, onComplete);
+            };
+            VisualEffectsManager.getInstance().playGroupAnimation("FIRE_CYCLONE", targets, afterAllAnimations, true);
         };
-        SkillLogicConsumer staffAttackLogic = (self, user, targets, onSkillComplete) -> {
+
+        SkillLogicConsumer staffAttackLogic = (_, self, user, targets, onComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,10,0,1.2,0.05);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
-            target.receiveDamage(calculateDamage, user, self);
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
+            // TODO: ANIMATION ON THIS
+            target.receiveDamage(calculateDamage, user, self, onComplete);
         };
 
         Skill fireball = new Skill(

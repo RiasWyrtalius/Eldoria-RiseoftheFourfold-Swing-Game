@@ -14,6 +14,7 @@ import Resource.Animation.AnimationLoopType;
 import Resource.Animation.AssetManager;
 
 import java.util.List;
+import java.util.concurrent.atomic.LongAccumulator;
 
 public class Warrior extends JobClass {
 
@@ -48,14 +49,16 @@ public class Warrior extends JobClass {
 
     @Override
     public List<ReactionSkill> createReactions() {
-        ReactionLogic blockLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+        ReactionLogic blockLogic = (defender, _, _, incomingDamage, onComplete) -> {
             double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
-            if (Dice.getInstance().chance(0.20) && hp_percent < 0.50) {
+            if (hp_percent < 0.50 && Dice.getInstance().chance(0.20)) {
                 LogManager.log(defender.getName() + " Uses their shield to block", LogFormat.ENEMY_ACTION);
-                VisualEffectsManager.getInstance().playAnimation("WARRIOR_SHIELD-BASH", defender, null, true);
-                return 0;
+                VisualEffectsManager.getInstance().playAnimation("WARRIOR_SHIELD-BASH", defender, () -> {
+                    onComplete.accept(0);
+                }, true);
+            } else {
+                onComplete.accept(incomingDamage);
             }
-            return -1;
         };
 
         ReactionSkill block = new ReactionSkill("Block", ReactionTrigger.ON_RECEIVE_DAMAGE, blockLogic);
@@ -64,32 +67,29 @@ public class Warrior extends JobClass {
 
     @Override
     public List<Skill> createSkills() {
-
-        SkillLogicConsumer shieldBashLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer shieldBashLogic = (_, self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,20,10,1.2,0.05);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, " Bashes Shield on ", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("WARRIOR_SHIELD-BASH", target, () -> {
-                target.receiveDamage(calculateDamage, user, self);
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
+                target.receiveDamage(calculateDamage, user, self, () -> {
                     VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                }
+                    if (onSkillComplete != null) onSkillComplete.run();
+                });
             }, true);
         };
 
-        SkillLogicConsumer swordSlashLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer swordSlashLogic = (_, self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,30,15,1.2,0.05);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, " Slashes on ", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("WARRIOR_SWORD-SLASH", target, () -> {
-                target.receiveDamage(calculateDamage, user, self);
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
+                target.receiveDamage(calculateDamage, user, self, () -> {
                     VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                }
+                    if (onSkillComplete != null) onSkillComplete.run();
+                });
             }, true);
         };
 

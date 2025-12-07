@@ -3,6 +3,7 @@ package Characters.Enemies;
 import Abilities.*;
 import Characters.Base.Enemy;
 import Characters.Character;
+import Core.Battle.BattleController;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.Dice;
@@ -33,41 +34,6 @@ public class Slime extends Enemy {
     }
 
     @Override
-    protected void initializeSkills() {
-        SkillLogicConsumer acidicSlamLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = user.getBaseAtk();
-
-            Character target = Dice.getInstance().pickRandom(targets);
-            LogManager.log(self.getActionLog(user, "uses", targets), LogFormat.ENEMY_ACTION);
-            VisualEffectsManager.getInstance().hideCharacterVisual(user);
-            VisualEffectsManager.getInstance().playAnimationOnCharacter("SLIME_ACIDIC-SLAM", target, () -> {
-                target.receiveDamage(calculateDamage, user, self);
-                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                }
-            }, true);
-        };
-
-        Skill AcidicSlam = new Skill(
-                "Acidic Slam", "Bashes its own body",0, 20,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
-                acidicSlamLogic
-        );
-
-        skills.add(AcidicSlam);
-    }
-
-    //    TODO: replace this with randomly use skill function
-    @Override
-    public void makeAttack(List<Character> targets, Runnable onSkillComplete) {
-        // TODO: randomly select skill
-        // TODO: add AI that checks if skill has enough mana or not
-        Skill skill = Dice.getInstance().pickRandom(skills);
-        skill.execute(this, targets, onSkillComplete);
-    }
-
-    @Override
     protected void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "SLIME_IDLE",
@@ -82,6 +48,40 @@ public class Slime extends Enemy {
                 4, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );
+    }
+
+    @Override
+    protected void initializeSkills() {
+        SkillLogicConsumer acidicSlamLogic = (controller, self, user, targets, onSkillComplete) -> {
+            int calculateDamage = user.getBaseAtk();
+
+            Character target = Dice.getInstance().pickRandom(targets);
+            LogManager.log(self.getActionLog(user, "uses", targets), LogFormat.ENEMY_ACTION);
+            VisualEffectsManager.getInstance().hideCharacterVisual(user);
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("SLIME_ACIDIC-SLAM", target, () -> {
+                target.receiveDamage(calculateDamage, user, self, () -> {
+                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+                    if (onSkillComplete != null) onSkillComplete.run();
+                });
+            }, true);
+        };
+
+        Skill AcidicSlam = new Skill(
+                "Acidic Slam", "Bashes its own body",0, 20,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
+                acidicSlamLogic
+        );
+
+        skills.add(AcidicSlam);
+    }
+
+    //    TODO: replace this with randomly use skill function
+    @Override
+    public void makeAttack(BattleController controller, List<Character> targets, Runnable onSkillComplete) {
+        // TODO: randomly select skill
+        // TODO: add AI that checks if skill has enough mana or not
+        Skill skill = Dice.getInstance().pickRandom(skills);
+        skill.execute(controller, this, targets, onSkillComplete);
     }
 
     @Override

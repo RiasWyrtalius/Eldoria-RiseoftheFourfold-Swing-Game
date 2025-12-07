@@ -40,6 +40,7 @@ public class Dice {
 
     public int roll(int min, int max) {
         if (min >= max) return min;
+        random.nextInt();
         return random.nextInt((max - min) + 1) + min;
     }
 

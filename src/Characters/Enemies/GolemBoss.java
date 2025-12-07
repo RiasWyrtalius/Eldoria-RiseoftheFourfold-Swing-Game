@@ -3,6 +3,7 @@ package Characters.Enemies;
 import Abilities.*;
 import Characters.Base.Boss;
 import Characters.Character;
+import Core.Battle.BattleController;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.LogFormat;
@@ -50,17 +51,18 @@ public class GolemBoss extends Boss {
 
     @Override
     protected void initializeSkills() {
-        SkillLogicConsumer basicAttackLogic = (self, user, targets, onSkillComplete) -> {
+
+        // --- BASIC ATTACK (Single Target) ---
+        SkillLogicConsumer basicAttackLogic = (controller, self, user, targets, onSkillComplete) -> {
+            // Find weakest target
             Character weakTarget = null;
             int lowHP = Integer.MAX_VALUE;
-
             for (Character c : targets) {
                 if (c.getHealth() > 0 && c.getHealth() < lowHP) {
                     lowHP = c.getHealth();
                     weakTarget = c;
                 }
             }
-
             if (weakTarget == null && !targets.isEmpty()) {
                 weakTarget = targets.getFirst();
             }
@@ -68,18 +70,22 @@ public class GolemBoss extends Boss {
             if (weakTarget != null) {
                 int calculateDamage = user.getBaseAtk();
                 LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget)), LogFormat.ENEMY_ACTION);
-                Character target = weakTarget;
+
+                // Define what happens after the animation
+                Character finalWeakTarget = weakTarget;
+                Runnable afterAnimation = () -> {
+                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+
+                    // Call async receiveDamage, passing the final onSkillComplete
+                    finalWeakTarget.receiveDamage(calculateDamage, user, self, onSkillComplete);
+                };
+
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);
-                VisualEffectsManager.getInstance().playAnimationOnCharacter("GOLEM_BOSS-ATTACK", target, () -> {
-                target.receiveDamage(calculateDamage, user, self);
-
-                    if (onSkillComplete != null) {
-                        onSkillComplete.run();
-                        VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                    }
-                }, true);
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("GOLEM_BOSS-ATTACK", weakTarget, afterAnimation, true);
+            } else {
+                // No valid targets, end turn immediately
+                if (onSkillComplete != null) onSkillComplete.run();
             }
-
         };
 
         Skill basicAttack = new Skill(
@@ -88,26 +94,18 @@ public class GolemBoss extends Boss {
                 basicAttackLogic
         );
 
-        SkillLogicConsumer devastatingStrikeLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer devastatingStrikeLogic = (controller, self, user, targets, onSkillComplete) -> {
             int calculateDamage = (int) (user.getBaseAtk() * 1.5);
 
             LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogFormat.ENEMY_ACTION);
+            Runnable afterAllAnimations = () -> {
+                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
 
-            for (Character target : targets) {
-                VisualEffectsManager.getInstance().hideCharacterVisual(user);
-                VisualEffectsManager.getInstance().playAnimationOnCharacter("GOLEM_BOSS-ATTACK", target, () -> {
-                    target.receiveDamage(calculateDamage, user, self);
+                controller.applyGroupDamage(user, self, targets, calculateDamage, onSkillComplete);
+            };
 
-                    if (onSkillComplete != null) {
-                        onSkillComplete.run();
-                        VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                    }
-                }, true);
-            }
-
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
+            VisualEffectsManager.getInstance().hideCharacterVisual(user);
+            VisualEffectsManager.getInstance().playGroupAnimation("GOLEM_BOSS-ATTACK", targets, afterAllAnimations, true);
         };
 
         Skill devastatingStrike = new Skill(
@@ -134,14 +132,14 @@ public class GolemBoss extends Boss {
     }
 
     @Override
-    public void makeAttack(List<Character> targets, Runnable onSkillComplete) {
+    public void makeAttack(BattleController controller, List<Character> targets, Runnable onSkillComplete) {
         Skill basicAttack = skills.get(0);
         Skill devastatingStrike = skills.get(1);
 
         if (this.getMana() >= devastatingStrike.getManaCost()) {
-            devastatingStrike.execute(this, targets, onSkillComplete);
+            devastatingStrike.execute(controller, this, targets, onSkillComplete);
         } else {
-            basicAttack.execute(this, targets, onSkillComplete);
+            basicAttack.execute(controller, this, targets, onSkillComplete);
         }
     }
 }

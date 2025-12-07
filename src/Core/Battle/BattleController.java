@@ -92,7 +92,7 @@ public class BattleController {
             advanceTurnCycle(false);
         };
 
-        hero.useSkill(skill, targets, onSkillComplete);
+        hero.useSkill(this, skill, targets, onSkillComplete);
         hero.setExhausted(true);
 
         if (this.mainView != null)
@@ -194,7 +194,7 @@ public class BattleController {
         }
 
         if (enemyChar instanceof Enemy) {
-            ((Enemy) enemyChar).makeAttack(validTargets, onCurrentEnemyFinished);
+            ((Enemy) enemyChar).makeAttack(this, validTargets, onCurrentEnemyFinished);
         } else {
             onCurrentEnemyFinished.run();
         }
@@ -301,6 +301,39 @@ public class BattleController {
             }
         } else {
             LogManager.log("No items found.");
+        }
+    }
+
+    /**
+     * Applies damage to a list of targets asynchronously and runs a final callback
+     * only after ALL damage (and reaction animations) have been resolved.
+     *
+     * @param user           The attacker.
+     * @param skill          The skill being used.
+     * @param targets        The list of characters to damage.
+     * @param damage         The amount of damage to apply to each.
+     * @param onAllDamageResolved The final callback to run.
+     */
+    public void applyGroupDamage(Character user, Skill skill, List<Character> targets, int damage, Runnable onAllDamageResolved) {
+        if (targets == null || targets.isEmpty()) {
+            if (onAllDamageResolved != null) onAllDamageResolved.run();
+            return;
+        }
+
+        final int totalTargets = targets.size();
+        final int[] damageResolvedCount = {0};
+
+        Runnable onSingleDamageResolved = () -> {
+            damageResolvedCount[0]++;
+            if (damageResolvedCount[0] >= totalTargets) {
+                if (onAllDamageResolved != null) {
+                    onAllDamageResolved.run();
+                }
+            }
+        };
+
+        for (Character t : targets) {
+            t.receiveDamage(damage, user, skill, onSingleDamageResolved);
         }
     }
 

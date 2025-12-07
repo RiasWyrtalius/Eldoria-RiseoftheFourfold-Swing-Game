@@ -56,18 +56,20 @@ public class AeroMancer extends JobClass {
 
     @Override
     public List<ReactionSkill> createReactions() {
-        ReactionLogic reflectWindPierceLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+        ReactionLogic reflectWindPierceLogic = (defender, attacker, incomingSkill, incomingDamage, onComplete) -> {
             double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
             int calculateDmg = ScalingLogic.calculateDamage(defender,20,15,1.2,0.05);
             int calculateDamage = (int)(calculateDmg * 0.4);
             if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
                 LogManager.log(defender.getName() + " Attacks them back", LogFormat.ENEMY_ACTION);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("WIND_PIERCE", attacker, () ->{
-                    attacker.receiveDamage(calculateDamage, defender, incomingSkill);
+                    attacker.receiveDamage(calculateDamage, defender, incomingSkill, () -> {
+                        onComplete.accept(0);
+                    });
                 }, true);
-                return 0;
+            } else {
+                onComplete.accept(incomingDamage);
             }
-            return -1;
         };
 
         ReactionSkill ReflectWindPierce= new ReactionSkill("Reflect Wind Pierce", ReactionTrigger.ON_RECEIVE_DAMAGE, reflectWindPierceLogic);
@@ -76,60 +78,45 @@ public class AeroMancer extends JobClass {
 
     @Override
     public List<Skill> createSkills() {
-        SkillLogicConsumer windTornadoLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user,30,(int)18.5,1.2,0.05);
+        SkillLogicConsumer windTornadoLogic = (controller, self, user, targets, onSkillComplete) -> {
+            int calculateDamage = ScalingLogic.calculateDamage(user, 30, (int) 18.5, 1.2, 0.05);
 
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "summons a tornado against", targets), LogFormat.HERO_ACTION);
 
-            for(Character t : targets) {
-                VisualEffectsManager.getInstance().playAnimationOnCharacter("WIND_TORNADO", t, () -> {
+            Runnable afterAllAnimations = () -> {
+                // Delegate group damage to the controller
+                controller.applyGroupDamage(user, self, targets, calculateDamage, onSkillComplete);
+            };
 
-                    t.receiveDamage(calculateDamage, user, self);
-
-                    if (onSkillComplete != null) {
-                        onSkillComplete.run();
-                    }
-                }, true);
-            }
-//            if (onSkillComplete != null) {
-//                onSkillComplete.run();
-//            }
+            // Delegate group animation to the VEM
+            VisualEffectsManager.getInstance().playGroupAnimation("WIND_TORNADO", targets, afterAllAnimations, true);
         };
-        SkillLogicConsumer windSlashLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user,20,(int)18.5,1.2,0.05);
+
+        SkillLogicConsumer windSlashLogic = (controller, self, user, targets, onSkillComplete) -> {
+            int calculateDamage = ScalingLogic.calculateDamage(user, 20, (int)18.5, 1.2, 0.05);
             Character target = targets.get(0);
+            LogManager.log(self.getActionLog(user, "slashes at", targets), LogFormat.HERO_ACTION);
 
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
-            VisualEffectsManager.getInstance().playAnimationOnCharacter("WIND_SLASH", target, () -> {
+            Runnable afterAnimation = () -> {
+                // Call the async receiveDamage, which will handle reactions and then call onSkillComplete
+                target.receiveDamage(calculateDamage, user, self, onSkillComplete);
+            };
 
-                target.receiveDamage(calculateDamage, user, self);
-
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                }
-            }, true);
-
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("WIND_SLASH", target, afterAnimation, true);
         };
 
 
-        SkillLogicConsumer windPierceLogic= (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user,20,15,1.2,0.05);
+        SkillLogicConsumer windPierceLogic = (controller, self, user, targets, onSkillComplete) -> {
+            int calculateDamage = ScalingLogic.calculateDamage(user, 20,15, 1.2, 0.05);
 
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "pierces", targets), LogFormat.HERO_ACTION);
 
-            for(Character t : targets) {
-                VisualEffectsManager.getInstance().playAnimationOnCharacter("WIND_PIERCE", t, () -> {
+            Runnable afterAllAnimations = () -> {
+                controller.applyGroupDamage(user, self, targets, calculateDamage, onSkillComplete);
+            };
 
-                    t.receiveDamage(calculateDamage, user, self);
-
-                    if (onSkillComplete != null) {
-                        onSkillComplete.run();
-                    }
-                }, true);
-            }
-
+            VisualEffectsManager.getInstance().playGroupAnimation("WIND_PIERCE", targets, afterAllAnimations, true);
         };
-
 
         Skill WindSlash = new Skill(
                 "Wind Slash", "A slash compressed wind", 20, 25,

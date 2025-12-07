@@ -2,6 +2,7 @@ package Characters.Base;
 
 import Abilities.Skill;
 import Characters.Character;
+import Core.Battle.BattleController;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 
@@ -36,7 +37,7 @@ public abstract class Enemy extends Character {
 
     protected abstract void initializeSkills();
 
-    public abstract void makeAttack(List<Character> targets, Runnable onSkillComplete);
+    public abstract void makeAttack(BattleController controller, List<Character> targets, Runnable onSkillComplete);
 
     @Override
     protected void onDeath() {

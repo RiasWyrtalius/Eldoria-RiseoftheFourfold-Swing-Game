@@ -373,6 +373,43 @@ public class VisualEffectsManager {
         LogManager.log("All active animation timers have been stopped.", LogFormat.SYSTEM);
     }
 
+
+    /**
+     * Plays the same animation on a list of targets and executes a single callback
+     * only after ALL animations in the group have finished.
+     *
+     * @param animationId   The ID of the animation to play.
+     * @param targets       The list of characters to play the animation on.
+     * @param onAllComplete The final callback to run once every animation is done.
+     * @param isTemporary   If the animation is a temporary effect.
+     */
+    public void playGroupAnimation(String animationId, List<Character> targets, Runnable onAllComplete, boolean isTemporary) {
+        if (targets == null || targets.isEmpty()) {
+            if (onAllComplete != null) onAllComplete.run();
+            return;
+        }
+
+        final int totalTargets = targets.size();
+        final int[] animationsFinished = {0};
+
+        for (Character target : targets) {
+            Runnable onSingleFinish = () -> {
+                animationsFinished[0]++;
+
+                // check if this was the LAST one
+                if (animationsFinished[0] >= totalTargets) {
+                    if (onAllComplete != null) {
+                        onAllComplete.run(); // Trigger the final callback
+                    }
+                }
+            };
+
+            playAnimationOnCharacter(animationId, target, onSingleFinish, isTemporary);
+        }
+    }
+
+    // --- STATUS EFFECTS ---
+
     public void applyStatusTint(JLabel displayLabel, String animationId, Color tintColor) {
         Icon currentIcon = displayLabel.getIcon();
 

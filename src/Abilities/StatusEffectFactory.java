@@ -12,7 +12,7 @@ public class StatusEffectFactory {
         StatusEffect.TickEffect logic = (target) -> {
             // TODO: add special effects
             LogManager.log(target.getName() + " is scorched for " + damage + " damage!", LogFormat.HIGHLIGHT_DEBUFF);
-            target.receiveDamage(damage, null, null);
+            target.receiveDamage(damage, null, null, () -> {});
         };
         return new StatusEffect("Burn", duration, logic, StatusEffectType.DEBUFF);
     }

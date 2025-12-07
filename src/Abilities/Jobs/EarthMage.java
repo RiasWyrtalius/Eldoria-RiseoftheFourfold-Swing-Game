@@ -57,18 +57,20 @@ public class EarthMage extends JobClass {
 
     @Override
     public List<ReactionSkill> createReactions() {
-        ReactionLogic reflectStoneHailLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+        ReactionLogic reflectStoneHailLogic = (defender, attacker, incomingSkill, incomingDamage, onComplete) -> {
             double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
             int calculateDmg = ScalingLogic.calculateDamage(defender,20,10,1.2,0.05);
             int calculateDamage = (int)(calculateDmg * 0.4);
             if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
                 LogManager.log(defender.getName() + " Attacks them back", LogFormat.ENEMY_ACTION);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("STONE_HAIL", attacker, () ->{
-                    attacker.receiveDamage(calculateDamage, defender, incomingSkill);
+                    attacker.receiveDamage(calculateDamage, defender, incomingSkill, () -> {
+                        onComplete.accept(0);
+                    });
                 }, true);
-                return 0;
+            } else {
+                onComplete.accept(incomingDamage);
             }
-            return -1;
         };
 
         ReactionSkill ReflectStoneHail= new ReactionSkill("Reflect Stone Hail", ReactionTrigger.ON_RECEIVE_DAMAGE, reflectStoneHailLogic);
@@ -78,58 +80,42 @@ public class EarthMage extends JobClass {
 
     @Override
     public List<Skill> createSkills() {
-        SkillLogicConsumer earthAttackLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user,50,28,1.2,0.05);
+        SkillLogicConsumer earthAttackLogic = (controller, self, user, targets, onSkillComplete) -> {
+            int calculateDamage = ScalingLogic.calculateDamage(user, 50, 28, 1.2, 0.05);
 
-            LogManager.log(self.getActionLog(user, "The earth unleashes itself", targets), LogFormat.HERO_ACTION);
-            for(Character t : targets) {
-                VisualEffectsManager.getInstance().playAnimationOnCharacter("EARTH_ATTACK", t, () -> {
+            LogManager.log(self.getActionLog(user, "unleashes the earth's fury upon", targets), LogFormat.HERO_ACTION);
 
-                    t.receiveDamage(calculateDamage, user, self);
-
-                    if (onSkillComplete != null) {
-                        onSkillComplete.run();
-                    }
-                }, true);
-            }
-
-
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
-
+            Runnable afterAllAnimations = () -> {
+                controller.applyGroupDamage(user, self, targets, calculateDamage, onSkillComplete);
+            };
+            VisualEffectsManager.getInstance().playGroupAnimation(
+                    "EARTH_ATTACK",
+                    targets,
+                    afterAllAnimations,
+                    true
+            );
         };
 
-        SkillLogicConsumer earthquakeSpellLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer earthquakeSpellLogic = (controller, self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,55,(int)23.5,1.2,0.05);
-
             LogManager.log(self.getActionLog(user, "Shakes the earth", targets), LogFormat.HERO_ACTION);
-            for(Character t : targets) {
-                VisualEffectsManager.getInstance().playAnimationOnCharacter("EARTHQUAKE", t, () -> {
-
-                    t.receiveDamage(calculateDamage, user, self);
-
-                    if (onSkillComplete != null) {
-                        onSkillComplete.run();
-                    }
-                }, true);
-            }
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
+            Runnable afterAllAnimations = () -> {
+                controller.applyGroupDamage(user, self, targets, calculateDamage, onSkillComplete);
+            };
+            VisualEffectsManager.getInstance().playGroupAnimation(
+                    "EARTHQUAKE",
+                    targets,
+                    afterAllAnimations,
+                    true
+            );
         };
 
-        SkillLogicConsumer stoneHailLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer stoneHailLogic = (_, self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,20,10,1.2,0.05);
             Character target = targets.get(0);
-            target.receiveDamage(calculateDamage, user, self);
             LogManager.log(self.getActionLog(user, "Multitudes of earth crumbles down", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("STONE_HAIL", target, () -> {
-                target.receiveDamage(calculateDamage, user, self);
-
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                }
+                target.receiveDamage(calculateDamage, user, self, onSkillComplete);
             }, true);
 
         };

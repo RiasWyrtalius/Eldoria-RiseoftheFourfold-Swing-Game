@@ -46,65 +46,66 @@ public class Cleric extends JobClass {
 
     @Override
     public List<Skill> createSkills() {
-        SkillLogicConsumer healSelfLogic = (self, user, targets, onSkillComplete) -> {
-            LogManager.log(self.getActionLog(user, " Heals", targets), LogFormat.HERO_ACTION);
-            int heal = ScalingLogic.calculateStat(user.getLevel(),30,10,0.05);
+        SkillLogicConsumer healSelfLogic = (_, self, user, targets, onSkillComplete) -> {
+            LogManager.log(self.getActionLog(user, "heals", targets), LogFormat.HERO_ACTION);
+            int heal = ScalingLogic.calculateStat(user.getLevel(), 30, 10, 0.05);
 
-            user.receiveHealing(heal, user);
-
-            VisualEffectsManager.getInstance().hideCharacterVisual(user);
-            VisualEffectsManager.getInstance().playAnimationOnCharacter("CLERIC_HEAL", user, () -> {
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                }
-            }, true);
-        };
-
-        SkillLogicConsumer healGroupLogic = (self, user, targets, onSkillComplete) -> {
-            LogManager.log(self.getActionLog(user, " Heals", targets), LogFormat.HERO_ACTION);
-
-            int heal = ScalingLogic.calculateStat(user.getLevel(),20,10,0.05);
-            for(Character target : targets) {
-                target.receiveHealing(heal, user);
-            }
-//            VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimation("CLERIC_HEAL", user, () -> {
-//                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+                // This runs AFTER the heal animation
+                user.receiveHealing(heal, user);
+
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                 }
             }, true);
         };
 
-        SkillLogicConsumer reviveLogic = (self, user, targets, onSkillComplete) -> {
-            Character target = targets.getFirst();
 
-            int revive_health= (int)(target.getMaxHealth() * 0.30);
-            int reset_mana= (int)(target.getMaxMana() * 0.50);
-            VisualEffectsManager.getInstance().hideCharacterVisual(user);
+        SkillLogicConsumer healGroupLogic = (_, self, user, targets, onSkillComplete) -> {
+            LogManager.log(self.getActionLog(user, "heals", targets), LogFormat.HERO_ACTION);
+            int heal = ScalingLogic.calculateStat(user.getLevel(), 20, 10, 0.05);
+
+            // isn't there a helper function i made to replace this
+            Runnable afterAllAnims = () -> {
+                for (Character target : targets) {
+                    target.receiveHealing(heal, user);
+                }
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                }
+            };
+
+            VisualEffectsManager.getInstance().playGroupAnimation("CLERIC_HEAL", targets, afterAllAnims, true);
+        };
+
+        SkillLogicConsumer reviveLogic = (_, self, user, targets, onSkillComplete) -> {
+            Character target = targets.get(0);
+            int revive_health = (int)(target.getMaxHealth() * 0.30);
+            int reset_mana = (int)(target.getMaxMana() * 0.50);
+
+            LogManager.log(self.getActionLog(user, "revives", targets), LogFormat.HERO_ACTION);
+
             VisualEffectsManager.getInstance().playAnimationOnCharacter("CLERIC_HEAL", user, () -> {
+                // After the caster's animation, play the target's revive visual
+                VisualEffectsManager.getInstance().reviveEffect(target);
+
                 target.revive(revive_health, user);
                 target.setMana(reset_mana);
 
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
-                    VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                 }
             }, true);
-
         };
 
-        SkillLogicConsumer BashLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer bashLogic = (_, self, user, targets, onSkillComplete) -> {
             Character target = targets.getFirst();
+            int calculateDamage = ScalingLogic.calculateDamage(user, 20, user.getBaseAtk(), 0.02, 0.005);
 
-            int calculateDamage = ScalingLogic.calculateDamage(user,20,20,0.02,0.005);
+            LogManager.log(self.getActionLog(user, "bashes", targets), LogFormat.HERO_ACTION);
 
-                    target.receiveDamage(calculateDamage, user, self);
-                    if (onSkillComplete != null) {
-                        onSkillComplete.run();
-                    }
-
+            // fixed using async
+            target.receiveDamage(calculateDamage, user, self, onSkillComplete);
         };
 
         Skill HealSelf = new Skill(
@@ -120,7 +121,7 @@ public class Cleric extends JobClass {
         Skill BashStaff = new Skill(
                 "Bash Staff", "Healing their teammate", 10, 20,
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
-                BashLogic
+                bashLogic
         );
         Skill Revive = new Skill(
                 "Revive", "Revive their teammate", 40, 0,

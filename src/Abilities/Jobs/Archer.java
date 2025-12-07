@@ -64,14 +64,17 @@ public class Archer extends JobClass {
     // TODO: account for animation completion
     @Override
     public List<ReactionSkill> createReactions() {
-        ReactionLogic dodgeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+        ReactionLogic dodgeLogic = (defender, _, _, incomingDamage, onComplete) -> {
             double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
-            if (Dice.getInstance().chance(0.3) && hp_percent < 0.60) {
+            if (hp_percent < 0.60 && Dice.getInstance().chance(0.3)) {
                 LogManager.log(defender.getName() + " swiftly dodges the attack!", LogFormat.ENEMY_ACTION);
-                VisualEffectsManager.getInstance().playAnimation("ARCHER_DODGE", defender, null, true);
-                return 0;
+                VisualEffectsManager.getInstance().playAnimation("ARCHER_DODGE", defender, () -> {
+                    // Pass 0 damage to the next step in the reaction chain
+                    onComplete.accept(0);
+                }, true);
+            } else {
+                onComplete.accept(incomingDamage);
             }
-            return -1;
         };
 
         ReactionSkill dodge = new ReactionSkill("Dodge", ReactionTrigger.ON_RECEIVE_DAMAGE, dodgeLogic);
@@ -82,27 +85,21 @@ public class Archer extends JobClass {
 
     @Override
     public List<Skill> createSkills() {
-        SkillLogicConsumer rapidFireLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer rapidFireLogic = (_, self, user, targets, onSkillComplete) -> {
             int dmg = ScalingLogic.calculateDamage(user, 20, 15, 1.2, 0.05);
             Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, "Unleashes array of Arrows", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW-Rapid", user, () -> {
-                target.receiveDamage(dmg, user, self);
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                }
+                target.receiveDamage(dmg, user, self, onSkillComplete);
             }, true);
         };
 
-        SkillLogicConsumer heavyArrowLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer heavyArrowLogic = (_, self, user, targets, onSkillComplete) -> {
             int dmg = ScalingLogic.calculateDamage(user, 40, 20, 1.2, 0.05);
             Character target = targets.getFirst();
             LogManager.log(self.getActionLog(user, "Pulls their bow the hardest they can to release", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW", user, () -> {
-                target.receiveDamage(dmg, user, self);
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                }
+                target.receiveDamage(dmg, user, self, onSkillComplete);
             }, true);
         };
 

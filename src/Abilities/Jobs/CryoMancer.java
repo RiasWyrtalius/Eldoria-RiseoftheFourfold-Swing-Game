@@ -51,18 +51,22 @@ public class CryoMancer extends JobClass {
 
     @Override
     public List<ReactionSkill> createReactions() {
-        ReactionLogic reflectIceSpikeLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
+        ReactionLogic reflectIceSpikeLogic = (defender, attacker, incomingSkill, incomingDamage, onComplete) -> {
             double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
             int calculateDmg = ScalingLogic.calculateDamage(defender,30,15,1.2,0.05);
-            int calculateDamage = (int)(calculateDmg * 0.4);
-            if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
+            // TODO: should prolly scale on targets defense
+            int counterDamage = (int)(calculateDmg * 0.4);
+            if (hp_percent < 0.40 && Dice.getInstance().chance(0.25)) {
                 LogManager.log(defender.getName() + " Attacks them back", LogFormat.ENEMY_ACTION);
-                VisualEffectsManager.getInstance().playAnimationOnCharacter("ICE_SPIKE", attacker, () ->{
-                    attacker.receiveDamage(calculateDamage, defender, incomingSkill);
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("ICE_SPIKE", attacker, () -> {
+                    attacker.receiveDamage(counterDamage, defender, null, () -> {
+                        onComplete.accept(0);
+                    });
                 }, true);
-                return 0;
+            } else {
+                // hehe it failed
+                onComplete.accept(incomingDamage);
             }
-            return -1;
         };
 
         ReactionSkill ReflectIceSpike= new ReactionSkill("Reflect Ice Spike", ReactionTrigger.ON_RECEIVE_DAMAGE, reflectIceSpikeLogic);
@@ -72,46 +76,25 @@ public class CryoMancer extends JobClass {
     @Override
     public List<Skill> createSkills() {
 
-        SkillLogicConsumer iceSpikeLogic = (self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user,30,15,1.2,0.05);
+        SkillLogicConsumer iceSpikeLogic = (_, self, user, targets, onSkillComplete) -> {
+            int calculateDamage = ScalingLogic.calculateDamage(user, 30, 15, 1.2, 0.05);
             Character target = targets.get(0);
-
-            LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "summons an Ice Spike under", targets), LogFormat.HERO_ACTION);
 
             VisualEffectsManager.getInstance().playAnimationOnCharacter("ICE_SPIKE", target, () -> {
-
-                target.receiveDamage(calculateDamage, user, self);
-
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                }
+                target.receiveDamage(calculateDamage, user, self, onSkillComplete);
             }, true);
-
-//            make sure this is only called once within the function or callback
-//            signifies the absolute end of the skill usage
-//            if (onSkillComplete != null) {
-//                onSkillComplete.run();
-//            }
         };
 
-
-        SkillLogicConsumer frostBiteLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer frostBiteLogic = (_, self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,15,15,1.2,0.05);
             Character target = targets.get(0);
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
-
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FROSTBITE", target, () -> {
-
-                target.receiveDamage(calculateDamage, user, self);
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
-                }
+                target.receiveDamage(calculateDamage, user, self, onSkillComplete);
             }, true);
-
-
         };
-
 
         Skill IceSpike = new Skill(
                 "Ice Spike", "Unleashes spikes from the ground", 25, 30,

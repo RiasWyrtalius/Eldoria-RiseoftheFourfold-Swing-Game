@@ -3,6 +3,7 @@ package Characters.Enemies;
 import Abilities.*;
 import Characters.Base.Enemy;
 import Characters.Character;
+import Core.Battle.BattleController;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.Dice;
@@ -53,7 +54,7 @@ public class Spider extends Enemy {
     // TODO: fix the SINGLE_TARGETING logic on this
     @Override
     protected void initializeSkills() {
-        SkillLogicConsumer spiderVenomLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer spiderVenomLogic = (controller, self, user, targets, onSkillComplete) -> {
             int calculateDamage = user.getBaseAtk();
 
 //            int index = Dice.getInstance().roll(0, targets.size());
@@ -61,12 +62,11 @@ public class Spider extends Enemy {
             LogManager.log(self.getActionLog(user, "uses", targets), LogFormat.ENEMY_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("SPIDER_VENOM", target, () -> {
-                target.receiveDamage(calculateDamage, user, self);
-
-                if (onSkillComplete != null) {
-                    onSkillComplete.run();
+                target.receiveDamage(calculateDamage, user, self, () -> {
                     VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                }
+                    if (onSkillComplete != null) onSkillComplete.run();
+                });
+
             }, true);
         };
 
@@ -81,11 +81,11 @@ public class Spider extends Enemy {
 
     //    TODO: replace this with randomly use skill function
     @Override
-    public void makeAttack(List<Character> targets, Runnable onSkillComplete) {
+    public void makeAttack(BattleController controller, List<Character> targets, Runnable onSkillComplete) {
         // TODO: randomly select skill
         // TODO: add AI that checks if skill has enough mana or not
         Skill skill = Dice.getInstance().pickRandom(skills);
-        skill.execute(this, targets, onSkillComplete);
+        skill.execute(controller, this, targets, onSkillComplete);
     }
 
     @Override

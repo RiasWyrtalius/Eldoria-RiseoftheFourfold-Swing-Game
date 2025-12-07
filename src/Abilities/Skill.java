@@ -1,6 +1,7 @@
 package Abilities;
 
 import Characters.Character;
+import Core.Battle.BattleController;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.LogFormat;
@@ -32,9 +33,9 @@ public class Skill {
         this.executeLogic = executeLogic;
     }
 
-    public void execute(Character user, List<Character> target, Runnable onSkillComplete) {
+    public void execute(BattleController controller, Character user, List<Character> targets, Runnable onComplete) {
         if (user.spendMana(this.manaCost)) {
-            executeLogic.accept(this, user, target, onSkillComplete);
+            executeLogic.accept(controller, this, user, targets, onComplete);
         }
     }
 

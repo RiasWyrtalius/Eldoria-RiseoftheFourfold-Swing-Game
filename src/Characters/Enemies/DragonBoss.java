@@ -3,6 +3,7 @@ package Characters.Enemies;
 import Abilities.*;
 import Characters.Base.Boss;
 import Characters.Character;
+import Core.Battle.BattleController;
 import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.Utils.LogFormat;
@@ -43,7 +44,7 @@ public class DragonBoss extends Boss {
 
     @Override
     protected void initializeSkills() {
-        SkillLogicConsumer basicAttackLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer basicAttackLogic = (controller,self, user, targets, onSkillComplete) -> {
             Character weakTarget = null;
             int lowHP = Integer.MAX_VALUE;
 
@@ -61,12 +62,11 @@ public class DragonBoss extends Boss {
             if (weakTarget != null) {
                 int calculateDamage = ScalingLogic.calculateDamage(user,(int)(baseAtk * 1.5),0.4,0.1);
                 LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget)), LogFormat.ENEMY_ACTION);
-                weakTarget.receiveDamage(calculateDamage, user, self);
+                weakTarget.receiveDamage(calculateDamage, user, self, () -> {
+                    if (onSkillComplete != null) onSkillComplete.run();
+                });
             }
 
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
-            }
         };
 
         Skill basicAttack = new Skill(
@@ -75,19 +75,17 @@ public class DragonBoss extends Boss {
                 basicAttackLogic
         );
 
-        SkillLogicConsumer devastatingStrikeLogic = (self, user, targets, onSkillComplete) -> {
+        SkillLogicConsumer devastatingStrikeLogic = (controller, self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculateDamage(user,(int)(baseAtk * 1.25),0.2,0.2);
 
             LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogFormat.ENEMY_ACTION);
 
             for (Character target : targets) {
                 if (target.getHealth() > 0) {
-                    target.receiveDamage(calculateDamage, user, self);
+                    target.receiveDamage(calculateDamage, user, self, () -> {
+                        if (onSkillComplete != null) onSkillComplete.run();
+                    });
                 }
-            }
-
-            if (onSkillComplete != null) {
-                onSkillComplete.run();
             }
         };
 
@@ -115,14 +113,14 @@ public class DragonBoss extends Boss {
     }
 
     @Override
-    public void makeAttack(List<Character> targets, Runnable onSkillComplete) {
+    public void makeAttack(BattleController controller, List<Character> targets, Runnable onSkillComplete) {
         Skill basicAttack = skills.get(0);
         Skill devastatingStrike = skills.get(1);
 
         if (this.getMana() >= devastatingStrike.getManaCost()) {
-            devastatingStrike.execute(this, targets, onSkillComplete);
+            devastatingStrike.execute(controller, this, targets, onSkillComplete);
         } else {
-            basicAttack.execute(this, targets, onSkillComplete);
+            basicAttack.execute(controller, this, targets, onSkillComplete);
         }
     }
 }

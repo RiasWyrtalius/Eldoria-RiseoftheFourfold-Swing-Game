@@ -49,23 +49,29 @@ public class Paladin extends JobClass {
 
     @Override
     public List<ReactionSkill> createReactions() {
-        ReactionLogic ReviveLogic = (defender, attacker, incomingSkill, incomingDamage) -> {
-            double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
-            if(defender.getHealth() - incomingDamage > 0){
-                return -1;
+        ReactionLogic ReviveLogic = (defender, _, _, incomingDamage, onComplete) -> {
+            if (hasRevived) {
+                onComplete.accept(incomingDamage);
+                return;
             }
-            int revive_health= (int)(defender.getMaxHealth() * 0.30);
-            int reset_mana= (int)(defender.getMaxMana() * 0.50);
-            if (Dice.getInstance().chance(0.75) && hp_percent <= 0 && !hasRevived) {
-                defender.setHealth(revive_health, defender);
-                defender.setMana(reset_mana);
-                hasRevived = true;
-                VisualEffectsManager.getInstance().playAnimation("PALADIN_REVIVE", defender, () -> {
-                    LogManager.log(defender.getName() + " REVIVES", LogFormat.HERO_ACTION);
-                    }, true);
-                return 0;
+
+            if (Dice.getInstance().chance(0.75)) {
+                LogManager.log(defender.getName() + "'s Divine Intervention activates!", LogFormat.HIGHLIGHT_BUFF);
+                Runnable afterReviveAnim = () -> {
+                    int revive_health = (int)(defender.getMaxHealth() * 0.30);
+                    int reset_mana = (int)(defender.getMaxMana() * 0.50);
+
+                    defender.setHealth(revive_health, null); // Source is the skill itself, not another char
+                    defender.setMana(reset_mana);
+                    hasRevived = true;
+                    onComplete.accept(1);
+                };
+
+                VisualEffectsManager.getInstance().playAnimation("PALADIN_REVIVE", defender, afterReviveAnim, true);
+            } else {
+                LogManager.log("Divine Intervention failed to trigger...");
+                onComplete.accept(incomingDamage);
             }
-            return -1;
         };
 
         ReactionSkill Revive = new ReactionSkill("Revive", ReactionTrigger.ON_FATAL_DAMAGE, ReviveLogic);
@@ -75,36 +81,30 @@ public class Paladin extends JobClass {
 
     @Override
     public List<Skill> createSkills() {
-        SkillLogicConsumer healSelfLogic = (self, user, targets, onSkillComplete) -> {
-            LogManager.log(self.getActionLog(user, " Heals", targets), LogFormat.HERO_ACTION);
-            int heal = ScalingLogic.calculateStat(user.getLevel(),20,10,0.05);
-            int curr = user.getHealth();
-
-
-                VisualEffectsManager.getInstance().hideCharacterVisual(user);
-                VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_REVIVE", targets.getFirst(), () -> {
-                    if (onSkillComplete != null) {
-                        onSkillComplete.run();
-                        VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                        user.setHealth(heal + curr, user);
-                    }
-                }, true);
+        SkillLogicConsumer healSelfLogic = (_, self, target, _, onSkillComplete) -> {
+            LogManager.log(self.getActionLog(target, "heals themself", List.of(target)), LogFormat.HERO_ACTION);
+            int healAmount = ScalingLogic.calculateStat(target.getLevel(), 20, 10, 0.05);
+            Runnable afterAnimation = () -> {
+                target.receiveHealing(healAmount, target);
+                VisualEffectsManager.getInstance().restoreCharacterVisual(target);
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                }
+            };
+            VisualEffectsManager.getInstance().hideCharacterVisual(target);
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_HEAL", target, afterAnimation, true);
         };
 
-        SkillLogicConsumer holyStrikeLogic = (self, user, targets, onSkillComplete) -> {
-            int dmg = ScalingLogic.calculateStat(user.getLevel(),30,20,0.05);
+        SkillLogicConsumer holyStrikeLogic = (controller, self, user, targets, onSkillComplete) -> {
+            int dmg = ScalingLogic.calculateDamage(user,30,20,0.05);
             LogManager.log(self.getActionLog(user, "Strikes", targets), LogFormat.HERO_ACTION);
-
-            Character target = targets.getFirst();
-
-                VisualEffectsManager.getInstance().hideCharacterVisual(user);
-                VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_HOLY-STRIKE", target, () -> {
-                    target.receiveDamage(dmg, user, self);
-                    if (onSkillComplete != null) {
-                        onSkillComplete.run();
-                        VisualEffectsManager.getInstance().restoreCharacterVisual(user);
-                    }
-                }, true);
+            Character target = targets.get(0);
+            Runnable afterAnimation = () -> {
+                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+                target.receiveDamage(dmg, user, self, onSkillComplete);
+            };
+            VisualEffectsManager.getInstance().hideCharacterVisual(user);
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_HOLY-STRIKE", target, afterAnimation, true);
         };
 
         Skill HealSelf = new Skill(

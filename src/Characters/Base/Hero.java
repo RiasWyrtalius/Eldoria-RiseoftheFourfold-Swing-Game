@@ -4,9 +4,11 @@ import Abilities.JobClass;
 import Abilities.ReactionSkill;
 import Abilities.Skill;
 import Characters.Character;
+import Core.Battle.BattleController;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Utils.ScalingLogic;
+import Core.Visuals.VisualEffectsManager;
 
 import java.awt.*;
 import java.util.List;
@@ -92,6 +94,11 @@ public class Hero extends Character {
         this.receiveHealing(hpGained, null);
         this.receiveMana(mpGained, null);
         LogManager.log(this.name + " reached Level " + this.level + "!", LogFormat.HIGHLIGHT_BUFF);
+
+        // Log gains only if they happened
+        if (hpGained > 0) LogManager.log(this.name + " gained +" + hpGained + " Max Health!");
+        if (mpGained > 0) LogManager.log(this.name + " gained +" + mpGained + " Max Mana!");
+        VisualEffectsManager.getInstance().showFloatingText(this, "LEVEL UP!", LogFormat.HIGHLIGHT_BUFF);
     }
 
 
@@ -126,10 +133,10 @@ public class Hero extends Character {
         return job.getDescription();
     }
 
-    public void useSkill(Skill skill, List<Character> targets, Runnable onSkillComplete) {
+    public void useSkill(BattleController controller, Skill skill, List<Character> targets, Runnable onSkillComplete) {
         LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on " + Skill.formatTargetList(targets), Color.GREEN);
 
-        skill.execute(this, targets, onSkillComplete);
+        skill.execute(controller,this, targets, onSkillComplete);
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============
