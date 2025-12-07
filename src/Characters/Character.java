@@ -55,6 +55,7 @@ public abstract class Character {
             LogManager.log(this.name + " took no damage (Mitigated)!");
         } else {
             LogManager.log(this.name + " takes " + finalDamage + " damage.");
+            VisualEffectsManager.getInstance().showFloatingText(this, "-" + finalDamage +"HP", LogFormat.DAMAGE_TAKEN);
         }
 
         int potentialHealth = this.health - finalDamage;
@@ -103,6 +104,7 @@ public abstract class Character {
 
         if (amount > 0) {
             Core.Utils.LogManager.log(this.name + " recovered " + amount + " MP.", LogFormat.MP);
+            VisualEffectsManager.getInstance().showFloatingText(this, "+" + amount +"MP", LogFormat.MP);
         }
     }
 
@@ -111,6 +113,7 @@ public abstract class Character {
         //      subclass method called
         if (canCast(manaCost)) {
             setMana(this.mana - manaCost);
+            VisualEffectsManager.getInstance().showFloatingText(this, "-" + manaCost +"MP", LogFormat.MP);
             return true;
         } else {
             return false;
@@ -128,6 +131,7 @@ public abstract class Character {
 
         if (finalAmount > 0) {
             LogManager.log(this.name + " recovers " + finalAmount + " HP.", LogFormat.HP);
+            VisualEffectsManager.getInstance().showFloatingText(this, "+" + finalAmount +"HP", LogFormat.HP);
         }
     }
 
