@@ -196,8 +196,8 @@ public class BattleInterface extends JPanel {
 
     private void updateControls() {
 //        LogManager.log("current mode: " + currentMode.toString());
-
         BattlePhase phase = battleController.getCurrentPhase();
+
         boolean isPlayerTurn = (phase == BattlePhase.HERO_ACTION_WAIT);
         endTurnButton.setEnabled(isPlayerTurn);
         boolean canUseItems = isPlayerTurn && (currentMode == BattleUIMode.HERO_SELECT);
@@ -210,12 +210,69 @@ public class BattleInterface extends JPanel {
             // TODO: set battleOutcome JLabel to victory, or tie
             BattleResult result = battleController.getFinalResult();
             endTurnButton.setVisible(false);
-            if (result == BattleResult.VICTORY)
-                descendPanel.setVisible(true);
+
+            if (result == BattleResult.VICTORY || result == BattleResult.DEFEAT) {
+                showSummaryScreen(result);
+            }
+
+            if (descendPanel != null) descendPanel.setVisible(false);
+
+            if (result == BattleResult.VICTORY){
+                showSummaryScreen(result);
+            }
         } else {
             endTurnButton.setVisible(true);
             descendPanel.setVisible(false);
         }
+    }
+
+    private void showSummaryScreen(BattleResult result) {
+        if (currentMode == BattleUIMode.IDLE) return;
+        currentMode = BattleUIMode.IDLE; // Lock logic
+
+        BattleSummary summary = new BattleSummary();
+        StringBuilder sb = new StringBuilder();
+
+        if (result == BattleResult.VICTORY) {
+
+            int xp = battleController.getEarnedXP();
+            sb.append("XP Gained: ").append(xp).append("\n");
+
+            java.util.List<Items.Item> items = battleController.getEarnedItems();
+            if (!items.isEmpty()) {
+                sb.append("Items Found:\n");
+                for (Items.Item item : items) {
+                    sb.append(" - ").append(item.getName()).append("\n");
+                }
+            } else {
+                sb.append("No items found.\n");
+            }
+
+            summary.setSummaryData("VICTORY!", sb.toString());
+            summary.configureButton("Descend", () -> {
+                GameManager.getInstance().loadNextLevel();
+            });
+
+        } else if (result == BattleResult.DEFEAT) {
+            sb.append("The party has fallen.\n\n");
+            sb.append("Your journey ends on Floor ").append(battleController.getLevelNumber()).append(".");
+            summary.setSummaryData("DEFEAT", sb.toString());
+            summary.configureButton("Return to Title", () -> {
+                GameManager.getInstance().loadMainMenu();
+            });
+        }
+
+        JRootPane root = SwingUtilities.getRootPane(this);
+
+        JPanel glassOverlay = new JPanel(new GridBagLayout());//centers it
+        glassOverlay.setOpaque(false);
+        glassOverlay.addMouseListener(new java.awt.event.MouseAdapter() {});
+        JPanel summaryBox = summary.getPanel();
+        summaryBox.setPreferredSize(new Dimension(400, 300));
+        summaryBox.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 100), 1));
+        glassOverlay.add(summaryBox);
+        root.setGlassPane(glassOverlay);
+        glassOverlay.setVisible(true);
     }
 
     private void setPartyUI(List<Character> party, List<JPanel> setupPanel) {

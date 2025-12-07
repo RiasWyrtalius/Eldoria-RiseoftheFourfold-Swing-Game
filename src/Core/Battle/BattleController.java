@@ -27,6 +27,10 @@ public class BattleController {
     private BattleResult finalResult = BattleResult.NONE;
     private final Level currentLevel;
 
+    //ui summary
+    private int earnedXP = 0;
+    private List<Item> earnedItems = new ArrayList<>();
+
 
     public BattleController(Party heroParty, Party enemyParty, Level currentLevel) {
         this.mainView = null;
@@ -250,6 +254,7 @@ public class BattleController {
         resetTurnReadiness();
         isBattleActive = false;
         setCurrentPhase(BattlePhase.BATTLE_ENDED);
+
         if (checkLose() && checkWin()) {
             finalResult = BattleResult.TIE;
         } else if (checkWin()) {
@@ -259,22 +264,8 @@ public class BattleController {
         } else if (checkLose()) {
             finalResult = BattleResult.DEFEAT;
         }
-        BattleResult result = getFinalResult();
-        switch (result) {
-            case VICTORY -> {
-                LogManager.log("VICTORY! " + heroParty.getPartyName() + " is Triumphant!", LogFormat.VICTORY);
-                LogManager.logHighlight("VICTORY!", LogFormat.HIGHLIGHT_VICTORY, LogFormat.SIZE_HEADER, true);
-            }
-            case DEFEAT -> {
-                LogManager.log("DEFEAT! " + enemyParty.getPartyName() + " has wiped " + heroParty.getPartyName() + " out!", LogFormat.DEFEAT);
-                LogManager.logHighlight("DEFEAT! Game Over.", LogFormat.DEFEAT, LogFormat.SIZE_HEADER, true);
-            }
-            case TIE -> {
-                LogManager.log("TIE!: Truly everyone is dead and gone.", LogFormat.TIE);
-                LogManager.logHighlight("TIE! Game Over. Truly no one wins in the end.", LogFormat.TIE, LogFormat.SIZE_HEADER, true);
-            }
-            default -> LogManager.logHighlight("Battle Ended.", LogFormat.HIGHLIGHT_VICTORY, LogFormat.SIZE_HEADER, true);
-        };
+
+        //printBattleEndVisuals(finalResult); - replaced with battlesumamry.form
 
 //        VisualEffectsManager.getInstance().stopAllTimers();
 
@@ -286,10 +277,14 @@ public class BattleController {
     private void processVictoryRewards() {
         LogManager.log("--- STAGE CLEAR REWARDS ---", LogFormat.VICTORY);
 
+        earnedXP = 0;
+        earnedItems.clear();
+
         int xpBonus = currentLevel.xpReward();
+        earnedXP = xpBonus;
+
         if (xpBonus > 0) {
             LogManager.log("Party gained " + xpBonus + " XP!");
-
             for (Character hero : heroParty.getPartyMembers()) {
                 if (hero instanceof Hero) {
                     ((Hero) hero).gainXP(xpBonus);
@@ -301,7 +296,10 @@ public class BattleController {
         if (!loot.isEmpty()) {
             LogManager.log("Loot found!");
             for (Item item : loot) {
-                heroParty.getInventory().addItem(item, 1);
+
+
+                heroParty.getInventory().addItem(item, 1);//updates game state
+                earnedItems.add(item);//battleinterface
                 LogManager.logHighlight("+" + xpBonus + " XP", LogFormat.HIGHLIGHT_LEVELUP, LogFormat.SIZE_IMPACT, false);
                 LogManager.log(" - " + item.getName(), LogFormat.PLAYER_JOIN);
             }
@@ -337,5 +335,13 @@ public class BattleController {
 
     public int getLevelNumber() {
         return currentLevel.levelNumber();
+    }
+
+    public int getEarnedXP() {
+        return earnedXP;
+    }
+
+    public List<Item> getEarnedItems() {
+        return earnedItems;
     }
 }

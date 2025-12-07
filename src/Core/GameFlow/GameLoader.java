@@ -435,15 +435,15 @@ public class GameLoader {
                 }
         ));
 
-        slides.add(new StorySlide(
-                "Assets/Images/Backgrounds/heroes.png",
-                List.of(
-                        "Good luck."
-                ),
-                () -> {
-                    GameManager.getInstance().startGameLoop();
-                }
-        ));
+//        slides.add(new StorySlide(
+//                "Assets/Images/Backgrounds/heroes.png",
+//                List.of(
+//                        "Good luck."
+//                ),
+//                () -> {
+//                    GameManager.getInstance().startGameLoop();
+//                }
+//        ));
 
         return slides;
     }

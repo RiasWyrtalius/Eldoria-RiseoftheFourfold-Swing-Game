@@ -64,6 +64,19 @@ public class GameManager {
         gameWindow.setVisible(true);
     }
 
+    public void loadMainMenu() {
+        Resource.Audio.AudioManager.getInstance().stopMusic(); //for battle music if implemented.
+
+        this.mainMenuView = new MainMenu(this);
+
+        if (gameWindow != null) {
+            gameWindow.setContentPane(mainMenuView);
+            gameWindow.revalidate();
+            gameWindow.repaint();
+            gameWindow.setVisible(true);
+        }
+    }
+
     public void loadSavedGame() {
         GameState state = SaveManager.loadGame();
 
