@@ -23,15 +23,16 @@ public class ScalingLogic {
      */
     public static int calculateDamage(Character user, int skillBase, int skillPower, double scalingFactor, double levelMultiplier) {
         int level = user.getLevel();
+        int baseDmg = user.getBaseAtk();
 
         // (L * Sf) -> Flat bonus based on level
-        double flatLevelBonus = level * scalingFactor;
+        double flatLevelBonus = (level - 1) * scalingFactor;
 
         // (Sb * (L * Lm)) percentage scaling based on dat level
         // base 20 * (Level 5 * 0.05) = 20 * 0.25 = 5 extra damage
-        double percentageLevelBonus = skillBase * (level * levelMultiplier);
+        double percentageLevelBonus = skillBase * ((level - 1) * levelMultiplier);
 
-        double totalDamage = skillBase + skillPower + flatLevelBonus + percentageLevelBonus;
+        double totalDamage =  + skillBase + skillPower + flatLevelBonus + percentageLevelBonus + baseDmg;
 
         return (int) totalDamage;
     }

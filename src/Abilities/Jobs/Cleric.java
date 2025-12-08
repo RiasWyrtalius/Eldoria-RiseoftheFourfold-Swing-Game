@@ -100,7 +100,7 @@ public class Cleric extends JobClass {
 
         SkillLogicConsumer bashLogic = (_, self, user, targets, onSkillComplete) -> {
             Character target = targets.getFirst();
-            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user, 20, user.getBaseAtk(), 0.02);
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user, 10, user.getBaseAtk(), 0.02);
 
             LogManager.log(self.getActionLog(user, "bashes", targets), LogFormat.HERO_ACTION);
 
@@ -119,7 +119,7 @@ public class Cleric extends JobClass {
                 healGroupLogic
         );
         Skill BashStaff = new Skill(
-                "Bash Staff", "Healing their teammate", 0, 20,
+                "Bash Staff", "Healing their teammate", 0, 10,
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 bashLogic
         );
