@@ -96,6 +96,7 @@ public class Rogue extends JobClass{
                         VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                         if (onSkillComplete != null) onSkillComplete.run();
                     });
+                    target.applyStatusEffect(StatusEffectFactory.bleed(3,3));
                 }, true);
             };
 

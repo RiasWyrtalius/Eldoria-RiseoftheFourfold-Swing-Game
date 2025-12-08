@@ -69,6 +69,7 @@ public class Cleric extends JobClass {
             Runnable afterAllAnims = () -> {
                 for (Character target : targets) {
                     target.receiveHealing(heal, user);
+                    target.applyStatusEffect(StatusEffectFactory.regeneration(10, 3));
                 }
                 if (onSkillComplete != null) {
                     onSkillComplete.run();

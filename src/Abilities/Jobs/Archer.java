@@ -100,6 +100,7 @@ public class Archer extends JobClass {
             LogManager.log(self.getActionLog(user, "Pulls their bow the hardest they can to release", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW", user, () -> {
                 target.receiveDamage(dmg, user, self, onSkillComplete);
+                target.applyStatusEffect(StatusEffectFactory.stun(2));
             }, true);
         };
 

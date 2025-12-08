@@ -77,6 +77,7 @@ public class Warrior extends JobClass {
                     VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                     if (onSkillComplete != null) onSkillComplete.run();
                 });
+                target.applyStatusEffect(StatusEffectFactory.stun(3));
             }, true);
         };
 
