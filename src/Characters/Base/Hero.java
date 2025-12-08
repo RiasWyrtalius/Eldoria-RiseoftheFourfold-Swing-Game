@@ -72,7 +72,7 @@ public class Hero extends Character {
         this.requiredXP = (int)(baseXP * Math.pow(growthRate,this.level - 1));
         int prev_health = getMaxHealth();
         int prev_mana = getMaxMana();
-        int new_health = (int)(maxHealth + ((this.level) * 4) + (maxHealth * 0.05 * (this.level - 1)));
+        int new_health = ScalingLogic.calculateStat(this.level,maxHealth,4,0.05);
 
         // increase logs
         LogManager.log(this.name + " has leveled up to level " + this.level + "!");
@@ -82,7 +82,7 @@ public class Hero extends Character {
         super.setMaxHealth(new_health);
         //if it stayed the same its redundant ignore
 
-        int new_mana = (int)(maxMana + ((this.level) * 2) + (maxMana * 0.009 * (this.level - 1)));
+        int new_mana = ScalingLogic.calculateStat(this.level,maxMana,2,0.009);
         int mpGained = this.maxMana - prev_mana;
         if(prev_mana != new_mana){
             LogManager.log(this.name + " increased their Mana from " + prev_mana + " to " + new_mana + "!");
