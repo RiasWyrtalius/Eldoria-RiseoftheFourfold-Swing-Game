@@ -70,7 +70,6 @@ public abstract class Character {
      * called by skill logic, reaction logic, effect logic and item logic
      */
     public void receiveDamage(int rawDamage, Character attacker, Skill incomingSkill, Runnable onDamageResolved) {
-        LogManager.log("receive damage debug: " + rawDamage, LogFormat.DEBUG_INFO);
         Consumer<Integer> afterReactions = (finalDamage) -> {
             if (finalDamage == 0) {
                 LogManager.log(this.name + " took no damage (Mitigated)!");
@@ -317,6 +316,12 @@ public abstract class Character {
 
 
     public void applyStatusEffect(StatusEffect effect) {
+        for (StatusEffect existingEffect : activeStatusEffects) {
+            if (existingEffect.getName().equalsIgnoreCase(effect.getName())) {
+                LogManager.log(this.name + "'s" + effect.getName() + " duration is extended.", LogFormat.SYSTEM);
+                existingEffect.setDuration(existingEffect.getDuration() + effect.getDuration());
+            }
+        }
         activeStatusEffects.add(effect);
 
         Color color = (effect.getType() == StatusEffectType.BUFF) ? LogFormat.HIGHLIGHT_BUFF : LogFormat.HIGHLIGHT_DEBUFF;

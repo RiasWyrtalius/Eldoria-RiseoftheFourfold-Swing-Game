@@ -41,18 +41,37 @@ public class GameLoader {
     private Map<Integer, Level> getPredefinedLevels() {
         Map<Integer, Level> fixedLevels = new HashMap<>();
 
+        // =========================================================
+        List<StorySlide> preCutsceneFirstLevel = new ArrayList<>();
+        preCutsceneFirstLevel.add(new StorySlide(
+                "Assets/Images/Backgrounds/eldoria_map.png",
+                List.of(
+                        "sample first level."
+                )
+        ));
+        List<StorySlide> postCutsceneFirstLevel = new ArrayList<>();
+        postCutsceneFirstLevel.add(new StorySlide(
+                "Assets/Images/Backgrounds/eldoria_map.png",
+                List.of(
+                        "AFOHFSFH YOU KILLED ALL THEM GOBLINS OMLLLL."
+                )
+        ));
+
         fixedLevels.put(1, createSpecificLevel(
                 1,
                 "The Gates",
                 "Assets/Images/Backgrounds/Level_BG/sample.jpg",
                 "A swarm of goblins surround you!",
-                buildEnemyGroup(Goblin::new,Goblin::new),
+                buildEnemyGroup(Goblin::new,Goblin::new,Goblin::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion(),
                         ItemFactory.summoningScroll()
-                )
+                ),
+                preCutsceneFirstLevel,postCutsceneFirstLevel
         ));
+        // =========================================================
+
         fixedLevels.put(5, createSpecificLevel(
                 5,
                 "The Coven",
@@ -127,6 +146,20 @@ public class GameLoader {
     }
 
     private Level createSpecificLevel(int levelNum, String name, String bgKey, String intro,
+                                      List<Function<Integer, Enemy>> enemies, List<Item> loot, List<StorySlide> preLevelCutscene, List<StorySlide> postLevelCutscene) {
+        return new Level(
+                levelNum, name, intro, bgKey,
+                enemies,
+                enemies.size(), enemies.size(),
+                loot,
+                100 * levelNum,
+                0, // fixed seed
+                true,
+                preLevelCutscene, postLevelCutscene
+        );
+    }
+
+    private Level createSpecificLevel(int levelNum, String name, String bgKey, String intro,
                                       List<Function<Integer, Enemy>> enemies, List<Item> loot) {
         return new Level(
                 levelNum, name, intro, bgKey,
@@ -135,7 +168,8 @@ public class GameLoader {
                 loot,
                 100 * levelNum,
                 0, // fixed seed
-                true
+                true,
+                null, null
         );
     }
 
@@ -265,6 +299,7 @@ public class GameLoader {
 
         String bg = getBackgroundForLevel(levelNum);
 
+        // TODO: add cutscenes???
         return new Level(
                 levelNum,
                 "Stage " + levelNum,
@@ -276,7 +311,7 @@ public class GameLoader {
                 generateRandomLoot(rng, levelNum),
                 100 * levelNum,
                 levelSeed,
-                false
+                false,null,null
         );
 
     }
@@ -320,8 +355,7 @@ public class GameLoader {
                 "Assets/Images/Backgrounds/eldoria_map.png",
                 List.of(
                         "In the mythic land of ELDORIA, four elemental forces weave the fate of mortals. Fire, wind, earth, and water- these primal powers have always felt like magic."
-                ),
-                null
+                )
         ));
 
         // Slide 2: The Peaceful Era
@@ -330,8 +364,7 @@ public class GameLoader {
                 "Assets/Images/Backgrounds/avendale_city.png",
                 List.of(
                         "For generations, peace reigned in Avendale and beyond. But now, a shadow falls. The court mage VAROTH has turned to darkness. He has become DREADLORD VAROTH, and his corruption spreads."
-                ),
-                null
+                )
         ));
 
         // Slide 3: The Corruption Begins
@@ -340,8 +373,7 @@ public class GameLoader {
                 "Assets/Images/Backgrounds/corrupted_forest.png",
                 List.of(
                         "Forests wilt under unnatural frost. Fields lie fallow. Goblins, orcs, and undead now prowl freely. The kingdoms are divided, their champions scattered."
-                ),
-                null
+                )
         ));
 
         // Slide 4: The Darkness Spreads
@@ -351,8 +383,8 @@ public class GameLoader {
                 List.of(
                         "In this dark hour, an ancient prophecy is remembered: when darkness ascends Blackspire's peak, FOURFOLD PARTY must unite to seek:",
                         "A WARRIOR, shield of the land. An ARCHER, swift as the wind. A CLERIC, healer and protector. and a MAGE, master of four elements. Alone they falter, together they fight."
-                ),
-                null
+                )
+
         ));
 
         // Slide 5: The Prophecy
@@ -361,8 +393,8 @@ public class GameLoader {
                 "Assets/Images/Backgrounds/fourfolds_bg.png",
                 List.of(
                         "But the four champions are scattered across Eldoria. The journey begins with ONE - the first to heed the call. Alone, you must brave the corrupted lands and find the others who share this fate."
-                ),
-                null
+                )
+
         ));
 
         // Slide 6: The Call to Action
@@ -370,8 +402,8 @@ public class GameLoader {
                 "Assets/Images/Backgrounds/fourfolds_bg.png",
                 List.of(
                         "Your quest is twofold: First, survive the perils of the wilds and dungeons. Second, seek out the other prophesied heroes, earning their trust through shared trials."
-                ),
-                null
+                )
+
         ));
 
         // Slide 7: The Descent Begins
@@ -379,8 +411,8 @@ public class GameLoader {
                 "Assets/Images/Backgrounds/dungeon_entrance.png",
                 List.of(
                         "Beneath Blackspire Mountain lies your proving ground: ancient dungeons twisted by Vargoth's magic. Here, you will grow stronger, level by level, and here, you will find allies worthy of the prophecy."
-                ),
-                null
+                )
+
         ));
 
         // Slide 8: The Final Challenge
@@ -388,8 +420,8 @@ public class GameLoader {
                 "Assets/Images/Backgrounds/throne_room.png",
                 List.of(
                         "Only when the FOURFOLD PARTY is complete, each hero tested and tempered, can you ascend to the throne room above, and face Dreadlord Vargoth as one united force."
-                ),
-                null
+                )
+
         ));
 
         // Slide 9: The Player's Role
@@ -398,7 +430,7 @@ public class GameLoader {
                 List.of(
                         "Your journey begins now. WHO WILL BE THE FIRST? Choose your starting hero wisely. The others will join you... in time.",
                         "Form your party and become the prophecy."
-                ), null
+                )
         ));
 
         slides.add(new StorySlide(
@@ -417,7 +449,7 @@ public class GameLoader {
                             CharacterSelectionMode.CREATE_NEW_PARTY,
                             onCharacterPicked
                     );
-                }
+                }, null
         ));
 
 //        slides.add(new StorySlide(

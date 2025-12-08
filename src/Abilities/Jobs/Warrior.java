@@ -68,7 +68,7 @@ public class Warrior extends JobClass {
     @Override
     public List<Skill> createSkills() {
         SkillLogicConsumer shieldBashLogic = (_, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,20,1.5,0.03);
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,user.getBaseAtk(),1.5,0.03);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, " Bashes Shield on ", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);

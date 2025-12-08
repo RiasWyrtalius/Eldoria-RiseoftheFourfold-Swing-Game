@@ -130,13 +130,22 @@ public class GameManager {
         audio.registerSound("STORYVIEW", "Assets/Audio/SFX/StoryView/storyview_bgm.wav");
         audio.playMusic("STORYVIEW");
 
+        playStorySequence(introScript, null);
+    }
+
+    /**
+     * public method to play cutscenes
+     * @param slides
+     * @param onFinished
+     */
+    public void playStorySequence(List<StorySlide> slides, Runnable onFinished) {
         StoryView storyView = new StoryView();
 
         gameWindow.setContentPane(storyView);
         gameWindow.revalidate();
         gameWindow.repaint();
 
-        storyView.startSequence(introScript, null);
+        storyView.startSequence(slides, onFinished);
     }
 
     public void loadNextLevel() {
@@ -153,17 +162,42 @@ public class GameManager {
 
         LogManager.log("Entering Level " + nextLevel.levelNumber(), LogFormat.SYSTEM);
 
-        mainView.setBattleBackground(nextLevel.battleBackground());
+        // check for prelevel story
+        List<StorySlide> preLevelCutscene = nextLevel.preLevelCutscene();
+        if (preLevelCutscene != null && !preLevelCutscene.isEmpty()) {
+            playStorySequence(preLevelCutscene, () -> {
+                setupBattle(nextLevel);
+            });
+        } else {
+            setupBattle(nextLevel);
+        }
+    }
 
-        Party enemyParty = nextLevel.buildEnemyParty();
+    public void setupBattle(Level level) {
+        // ensure fresh view
+        if (mainView == null) mainView = new BattleInterface();
 
-        this.battleController = new BattleController(heroParty, enemyParty, nextLevel);
+        switchToBattleView();
+
+        mainView.setBattleBackground(level.battleBackground());
+
+        Party enemyParty = level.buildEnemyParty();
+
+        this.battleController = new BattleController(heroParty, enemyParty, level);
 
         battleController.setMainView(mainView);
         mainView.linkControllerAndData(battleController);
 
         LogManager.log("Creating save point...");
         saveCurrentGame();
+    }
+
+    public void switchToBattleView() {
+        if (mainView == null || gameWindow == null) return;
+
+        gameWindow.setContentPane(mainView);
+        gameWindow.revalidate();
+        gameWindow.repaint();
     }
 
     public void saveCurrentGame() {

@@ -5,6 +5,8 @@ import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Character;
 import Characters.Party;
+import Core.GameManager;
+import Core.Story.StorySlide;
 import Resource.Audio.AudioManager;
 import Core.GameFlow.Level;
 import Core.Utils.LogFormat;
@@ -276,23 +278,31 @@ public class BattleController {
         isBattleActive = false;
         setCurrentPhase(BattlePhase.BATTLE_ENDED);
 
+
         if (checkLose() && checkWin()) {
             finalResult = BattleResult.TIE;
         } else if (checkWin()) {
             finalResult = BattleResult.VICTORY;
             AudioManager.getInstance().playSound("VICTORY_MUSIC_1");
-            processVictoryRewards();
+
+            List<StorySlide> postLevelCutscene = this.currentLevel.postLevelCutscene();
+            if (postLevelCutscene != null && !postLevelCutscene.isEmpty()) {
+                GameManager.getInstance().playStorySequence(postLevelCutscene, () -> {
+                    GameManager.getInstance().switchToBattleView();
+                    resetTurnReadiness();
+                    processVictoryRewards();
+                });
+            } else {
+                resetTurnReadiness();
+                processVictoryRewards();
+            }
         } else if (checkLose()) {
             finalResult = BattleResult.DEFEAT;
         }
-
-        //printBattleEndVisuals(finalResult); - replaced with battlesumamry.form
-
-//        VisualEffectsManager.getInstance().stopAllTimers();
-
         if (this.mainView != null) {
             this.mainView.refreshUI();
         }
+        //printBattleEndVisuals(finalResult); - replaced with battlesumamry.form
     }
 
     private void processVictoryRewards() {

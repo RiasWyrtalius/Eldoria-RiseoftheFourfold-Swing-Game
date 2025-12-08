@@ -34,6 +34,8 @@ public class StoryView extends JPanel {
     private boolean isTyping = false;
     private final SimpleAttributeSet narrationStyle;
 
+    private boolean isSequenceFinished = false;
+
     private static final Color TEXT_COLOR = new Color(245, 240, 220);
 
     public StoryView() {
@@ -133,7 +135,9 @@ public class StoryView extends JPanel {
     // the index would go out of bouds
     // might implement a fadein timer
     private void handleInput() {
-        if (sequence == null || sequence.isEmpty()) return;
+        if (isSequenceFinished || sequence == null || sequence.isEmpty()) {
+            return;
+        }
         if (isTyping) {
             completeTypewriter();
         } else {
@@ -142,12 +146,23 @@ public class StoryView extends JPanel {
                 currentLineIndex++;
                 playCurrentLine();
             } else {
+                if (currentSlide.onEnd() != null) {
+                    try {
+                        currentSlide.onEnd().run();
+                    } catch (Exception e) {
+                        LogManager.log(e.getMessage(), LogFormat.SYSTEM_ERROR);
+                    }
+                }
                 currentSlideIndex++;
                 if (currentSlideIndex < sequence.size()) {
                     currentLineIndex = 0;
                     loadCurrentSlide();
                 } else {
-                    if (onFinishCallback != null) onFinishCallback.run();
+                    isSequenceFinished = true;
+
+                    if (onFinishCallback != null) {
+                        onFinishCallback.run();
+                    }
                 }
             }
         }

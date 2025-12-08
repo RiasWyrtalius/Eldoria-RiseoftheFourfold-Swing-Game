@@ -2,6 +2,7 @@ package Core.GameFlow;
 
 import Characters.Base.Enemy;
 import Characters.Party;
+import Core.Story.StorySlide;
 import Core.Utils.Dice;
 import Items.Item;
 
@@ -22,7 +23,11 @@ public record Level(
         List<Item> possibleItemDrops,
         int xpReward,
         long levelSeed,
-        boolean isFixedRoster) {
+        boolean isFixedRoster,
+
+        List<StorySlide> preLevelCutscene,
+        List<StorySlide> postLevelCutscene
+) {
 
     public Party buildEnemyParty() {
         Party party = new Party(levelName + " Enemies");

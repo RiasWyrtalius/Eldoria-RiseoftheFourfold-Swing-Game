@@ -42,6 +42,10 @@ public class StatusEffect {
         return duration;
     }
 
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
     public StatusEffectType getType() {
         return type;
     }
