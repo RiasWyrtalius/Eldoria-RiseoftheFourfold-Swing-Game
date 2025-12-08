@@ -55,7 +55,7 @@ public class BattleController {
                 LogManager.logHighlight("BATTLE", LogFormat.BATTLE_HEADER, LogFormat.SIZE_HEADER, false);
                 Thread.sleep(500);
                 LogManager.clearHighlight();
-                LogManager.logHighlight("START!!", LogFormat.BATTLE_HEADER, LogFormat.SIZE_HEADER, false);
+                LogManager.logHighlight("START", LogFormat.BATTLE_HEADER, LogFormat.SIZE_HEADER, false);
                 Thread.sleep(500);
                 LogManager.clearHighlight();
 
@@ -331,7 +331,7 @@ public class BattleController {
 
                 heroParty.getInventory().addItem(item, 1);//updates game state
                 earnedItems.add(item);//battleinterface
-                LogManager.logHighlight("+" + xpBonus + " XP", LogFormat.HIGHLIGHT_LEVELUP, LogFormat.SIZE_IMPACT, false);
+                //LogManager.logHighlight("+" + xpBonus + " XP", LogFormat.HIGHLIGHT_LEVELUP, LogFormat.SIZE_IMPACT, false);
                 LogManager.log(" - " + item.getName(), LogFormat.PLAYER_JOIN);
             }
         } else {
