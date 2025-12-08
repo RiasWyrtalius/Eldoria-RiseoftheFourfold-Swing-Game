@@ -118,7 +118,7 @@ public class Goblin extends Enemy {
         ReactionLogic cowardiceLogic = (defender, attacker, skill, incomingDamage, onComplete) -> {
             double healthPercent = (double) defender.getHealth() / defender.getMaxHealth();
             if (healthPercent > 0.50) {
-                onComplete.accept(incomingDamage);
+                onComplete.accept(ReactionResult.FAILED(incomingDamage));
                 return;
             }
 
@@ -126,11 +126,11 @@ public class Goblin extends Enemy {
                 LogManager.log(defender.getName() + " panics and dodges the attack!", LogFormat.ENEMY_ACTION);
 
 //                TODO: Trigger pop up or sound or something
-                onComplete.accept(0);
+                onComplete.accept(new ReactionResult(true, 0, true));
                 return;
             }
 
-            onComplete.accept(incomingDamage);
+            onComplete.accept(ReactionResult.FAILED(incomingDamage));
         };
 
 //        ReactionLogic DeathLogic = (user,_,_,_, onComplete) -> {

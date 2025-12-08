@@ -50,7 +50,7 @@ public class Rogue extends JobClass{
             ReactionLogic dodgeLogic = (defender, _, _, incomingDamage, onComplete) -> {
                 double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
                 if (hp_percent >= 0.60) {
-                    onComplete.accept(incomingDamage);
+                    onComplete.accept(ReactionResult.FAILED(incomingDamage));
                     return;
                 }
 
@@ -64,10 +64,10 @@ public class Rogue extends JobClass{
                 if (Dice.getInstance().chance(dodgeChance)) {
                     LogManager.log(defender.getName() + " skillfully dodges the attack!", LogFormat.ENEMY_ACTION);
                     VisualEffectsManager.getInstance().playAnimation("ROGUE_DODGE", defender, () -> {
-                        onComplete.accept(0);
+                        onComplete.accept(new ReactionResult(true, 0, true));
                     }, true);
                 } else {
-                    onComplete.accept(incomingDamage);
+                    onComplete.accept(ReactionResult.FAILED(incomingDamage));
                 }
             };
 

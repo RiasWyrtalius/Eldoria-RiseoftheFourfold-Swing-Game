@@ -54,10 +54,10 @@ public class Warrior extends JobClass {
             if (hp_percent < 0.50 && Dice.getInstance().chance(0.20)) {
                 LogManager.log(defender.getName() + " Uses their shield to block", LogFormat.ENEMY_ACTION);
                 VisualEffectsManager.getInstance().playAnimation("WARRIOR_SHIELD-BASH", defender, () -> {
-                    onComplete.accept(0);
+                    onComplete.accept(new ReactionResult(true, 0, true));
                 }, true);
             } else {
-                onComplete.accept(incomingDamage);
+                onComplete.accept(ReactionResult.FAILED(incomingDamage));
             }
         };
 

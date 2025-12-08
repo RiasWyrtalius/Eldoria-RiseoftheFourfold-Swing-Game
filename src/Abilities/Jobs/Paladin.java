@@ -51,7 +51,7 @@ public class Paladin extends JobClass {
     public List<ReactionSkill> createReactions() {
         ReactionLogic ReviveLogic = (defender, _, _, incomingDamage, onComplete) -> {
             if (hasRevived) {
-                onComplete.accept(incomingDamage);
+                onComplete.accept(ReactionResult.FAILED(incomingDamage));
                 return;
             }
 
@@ -64,13 +64,13 @@ public class Paladin extends JobClass {
                     defender.setHealth(revive_health, null); // Source is the skill itself, not another char
                     defender.setMana(reset_mana);
                     hasRevived = true;
-                    onComplete.accept(1);
+                    onComplete.accept(new ReactionResult(true, 0, true));
                 };
 
                 VisualEffectsManager.getInstance().playAnimation("PALADIN_REVIVE", defender, afterReviveAnim, true);
             } else {
                 LogManager.log("Divine Intervention failed to trigger...");
-                onComplete.accept(incomingDamage);
+                onComplete.accept(ReactionResult.FAILED(incomingDamage));
             }
         };
 

@@ -54,74 +54,110 @@ public abstract class Character {
     /**
      * Kicks off the asynchronous reaction queue for damage events.
      */
-    protected void processDamageReactions(Character attacker, Skill incomingSkill, int incomingDamage, Consumer<Integer> onComplete) {
+    protected void processDamageReactions(Character attacker, Skill incomingSkill, int incomingDamage, Consumer<ReactionResult> onComplete) {
         VisualEffectsManager.getInstance().flashDamage(this);
 
         List<ReactionSkill> queue = this.reactions.stream()
                 .filter(r -> r.trigger() == ReactionTrigger.ON_RECEIVE_DAMAGE)
                 .collect(Collectors.toList());
 
-        // start the recursive chain
         processReactionQueue(queue, incomingDamage, attacker, incomingSkill, onComplete);
     }
-
 
     /*
      * called by skill logic, reaction logic, effect logic and item logic
      */
     public void receiveDamage(int rawDamage, Character attacker, Skill incomingSkill, Runnable onDamageResolved) {
-        Consumer<Integer> afterReactions = (finalDamage) -> {
-            if (finalDamage == 0) {
-                LogManager.log(this.name + " took no damage (Mitigated)!");
-            } else {
+
+        // This is the final callback after ALL reactions are done.
+        Consumer<ReactionResult> afterReactionsCallback = (finalResult) -> {
+
+            int finalDamage = finalResult.newDamageValue();
+
+            if (!finalResult.wasTriggered()) {
                 LogManager.log(this.name + " takes " + finalDamage + " damage.");
                 VisualEffectsManager.getInstance().showFloatingText(this, "-" + finalDamage + "HP", LogFormat.DAMAGE_TAKEN);
+            } else {
+                LogManager.log(this.name + " reaction mitigated damage!");
             }
+
             int potentialHealth = this.health - finalDamage;
 
-            // fatal check
             if (potentialHealth <= 0) {
-                boolean wasSaved = processFatalReactions(attacker, incomingSkill);
-                if (wasSaved) {
-                    if (onDamageResolved != null) onDamageResolved.run();
-                    return;
-                }
-            }
 
-            setHealth(potentialHealth, attacker);
-            if (onDamageResolved != null) onDamageResolved.run();
+                Consumer<Boolean> onFatalCheckComplete = (wasSaved) -> {
+                    if (!wasSaved) {
+                        setHealth(potentialHealth, attacker);
+                    }
+                    if (onDamageResolved != null) onDamageResolved.run();
+                };
+
+                processFatalReactions(attacker, incomingSkill, onFatalCheckComplete);
+
+            } else {
+                setHealth(potentialHealth, attacker);
+                if (onDamageResolved != null) onDamageResolved.run();
+            }
         };
 
-        processDamageReactions(attacker, incomingSkill, rawDamage, afterReactions);
+        processDamageReactions(attacker, incomingSkill, rawDamage, afterReactionsCallback);
     }
 
-    protected boolean processFatalReactions(Character attacker, Skill incomingSkill) {
-        for (ReactionSkill reaction : reactions) {
-            if (reaction.trigger() == ReactionTrigger.ON_FATAL_DAMAGE) {
-                // use a dummy consumer because this path is sync
-                final int[] result = {-1};
-                reaction.logic().tryReact(this, attacker, incomingSkill, 0, res -> result[0] = res);
-                if (result[0] != -1) return true;
-            }
-        }
-        return false;
+    protected void processFatalReactions(Character attacker, Skill incomingSkill, Consumer<Boolean> onComplete) {
+        List<ReactionSkill> queue = this.reactions.stream()
+                .filter(r -> r.trigger() == ReactionTrigger.ON_FATAL_DAMAGE)
+                .collect(Collectors.toList());
+        processFatalReactionQueue(queue, attacker, incomingSkill, onComplete);
     }
 
-
-    private void processReactionQueue(List<ReactionSkill> queue, int currentDamage, Character attacker, Skill skill, Consumer<Integer> onChainComplete) {
-        if (queue.isEmpty() || currentDamage <= 0) {
-            onChainComplete.accept(currentDamage);
+    /**
+     * Asynchronously checks a queue of ON_FATAL_DAMAGE reactions.
+     * @param onChainComplete Callback that receives 'true' if saved, 'false' otherwise.
+     */
+    private void processFatalReactionQueue(List<ReactionSkill> queue, Character attacker, Skill skill, Consumer<Boolean> onChainComplete) {
+        if (queue.isEmpty()) {
+            onChainComplete.accept(false); // No more reactions, character was not saved.
             return;
         }
 
-        // get next reaction
         ReactionSkill currentReaction = queue.remove(0);
 
-        Consumer<Integer> onReactionFinished = (newDamage) -> {
-            processReactionQueue(queue, newDamage, attacker, skill, onChainComplete);
+        Consumer<ReactionResult> onThisReactionFinished = (result) -> {
+            if (result.wasTriggered()) {
+                onChainComplete.accept(true);
+            } else {
+                processFatalReactionQueue(queue, attacker, skill, onChainComplete);
+            }
+        };
+        // Pass 0 as damage context, the 'wasTriggered' flag is what matters.
+        currentReaction.logic().tryReact(this, attacker, skill, 0, onThisReactionFinished);
+    }
+
+    /**
+     * The recursive engine for processing a chain of potentially animated reactions.
+     */
+    private void processReactionQueue(List<ReactionSkill> queue, int currentDamage,
+                                      Character attacker, Skill skill,
+                                      Consumer<ReactionResult> onChainComplete) {
+
+        if (queue.isEmpty()) {
+            onChainComplete.accept(ReactionResult.FAILED(currentDamage)); // Pass final value up
+            return;
+        }
+
+        ReactionSkill currentReaction = queue.remove(0);
+
+        Consumer<ReactionResult> onThisReactionFinished = (result) -> {
+
+            if (result.wasTriggered() && result.isFinal()) {
+                onChainComplete.accept(result);
+            }
+            else {
+                processReactionQueue(queue, result.newDamageValue(), attacker, skill, onChainComplete);
+            }
         };
 
-        currentReaction.logic().tryReact(this, attacker, skill, currentDamage, onReactionFinished);
+        currentReaction.logic().tryReact(this, attacker, skill, currentDamage, onThisReactionFinished);
     }
 
     /**
@@ -133,21 +169,15 @@ public abstract class Character {
         for (ReactionSkill reaction : reactions) {
             if (reaction.trigger() == trigger) {
 
-                // Use a wrapper to capture the result from the lambda
-                final int[] syncResult = { -1 };
+                final ReactionResult[] syncResult = {null};
 
-                // The lambda here runs immediately if the reaction has no animation
                 reaction.logic().tryReact(this, source, skill, currentValue, res -> syncResult[0] = res);
 
-                // IMPORTANT: This only works if your Heal/Mana reactions are INSTANT
-                // (i.e., they call onComplete.accept() immediately).
-
-                // Only update if the reaction was successful (did not return -1)
-                if (syncResult[0] != -1) {
-                    currentValue = syncResult[0];
-
-                    // Optional: If value is 0, we can stop checking
-                    if (currentValue <= 0) return 0;
+                if (syncResult[0] != null && syncResult[0].wasTriggered()) {
+                    currentValue = syncResult[0].newDamageValue();
+                    if (currentValue <= 0 || syncResult[0].isFinal()) {
+                        return currentValue;
+                    }
                 }
             }
         }

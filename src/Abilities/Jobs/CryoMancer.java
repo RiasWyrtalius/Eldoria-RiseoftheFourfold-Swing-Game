@@ -60,12 +60,12 @@ public class CryoMancer extends JobClass {
                 LogManager.log(defender.getName() + " Attacks them back", LogFormat.ENEMY_ACTION);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("ICE_SPIKE", attacker, () -> {
                     attacker.receiveDamage(counterDamage, defender, null, () -> {
-                        onComplete.accept(0);
+                        onComplete.accept(new ReactionResult(true, 0, true));
                     });
                 }, true);
             } else {
                 // hehe it failed
-                onComplete.accept(incomingDamage);
+                onComplete.accept(ReactionResult.FAILED(incomingDamage));
             }
         };
 

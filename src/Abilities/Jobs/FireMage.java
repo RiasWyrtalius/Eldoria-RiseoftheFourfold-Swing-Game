@@ -59,11 +59,11 @@ public class FireMage extends JobClass {
                 LogManager.log(defender.getName() + " Attacks them back", LogFormat.ENEMY_ACTION);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", attacker, () ->{
                     attacker.receiveDamage(calculateDamage, defender, incomingSkill, () -> {
-                        onComplete.accept(0);
+                        onComplete.accept(new ReactionResult(true, 0, true));
                     });
                 }, true);
             } else {
-                onComplete.accept(incomingDamage);
+                onComplete.accept(ReactionResult.FAILED(incomingDamage));
             }
         };
 
