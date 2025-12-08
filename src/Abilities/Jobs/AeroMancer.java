@@ -58,7 +58,7 @@ public class AeroMancer extends JobClass {
     public List<ReactionSkill> createReactions() {
         ReactionLogic reflectWindPierceLogic = (defender, attacker, incomingSkill, incomingDamage, onComplete) -> {
             double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
-            int calculateDmg = ScalingLogic.calculateMagicalDamage(defender,20,15,1.2);
+            int calculateDmg = ScalingLogic.calculateMagicalDamage(defender,20,2.0,0.03);
             int calculateDamage = (int)(calculateDmg * 0.4);
             if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
                 LogManager.log(defender.getName() + " Attacks them back", LogFormat.ENEMY_ACTION);
@@ -79,7 +79,7 @@ public class AeroMancer extends JobClass {
     @Override
     public List<Skill> createSkills() {
         SkillLogicConsumer windTornadoLogic = (controller, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateMagicalDamage(user, 30, (int) 18.5, 1.2);
+            int calculateDamage = ScalingLogic.calculateMagicalDamage(user, 25, 1.8, 0.03);
 
             LogManager.log(self.getActionLog(user, "summons a tornado against", targets), LogFormat.HERO_ACTION);
 
@@ -93,7 +93,7 @@ public class AeroMancer extends JobClass {
         };
 
         SkillLogicConsumer windSlashLogic = (controller, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateMagicalDamage(user, 20, (int)18.5, 1.2);
+            int calculateDamage = ScalingLogic.calculateMagicalDamage(user, 30, 2.5, 0.04);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, "slashes at", targets), LogFormat.HERO_ACTION);
 
@@ -107,7 +107,7 @@ public class AeroMancer extends JobClass {
 
 
         SkillLogicConsumer windPierceLogic = (controller, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateMagicalDamage(user, 20,15, 1.2);
+            int calculateDamage = ScalingLogic.calculateMagicalDamage(user, 20,2.0, 0.03);
 
             LogManager.log(self.getActionLog(user, "pierces", targets), LogFormat.HERO_ACTION);
 

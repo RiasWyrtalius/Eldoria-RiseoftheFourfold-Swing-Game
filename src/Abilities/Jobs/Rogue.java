@@ -86,7 +86,7 @@ public class Rogue extends JobClass{
         public List<Skill> createSkills() {
             // FIXME: turn doesn't end when animation is finished
             SkillLogicConsumer assassinateLogic = (_,self, user, targets, onSkillComplete) -> {
-                int calculateDamage = ScalingLogic.calculateDamage(user,10,40,1.3,0.05);
+                int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,20,2.5,0.03);
                 Characters.Character target = targets.getFirst();
                 LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
 
@@ -100,7 +100,7 @@ public class Rogue extends JobClass{
             };
 
             SkillLogicConsumer cloneAttackLogic = (controller, self, user, targets, onSkillComplete) -> {
-                int calculateDamage = ScalingLogic.calculateDamage(user,10,30,1.2,0.05);
+                int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,15,1.5,0.02);
                 LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
 
                 VisualEffectsManager.getInstance().hideCharacterVisual(user);

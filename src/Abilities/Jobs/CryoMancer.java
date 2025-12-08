@@ -53,7 +53,7 @@ public class CryoMancer extends JobClass {
     public List<ReactionSkill> createReactions() {
         ReactionLogic reflectIceSpikeLogic = (defender, attacker, incomingSkill, incomingDamage, onComplete) -> {
             double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
-            int calculateDmg = ScalingLogic.calculateMagicalDamage(defender,30,15,1.2);
+            int calculateDmg = ScalingLogic.calculateMagicalDamage(defender,30,2.5,0.04);
             // TODO: should prolly scale on targets defense
             int counterDamage = (int)(calculateDmg * 0.4);
             if (hp_percent < 0.40 && Dice.getInstance().chance(0.25)) {
@@ -77,7 +77,7 @@ public class CryoMancer extends JobClass {
     public List<Skill> createSkills() {
 
         SkillLogicConsumer iceSpikeLogic = (_, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateMagicalDamage(user, 30, 15, 1.2);
+            int calculateDamage = ScalingLogic.calculateMagicalDamage(user, 35, 2.5, 0.05);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, "summons an Ice Spike under", targets), LogFormat.HERO_ACTION);
 
@@ -87,7 +87,7 @@ public class CryoMancer extends JobClass {
         };
 
         SkillLogicConsumer frostBiteLogic = (_, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateMagicalDamage(user,15,15,1.2);
+            int calculateDamage = ScalingLogic.calculateMagicalDamage(user,15,1.5,0.3);
             Character target = targets.get(0);
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);

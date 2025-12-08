@@ -59,7 +59,7 @@ public class EarthMage extends JobClass {
     public List<ReactionSkill> createReactions() {
         ReactionLogic reflectStoneHailLogic = (defender, attacker, incomingSkill, incomingDamage, onComplete) -> {
             double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
-            int calculateDmg = ScalingLogic.calculateMagicalDamage(defender,20,10,1.2);
+            int calculateDmg = ScalingLogic.calculateMagicalDamage(defender,20,2.0,0.03);
             int calculateDamage = (int)(calculateDmg * 0.4);
             if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
                 LogManager.log(defender.getName() + " Attacks them back", LogFormat.ENEMY_ACTION);
@@ -81,7 +81,7 @@ public class EarthMage extends JobClass {
     @Override
     public List<Skill> createSkills() {
         SkillLogicConsumer earthAttackLogic = (controller, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateMagicalDamage(user, 50, 28, 1.2);
+            int calculateDamage = ScalingLogic.calculateMagicalDamage(user, 30, 2.0, 0.04);
 
             LogManager.log(self.getActionLog(user, "unleashes the earth's fury upon", targets), LogFormat.HERO_ACTION);
 
@@ -97,7 +97,7 @@ public class EarthMage extends JobClass {
         };
 
         SkillLogicConsumer earthquakeSpellLogic = (controller, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateMagicalDamage(user,55,(int)23.5,1.2);
+            int calculateDamage = ScalingLogic.calculateMagicalDamage(user,25,1.8,0.03);
             LogManager.log(self.getActionLog(user, "Shakes the earth", targets), LogFormat.HERO_ACTION);
             Runnable afterAllAnimations = () -> {
                 controller.applyGroupDamage(user, self, targets, calculateDamage, onSkillComplete);
@@ -111,7 +111,7 @@ public class EarthMage extends JobClass {
         };
 
         SkillLogicConsumer stoneHailLogic = (_, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateMagicalDamage(user,20,10,1.2);
+            int calculateDamage = ScalingLogic.calculateMagicalDamage(user,20,1.5,0.03);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, "Multitudes of earth crumbles down", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("STONE_HAIL", target, () -> {

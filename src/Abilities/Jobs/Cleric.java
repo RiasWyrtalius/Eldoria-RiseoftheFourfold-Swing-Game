@@ -48,7 +48,7 @@ public class Cleric extends JobClass {
     public List<Skill> createSkills() {
         SkillLogicConsumer healSelfLogic = (_, self, user, targets, onSkillComplete) -> {
             LogManager.log(self.getActionLog(user, "heals", targets), LogFormat.HERO_ACTION);
-            int heal = ScalingLogic.calculateStat(user.getLevel(), 30, 10, 0.1);
+            int heal = ScalingLogic.calculateStat(user.getLevel(), 35, 50, 0.05);
 
             VisualEffectsManager.getInstance().playAnimation("CLERIC_HEAL", user, () -> {
                 // This runs AFTER the heal animation
@@ -63,7 +63,7 @@ public class Cleric extends JobClass {
 
         SkillLogicConsumer healGroupLogic = (_, self, user, targets, onSkillComplete) -> {
             LogManager.log(self.getActionLog(user, "heals", targets), LogFormat.HERO_ACTION);
-            int heal = ScalingLogic.calculateStat(user.getLevel(), 20, 10, 0.1);
+            int heal = ScalingLogic.calculateStat(user.getLevel(), 20, 10, 0.03);
 
             // isn't there a helper function i made to replace this
             Runnable afterAllAnims = () -> {
@@ -100,7 +100,7 @@ public class Cleric extends JobClass {
 
         SkillLogicConsumer bashLogic = (_, self, user, targets, onSkillComplete) -> {
             Character target = targets.getFirst();
-            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user, 10, user.getBaseAtk(), 0.02);
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user, 15, 1.0, 0.02);
 
             LogManager.log(self.getActionLog(user, "bashes", targets), LogFormat.HERO_ACTION);
 

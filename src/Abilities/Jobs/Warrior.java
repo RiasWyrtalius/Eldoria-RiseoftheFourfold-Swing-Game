@@ -68,7 +68,7 @@ public class Warrior extends JobClass {
     @Override
     public List<Skill> createSkills() {
         SkillLogicConsumer shieldBashLogic = (_, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,20,10,1.2);
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,20,1.5,0.03);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, " Bashes Shield on ", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
@@ -81,7 +81,7 @@ public class Warrior extends JobClass {
         };
 
         SkillLogicConsumer swordSlashLogic = (_, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,30,15,1.2);
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,35,2.5,0.05);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, " Slashes on ", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
