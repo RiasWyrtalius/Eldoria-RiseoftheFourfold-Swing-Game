@@ -17,7 +17,7 @@ import java.util.List;
 public class Cleric extends JobClass {
 
     public static final String description = "A devoted healer and protector, the Cleric channels divine energy to restore allies and banish darkness. Her blessings strengthen companions, while her radiant light wards off evil. Compassionate yet formidable, she is the heart of the party.";
-    private static final String IDLE_PATH = "Assets/Animations/Heroes/Cleric/Idle/sprite_%d.png";
+    private static final String IDLE_PATH = "/Assets/Animations/Heroes/Cleric/Idle/sprite_%d.png";
 
     public Cleric() {
         super("Cleric", description, "CLERIC_IDLE", 20, 40);
@@ -27,13 +27,13 @@ public class Cleric extends JobClass {
     public void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "CLERIC_IDLE",
-                "Assets/Animations/Heroes/Cleric/Idle/sprite_%d.png",
+                "/Assets/Animations/Heroes/Cleric/Idle/sprite_%d.png",
                 3, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
         AssetManager.getInstance().registerAnimation(
                 "CLERIC_HEAL",
-                "Assets/Animations/Heroes/Cleric/Effects/Heal/sprite_%d.png",
+                "/Assets/Animations/Heroes/Cleric/Effects/Heal/sprite_%d.png",
                 4, 100, 100 , 200,
                 AnimationLoopType.ONE_CYCLE
         );

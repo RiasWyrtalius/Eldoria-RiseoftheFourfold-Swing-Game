@@ -46,20 +46,32 @@ public class AssetManager {
         ImageIcon scaledIcon = null;
 
         try {
-//            load original icon
-            ImageIcon originalIcon = new ImageIcon(key);
+            java.net.URL imgUrl = getClass().getResource(key);
 
-            if (originalIcon.getIconWidth() == -1) {
-                throw new RuntimeException("Image file not found or corrupted: " + key);
+            if (imgUrl == null && !key.startsWith("/")) {
+                imgUrl = getClass().getResource("/" + key);
             }
 
-//            scale
+            if (imgUrl == null) {
+                throw new RuntimeException("Image resource not found in classpath: " + key);
+            }
+
+            ImageIcon originalIcon = new ImageIcon(imgUrl);
+
+            if (originalIcon.getIconWidth() == -1) {
+                throw new RuntimeException("Image file corrupted or invalid: " + key);
+            }
+
+            // scale
             Image img = originalIcon.getImage();
             Image scaledImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
             scaledIcon = new ImageIcon(scaledImg);
             imageCache.put(cachedKey, scaledIcon);
             LogManager.log("AssetManager: retrieving cached " + cachedKey, LogFormat.SYSTEM);
+
         } catch (Exception e) {
+            // This will print the error and generate the Red "X" box
+            System.err.println("Failed to load: " + key); // Print to console so you can see why
             LogManager.log("AssetManager ERROR: Failed to load/scale image '" + key + "'. Using fallback Icon", LogFormat.SYSTEM);
             scaledIcon = createFallbackIcon(width, height);
             imageCache.put(cachedKey, scaledIcon);

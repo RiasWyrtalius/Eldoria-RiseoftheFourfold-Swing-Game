@@ -18,7 +18,7 @@ import java.util.List;
 public class Paladin extends JobClass {
 
     public static final String description = "A beacon of righteousness clad in radiant armor, the Paladin is both protector and purifier. Guided by unwavering faith, he channels divine power to heal allies and smite evil. With a shield in hand and conviction in heart, he stands firm against darkness, inspiring hope and courage in all who fight beside him.";
-    private static final String IDLE_PATH = "Assets/Animations/Heroes/Paladin/Idle/sprite_%d.png";
+    private static final String IDLE_PATH = "/Assets/Animations/Heroes/Paladin/Idle/sprite_%d.png";
     private static boolean hasRevived = false;
 
     public Paladin() {
@@ -35,13 +35,13 @@ public class Paladin extends JobClass {
         );
         AssetManager.getInstance().registerAnimation(
                 "PALADIN_REVIVE",
-                "Assets/Animations/Heroes/Paladin/Effects/Revive/sprite_%d.png",
+                "/Assets/Animations/Heroes/Paladin/Effects/Revive/sprite_%d.png",
                 9, 100, 100 , 500,
                 AnimationLoopType.ONE_CYCLE
         );
         AssetManager.getInstance().registerAnimation(
                 "PALADIN_HOLY-STRIKE",
-                "Assets/Animations/Heroes/Paladin/Effects/Holy_Strike/sprite_%d.png",
+                "/Assets/Animations/Heroes/Paladin/Effects/Holy_Strike/sprite_%d.png",
                 4, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );

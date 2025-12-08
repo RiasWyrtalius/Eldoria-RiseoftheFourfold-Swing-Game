@@ -9,14 +9,13 @@ import UI.Components.FantasyDialogPanel;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class StoryView extends JPanel {
@@ -37,8 +36,11 @@ public class StoryView extends JPanel {
     private boolean isSequenceFinished = false;
 
     private static final Color TEXT_COLOR = new Color(245, 240, 220);
+    private static final String FONT_PATH = "/Assets/Fonts/vecna.ttf";
 
     public StoryView() {
+        createUIComponents();
+
         this.setLayout(new BorderLayout());
         this.setBackground(Color.BLACK);
 
@@ -52,14 +54,9 @@ public class StoryView extends JPanel {
 
         textContainer = new FantasyDialogPanel();
         textContainer.setLayout(new BorderLayout());
-
         textContainer.setBorder(new EmptyBorder(35, 60, 35, 60));
-
-
         textContainer.setPreferredSize(new Dimension(1280, 220));
-
         textContainer.add(contentPane, BorderLayout.CENTER);
-
 
         backgroundPanel.add(textContainer, BorderLayout.SOUTH);
 
@@ -67,23 +64,7 @@ public class StoryView extends JPanel {
         narrationStyle = new SimpleAttributeSet();
         StyleConstants.setForeground(narrationStyle, TEXT_COLOR);
 
-
-        int fontSize = 36; // base size
-        try {
-            File fontFile = new File("Assets/Fonts/Vecna.ttf");
-            if (fontFile.exists()) {
-                Font vecna = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont((float)fontSize);
-                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-                ge.registerFont(vecna);
-                StyleConstants.setFontFamily(narrationStyle, vecna.getFamily());
-                StyleConstants.setFontSize(narrationStyle, fontSize);
-            }
-        } catch(IOException | FontFormatException FFE) {
-            StyleConstants.setFontFamily(narrationStyle, "Georgia");
-            StyleConstants.setFontSize(narrationStyle, 26);
-            StyleConstants.setItalic(narrationStyle, true);
-            StyleConstants.setAlignment(narrationStyle, StyleConstants.ALIGN_CENTER);
-        }
+        loadCustomFont();
 
         typeTimer = new Timer(30, e -> updateTypewriter());
 
@@ -94,6 +75,35 @@ public class StoryView extends JPanel {
             }
         });
     }
+
+    private void loadCustomFont() {
+        int fontSize = 36;
+        try (InputStream is = getClass().getResourceAsStream(FONT_PATH)) {
+            if (is == null) {
+                throw new IOException("InputStream is null. Check path: " + FONT_PATH);
+            }
+            Font baseFont = Font.createFont(Font.TRUETYPE_FONT, is);
+            Font vecna = baseFont.deriveFont((float) fontSize);
+
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            boolean registered = ge.registerFont(vecna);
+
+            System.out.println("Font Loaded: " + vecna.getFontName());
+            System.out.println("Registration Successful: " + registered);
+
+            StyleConstants.setFontFamily(narrationStyle, vecna.getFamily());
+            StyleConstants.setFontSize(narrationStyle, fontSize);
+
+        } catch (IOException | FontFormatException e) {
+            System.err.println("CRITICAL ERROR LOADING FONT at: " + FONT_PATH);
+            e.printStackTrace();
+
+            // Fallback
+            StyleConstants.setFontFamily(narrationStyle, "SansSerif");
+            StyleConstants.setFontSize(narrationStyle, 26);
+        }
+    }
+
 
     private void createUIComponents() {
         this.backgroundPanel = new BackgroundPanel();
@@ -115,7 +125,7 @@ public class StoryView extends JPanel {
         if (currentSlideIndex >= sequence.size()) return;
         StorySlide slide = sequence.get(currentSlideIndex);
         ((BackgroundPanel)backgroundPanel).setBackgroundImage(slide.imageKey());
-        System.out.println("REQUIRED IMAGE SIZE: " + getWidth() + "x" + getHeight());
+//        System.out.println("REQUIRED IMAGE SIZE: " + getWidth() + "x" + getHeight());
         if (slide.onStart() != null) {
             try { slide.onStart().run(); }
             catch (Exception e) { LogManager.log(e.getMessage(), LogFormat.DEBUG_INFO); }

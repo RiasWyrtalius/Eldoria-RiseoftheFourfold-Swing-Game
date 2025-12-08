@@ -20,7 +20,7 @@ import java.util.List;
 public class EarthMage extends JobClass {
 
     public static final String description = "A stalwart spellcaster who channels the raw power of stone and soil. The Mage Earth conjures barriers, summons tremors, and hardens allies’ defenses. Steadfast and immovable, she is the embodiment of endurance and stability.";
-    public static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Earth/Idle/sprite_%d.png";
+    public static final String IDLE_PATH = "/Assets/Animations/Heroes/Mage-Earth/Idle/sprite_%d.png";
 
     public EarthMage(){
         super("EarthMage", description,"MAGE_EARTH-IDLE",0,30);
@@ -30,26 +30,26 @@ public class EarthMage extends JobClass {
     public void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "MAGE_EARTH-IDLE",
-                "Assets/Animations/Heroes/Mage-Earth/Idle/sprite_%d.png",
+                "/Assets/Animations/Heroes/Mage-Earth/Idle/sprite_%d.png",
                 3, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
 
         AssetManager.getInstance().registerAnimation(
                 "EARTH_ATTACK",
-                "Assets/Animations/Heroes/Mage-Earth/Effects/Earth_Attack/sprite_%d.png",
+                "/Assets/Animations/Heroes/Mage-Earth/Effects/Earth_Attack/sprite_%d.png",
                 8, 100, 100 , 200,
                 AnimationLoopType.ONE_CYCLE
         );
         AssetManager.getInstance().registerAnimation(
                 "EARTHQUAKE",
-                "Assets/Animations/Heroes/Mage-Earth/Effects/Earthquake/sprite_%d.png",
+                "/Assets/Animations/Heroes/Mage-Earth/Effects/Earthquake/sprite_%d.png",
                 13, 100, 100 , 100,
                 AnimationLoopType.TWO_CYCLES
         );
         AssetManager.getInstance().registerAnimation(
                 "STONE_HAIL",
-                "Assets/Animations/Heroes/Mage-Earth/Effects/Stone_Hail/sprite_%d.png",
+                "/Assets/Animations/Heroes/Mage-Earth/Effects/Stone_Hail/sprite_%d.png",
                 7, 100, 100 , 100,
                 AnimationLoopType.TWO_CYCLES
         );

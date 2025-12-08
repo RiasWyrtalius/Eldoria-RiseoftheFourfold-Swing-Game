@@ -19,7 +19,7 @@ import java.util.List;
 
 public class AeroMancer extends JobClass {
     private static final String description = "Master of the skies, the AeroMancer bends the wind to her will. She summons gales to scatter enemies, rides currents to evade danger, and unleashes razor-sharp blasts of air. Her magic is swift, elusive, and devastating.";
-    private static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Wind/Idle/sprite_%d.png";
+    private static final String IDLE_PATH = "/Assets/Animations/Heroes/Mage-Wind/Idle/sprite_%d.png";
 
     public AeroMancer(){
         super("AeroMancer", description,"MAGE_WIND-IDLE",0,30);
@@ -36,19 +36,19 @@ public class AeroMancer extends JobClass {
 
         AssetManager.getInstance().registerAnimation(
                 "WIND_TORNADO",
-                "Assets/Animations/Heroes/Mage-Wind/Effects/Wind_Tornado/sprite_%d.png",
+                "/Assets/Animations/Heroes/Mage-Wind/Effects/Wind_Tornado/sprite_%d.png",
                 11, 100, 100 , 200,
                 AnimationLoopType.TWO_CYCLES
         );
         AssetManager.getInstance().registerAnimation(
                 "WIND_PIERCE",
-                "Assets/Animations/Heroes/Mage-Wind/Effects/Wind_Pierce/sprite_%d.png",
+                "/Assets/Animations/Heroes/Mage-Wind/Effects/Wind_Pierce/sprite_%d.png",
                 4, 100, 100 , 200,
                 AnimationLoopType.TWO_CYCLES
         );
         AssetManager.getInstance().registerAnimation(
                 "WIND_SLASH",
-                "Assets/Animations/Heroes/Mage-Wind/Effects/Wind_Slash/sprite_%d.png",
+                "/Assets/Animations/Heroes/Mage-Wind/Effects/Wind_Slash/sprite_%d.png",
                 4, 100, 100 , 200,
                 AnimationLoopType.TWO_CYCLES
         );

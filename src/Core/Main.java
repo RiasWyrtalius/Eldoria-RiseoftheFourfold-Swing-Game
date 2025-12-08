@@ -1,7 +1,7 @@
-import Core.GameManager;
+package Core;
 
 /**
- * Main Entry point
+ * Core.Main Entry point
  */
 public class Main {
     public static void main(String[] args) {

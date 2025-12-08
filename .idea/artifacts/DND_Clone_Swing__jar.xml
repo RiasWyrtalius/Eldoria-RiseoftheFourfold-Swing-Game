@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DND_Clone_Swing_:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DND_Clone_Swing__jar</output-path>
+    <root id="archive" name="DND_Clone_Swing_.jar">
+      <element id="module-output" name="DND_Clone_Swing_" />
+    </root>
+  </artifact>
+</component>

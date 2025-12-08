@@ -18,7 +18,7 @@ import java.util.List;
 public class Rogue extends JobClass{
         //TODO: add to Class: CharacterSelection, IDLE_PATH, DESC, WAITING ON ANIMATIONS
         public static final String description = "A shadow in the night, the Rogue moves with silent precision and deadly intent. Master of stealth and deception, she strikes from the shadows before vanishing without a trace. Agile and cunning, she excels at disabling traps, picking locks, and exploiting enemy weaknesses. Her loyalty lies with the mission—and her own code.";
-        private static final String IDLE_PATH = "Assets/Animations/Heroes/Rogue/Idle/sprite_%d.png";
+        private static final String IDLE_PATH = "/Assets/Animations/Heroes/Rogue/Idle/sprite_%d.png";
         public Rogue() {
             super("Rogue", description, "ROGUE_IDLE", 0, 30);
         }
@@ -33,13 +33,13 @@ public class Rogue extends JobClass{
             );
             AssetManager.getInstance().registerAnimation(
                     "ROGUE_ATTACK",
-                    "Assets/Animations/Heroes/Rogue/Effects/Attack/sprite_%d.png",
+                    "/Assets/Animations/Heroes/Rogue/Effects/Attack/sprite_%d.png",
                     6, 100, 100 , 200,
                     AnimationLoopType.ONE_CYCLE
             );
             AssetManager.getInstance().registerAnimation(
                     "ROGUE_DODGE",
-                    "Assets/Animations/Heroes/Rogue/Effects/Dodge/sprite_%d.png",
+                    "/Assets/Animations/Heroes/Rogue/Effects/Dodge/sprite_%d.png",
                     6, 100, 100 , 200,
                     AnimationLoopType.ONE_CYCLE
             );

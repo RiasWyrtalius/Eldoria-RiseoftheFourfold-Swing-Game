@@ -20,7 +20,7 @@ import java.util.List;
 public class Archer extends JobClass {
 
     private static final String description = "Agile and precise, the Archer strikes from afar with deadly accuracy. Her keen eyesight and swift reflexes allow her to rain arrows upon foes before they can close the distance. She embodies speed, cunning, and tactical finesse.";
-    private static final String IDLE_PATH = "Assets/Animations/Heroes/Archer/Idle/sprite_%d.png";
+    private static final String IDLE_PATH = "/Assets/Animations/Heroes/Archer/Idle/sprite_%d.png";
 
     public Archer(){
         super("Archer", description, "ARCHER_IDLE",0,30);
@@ -30,31 +30,31 @@ public class Archer extends JobClass {
     public void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "ARCHER_IDLE",
-                "Assets/Animations/Heroes/Archer/Idle/sprite_%d.png",
+                "/Assets/Animations/Heroes/Archer/Idle/sprite_%d.png",
                 3, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
         AssetManager.getInstance().registerAnimation(
                 "ARCHER_DODGE",
-                "Assets/Animations/Heroes/Archer/Effects/Dodge/sprite_%d.png",
+                "/Assets/Animations/Heroes/Archer/Effects/Dodge/sprite_%d.png",
                 5, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );
         AssetManager.getInstance().registerAnimation(
                 "ARCHER_SHOOT_ARROW",
-                "Assets/Animations/Heroes/Archer/Effects/Shoot_Arrow/sprite_%d.png",
+                "/Assets/Animations/Heroes/Archer/Effects/Shoot_Arrow/sprite_%d.png",
                 5, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );
         AssetManager.getInstance().registerAnimation(
                 "ARCHER_SHOOT_ARROW-Rapid",
-                "Assets/Animations/Heroes/Archer/Effects/Shoot_Arrow/sprite_%d.png",
+                "/Assets/Animations/Heroes/Archer/Effects/Shoot_Arrow/sprite_%d.png",
                 5, 100, 100 , 70,
                 AnimationLoopType.TWO_CYCLES
         );
         AssetManager.getInstance().registerAnimation(
                 "ARCHER_DEATH",
-                "Assets/Animations/Heroes/Archer/Death/sprite_%d.png",
+                "/Assets/Animations/Heroes/Archer/Death/sprite_%d.png",
                 1, 100, 100 , 500,
                 AnimationLoopType.INFINITE
         );

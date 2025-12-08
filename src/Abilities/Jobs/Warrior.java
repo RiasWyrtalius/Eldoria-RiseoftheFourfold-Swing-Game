@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.LongAccumulator;
 public class Warrior extends JobClass {
 
     public static final String description = "A battle-hardened fighter clad in steel, the Warrior thrives on the frontlines. With unmatched strength and resilience, he shields allies from harm while delivering crushing blows to enemies. His loyalty and courage make him the backbone of any party.";
-    public static final String IDLE_PATH = "Assets/Animations/Heroes/Warrior/Idle/sprite_%d.png";
+    public static final String IDLE_PATH = "/Assets/Animations/Heroes/Warrior/Idle/sprite_%d.png";
 
     public Warrior() {
         super("Warrior", description, "WARRIOR_IDLE", 50, 0);
@@ -35,13 +35,13 @@ public class Warrior extends JobClass {
         );
         AssetManager.getInstance().registerAnimation(
                 "WARRIOR_SWORD-SLASH",
-                "Assets/Animations/Heroes/Warrior/Effects/Sword_Slash/sprite_%d.png",
+                "/Assets/Animations/Heroes/Warrior/Effects/Sword_Slash/sprite_%d.png",
                 4, 100, 100 , 150,
                 AnimationLoopType.ONE_CYCLE
         );
         AssetManager.getInstance().registerAnimation(
                 "WARRIOR_SHIELD-BASH",
-                "Assets/Animations/Heroes/Warrior/Effects/Shield_Bash/sprite_%d.png",
+                "/Assets/Animations/Heroes/Warrior/Effects/Shield_Bash/sprite_%d.png",
                 3, 100, 100 , 300,
                 AnimationLoopType.ONE_CYCLE
         );

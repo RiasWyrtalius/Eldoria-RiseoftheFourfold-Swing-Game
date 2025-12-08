@@ -472,7 +472,7 @@ public class BattleInterface extends JPanel {
         JLayeredPane layeredPane = root.getLayeredPane();
 
         VictoryPanel victoryOverlay = new VictoryPanel(e -> {
-            // TODO: Add logic here to load the Main Menu
+            // TODO: Add logic here to load the Core.Main Menu
             System.out.println("Returning to title...");
             System.exit(0);
         });

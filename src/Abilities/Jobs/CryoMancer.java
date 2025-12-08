@@ -20,7 +20,7 @@ import java.util.List;
 public class CryoMancer extends JobClass {
 
     public static final String description = "Cold and calculating, the CryoMancer freezes enemies in their tracks. She conjures blizzards, sharp ice shards, and chilling prisons to sap the strength of her foes. Her frosty power brings control and precision to the battlefield.";
-    private static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png";
+    private static final String IDLE_PATH = "/Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png";
 
     public CryoMancer(){
         super("CryoMancer", description, "MAGE_ICE-IDLE",0,30);
@@ -30,7 +30,7 @@ public class CryoMancer extends JobClass {
     public void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "MAGE_ICE-IDLE",
-                "Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png",
+                "/Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png",
                 3, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );

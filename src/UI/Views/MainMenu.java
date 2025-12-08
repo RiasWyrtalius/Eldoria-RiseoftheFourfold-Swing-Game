@@ -13,6 +13,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 public class MainMenu extends JPanel {
     private final GameManager manager;
@@ -28,6 +30,11 @@ public class MainMenu extends JPanel {
 
     private final Color INACTIVE_STATE = new Color(169, 169, 169);
     private final Color ACTIVE_STATE = new Color(211, 211, 211);
+    private final Color GOLD_COLOR = new Color(255, 215, 0);
+
+    // Constant Paths
+    private static final String FONT_PATH = "/Assets/Fonts/vecna.ttf";
+    private static final String BG_IMAGE_PATH = "/Assets/Images/MainMenu/Elordia_BG.png";
 
     public MainMenu(GameManager manager) {
         this.manager = manager;
@@ -38,51 +45,41 @@ public class MainMenu extends JPanel {
         }
 
         AudioManager audio = AudioManager.getInstance();
-        audio.registerSound("MAIN-THEME", "Assets/Audio/SFX/MainUI/mainMenu_bgm.wav");
-        audio.registerSound("BUTTON_HOVER", "Assets/Audio/SFX/MainUI/button_hover.wav");
-        audio.registerSound("BUTTON_SELECT", "Assets/Audio/SFX/MainUI/button_select.wav");
+        audio.registerSound("MAIN-THEME", "/Assets/Audio/SFX/MainUI/mainMenu_bgm.wav");
+        audio.registerSound("BUTTON_HOVER", "/Assets/Audio/SFX/MainUI/button_hover.wav");
+        audio.registerSound("BUTTON_SELECT", "/Assets/Audio/SFX/MainUI/button_select.wav");
         audio.playMusic("MAIN-THEME");
 
-        try {
-            File fontFile = new File("Assets/Fonts/Vecna.ttf");
-            if (fontFile.exists()) {
-                Font fontBase = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+        try (InputStream is = getClass().getResourceAsStream(FONT_PATH)) {
+            if (is != null) {
+                Font fontBase = Font.createFont(Font.TRUETYPE_FONT, is);
+
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                ge.registerFont(fontBase);
 
                 Font buttonFont = fontBase.deriveFont(50f);
-
                 addHoverEffect(startButton, buttonFont);
                 addHoverEffect(continueButton, buttonFont);
                 addHoverEffect(exitButton, buttonFont);
+
+                if (titleLabel != null) {
+                    titleLabel.setFont(fontBase.deriveFont(96f));
+                    titleLabel.setForeground(GOLD_COLOR);
+                }
+
+                System.out.println("Font loaded successfully via Stream!");
+            } else {
+                System.err.println("FONT ERROR: Could not find resource in Classpath: " + FONT_PATH);
             }
-        } catch (IOException | FontFormatException FFE) {
-            FFE.printStackTrace();
+        } catch (IOException | FontFormatException e) {
+            System.err.println("Error loading font: " + e.getMessage());
+            e.printStackTrace();
         }
 
         if (SaveManager.hasSaveFile()) {
             continueButton.setEnabled(true);
         } else {
             continueButton.setEnabled(false);
-        }
-
-        try {
-            File fontFile = new File("Assets/Fonts/Vecna.ttf");
-
-            if (fontFile.exists()) {
-                Font elordiaFont = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(96f);
-
-
-                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-                ge.registerFont(elordiaFont);
-
-                titleLabel.setFont(elordiaFont);
-                titleLabel.setForeground(new Color(255, 215, 0));
-
-                System.out.println("Font loaded successfully!");
-            } else {
-                System.err.println("Error: Font file not found at " + fontFile.getAbsolutePath());
-            }
-        } catch (IOException | FontFormatException e) {
-            System.err.println("Error loading font: " + e.getMessage());
         }
 
         contentPanel.setOpaque(true);
@@ -165,21 +162,26 @@ public class MainMenu extends JPanel {
     }
 
     private void createUIComponents() {
-        Image tempImage = null;
+        Image bgImage = null;
         try {
-            tempImage = ImageIO.read(new File("Assets/Images/MainMenu/Elordia_BG.png"));
+            URL imgUrl = getClass().getResource(BG_IMAGE_PATH);
+            if (imgUrl != null) {
+                bgImage = ImageIO.read(imgUrl);
+            } else {
+                System.err.println("IMAGE ERROR: Could not find background at " + BG_IMAGE_PATH);
+            }
         } catch (IOException e) {
             System.err.println("Could not load image: " + e.getMessage());
         }
 
-        Image bgImage = tempImage;
+        final Image finalBgImage = bgImage;
 
         contentPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                if (bgImage != null) {
-                    g.drawImage(bgImage, 0, 0, this.getWidth(), this.getHeight(), this);
+                if (finalBgImage != null) {
+                    g.drawImage(finalBgImage, 0, 0, this.getWidth(), this.getHeight(), this);
                 }
             }
         };

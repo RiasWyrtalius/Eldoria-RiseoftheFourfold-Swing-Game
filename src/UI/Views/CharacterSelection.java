@@ -273,11 +273,13 @@ public class CharacterSelection extends JPanel {
         SelectedCharacter.setOpaque(false);
         infoPanel.setPreferredSize(new Dimension(300, 550));
 
+        String bgPath = "/Assets/Images/Backgrounds/CSelection_BG-TEST.png";
+
         customizePanel(infoPanel, "Character Information", TitledBorder.LEFT);
         customizePanel(SelectedCharacter, "Selected Hero", TitledBorder.CENTER);
 
         CharacterPreview.setPreferredSize(new Dimension(500, 500));
-        ((BackgroundPanel) CharacterPreview).setBackgroundImage("Assets/Images/Backgrounds/CSelection_BG-TEST.png");
+        ((BackgroundPanel) CharacterPreview).setBackgroundImage(bgPath);
     }
 
     private void customizePanel(JPanel panel, String titleText, int alignment) {

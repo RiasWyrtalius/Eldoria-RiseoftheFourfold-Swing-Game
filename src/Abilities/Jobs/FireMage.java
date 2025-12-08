@@ -19,7 +19,7 @@ import java.util.List;
 public class FireMage extends JobClass {
 
     public static final String description = "Fierce and unpredictable, the Mage Fire wields flames with destructive passion. She incinerates her foes with fireballs, engulfs battlefields in blazing infernos, and thrives on chaos. Her magic is as dangerous as it is mesmerizing.";
-    public static final String IDLE_PATH = "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png";
+    public static final String IDLE_PATH = "/Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png";
 
     public FireMage() {
         super("FireMage", description, "MAGE_IDLE",0,30);
@@ -29,21 +29,21 @@ public class FireMage extends JobClass {
     public void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "MAGE_IDLE",
-                "Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png",
+                "/Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png",
                 3, 100, 100 , 300,
                 AnimationLoopType.INFINITE
         );
 
         AssetManager.getInstance().registerAnimation(
                 "FIREBALL",
-                "Assets/Animations/Heroes/Mage-Fire/Effects/FireBall/sprite_%d.png",
+                "/Assets/Animations/Heroes/Mage-Fire/Effects/FireBall/sprite_%d.png",
                 6, 100,100, 100,
                 AnimationLoopType.ONE_CYCLE
         );
 
         AssetManager.getInstance().registerAnimation(
                 "FIRE_CYCLONE",
-                "Assets/Animations/Heroes/Mage-Fire/Effects/FireCyclone/sprite_%d.png",
+                "/Assets/Animations/Heroes/Mage-Fire/Effects/FireCyclone/sprite_%d.png",
                 5, 100,100, 300,
                 AnimationLoopType.TWO_CYCLES
         );
