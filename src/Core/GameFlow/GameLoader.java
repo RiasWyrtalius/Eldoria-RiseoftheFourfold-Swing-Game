@@ -83,6 +83,8 @@ public class GameLoader {
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion(),
                         ItemFactory.smallManaPotion(),
+                        ItemFactory.mediumHealthPotion(),
+                        ItemFactory.mediumManaPotion(),
                         ItemFactory.splashHealthPotion(),
                         ItemFactory.splashHealthPotion(),
                         ItemFactory.splashManaPotion(),
@@ -101,6 +103,8 @@ public class GameLoader {
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion(),
                         ItemFactory.smallManaPotion(),
+                        ItemFactory.mediumHealthPotion(),
+                        ItemFactory.mediumManaPotion(),
                         ItemFactory.summoningScroll(),
                         ItemFactory.revivePotion()
                 )
@@ -116,6 +120,8 @@ public class GameLoader {
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion(),
                         ItemFactory.smallManaPotion(),
+                        ItemFactory.mediumHealthPotion(),
+                        ItemFactory.mediumManaPotion(),
                         ItemFactory.revivePotion()
                 )
         ));
@@ -130,6 +136,8 @@ public class GameLoader {
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion(),
                         ItemFactory.smallManaPotion(),
+                        ItemFactory.mediumHealthPotion(),
+                        ItemFactory.mediumManaPotion(),
                         ItemFactory.revivePotion()
                 )
         ));

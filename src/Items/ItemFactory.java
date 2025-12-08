@@ -17,71 +17,78 @@ public class ItemFactory {
     private static final Map<String, Item> itemRegistry = new HashMap<>();
 
     static {
+        // --- COMMON (10%) ---
         register(new ResourceItem(
                 "Small Health Potion",
-                "Restores 50 HP to a selected target",
+                "Restores 10% HP to a selected target",
                 null,
                 Rarity.COMMON,
-                50, 0,
+                true, false,
                 TargetType.SINGLE_TARGET
         ));
 
         register(new ResourceItem(
                 "Small Mana Potion",
-                "Restores 50 MP to a selected target",
+                "Restores 10% MP to a selected target",
                 null,
                 Rarity.COMMON,
-                0, 50,
+                false, true,
                 TargetType.SINGLE_TARGET
         ));
 
+        // --- UNCOMMON (25%) ---
         register(new ResourceItem(
                 "Splash Small Health Potion",
-                "Restores 30 HP to a selected targets",
+                "Restores 25% HP to selected targets",
                 null,
                 Rarity.UNCOMMON,
-                30, 0,
+                true, false,
                 TargetType.AOE_TWO_TARGETS
         ));
 
         register(new ResourceItem(
                 "Splash Small Mana Potion",
-                "Restores 10 MP to a selected targets",
+                "Restores 25% MP to selected targets",
                 null,
                 Rarity.UNCOMMON,
-                0, 10,
+                false, true,
                 TargetType.AOE_TWO_TARGETS
         ));
 
+        // --- RARE (40%) ---
         register(new ResourceItem(
                 "Medium Health Potion",
-                "Restores 80 HP to a selected target",
+                "Restores 40% HP to a selected target",
                 null,
                 Rarity.RARE,
-                80, 0,
+                true, false,
                 TargetType.SINGLE_TARGET
         ));
 
         register(new ResourceItem(
                 "Medium Mana Potion",
-                "Restores 80 MP to a selected target",
+                "Restores 40% MP to a selected target",
                 null,
                 Rarity.RARE,
-                0, 80,
+                false, true,
                 TargetType.SINGLE_TARGET
         ));
 
+        // --- UTILITY ITEMS ---
         register(new UtilityItem(
                 "Revive Potion",
-                "Revive and restore 20HP to a selected target",
+                "Revive and restore 20% HP to a selected target",
                 TargetType.SINGLE_TARGET,
                 TargetCondition.DEAD,
                 null,
                 Rarity.EPIC,
                 (item, user, targets, onItemComplete) -> {
-                    VisualEffectsManager.getInstance().reviveEffect(targets.getFirst());
-                    int hp = (int)(targets.getFirst().getMaxHealth() * .20);
-                    targets.getFirst().revive(hp, user);
+                    if (!targets.isEmpty()) {
+                        VisualEffectsManager.getInstance().reviveEffect(targets.getFirst());
+                        int hp = (int)(targets.getFirst().getMaxHealth() * .20);
+                        targets.getFirst().revive(hp, user);
+                    }
+                    if (onItemComplete != null) onItemComplete.run();
                 }
         ));
 
@@ -97,6 +104,9 @@ public class ItemFactory {
                         Party heroParty = GameManager.getInstance().getHeroParty();
                         heroParty.addPartyMember(selectedHero);
                         GameManager.getInstance().closeOverlay();
+
+                        // Signal item completion after selection is done
+                        if (onItemComplete != null) onItemComplete.run();
                     };
                     GameManager.getInstance().showCharacterSelectionScreen(CharacterSelectionMode.ADD_TO_EXISTING_PARTY, onCharacterPicked);
                 }
@@ -114,36 +124,12 @@ public class ItemFactory {
 
     // --- HELPER FUNCTIONS ---
 
-    public static Item smallHealthPotion() {
-        return itemRegistry.get("Small Health Potion");
-    }
-
-    public static Item smallManaPotion() {
-        return itemRegistry.get("Small Mana Potion");
-    }
-
-    public static Item splashHealthPotion() {
-        return itemRegistry.get("Splash Small Health Potion");
-    }
-
-    public static Item splashManaPotion() {
-        return itemRegistry.get("Splash Small Mana Potion");
-    }
-
-    public static Item mediumHealthPotion() {
-        return itemRegistry.get("Medium Health Potion");
-    }
-
-    public static Item mediumManaPotion() {
-        return itemRegistry.get("Medium Mana Potion");
-    }
-
-    public static Item revivePotion() {
-        return itemRegistry.get("Revive Potion");
-    }
-
-    public static Item summoningScroll() {
-        return itemRegistry.get("Summoning Scroll");
-    }
-
+    public static Item smallHealthPotion() { return itemRegistry.get("Small Health Potion"); }
+    public static Item smallManaPotion() { return itemRegistry.get("Small Mana Potion"); }
+    public static Item splashHealthPotion() { return itemRegistry.get("Splash Small Health Potion"); }
+    public static Item splashManaPotion() { return itemRegistry.get("Splash Small Mana Potion"); }
+    public static Item mediumHealthPotion() { return itemRegistry.get("Medium Health Potion"); }
+    public static Item mediumManaPotion() { return itemRegistry.get("Medium Mana Potion"); }
+    public static Item revivePotion() { return itemRegistry.get("Revive Potion"); }
+    public static Item summoningScroll() { return itemRegistry.get("Summoning Scroll"); }
 }

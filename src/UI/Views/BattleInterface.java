@@ -93,7 +93,7 @@ public class BattleInterface extends JPanel {
                 public void componentResized(java.awt.event.ComponentEvent e) {
                     int w = battlePanel.getWidth();
                     int h = battlePanel.getHeight();
-                    System.out.println("BATTLE BACKGROUND SIZE needed: " + w + " x " + h);
+                    //System.out.println("BATTLE BACKGROUND SIZE needed: " + w + " x " + h);
                 }
             });
         }
