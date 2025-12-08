@@ -46,22 +46,22 @@ public class GameLoader {
         preCutsceneFirstLevel.add(new StorySlide(
                 "Assets/Images/Backgrounds/eldoria_map.png",
                 List.of(
-                        "sample first level."
+                        "At the edge of the wilds, the first champion steps forward. Alone, yet bound by prophecy, the journey into corruption begins."
                 )
         ));
         List<StorySlide> postCutsceneFirstLevel = new ArrayList<>();
         postCutsceneFirstLevel.add(new StorySlide(
-                "Assets/Images/Backgrounds/eldoria_map.png",
+                "Assets/Images/Backgrounds/avendale_city.png",
                 List.of(
-                        "AFOHFSFH YOU KILLED ALL THEM GOBLINS OMLLLL."
+                        "The goblins fall. The land exhales. Your strength grows — and somewhere in Eldoria, another hero takes notice."
                 )
         ));
 
         fixedLevels.put(1, createSpecificLevel(
                 1,
                 "The Gates",
-                "Assets/Images/Backgrounds/Level_BG/sample.jpg",
-                "A swarm of goblins surround you!",
+                "Assets/Images/Backgrounds/Level_BG/dungeon_entrance.jpg",
+                "A swarm of goblins blocks your path!",
                 buildEnemyGroup(Goblin::new,Goblin::new,Goblin::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
@@ -76,7 +76,7 @@ public class GameLoader {
                 5,
                 "The Coven",
                 "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
-                "Two shadows peel from the darkness",
+                "Whispers spread through the forest. A hunter stalks the same darkness you fight.",
                 buildEnemyGroup(Vampire::new, Vampire::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
@@ -96,7 +96,7 @@ public class GameLoader {
                 10,
                 "The Critters and Fangs",
                 "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
-                "The brood and the Coven",
+                "The brood gathers.",
                 buildEnemyGroup(Vampire::new,Spider::new,Spider::new, Vampire::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
@@ -129,7 +129,7 @@ public class GameLoader {
                 20,
                 "The Rage of rock and flame",
                 "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
-                "Wrath of sky and earth stops you",
+                "The final ascent begins. Fire and stone guard the path to destiny.",
                 buildEnemyGroup((_) -> new GolemBoss(5),(_) -> new DragonBoss(5)),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),

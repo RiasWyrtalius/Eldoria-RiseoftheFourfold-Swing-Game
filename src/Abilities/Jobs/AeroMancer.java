@@ -60,15 +60,15 @@ public class AeroMancer extends JobClass {
             double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
             int calculateDmg = ScalingLogic.calculateMagicalDamage(defender,20,2.0,0.03);
             int calculateDamage = (int)(calculateDmg * 0.4);
-            if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
+            if (hp_percent < 0.40 && Dice.getInstance().chance(0.25)) {
                 LogManager.log(defender.getName() + " Attacks them back", LogFormat.ENEMY_ACTION);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("WIND_PIERCE", attacker, () ->{
                     attacker.receiveDamage(calculateDamage, defender, incomingSkill, () -> {
-                        onComplete.accept(0);
+                        onComplete.accept(new ReactionResult(true, 0, true));
                     });
                 }, true);
             } else {
-                onComplete.accept(incomingDamage);
+                onComplete.accept(ReactionResult.FAILED(incomingDamage));
             }
         };
 

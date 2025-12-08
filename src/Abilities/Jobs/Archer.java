@@ -70,10 +70,10 @@ public class Archer extends JobClass {
                 LogManager.log(defender.getName() + " swiftly dodges the attack!", LogFormat.ENEMY_ACTION);
                 VisualEffectsManager.getInstance().playAnimation("ARCHER_DODGE", defender, () -> {
                     // Pass 0 damage to the next step in the reaction chain
-                    onComplete.accept(0);
+                    onComplete.accept(new ReactionResult(true, 0, true));
                 }, true);
             } else {
-                onComplete.accept(incomingDamage);
+                onComplete.accept(ReactionResult.FAILED(incomingDamage));
             }
         };
 
