@@ -60,6 +60,7 @@ public class BattleSummary extends JDialog{
 
         if (title.equalsIgnoreCase("DEFEAT")) {
             if (resultLabel != null) resultLabel.setForeground(Color.RED); //lose
+            textLabel.setText("");
         } else {
             if (resultLabel != null) resultLabel.setForeground(Color.YELLOW); //win
         }

@@ -139,7 +139,7 @@ public class BattleInterface extends JPanel {
 
     public void linkControllerAndData(BattleController controller) {
         this.battleController = controller;
-
+        resetSelectionState();
         refreshUI();
     }
 
@@ -236,7 +236,7 @@ public class BattleInterface extends JPanel {
         if (result == BattleResult.VICTORY) {
 
             int xp = battleController.getEarnedXP();
-            sb.append("XP Gained: ").append(xp).append("\n");
+            sb.append("XP gained: ").append(xp).append("\n");
 
             java.util.List<Items.Item> items = battleController.getEarnedItems();
             if (!items.isEmpty()) {
@@ -507,16 +507,22 @@ public class BattleInterface extends JPanel {
             return;
         }
 
+        boolean actionSuccess = false;
+
         if (selectedSkill != null) {
-            battleController.executeActionFromUI(activeHero, selectedSkill, selectedTargets);
+            actionSuccess = battleController.executeActionFromUI(activeHero, selectedSkill, selectedTargets);
         }
         else if (selectedItem != null) {
-            battleController.executeItemActionFromUI(selectedItem, selectedTargets);
+            actionSuccess = battleController.executeItemActionFromUI(selectedItem, selectedTargets);
         }
 
-        hideTargetConfirmMenu();
-        resetSelectionState();
-        refreshUI();
+        if (actionSuccess) {
+            hideTargetConfirmMenu();
+            resetSelectionState();
+            refreshUI();
+        } else {
+            hideTargetConfirmMenu();
+        }
     }
 
     public void onHeroSelect(Hero clickedHero) {

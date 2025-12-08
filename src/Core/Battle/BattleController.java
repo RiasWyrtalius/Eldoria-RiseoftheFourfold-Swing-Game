@@ -14,6 +14,7 @@ import Items.Inventory;
 import Items.Item;
 import UI.Views.BattleInterface;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class BattleController {
         this.isBattleActive = true;
         this.currentLevel = currentLevel;
 
+        resetTurnReadiness();
 //        VisualEffectsManager.getInstance().pauseAllAnimations();
         runBattleIntro();
     }
@@ -82,10 +84,16 @@ public class BattleController {
         enemyParty.setPartyExhaustion(false);
     }
 
-    public void executeActionFromUI(Hero hero, Skill skill, List<Character> targets) {
+    public boolean executeActionFromUI(Hero hero, Skill skill, List<Character> targets) {
         if (!isBattleActive || !hero.isAlive() || hero.isExhausted()) {
             LogManager.log(hero.getName() + " cannot act right now.");
-            return;
+            return false;
+        }
+
+        if (hero.getMana() < skill.getManaCost()) {
+            LogManager.log(hero.getName() + " does not have enough MP for " + skill.getName() + "!");
+            VisualEffectsManager.getInstance().showFloatingText(hero, "Not enough MP!", Color.CYAN);
+            return false;
         }
 
         List<Character> finalTargets = (targets == null) ? new ArrayList<>() : new ArrayList<>(targets);
@@ -108,18 +116,22 @@ public class BattleController {
 
         if (this.mainView != null)
             this.mainView.refreshUI();
+
+        return true; // Action Success
     }
 
-    public void executeItemActionFromUI(Item item, List<Character> targets) {
+
+    public boolean executeItemActionFromUI(Item item, List<Character> targets) {
         if (!isBattleActive) {
             LogManager.log("cannot use item right now.");
-            return;
+            return false;
         }
 
         Inventory inventory = heroParty.getInventory();
 
         if (!inventory.consumeItem(item.getName())) {
             LogManager.log("You have no " + item.getName() + " left!", LogFormat.ENEMY_ACTION);
+            return false;
         }
 
         List<Character> finalTargets = (targets == null) ? new ArrayList<>() : new ArrayList<>(targets);
@@ -127,11 +139,13 @@ public class BattleController {
         Runnable onItemComplete = () -> {
             LogManager.log("Item used. Turn Cycle Advancing...");
             mainView.refreshUI();
-            advanceTurnCycle(true); // Manual override to force phase change
+            advanceTurnCycle(true);
         };
 
         LogManager.log("Party used " + item.getName() + "!", LogFormat.PLAYER_JOIN);
         item.use(null, finalTargets, onItemComplete);
+
+        return true;
     }
 
     public void endHeroPhaseManually() {
