@@ -9,6 +9,7 @@ import Core.Battle.TargetType;
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
 import Core.Utils.ScalingLogic;
+import Core.Visuals.VisualEffectsManager;
 import Resource.Animation.AnimationLoopType;
 import Resource.Animation.AssetManager;
 
@@ -40,6 +41,12 @@ public class DragonBoss extends Boss {
                 3, 100, 100 , 320,
                 AnimationLoopType.INFINITE
         );
+        AssetManager.getInstance().registerAnimation(
+                "FIREBALL",
+                "Assets/Animations/Heroes/Mage-Fire/Effects/FireBall/sprite_%d.png",
+                6, 100, 100 , 200,
+                AnimationLoopType.ONE_CYCLE
+        );
     }
 
     @Override
@@ -62,15 +69,17 @@ public class DragonBoss extends Boss {
             if (weakTarget != null) {
                 int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,(int)(baseAtk * 1.5),0.4,0.1);
                 LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget)), LogFormat.ENEMY_ACTION);
-                weakTarget.receiveDamage(calculateDamage, user, self, () -> {
+                Character target = weakTarget;
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
+                    target.receiveDamage(calculateDamage, user, self, onSkillComplete);
                     if (onSkillComplete != null) onSkillComplete.run();
-                });
+                }, true);
             }
 
         };
 
         Skill basicAttack = new Skill(
-                "Cruel Strike", "Attacks the weakest target", 0, 0,
+                "Dragon's Breath", "Attacks the weakest target", 0, 0,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 basicAttackLogic
         );

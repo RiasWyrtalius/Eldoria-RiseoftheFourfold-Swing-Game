@@ -92,6 +92,7 @@ public class CryoMancer extends JobClass {
 
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FROSTBITE", target, () -> {
+                target.applyStatusEffect(StatusEffectFactory.freeze(3, 2));
                 target.receiveDamage(calculateDamage, user, self, onSkillComplete);
             }, true);
         };
