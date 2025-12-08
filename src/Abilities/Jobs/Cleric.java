@@ -48,7 +48,7 @@ public class Cleric extends JobClass {
     public List<Skill> createSkills() {
         SkillLogicConsumer healSelfLogic = (_, self, user, targets, onSkillComplete) -> {
             LogManager.log(self.getActionLog(user, "heals", targets), LogFormat.HERO_ACTION);
-            int heal = ScalingLogic.calculateStat(user.getLevel(), 30, 10, 0.05);
+            int heal = ScalingLogic.calculateStat(user.getLevel(), 30, 10, 0.1);
 
             VisualEffectsManager.getInstance().playAnimation("CLERIC_HEAL", user, () -> {
                 // This runs AFTER the heal animation
@@ -63,7 +63,7 @@ public class Cleric extends JobClass {
 
         SkillLogicConsumer healGroupLogic = (_, self, user, targets, onSkillComplete) -> {
             LogManager.log(self.getActionLog(user, "heals", targets), LogFormat.HERO_ACTION);
-            int heal = ScalingLogic.calculateStat(user.getLevel(), 20, 10, 0.05);
+            int heal = ScalingLogic.calculateStat(user.getLevel(), 20, 10, 0.1);
 
             // isn't there a helper function i made to replace this
             Runnable afterAllAnims = () -> {
@@ -100,7 +100,7 @@ public class Cleric extends JobClass {
 
         SkillLogicConsumer bashLogic = (_, self, user, targets, onSkillComplete) -> {
             Character target = targets.getFirst();
-            int calculateDamage = ScalingLogic.calculateDamage(user, 20, user.getBaseAtk(), 0.02, 0.005);
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user, 20, user.getBaseAtk(), 0.02);
 
             LogManager.log(self.getActionLog(user, "bashes", targets), LogFormat.HERO_ACTION);
 
@@ -119,7 +119,7 @@ public class Cleric extends JobClass {
                 healGroupLogic
         );
         Skill BashStaff = new Skill(
-                "Bash Staff", "Healing their teammate", 10, 20,
+                "Bash Staff", "Healing their teammate", 0, 20,
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 bashLogic
         );

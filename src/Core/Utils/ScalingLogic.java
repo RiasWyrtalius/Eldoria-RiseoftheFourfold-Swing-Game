@@ -36,17 +36,52 @@ public class ScalingLogic {
         return (int) totalDamage;
     }
 
+    //TODO: put in desmos for the fancy
     /**
-     * Uses the Character's own Base Attack (getBaseAtk) as the Skill Power (Sp)
-     * @param user
-     * @param skillBase
-     * @param scalingFactor
-     * @param levelMultiplier
-     * @return
+     * Calculates Magical Damage.
+     * Uses the Character's Base Attack (getBaseAtk) as the Skill Power (Sp).
+     * Note: We treat BaseAtk as "Adaptive Power" here (Intelligence/Magic).
+     *
+     * @param user            The character using the skill.
+     * @param skillBase       (Sb) Base damage.
+     * @param scalingFactor   (Sf) Flat bonus per level.
+     * @param levelMultiplier (Lm) Percentage growth per level.
+     * @return                Final Magical Damage.
      */
-    public static int calculateDamage(Character user, int skillBase, double scalingFactor, double levelMultiplier) {
+    public static int calculateMagicalDamage(Character user, int skillBase, double scalingFactor, double levelMultiplier) {
+        // CONVERSION LOGIC: 100 MP = 50 Magic Damage
+        int simulatedManaPower = (int) (user.getMaxMana() * 0.5);
+
+        return calculateDamage(user, skillBase, simulatedManaPower, scalingFactor, levelMultiplier);
+    }
+
+    //TODO: put in desmos for the fancy
+    /**
+     * Calculates Physical Damage.
+     * Uses the Character's Base Attack (getBaseAtk) as the Skill Power (Sp).
+     *
+     * @param user            The character using the skill.
+     * @param skillBase       (Sb) Base damage.
+     * @param scalingFactor   (Sf) Flat bonus per level.
+     * @param levelMultiplier (Lm) Percentage growth per level.
+     * @return                Final Physical Damage.
+     */
+    public static int calculatePhysicalDamage(Character user, int skillBase, double scalingFactor, double levelMultiplier) {
         return calculateDamage(user, skillBase, user.getBaseAtk(), scalingFactor, levelMultiplier);
     }
+
+//      we already had this?? - charlz
+//    /**
+//     * Uses the Character's own Base Attack (getBaseAtk) as the Skill Power (Sp)
+//     * @param user
+//     * @param skillBase
+//     * @param scalingFactor
+//     * @param levelMultiplier
+//     * @return
+//     */
+//    public static int calculateDamage(Character user, int skillBase, double scalingFactor, double levelMultiplier) {
+//        return calculateDamage(user, skillBase, user.getBaseAtk(), scalingFactor, levelMultiplier);
+//    }
 
     /**
      * Calculates Max HP or Max MP based on:

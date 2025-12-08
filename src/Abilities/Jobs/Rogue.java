@@ -111,7 +111,7 @@ public class Rogue extends JobClass{
             };
 
             Skill Assassinate = new Skill(
-                    "Assassinate", "Single-target physical", 20, 40,
+                    "Assassinate", "Single-target physical", 0, 40,
                     SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                     assassinateLogic
             );

@@ -60,7 +60,7 @@ public class DragonBoss extends Boss {
             }
 
             if (weakTarget != null) {
-                int calculateDamage = ScalingLogic.calculateDamage(user,(int)(baseAtk * 1.5),0.4,0.1);
+                int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,(int)(baseAtk * 1.5),0.4,0.1);
                 LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget)), LogFormat.ENEMY_ACTION);
                 weakTarget.receiveDamage(calculateDamage, user, self, () -> {
                     if (onSkillComplete != null) onSkillComplete.run();
@@ -76,7 +76,7 @@ public class DragonBoss extends Boss {
         );
 
         SkillLogicConsumer devastatingStrikeLogic = (controller, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user,(int)(baseAtk * 1.25),0.2,0.2);
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,(int)(baseAtk * 1.25),0.2,0.2);
 
             LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogFormat.ENEMY_ACTION);
 

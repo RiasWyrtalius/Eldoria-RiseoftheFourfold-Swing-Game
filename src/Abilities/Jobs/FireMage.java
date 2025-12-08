@@ -53,7 +53,7 @@ public class FireMage extends JobClass {
     public List<ReactionSkill> createReactions() {
         ReactionLogic reflectFireballLogic = (defender, attacker, incomingSkill, incomingDamage, onComplete) -> {
             double hp_percent = (double)defender.getHealth() / defender.getMaxHealth();
-            int calculateDmg = ScalingLogic.calculateDamage(defender,25,15,1.2,0.05);
+            int calculateDmg = ScalingLogic.calculateMagicalDamage(defender,25,15,1.2);
             int calculateDamage = (int)(calculateDmg * 0.4);
             if (Dice.getInstance().chance(0.25) && hp_percent < 0.40) {
                 LogManager.log(defender.getName() + " Attacks them back", LogFormat.ENEMY_ACTION);
@@ -77,7 +77,7 @@ public class FireMage extends JobClass {
 
         // FIXME: turn doesn't end when animation is finished
         SkillLogicConsumer fireBallLogic = (_, self, user, targets, onComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user,25,15,1.2,0.05);
+            int calculateDamage = ScalingLogic.calculateMagicalDamage(user,25,15,1.2);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("FIREBALL", target, () -> {
@@ -87,7 +87,7 @@ public class FireMage extends JobClass {
         };
 
         SkillLogicConsumer fireCycloneLogic = (controller, self, user, targets, onComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user,50,30,1.2,0.05);
+            int calculateDamage = ScalingLogic.calculateMagicalDamage(user,50,30,1.2);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
             Runnable afterAllAnimations = () -> {
                 controller.applyGroupDamage(user, self, targets, calculateDamage, onComplete);
@@ -96,7 +96,7 @@ public class FireMage extends JobClass {
         };
 
         SkillLogicConsumer staffAttackLogic = (_, self, user, targets, onComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user,10,0,1.2,0.05);
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,10,0,1.2);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.HERO_ACTION);
             // TODO: ANIMATION ON THIS
@@ -115,7 +115,7 @@ public class FireMage extends JobClass {
                 fireCycloneLogic
         );
 
-        Skill staffAttack= new Skill(
+        Skill staffAttack = new Skill(
                 "Staff Attack", "Single-target spell", 0, 10,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 staffAttackLogic

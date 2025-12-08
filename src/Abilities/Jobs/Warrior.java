@@ -68,7 +68,7 @@ public class Warrior extends JobClass {
     @Override
     public List<Skill> createSkills() {
         SkillLogicConsumer shieldBashLogic = (_, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user,20,10,1.2,0.05);
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,20,10,1.2);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, " Bashes Shield on ", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
@@ -81,7 +81,7 @@ public class Warrior extends JobClass {
         };
 
         SkillLogicConsumer swordSlashLogic = (_, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculateDamage(user,30,15,1.2,0.05);
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,30,15,1.2);
             Character target = targets.get(0);
             LogManager.log(self.getActionLog(user, " Slashes on ", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().hideCharacterVisual(user);
@@ -94,13 +94,13 @@ public class Warrior extends JobClass {
         };
 
         Skill ShieldBash = new Skill(
-                "Shield Bash", "Single-target Shield attack", 15, 20,
+                "Shield Bash", "Single-target Shield attack", 0, 20,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 shieldBashLogic
         );
 
         Skill SwordSlash = new Skill(
-                "Sword Slash", "Single-target Sword Slash", 20, 30,
+                "Sword Slash", "Single-target Sword Slash", 0, 30,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 swordSlashLogic
         );

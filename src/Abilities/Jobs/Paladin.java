@@ -96,7 +96,7 @@ public class Paladin extends JobClass {
         };
 
         SkillLogicConsumer holyStrikeLogic = (controller, self, user, targets, onSkillComplete) -> {
-            int dmg = ScalingLogic.calculateDamage(user,30,20,0.05);
+            int dmg = ScalingLogic.calculatePhysicalDamage(user,30,20,0.05);
             LogManager.log(self.getActionLog(user, "Strikes", targets), LogFormat.HERO_ACTION);
             Character target = targets.get(0);
             Runnable afterAnimation = () -> {
@@ -113,7 +113,7 @@ public class Paladin extends JobClass {
                 healSelfLogic
         );
         Skill HolyStrike = new Skill(
-                "Holy Strike", "Righteousness as a Sword Strike", 30, 30,
+                "Holy Strike", "Righteousness as a Sword Strike", 20, 30,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 holyStrikeLogic
         );

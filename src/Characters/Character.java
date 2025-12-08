@@ -345,52 +345,42 @@ public abstract class Character {
         }
     }
 
+    public boolean isExhausted() {
+        return isExhausted;
+    }
+
     // =============== PUBLIC GETTERS AND SETTERS ===============
     public int getMaxHealth() {
         return maxHealth;
     }
-
     public String getName() {
         return name;
     }
-
     public int getHealth() {
         return health;
     }
-
     public boolean isAlive() {
         return isAlive;
     }
-
     public int getBaseAtk() {
         return baseAtk;
     }
-
     public int getLevel() {
         return level;
     }
-
     public int getMana() { return mana; }
-
     public int getMaxMana() {
         return maxMana;
     }
     public int getBaseMaxHealth() {
         return baseMaxHealth;
     }
-
     public int getBaseMaxMana() {
         return baseMaxMana;
     }
-
-    public boolean isExhausted() {
-        return isExhausted;
-    }
-
     public void setExhausted(boolean exhausted) {
         isExhausted = exhausted;
     }
-
     public void setMana(int newMana) {
         if (newMana > maxMana) {
             newMana = maxMana;
@@ -400,12 +390,8 @@ public abstract class Character {
         }
         this.mana = newMana;
     }
-
     public abstract List<Skill> getSkills();
-
     public abstract String getDescription();
-
     public abstract String getIdleImageKey();
-
     public void setName(String name) { this.name = name; }
 }
