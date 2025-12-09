@@ -530,9 +530,11 @@ public class VisualEffectsManager {
         Point panelLoc = SwingUtilities.convertPoint(targetPanel, 0, 0, layeredPane);
         Dimension labelSize = label.getPreferredSize();
 
-        int y = panelLoc.y - (labelSize.height / 2);
-        int baseX = panelLoc.x + (targetPanel.getWidth() / 2) - (labelSize.width / 2);
+        int baseY = panelLoc.y - (labelSize.height / 2);
         int randomOffset = Core.Utils.Dice.getInstance().roll(-20, 20);
+        int y = baseY + randomOffset;
+        int baseX = panelLoc.x + (targetPanel.getWidth() / 2) - (labelSize.width / 2);
+        randomOffset = Core.Utils.Dice.getInstance().roll(-20, 20);
         int x = baseX + randomOffset;
 
         label.setBounds(x, y, labelSize.width, labelSize.height);
