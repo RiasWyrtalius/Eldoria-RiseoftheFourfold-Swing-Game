@@ -42,7 +42,7 @@ public class Varoth extends Boss {
                 AnimationLoopType.INFINITE
         );
         AssetManager.getInstance().registerAnimation(
-                "VOID-SLASH",
+                "VOID_SLASH",
                 "Assets/Animations/Enemies/Boss/Varoth/Effects/Basic_Attack/sprite_%d.png",
                 4, 100, 100 , 200,
                 AnimationLoopType.ONE_CYCLE
@@ -106,7 +106,7 @@ public class Varoth extends Boss {
 
         Skill devastatingStrike = new Skill(
                 "Void Slash", "Attacks using the void damage", 50, 0,
-                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 devastatingStrikeLogic
         );
 
