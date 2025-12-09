@@ -76,6 +76,7 @@ public class Varoth extends Boss {
                 int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,(int)(baseAtk * 1.5),0.4,0.1);
                 LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget)), LogFormat.ENEMY_ACTION);
                 Character target = weakTarget;
+                VisualEffectsManager.getInstance().hideCharacterVisual(user);
                 VisualEffectsManager.getInstance().playAnimationOnCharacter("CONSUME", target, () -> {
                     target.receiveDamage(calculateDamage, user, self, onSkillComplete);
                     if (onSkillComplete != null) onSkillComplete.run();
@@ -93,11 +94,13 @@ public class Varoth extends Boss {
         SkillLogicConsumer devastatingStrikeLogic = (controller, self, user, targets, onSkillComplete) -> {
             int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,(int)(baseAtk * 1.25),0.2,0.2);
 
-            LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogFormat.ENEMY_ACTION);
+            LogManager.log(self.getActionLog(user, "unleashes a Void Slash on", targets), LogFormat.ENEMY_ACTION);
             Character target = targets.getFirst();
+            VisualEffectsManager.getInstance().hideCharacterVisual(user);
             VisualEffectsManager.getInstance().playAnimationOnCharacter("VOID_SLASH", target, () -> {
                         target.receiveDamage(calculateDamage, user, self, onSkillComplete);
                         if (onSkillComplete != null) onSkillComplete.run();
+                        VisualEffectsManager.getInstance().restoreCharacterVisual(user);
                         }, true);
         };
 
