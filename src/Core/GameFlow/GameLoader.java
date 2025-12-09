@@ -62,7 +62,7 @@ public class GameLoader {
                 "The Gates",
                 "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
                 "A swarm of goblins blocks your path!",
-                buildEnemyGroup(Goblin::new,Goblin::new,Goblin::new),
+                buildEnemyGroup((_) -> new Varoth(1)),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion(),
