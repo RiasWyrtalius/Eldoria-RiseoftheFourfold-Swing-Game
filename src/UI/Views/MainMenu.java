@@ -50,6 +50,8 @@ public class MainMenu extends JPanel {
         audio.registerSound("BUTTON_SELECT", "/Assets/Audio/SFX/MainUI/button_select.wav");
         audio.playMusic("MAIN-THEME");
 
+        createUIComponents();
+
         try (InputStream is = getClass().getResourceAsStream(FONT_PATH)) {
             if (is != null) {
                 Font fontBase = Font.createFont(Font.TRUETYPE_FONT, is);

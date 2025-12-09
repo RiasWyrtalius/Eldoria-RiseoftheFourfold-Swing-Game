@@ -236,13 +236,27 @@ public class BattleInterface extends JPanel {
         if (result == BattleResult.VICTORY) {
 
             int xp = battleController.getEarnedXP();
-            sb.append("XP gained: ").append(xp).append("\n");
+            sb.append("XP gained: ").append(xp).append("\n\n");
 
             java.util.List<Items.Item> items = battleController.getEarnedItems();
+
             if (!items.isEmpty()) {
-                sb.append("Items Found:\n");
+                sb.append("--- LOOT ACQUIRED ---\n");
+
+                Map<String, Integer> itemCounts = new LinkedHashMap<>();
+
                 for (Items.Item item : items) {
-                    sb.append(" - ").append(item.getName()).append("\n");
+                    String name = item.getName();
+                    itemCounts.put(name, itemCounts.getOrDefault(name, 0) + 1);
+                }
+
+                for (Map.Entry<String, Integer> entry : itemCounts.entrySet()) {
+                    sb.append(" • ").append(entry.getKey());
+
+                    if (entry.getValue() > 1) {
+                        sb.append(" (x").append(entry.getValue()).append(")");
+                    }
+                    sb.append("\n");
                 }
             } else {
                 sb.append("No items found.\n");
@@ -264,7 +278,7 @@ public class BattleInterface extends JPanel {
 
         JRootPane root = SwingUtilities.getRootPane(this);
 
-        JPanel glassOverlay = new JPanel(new GridBagLayout());//centers it
+        JPanel glassOverlay = new JPanel(new GridBagLayout());
         glassOverlay.setOpaque(false);
         glassOverlay.addMouseListener(new java.awt.event.MouseAdapter() {});
         JPanel summaryBox = summary.getPanel();

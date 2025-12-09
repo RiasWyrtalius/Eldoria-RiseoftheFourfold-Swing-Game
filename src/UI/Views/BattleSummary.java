@@ -5,6 +5,10 @@ import Core.GameManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import Items.Item;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BattleSummary extends JDialog{
     private JPanel panel1;
