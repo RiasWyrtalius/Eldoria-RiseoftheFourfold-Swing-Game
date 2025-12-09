@@ -20,7 +20,7 @@ public class Varoth extends Boss {
 
     public Varoth(int level){
         this(
-                "Baby Dragon",
+                "Varoth",
                 ScalingLogic.calculateStat(level,500,20,0.1),
                 ScalingLogic.calculateStat(level,50,15,0.05),
                 ScalingLogic.calculateStat(level,400,50,0.2),
@@ -37,7 +37,7 @@ public class Varoth extends Boss {
     protected void registerAssets() {
         AssetManager.getInstance().registerAnimation(
                 "VAROTH-IDLE",
-                "Assets/Animations/Enemies/Boss/Varoth/Idlle/sprite_%d.png",
+                "Assets/Animations/Enemies/Boss/Varoth/Idle/sprite_%d.png",
                 3, 100, 100 , 320,
                 AnimationLoopType.INFINITE
         );
@@ -111,8 +111,19 @@ public class Varoth extends Boss {
                 devastatingStrikeLogic
         );
 
+        SkillLogicConsumer doNothingLogic = (controller, self, user, targets, onSkillComplete) -> {
+
+        };
+
+        Skill DoNothing = new Skill(
+                "Void Slash", "Attacks using the void damage", 50, 0,
+                SkillType.UTILITY, SkillAction.PHYSICAL, TargetType.NO_TARGETS, TargetCondition.ALIVE,
+                doNothingLogic
+        );
+
         skills.add(basicAttack);
         skills.add(devastatingStrike);
+        skills.add(DoNothing);
     }
 
     // TODO: character death animation
