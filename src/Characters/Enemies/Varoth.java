@@ -94,15 +94,11 @@ public class Varoth extends Boss {
             int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,(int)(baseAtk * 1.25),0.2,0.2);
 
             LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogFormat.ENEMY_ACTION);
-
-            for (Character target : targets) {
-                if (target.getHealth() > 0) {
-                    VisualEffectsManager.getInstance().playAnimationOnCharacter("VOID_SLASH", target, () -> {
+            Character target = targets.getFirst();
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("VOID_SLASH", target, () -> {
                         target.receiveDamage(calculateDamage, user, self, onSkillComplete);
                         if (onSkillComplete != null) onSkillComplete.run();
-                    }, true);
-                }
-            }
+                        }, true);
         };
 
         Skill devastatingStrike = new Skill(
@@ -116,7 +112,7 @@ public class Varoth extends Boss {
         };
 
         Skill DoNothing = new Skill(
-                "Void Slash", "Attacks using the void damage", 50, 0,
+                "Void Slash", "Attacks using the void damage", 0, 0,
                 SkillType.UTILITY, SkillAction.PHYSICAL, TargetType.NO_TARGETS, TargetCondition.ALIVE,
                 doNothingLogic
         );
