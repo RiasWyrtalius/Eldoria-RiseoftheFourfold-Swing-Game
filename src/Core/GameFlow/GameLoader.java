@@ -44,14 +44,14 @@ public class GameLoader {
         // =========================================================
         List<StorySlide> preCutsceneFirstLevel = new ArrayList<>();
         preCutsceneFirstLevel.add(new StorySlide(
-                "Assets/Images/Backgrounds/eldoria_map.png",
+                "/Assets/Images/Backgrounds/eldoria_map.png",
                 List.of(
                         "At the edge of the wilds, the first champion steps forward. Alone, yet bound by prophecy, the journey into corruption begins."
                 )
         ));
         List<StorySlide> postCutsceneFirstLevel = new ArrayList<>();
         postCutsceneFirstLevel.add(new StorySlide(
-                "Assets/Images/Backgrounds/avendale_city.png",
+                "/Assets/Images/Backgrounds/avendale_city.png",
                 List.of(
                         "The goblins fall. The land exhales. Your strength grows — and somewhere in Eldoria, another hero takes notice."
                 )
@@ -60,7 +60,7 @@ public class GameLoader {
         fixedLevels.put(1, createSpecificLevel(
                 1,
                 "The Gates",
-                "Assets/Images/Backgrounds/Level_BG/dungeon_entrance.jpg",
+                "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
                 "A swarm of goblins blocks your path!",
                 buildEnemyGroup(Goblin::new,Goblin::new,Goblin::new),
                 buildLoot(
@@ -75,7 +75,7 @@ public class GameLoader {
         fixedLevels.put(5, createSpecificLevel(
                 5,
                 "The Coven",
-                "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
+                "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
                 "Whispers spread through the forest. A hunter stalks the same darkness you fight.",
                 buildEnemyGroup(Vampire::new, Vampire::new),
                 buildLoot(
@@ -95,7 +95,7 @@ public class GameLoader {
         fixedLevels.put(10, createSpecificLevel(
                 10,
                 "The Critters and Fangs",
-                "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
+                "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
                 "The brood gathers.",
                 buildEnemyGroup(Vampire::new,Spider::new,Spider::new, Vampire::new),
                 buildLoot(
@@ -112,7 +112,7 @@ public class GameLoader {
         fixedLevels.put(15, createSpecificLevel(
                 15,
                 "The Acid and Rock",
-                "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
+                "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
                 "Solid strength and shifting sludge",
                 buildEnemyGroup(Slime::new,(_) -> new GolemBoss(3),Slime::new),
                 buildLoot(
@@ -128,7 +128,7 @@ public class GameLoader {
         fixedLevels.put(20, createSpecificLevel(
                 20,
                 "The Rage of rock and flame",
-                "Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
+                "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
                 "The final ascent begins. Fire and stone guard the path to destiny.",
                 buildEnemyGroup((_) -> new GolemBoss(5),(_) -> new DragonBoss(5)),
                 buildLoot(

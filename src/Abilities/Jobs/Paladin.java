@@ -83,7 +83,7 @@ public class Paladin extends JobClass {
     public List<Skill> createSkills() {
         SkillLogicConsumer healSelfLogic = (_, self, target, _, onSkillComplete) -> {
             LogManager.log(self.getActionLog(target, "heals themself", List.of(target)), LogFormat.HERO_ACTION);
-            int healAmount = ScalingLogic.calculateStat(target.getLevel(), 30, 40, 0.03);
+            int healAmount = ScalingLogic.calculateStat(target.getLevel(), 30, 15, 0.03);
             Runnable afterAnimation = () -> {
                 target.receiveHealing(healAmount, target);
                 VisualEffectsManager.getInstance().restoreCharacterVisual(target);
@@ -108,12 +108,12 @@ public class Paladin extends JobClass {
         };
 
         Skill HealSelf = new Skill(
-                "Self Heal", "Selfish Healing for themself", 10, 20,
+                "Self Heal", "Selfish Healing for themself", 20, 20,
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 healSelfLogic
         );
         Skill HolyStrike = new Skill(
-                "Holy Strike", "Righteousness as a Sword Strike", 20, 30,
+                "Holy Strike", "Righteousness as a Sword Strike", 30, 30,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 holyStrikeLogic
         );
