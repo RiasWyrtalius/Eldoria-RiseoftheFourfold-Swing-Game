@@ -43,18 +43,25 @@ public class GameLoader {
         Map<Integer, Level> fixedLevels = new HashMap<>();
 
         // =========================================================
-        List<StorySlide> preCutsceneFirstLevel = new ArrayList<>();
-        preCutsceneFirstLevel.add(new StorySlide(
+        List<StorySlide> preCutsceneLevel1 = new ArrayList<>();
+        preCutsceneLevel1.add(new StorySlide(
                 "/Assets/Images/Backgrounds/eldoria_map.png",
                 List.of(
                         "At the edge of the wilds, the first champion steps forward. Alone, yet bound by prophecy, the journey into corruption begins."
                 )
         ));
-        List<StorySlide> postCutsceneFirstLevel = new ArrayList<>();
-        postCutsceneFirstLevel.add(new StorySlide(
-                "/Assets/Images/Backgrounds/avendale_city.png",
+
+        List<StorySlide> postCutsceneLevel1 = new ArrayList<>();
+        postCutsceneLevel1.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor1/Floor1_c1.png",
                 List.of(
-                        "The goblins fall. The land exhales. Your strength grows — and somewhere in Eldoria, another hero takes notice."
+                        "The goblins fall. The land exhales. Your strength grows — and somewhere in Eldoria,"
+                )
+        ));
+        postCutsceneLevel1.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor1/Floor1_c2.png",
+                List.of(
+                        "another hero takes notice. Drawn by fate, a cloaked champion steps from the shadows, waiting for the one who will summon them."
                 )
         ));
 
@@ -69,10 +76,32 @@ public class GameLoader {
                         ItemFactory.smallManaPotion(),
                         ItemFactory.summoningScroll()
                 ),
-                preCutsceneFirstLevel,postCutsceneFirstLevel
+                preCutsceneLevel1,
+                postCutsceneLevel1
         ));
         // =========================================================
 
+        List<StorySlide> preCutsceneLevel5 = new ArrayList<>();
+        preCutsceneLevel5.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor5/Floor5_c1pre.png",
+                List.of(
+                        "Deep in the forest, ancient magic stirs — a new hero senses your rise, awaiting the scroll that will summon them."
+                )
+        ));
+
+        List<StorySlide> postCutsceneLevel5 = new ArrayList<>();
+        postCutsceneLevel5.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor5/Floor5_c1.png",
+                List.of(
+                        "The forest stills. The vampires fade to crimson dust, drawn into the roots beneath your feet."
+                )
+        ));
+        postCutsceneLevel5.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor5/Floor5_c2.png",
+                List.of(
+                        "From the shadows, a hidden hunter watches… as spiders creep toward the same unseen call."
+                )
+        ));
         fixedLevels.put(5, createSpecificLevel(
                 5,
                 "The Coven",
@@ -91,8 +120,33 @@ public class GameLoader {
                         ItemFactory.splashManaPotion(),
                         ItemFactory.splashManaPotion(),
                         ItemFactory.summoningScroll()
+                ),
+                preCutsceneLevel5,
+                postCutsceneLevel5
+        ));
+        // =========================================================
+        List<StorySlide> preCutsceneLevel10 = new ArrayList<>();
+        preCutsceneLevel10.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor10/Floor10_c1pre.png",
+                List.of(
+                        "The forest grows restless — threads of web and whispers of fang weave into a single rising threat."
                 )
         ));
+
+        List<StorySlide> postCutsceneLevel10 = new ArrayList<>();
+        postCutsceneLevel10.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor10/Floor10_c1.png",
+                List.of(
+                        "Beneath the trees, spiders swarm toward a pulsing glow in the roots, answered by lingering vampiric ash."
+                )
+        ));
+        postCutsceneLevel10.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor10/Floor10_c2.png",
+                List.of(
+                        "WWhat erupts here will soon take shape — the horrors awaiting you deeper in the wild."
+                )
+        ));
+
         fixedLevels.put(10, createSpecificLevel(
                 10,
                 "The Critters and Fangs",
@@ -108,8 +162,33 @@ public class GameLoader {
                         ItemFactory.mediumManaPotion(),
                         ItemFactory.summoningScroll(),
                         ItemFactory.revivePotion()
+                ),
+                preCutsceneLevel10,
+                postCutsceneLevel10
+        ));
+        // =========================================================
+        List<StorySlide> preCutsceneLevel15 = new ArrayList<>();
+        preCutsceneLevel10.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor15/Floor15_c1pre.png",
+                List.of(
+                        "The ground that once trembled now swells and splits — corruption rising in sludge and stone."
                 )
         ));
+
+        List<StorySlide> postCutsceneLevel15 = new ArrayList<>();
+        postCutsceneLevel15.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor15/Floor15_c1.png",
+                List.of(
+                        "The corrupted sludge recoils into the cracked earth, its twisted glow fading as the forest exhales in relief."
+                )
+        ));
+        postCutsceneLevel15.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor15/Floor15_c2.png",
+                List.of(
+                        "The fallen golem collapses to dust, revealing deeper fissures below — something colossal stirs in the depths, feeding on the corruption that remains."
+                )
+        ));
+
         fixedLevels.put(15, createSpecificLevel(
                 15,
                 "The Acid and Rock",
@@ -124,8 +203,33 @@ public class GameLoader {
                         ItemFactory.mediumHealthPotion(),
                         ItemFactory.mediumManaPotion(),
                         ItemFactory.revivePotion()
+                ),
+                preCutsceneLevel15,
+                postCutsceneLevel15
+        ));
+        // =========================================================
+        List<StorySlide> preCutsceneLevel20 = new ArrayList<>();
+        preCutsceneLevel10.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor20/Floor20_c1pre.png",
+                List.of(
+                        "From the deepest fissures, a presence awakens — purple flame twisting through rising stone, as a colossal shadow climbs toward the surface."
                 )
         ));
+
+        List<StorySlide> postCutsceneLevel20 = new ArrayList<>();
+        postCutsceneLevel15.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor20/Floor20_c1.png",
+                List.of(
+                        "Varoth’s inferno collapses inward, the purple flames sputtering out as the last pulse of corruption drains into the earth."
+                )
+        ));
+        postCutsceneLevel15.add(new StorySlide(
+                "/Assets/Images/CutsceneImages/Floor20/Floor20_c2.png",
+                List.of(
+                        "Silence settles over the ruin; the fissures cool, embers fade, and the forest stands still — free at last from the shadow that once devoured its light."
+                )
+        ));
+
         fixedLevels.put(20, createSpecificLevel(
                 20,
                 "The Rage of rock and flame",
@@ -140,7 +244,9 @@ public class GameLoader {
                         ItemFactory.mediumHealthPotion(),
                         ItemFactory.mediumManaPotion(),
                         ItemFactory.revivePotion()
-                )
+                ),
+                preCutsceneLevel20,
+                postCutsceneLevel20
         ));
         return fixedLevels;
     }
