@@ -12,7 +12,7 @@ public abstract class JobClass {
 
     // --- BASE STAT MODIFIERS ---
     private final int hpBonus;      // One-time boost at creation
-    private final int manaBonus;    // One-time boost at creation
+    private final int mpBonus;    // One-time boost at creation
 
     // --- PER-LEVEL SCALING CONSTANTS ---
     private final int hpFlat;       // Flat HP per level
@@ -26,7 +26,7 @@ public abstract class JobClass {
     public JobClass(
             String name, String description,
             String idleImageKey,
-            int hpBonus, int manaBonus,
+            int hpBonus, int mpBonus,
             int hpFlat, double hpGrowth,
             int mpFlat, double mpGrowth) {
         this.name = name;
@@ -35,7 +35,7 @@ public abstract class JobClass {
 
         // Base Stats
         this.hpBonus = hpBonus;
-        this.manaBonus = manaBonus;
+        this.mpBonus = mpBonus;
 
         // Scaling Stats
         this.hpFlat = hpFlat;
@@ -51,12 +51,12 @@ public abstract class JobClass {
         registerAssets();
     }
 
-    public JobClass(String name, String description, String idleImageKey, int hpBonus, int manaBonus) {
-        this(name, description, idleImageKey, hpBonus, manaBonus, 0, 0.0, 0, 0.0);
+    public JobClass(String name, String description, String idleImageKey, int hpBonus, int mpBonus) {
+        this(name, description, idleImageKey, hpBonus, mpBonus, 4, 0.05, 2, 0.009);
     }
     
     public JobClass(String name, String description, String idleImageKey) {
-        this(name, description, idleImageKey, 0, 0, 0, 0.0, 0, 0.0);
+        this(name, description, idleImageKey, 0, 0);
     }
 
     public abstract List<ReactionSkill> createReactions();
@@ -80,8 +80,8 @@ public abstract class JobClass {
     public int getHpBonus() {
         return hpBonus;
     }
-    public int getManaBonus() {
-        return manaBonus;
+    public int getMpBonus() {
+        return mpBonus;
     }
     public String getDescription() {
         return description;
