@@ -66,5 +66,7 @@ To defeat the Dreadlord, you must assemble your party and venture into the **Bla
 ## 🏹 Example Gameplay  
 <img width="1576" height="706" alt="image" src="https://github.com/user-attachments/assets/1ce68b9d-eaca-49be-ae51-a2a77b93ca98" />
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7ba38142-0edc-4041-ae69-f34433ee7f4d" />
+<img width="810" height="809" alt="image" src="https://github.com/user-attachments/assets/a2512f95-c163-4ee5-a9d2-ad7fd986b18a" />
+
 
 
