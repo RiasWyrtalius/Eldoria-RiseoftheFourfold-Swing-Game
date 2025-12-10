@@ -34,20 +34,5 @@ The game features a fully designed party system, allowing multiple heroes to fig
 ## 🏹 Example Gameplay  
 
 ```text
-Lyria shoots a deadly arrow using Artemis dealing 18 damage at Dreadlord Vargoth, the Boss!
-Dreadlord Vargoth, the Boss snarls in fury! Remaining HP: 62
-
-Dreadlord Vargoth, the Boss unleashes a devastating strike on Ragnar!
-Ragnar takes 25 damage. Remaining HP: 115
-
-Ragnar slashes fiercely with Excalibur dealing 20 damage at Dreadlord Vargoth, the Boss!
-Dreadlord Vargoth, the Boss snarls in fury! Remaining HP: 42
-
-Ezren casts a powerful spell with Elder Wand dealing 30 damage at Dreadlord Vargoth, the Boss! 🔥 CRITICAL HIT! 🔥
-Dreadlord Vargoth, the Boss snarls in fury! Remaining HP: 9
-```
-
-## 🛠️ Project Structure
-```
-temp text
+<img width="1576" height="706" alt="image" src="https://github.com/user-attachments/assets/1ce68b9d-eaca-49be-ae51-a2a77b93ca98" />
 ```
