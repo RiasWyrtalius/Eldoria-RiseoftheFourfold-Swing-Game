@@ -33,7 +33,6 @@ public class SaveManager {
             LogManager.log("No save file found at: " + SAVE_FILE_PATH, LogFormat.SYSTEM);
             return null;
         }
-
         try (
                 FileInputStream fileIn = new FileInputStream(saveFile);
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn)

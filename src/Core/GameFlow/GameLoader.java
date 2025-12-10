@@ -58,19 +58,19 @@ public class GameLoader {
                 )
         ));
 
-        fixedLevels.put(1, createSpecificLevel(
-                1,
-                "The Gates",
-                "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
-                "A swarm of goblins blocks your path!",
-                buildEnemyGroup((_) -> new Varoth(1)),
-                buildLoot(
-                        ItemFactory.smallHealthPotion(),
-                        ItemFactory.smallManaPotion(),
-                        ItemFactory.summoningScroll()
-                ),
-                preCutsceneFirstLevel,postCutsceneFirstLevel
-        ));
+//        fixedLevels.put(1, createSpecificLevel(
+//                1,
+//                "The Gates",
+//                "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
+//                "A swarm of goblins blocks your path!",
+//                buildEnemyGroup((_) -> new Varoth(1)),
+//                buildLoot(
+//                        ItemFactory.smallHealthPotion(),
+//                        ItemFactory.smallManaPotion(),
+//                        ItemFactory.summoningScroll()
+//                ),
+//                preCutsceneFirstLevel,postCutsceneFirstLevel
+//        ));
         // =========================================================
 
         fixedLevels.put(5, createSpecificLevel(
@@ -197,6 +197,7 @@ public class GameLoader {
                     data.baseHP,
                     data.baseAtk,
                     data.baseMP,
+                    data.xp,
                     data.level,
                     job
             );
