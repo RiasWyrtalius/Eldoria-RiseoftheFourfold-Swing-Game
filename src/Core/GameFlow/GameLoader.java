@@ -209,7 +209,7 @@ public class GameLoader {
         ));
         // =========================================================
         List<StorySlide> preCutsceneLevel20 = new ArrayList<>();
-        preCutsceneLevel10.add(new StorySlide(
+        preCutsceneLevel20.add(new StorySlide(
                 "/Assets/Images/CutsceneImages/Floor20/Floor20_c1pre.png",
                 List.of(
                         "From the deepest fissures, a presence awakens — purple flame twisting through rising stone, as a colossal shadow climbs toward the surface."
@@ -217,13 +217,13 @@ public class GameLoader {
         ));
 
         List<StorySlide> postCutsceneLevel20 = new ArrayList<>();
-        postCutsceneLevel15.add(new StorySlide(
+        postCutsceneLevel20.add(new StorySlide(
                 "/Assets/Images/CutsceneImages/Floor20/Floor20_c1.png",
                 List.of(
                         "Varoth’s inferno collapses inward, the purple flames sputtering out as the last pulse of corruption drains into the earth."
                 )
         ));
-        postCutsceneLevel15.add(new StorySlide(
+        postCutsceneLevel20.add(new StorySlide(
                 "/Assets/Images/CutsceneImages/Floor20/Floor20_c2.png",
                 List.of(
                         "Silence settles over the ruin; the fissures cool, embers fade, and the forest stands still — free at last from the shadow that once devoured its light."
