@@ -1,4 +1,4 @@
-# ⚔️ DND Clone - Swing  
+# ⚔️ Elordia : Rise of the Fourfold - Swing Game
 
 <p align="center"> <img src="https://img.shields.io/badge/Java-21-orange?logo=java&logoColor=white" /> </p>
 
@@ -27,6 +27,36 @@ The game features a fully designed party system, allowing multiple heroes to fig
 - 🎯 **Critical Hits** – Attacks have a chance to deal double damage with a 🔥 CRITICAL HIT! 🔥 message.  
 - 📈 **Leveling & EXP** – Heroes gain EXP after defeating enemies and level up automatically.  
 - 💀 **Defeat Rewards** – All surviving heroes share EXP when an enemy is defeated.
+
+---
+
+## ⚔️ The Lore of Eldoria
+
+**The Setting**
+Eldoria is a land shaped by primal forces. For generations, peace reigned until **Dreadlord Vargoth** corrupted the elemental balance. From the peak of **Blackspire**, he now commands a legion of shadows, threatening to plunge the world into eternal night.
+
+**The Champions of Prophecy**
+Ancient seers foretold that nine distinct paths of power must unite to challenge the darkness. Heroes from every discipline have answered the call:
+
+*   **The Vanguard (Tanks):**
+    *   🛡️ **Warrior:** The master of steel who breaks the front lines.
+    *   ✨ **Paladin:** The holy knight who shields the weak with divine light.
+
+*   **The Strikers (Physical DPS):**
+    *   🏹 **Archer:** The eagle-eyed marksman with unmatched precision.
+    *   🗡️ **Rogue:** The shadow in the night, striking where the enemy is weakest.
+
+*   **The Elemental Mages (Magic DPS):**
+    *   🔥 **Fire Mage:** Conjurer of destruction and roaring flames.
+    *   ❄️ **Cryo Mancer:** Master of the frozen winds and binding ice.
+    *   🌪️ **Aero Mancer:** Wielder of the tempest and the skies.
+    *   🪨 **Earth Mage:** Shaper of the ground, crushing foes with nature's weight.
+
+*   **The Protector (Support):**
+    *   🌿 **Cleric:** The divine healer who restores life and safeguards the party.
+
+**The Mission**
+To defeat the Dreadlord, you must assemble your party and venture into the **Blackspire Dungeons**. Only by combining steel, stealth, divinity, and the four elements can the heroes shatter Vargoth's dark mantle and restore the dawn.
 
 ---
 
