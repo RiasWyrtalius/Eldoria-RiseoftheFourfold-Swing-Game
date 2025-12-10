@@ -33,9 +33,11 @@ The game features a fully designed party system, allowing multiple heroes to fig
 ## ⚔️ The Lore of Eldoria
 
 **The Setting**
+
 Eldoria is a land shaped by primal forces. For generations, peace reigned until **Dreadlord Vargoth** corrupted the elemental balance. From the peak of **Blackspire**, he now commands a legion of shadows, threatening to plunge the world into eternal night.
 
 **The Champions of Prophecy**
+
 Ancient seers foretold that nine distinct paths of power must unite to challenge the darkness. Heroes from every discipline have answered the call:
 
 *   **The Vanguard (Tanks):**
