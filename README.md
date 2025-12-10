@@ -22,11 +22,12 @@ The game features a fully designed party system, allowing multiple heroes to fig
 
 ## ✨ Features  
 
-- 👥 **Party System** – Manage multiple heroes in a party.  
-- 🗡️ **Weapons & Damage** – Heroes can equip weapons with different attack powers.  
-- 🎯 **Critical Hits** – Attacks have a chance to deal double damage with a 🔥 CRITICAL HIT! 🔥 message.  
-- 📈 **Leveling & EXP** – Heroes gain EXP after defeating enemies and level up automatically.  
-- 💀 **Defeat Rewards** – All surviving heroes share EXP when an enemy is defeated.
+*   👥 **Party System** – Command and manage a team of multiple heroes.
+*   🎒 **Inventory System** – Strategically use items to heal or buff your party during combat.
+*   🎬 **Story Cutscenes** – The history of Eldoria unfolds through narrative cinematic sequences.
+*   💬 **Status Pop-ups** – visual feedback for damage dealt, healing received, and level-ups.
+*   📈 **Leveling & EXP** – Heroes grow stronger by defeating enemies and leveling up automatically.
+*   💀 **Victory Rewards** – Experience (XP) is shared among all surviving heroes after battle.
 
 ---
 
