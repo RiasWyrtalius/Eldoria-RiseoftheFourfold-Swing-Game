@@ -159,8 +159,8 @@ public class GameLoader {
                 15,
                 "The Fire and Rock",
                 "/Assets/Images/Backgrounds/dungeon_entrance.png",
-                "Solid strength and shifting sludge",
-                buildEnemyGroup((_) -> new GolemBoss(3), (_) -> new DragonBoss(3)),
+                "Stops you at the entrance",
+                buildEnemyGroup((_) -> new GolemBoss(20), (_) -> new DragonBoss(20)),
                 buildLoot(
                         ItemFactory.mediumHealthPotion(),
                         ItemFactory.mediumManaPotion(),
@@ -192,7 +192,7 @@ public class GameLoader {
                 "Rage of Rock and Flame",
                 "/Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png",
                 "The final ascent begins. Fire and stone guard the path to destiny.",
-                buildEnemyGroup((_) -> new Varoth(15)),
+                buildEnemyGroup((_) -> new Varoth(20)),
                 buildLoot(
                         ItemFactory.mediumHealthPotion(),
                         ItemFactory.mediumManaPotion(),
