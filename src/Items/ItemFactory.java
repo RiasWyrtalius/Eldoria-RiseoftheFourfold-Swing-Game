@@ -86,7 +86,7 @@ public class ItemFactory {
         ));
 
         register(new ResourceItem(
-                "Spalsh Medium Mana Potion",
+                "Splash Medium Mana Potion",
                 "Restores 40% MP to a selected target",
                 null,
                 Rarity.RARE,
@@ -153,6 +153,8 @@ public class ItemFactory {
     public static Item splashManaPotion() { return itemRegistry.get("Splash Small Mana Potion"); }
     public static Item mediumHealthPotion() { return itemRegistry.get("Medium Health Potion"); }
     public static Item mediumManaPotion() { return itemRegistry.get("Medium Mana Potion"); }
+    public static Item splashMediumHealthPotion() { return itemRegistry.get("Splash Medium Health Potion"); }
+    public static Item splashMediumManaPotion() { return itemRegistry.get("Splash Medium Mana Potion"); }
     public static Item revivePotion() { return itemRegistry.get("Revive Potion"); }
     public static Item summoningScroll() { return itemRegistry.get("Summoning Scroll"); }
 }
