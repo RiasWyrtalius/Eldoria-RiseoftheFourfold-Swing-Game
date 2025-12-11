@@ -73,7 +73,7 @@ public class Goblin extends Enemy {
         };
 
         SkillLogicConsumer throwCoinsLogic = (controller, self, user, targets, onSkillComplete) -> {
-            int coins = Dice.getInstance().roll(1, 5);
+            int coins = Dice.getInstance().roll(1, 3);
             int baseDamage = ScalingLogic.calculatePhysicalDamage(user, baseAtk, 0.2, 0.1);
             int calculateDamage = (int)(baseDamage * Math.sqrt(coins));
 
