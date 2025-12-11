@@ -3,6 +3,7 @@ package UI;
 import UI.Components.ScreenFader;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Stack;
 
 /**
@@ -59,13 +60,19 @@ public class SceneManager {
     public void showOverlay(JPanel overlayPanel) {
         if (layeredPane == null) return;
 
+//        if (layeredPane.getLayout() == null) {
+//            layeredPane.setLayout(new BorderLayout());
+//        }
+
+//        layeredPane.add(overlayPanel, BorderLayout.CENTER);
+        overlayPanel.setBounds(0, 0, gameWindow.getWidth(), gameWindow.getHeight());
+        layeredPane.add(overlayPanel, JLayeredPane.POPUP_LAYER);
+
         // hides the previous top overlay if one exists at all
         if (!overlayStack.isEmpty()) {
             overlayStack.peek().setVisible(false);
         }
 
-        overlayPanel.setBounds(0, 0, gameWindow.getWidth(), gameWindow.getHeight());
-        layeredPane.add(overlayPanel, JLayeredPane.POPUP_LAYER);
         overlayStack.push(overlayPanel);
 
         gameWindow.revalidate();

@@ -290,7 +290,7 @@ public class BattleController {
                     processVictoryRewards();
                     AudioManager.getInstance().playSound("VICTORY_MUSIC_1");
                     finalResult = BattleResult.VICTORY;
-                }, true);
+                });
             } else {
                 resetTurnReadiness();
                 processVictoryRewards();

@@ -31,7 +31,6 @@ public class GameManager {
 
     private JFrame gameWindow;
     private MainMenu mainMenuView;
-    private StoryView storyView;
     private BattleInterface battleView;
 
     private GameManager() {
@@ -76,8 +75,8 @@ public class GameManager {
 
             // preload all views!!!
             mainMenuView = new MainMenu(this);
-            storyView = new StoryView();
             battleView = new BattleInterface();
+            LogManager.initialize(battleView.getGameLogPanelTextPane(), battleView.getGameLogHighlightPanelTextPane());
 
             transitionToMainMenu();
 
@@ -94,8 +93,6 @@ public class GameManager {
 
     public void transitionToBattleView() {
         SceneManager.getInstance().transitionTo(battleView);
-
-        LogManager.initialize(battleView.getGameLogPanelTextPane(), battleView.getGameLogHighlightPanelTextPane());
         VisualEffectsManager.getInstance().setMainView(battleView);
     }
 
@@ -165,30 +162,15 @@ public class GameManager {
      * @param slides
      * @param onFinished
      */
-    public void playStorySequence(List<StorySlide> slides, Runnable onFinished, boolean isOverlay) {
+    public void playStorySequence(List<StorySlide> slides, Runnable onFinished) {
         if (slides == null || slides.isEmpty()) {
             if (onFinished != null) onFinished.run();
             return;
         }
 
         StoryView storyView = new StoryView();
-
-        Runnable finalCallback = () -> {
-            if (isOverlay) {
-                SceneManager.getInstance().goBack(); // Close the overlay
-            }
-            if (onFinished != null) {
-                onFinished.run();
-            }
-        };
-
-        if (isOverlay) {
-            SceneManager.getInstance().showOverlay(storyView);
-        } else {
-            SceneManager.getInstance().transitionTo(storyView);
-        }
-
-        storyView.startSequence(slides, finalCallback);
+        SceneManager.getInstance().transitionTo(storyView);
+        storyView.startSequence(slides, onFinished);
     }
 
     public void loadNextLevel() {
@@ -209,8 +191,6 @@ public class GameManager {
 
         if (battleController != null) saveCurrentGame();
 
-        if (battleController != null) saveCurrentGame();
-
         if (nextLevel.levelNumber() % 5 == 0) {
             LogManager.log("Milestone Floor Reached! The party's determination restores them.", LogFormat.HIGHLIGHT_BUFF);
 
@@ -225,7 +205,8 @@ public class GameManager {
         if (preLevelCutscene != null && !preLevelCutscene.isEmpty()) {
             playStorySequence(preLevelCutscene, () -> {
                 setupBattle(nextLevel);
-            }, true);
+                transitionToBattleView();
+            });
         } else {
             setupBattle(nextLevel);
         }

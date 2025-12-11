@@ -45,7 +45,7 @@ public class InventoryPanel extends JPanel {
         };
 
         itemList.setOpaque(false);
-        itemList.setBackground(new Color(0, 0, 0, 0));
+        itemList.setBackground(new Color(255, 255, 255, 0));
         itemList.setCellRenderer(new ItemListRenderer());
         itemList.setSelectionBackground(SELECTION_COLOR);
         itemList.setSelectionForeground(Color.WHITE);
