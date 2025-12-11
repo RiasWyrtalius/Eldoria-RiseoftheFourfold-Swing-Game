@@ -2,22 +2,25 @@ package UI.Components;
 
 import Items.Inventory;
 import Items.Item;
-import Resource.Animation.AssetManager;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class InventoryPanel extends JPanel {
 
-    private static final Color SELECTION_COLOR = new Color(218, 165, 32, 100);
-    private static final Color HOVER_COLOR = new Color(255, 255, 255, 40);
-    private static final Color FONT_COLOR = new Color(245, 240, 220);
+    // COLORS UPDATED FOR WHITE THEME
+    private static final Color SELECTION_COLOR = new Color(218, 165, 32);
+    private static final Color HOVER_COLOR = new Color(230, 230, 230);
+    private static final Color FONT_COLOR = Color.BLACK;
+    private static final Color BACKGROUND_COLOR = Color.WHITE;
+
     private static final Font FONT_ITEM = new Font("Georgia", Font.PLAIN, 16);
 
     private JList<Item> itemList;
@@ -27,9 +30,18 @@ public class InventoryPanel extends JPanel {
     private int hoveredIndex = -1;
 
     public InventoryPanel() {
-        setOpaque(false);
-        this.setBorder(new EmptyBorder(20, 10, 10, 10));
+        setOpaque(true);
+        setBackground(BACKGROUND_COLOR);
         setLayout(new BorderLayout());
+
+        Border lineBorder = BorderFactory.createLineBorder(new Color(100, 100, 100));
+        TitledBorder titledBorder = BorderFactory.createTitledBorder(lineBorder, "Inventory");
+        titledBorder.setTitleColor(Color.WHITE);
+        titledBorder.setTitleColor(new Color(200, 200, 200));
+        titledBorder.setTitleJustification(TitledBorder.CENTER);
+
+        // Add padding inside
+        this.setBorder(BorderFactory.createCompoundBorder(titledBorder, new EmptyBorder(10, 10, 10, 10)));
 
         listModel = new DefaultListModel<>();
         itemList = new JList<>(listModel) {
@@ -44,8 +56,9 @@ public class InventoryPanel extends JPanel {
             }
         };
 
-        itemList.setOpaque(false);
-        itemList.setBackground(new Color(0, 0, 0, 0));
+        // 3. Set List Background to White
+        itemList.setOpaque(true);
+        itemList.setBackground(BACKGROUND_COLOR);
         itemList.setCellRenderer(new ItemListRenderer());
         itemList.setSelectionBackground(SELECTION_COLOR);
         itemList.setSelectionForeground(Color.WHITE);
@@ -63,7 +76,7 @@ public class InventoryPanel extends JPanel {
             @Override
             public void mouseExited(MouseEvent e) {
                 hoveredIndex = -1;
-//                itemList.repaint();
+                itemList.repaint();
             }
 
             @Override
@@ -84,31 +97,16 @@ public class InventoryPanel extends JPanel {
         itemList.addMouseMotionListener(unifiedMouseAdapter);
 
         JScrollPane scrollPane = new JScrollPane(itemList);
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
+
+        // 4. CRITICAL: Set ScrollPane and Viewport to White to remove "Grayness"
+        scrollPane.setOpaque(true);
+        scrollPane.setBackground(BACKGROUND_COLOR);
+        scrollPane.getViewport().setOpaque(true);
+        scrollPane.getViewport().setBackground(BACKGROUND_COLOR);
         scrollPane.setBorder(null);
+
         add(scrollPane, BorderLayout.CENTER);
     }
-
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        Graphics2D g2 = (Graphics2D) g.create();
-//        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//
-//        int arc = 20;
-//        int borderThickness = 2;
-//        int x = 5, y = 5, w = getWidth() - 10, h = getHeight() - 10;
-//
-//        g2.setColor(new Color(0, 0, 0, 180));
-//        g2.fillRoundRect(x, y, w, h, arc, arc);
-//
-//        g2.setColor(new Color(218, 165, 32));
-//        g2.setStroke(new BasicStroke(borderThickness));
-//        g2.drawRoundRect(x, y, w, h, arc, arc);
-//
-//        g2.dispose();
-//    }
 
     public void loadInventory(Inventory inventory) {
         this.currentInventory = inventory;
@@ -147,11 +145,11 @@ public class InventoryPanel extends JPanel {
                 setBackground(list.getSelectionBackground());
                 setForeground(Color.WHITE);
             } else if (index == hoveredIndex) {
-                setBackground(HOVER_COLOR);
-                setForeground(FONT_COLOR);
+                setBackground(HOVER_COLOR); // Light gray hover
+                setForeground(FONT_COLOR);  // Black text
             } else {
-                setBackground(new Color(0, 0, 0, 0));
-                setForeground(FONT_COLOR);
+                setBackground(BACKGROUND_COLOR); // Pure White background
+                setForeground(FONT_COLOR);       // Black text
             }
 
             return this;
