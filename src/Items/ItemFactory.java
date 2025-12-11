@@ -76,6 +76,24 @@ public class ItemFactory {
                 TargetType.SINGLE_TARGET
         ));
 
+        register(new ResourceItem(
+                "Splash Medium Health Potion",
+                "Restores 40% HP to a selected target",
+                null,
+                Rarity.RARE,
+                true, false,
+                TargetType.AOE_TWO_TARGETS
+        ));
+
+        register(new ResourceItem(
+                "Spalsh Medium Mana Potion",
+                "Restores 40% MP to a selected target",
+                null,
+                Rarity.RARE,
+                false, true,
+                TargetType.AOE_TWO_TARGETS
+        ));
+
         // --- UTILITY ITEMS ---
         register(new UtilityItem(
                 "Revive Potion",
