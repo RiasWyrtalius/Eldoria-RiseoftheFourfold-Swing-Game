@@ -61,22 +61,22 @@ public abstract class JobClass {
 
     public abstract List<ReactionSkill> createReactions();
     public abstract List<Skill> createSkills();
-
     public abstract void registerAssets();
 
-    // =============== PUBLIC GETTERS FOR UI ===============
+    public void setReactions(List<ReactionSkill> reactions) {
+        this.reactions = reactions;
+    }
+
     public String getName() { return this.name; }
     public List<Skill> getSkills() {
         return skills;
     }
-
     public Skill getSkill(String skillName) {
         return this.skills.stream()
                 .filter(skill -> skill.getName().equalsIgnoreCase(skillName))
                 .findFirst()
                 .orElse(null);
     }
-
     public int getHpBonus() {
         return hpBonus;
     }
@@ -89,28 +89,18 @@ public abstract class JobClass {
     public List<ReactionSkill> getReactions() {
         return reactions;
     }
-
-    public void setReactions(List<ReactionSkill> reactions) {
-        this.reactions = reactions;
-    }
-
     public int getHpFlat() {
         return hpFlat;
     }
-
     public double getHpGrowth() {
         return hpGrowth;
     }
-
     public int getMpFlat() {
         return mpFlat;
     }
-
     public double getMpGrowth() {
         return mpGrowth;
     }
-
-    //TEMPORARY GETTERS FOR CHARACTER DISPLAY
     public String getPreviewImagePath() { return ""; }
     public String getIdleImageKey() { return this.idleImageKey; }
 

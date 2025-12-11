@@ -83,7 +83,7 @@ public class Hero extends Character {
         this.requiredXP = (int)(baseXP * Math.pow(growthRate,this.level - 1));
 
         VisualEffectsManager.getInstance().showFloatingText(this, "LEVEL " + this.level, LogFormat.HIGHLIGHT_BUFF);
-        LogManager.log(this.name + " has leveled up to level " + this.level + "!");
+        LogManager.log(this.name + " has leveled up to level " + this.level + "!", LogFormat.HIGHLIGHT_LEVELUP);
 
         recalculateStats();
 
@@ -158,31 +158,22 @@ public class Hero extends Character {
     @Override
     protected void onDeath() {
         super.onDeath();
-        LogManager.log("(HERO) : " + this.name + " has died!");
+        LogManager.log("(HERO) : " + this.name + " has died!", LogFormat.DEAD);
     }
 
-    @Override
-    public String getDescription() {
-        return job.getDescription();
-    }
 
     public void useSkill(BattleController controller, Skill skill, List<Character> targets, Runnable onSkillComplete) {
-        LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on " + Skill.formatTargetList(targets), Color.GREEN);
+        LogManager.log("(HERO) : " + this.name + " is attempting to use " + skill.getName() + " on " + Skill.formatTargetList(targets), LogFormat.HIGHLIGHT_PLAYER_TURN);
 
         skill.execute(controller,this, targets, onSkillComplete);
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============
+    @Override public String getDescription() { return job.getDescription();}
     @Override public List<Skill> getSkills() { return job.getSkills(); }
     public List<ReactionSkill> getReactions() { return reactions; }
-    public int getXP() {
-        return XP;
-    }
-    public int getRequiredXP() {
-        return requiredXP;
-    }
-    public JobClass getJob() {
-        return job;
-    }
+    public int getXP() { return XP; }
+    public int getRequiredXP() { return requiredXP; }
+    public JobClass getJob() { return job; }
     @Override public String getIdleImageKey() { return this.job.getIdleImageKey(); }
 }

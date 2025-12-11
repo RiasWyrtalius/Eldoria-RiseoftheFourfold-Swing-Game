@@ -249,7 +249,7 @@ public class BattleController {
 
     private void executeTurnCleanUp() {
         LogManager.log("┌──── ∘°❉ - ❉°∘ ────┐", LogFormat.TURN_INDICATOR);
-        LogManager.log("│   Turn Recovery   │", LogFormat.TURN_INDICATOR);
+        LogManager.log("│    Turn Recovery   │", LogFormat.TURN_INDICATOR);
         LogManager.log("└──── °∘❉ - ❉∘° ────┘", LogFormat.TURN_INDICATOR);
 
         List<Character> allCharacters = new ArrayList<>();
@@ -307,7 +307,9 @@ public class BattleController {
     }
 
     private void processVictoryRewards() {
-        LogManager.log("--- STAGE CLEAR REWARDS ---", LogFormat.VICTORY);
+        LogManager.log("┌──── ∘°❉ - ❉°∘ ────┐", LogFormat.TURN_INDICATOR);
+        LogManager.log("│    STAGE CLEAR   │", LogFormat.TURN_INDICATOR);
+        LogManager.log("└──── °∘❉ - ❉∘° ────┘", LogFormat.TURN_INDICATOR);
 
         earnedXP = 0;
         earnedItems.clear();
@@ -316,7 +318,7 @@ public class BattleController {
         earnedXP = xpBonus;
 
         if (xpBonus > 0) {
-            LogManager.log("Party gained " + xpBonus + " XP!");
+//            LogManager.log("Party gained " + xpBonus + " XP!");
             for (Character hero : heroParty.getPartyMembers()) {
                 if (hero instanceof Hero) {
                     ((Hero) hero).gainXP(xpBonus);
@@ -326,7 +328,7 @@ public class BattleController {
 
         List<Item> loot = currentLevel.possibleItemDrops();
         if (!loot.isEmpty()) {
-            LogManager.log("Loot found!");
+            LogManager.log("Loot found!", LogFormat.LOOT);
             for (Item item : loot) {
 
 
@@ -353,7 +355,7 @@ public class BattleController {
     public void applyGroupDamage(Character user, Skill skill, List<Character> targets, int damage, Runnable onAllDamageResolved) {
         if (targets == null || targets.isEmpty()) {
             if (onAllDamageResolved != null) onAllDamageResolved.run();
-            LogManager.log("no targets!");
+            LogManager.log("no targets!", LogFormat.SYSTEM_ERROR);
             return;
         }
 

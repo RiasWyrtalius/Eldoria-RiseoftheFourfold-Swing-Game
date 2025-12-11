@@ -42,14 +42,14 @@ public abstract class Enemy extends Character {
     @Override
     protected void onDeath() {
         super.onDeath();
-        LogManager.log("(ENEMY) : " + this.name + " has died!");
+        LogManager.log("(ENEMY) : " + this.name + " has died!", LogFormat.DEAD);
     }
 
     @Override
     protected void onDefeat(Character finalAttacker) {
         super.onDefeat(finalAttacker);
         if (finalAttacker instanceof Hero winner) {
-            LogManager.log(winner.getName() + " delivered the final blow to " + this.name + "!", Color.CYAN);
+            LogManager.log(winner.getName() + " delivered the final blow to " + this.name + "!", LogFormat.HERO_ACTION);
             winner.gainXP(this.getRewardXP()); // Grant XP to the winner
         }
     }

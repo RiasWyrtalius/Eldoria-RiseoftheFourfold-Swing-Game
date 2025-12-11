@@ -78,7 +78,7 @@ public abstract class Character {
                 LogManager.log(this.name + " takes " + finalDamage + " damage.");
                 VisualEffectsManager.getInstance().showFloatingText(this, "-" + finalDamage + "HP", LogFormat.DAMAGE_TAKEN);
             } else {
-                LogManager.log(this.name + " reaction mitigated damage!");
+                LogManager.log(this.name + " reaction mitigated damage!", LogFormat.HIGHLIGHT_DODGE);
             }
 
             int potentialHealth = this.health - finalDamage;
@@ -233,7 +233,7 @@ public abstract class Character {
     }
 
     public void attack(Character target) {
-        LogManager.log("(CHARACTER) : " + this.name + " attacks " + target.getName());
+        LogManager.log("(CHARACTER) : " + this.name + " attacks " + target.getName(), LogFormat.HERO_ACTION);
     }
 
     public void receiveHealing(int rawAmount, Character source) {
@@ -251,7 +251,7 @@ public abstract class Character {
         if (this.isAlive) {
             // this shouldn't happen as the targeting ensures that
             // revive abilities or items is not called on alive characters
-            LogManager.log(this.name + " is already alive!");
+            LogManager.log(this.name + " is already alive!", LogFormat.SYSTEM_ERROR);
             return;
         }
 

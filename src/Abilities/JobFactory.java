@@ -45,7 +45,6 @@ public class JobFactory {
     public static JobClass getDefaultJob() {
         return jobRegistry.get("Warrior");
     }
-
     public static Collection<JobClass> getAllJobs() {
         return jobRegistry.values();
     }

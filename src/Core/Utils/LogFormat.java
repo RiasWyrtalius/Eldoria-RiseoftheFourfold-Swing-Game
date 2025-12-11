@@ -59,11 +59,11 @@ public class LogFormat {
     public static final Color HIGHLIGHT_ENEMY_TURN  = new Color(255, 100, 0); // Bright Orange
 
     // STATUS & ITEMS
-    public static final Color HIGHLIGHT_BUFF    = new Color(255, 215, 0);   // Gold
+    public static final Color HIGHLIGHT_BUFF    = new Color(145, 123, 0);   // Gold
     public static final Color HIGHLIGHT_DEBUFF  = new Color(148, 0, 211);   // Violet
-    public static final Color HIGHLIGHT_ITEM    = new Color(255, 255, 255); // White
+    public static final Color LOOT = new Color(255, 223, 0);
 
     // GAME STATES
     public static final Color HIGHLIGHT_LEVELUP = new Color(255, 0, 255);   // Magenta
-    public static final Color HIGHLIGHT_VICTORY = new Color(255, 215, 0);   // Pure Gold
+    public static final Color HIGHLIGHT_VICTORY = new Color(159, 132, 10);   // Pure Gold
 }
