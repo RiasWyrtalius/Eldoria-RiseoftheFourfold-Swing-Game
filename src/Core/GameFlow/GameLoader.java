@@ -159,9 +159,9 @@ public class GameLoader {
         fixedLevels.put(15, createSpecificLevel(
                 15,
                 "The Fire and Rock",
-                "/Assets/Images/Backgrounds/dungeon_entrance.png",
+                "/Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png",
                 "Stops you at the entrance",
-                buildEnemyGroup((_) -> new GolemBoss(20), (_) -> new DragonBoss(20)),
+                buildEnemyGroup((_) -> new GolemBoss(10), (_) -> new DragonBoss(10)),
                 buildLoot(
                         ItemFactory.mediumHealthPotion(),
                         ItemFactory.mediumManaPotion(),

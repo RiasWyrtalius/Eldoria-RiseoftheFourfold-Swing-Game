@@ -1,4 +1,4 @@
-# ⚔️ Elordia : Rise of the Fourfold - Swing Game
+# ⚔️ Eldoria : Rise of the Fourfold - Swing Game
 
 <p align="center"> <img src="https://img.shields.io/badge/Java-21-orange?logo=java&logoColor=white" /> </p>
 
