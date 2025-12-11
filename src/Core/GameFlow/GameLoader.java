@@ -70,7 +70,7 @@ public class GameLoader {
                 "The Gates",
                 "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
                 "A swarm of goblins blocks your path!",
-                buildEnemyGroup((_) -> new Varoth(1)),
+                buildEnemyGroup(Goblin::new,Goblin::new),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallManaPotion(),
@@ -143,7 +143,7 @@ public class GameLoader {
         postCutsceneLevel10.add(new StorySlide(
                 "/Assets/Images/CutsceneImages/Floor10/Floor10_c2.png",
                 List.of(
-                        "WWhat erupts here will soon take shape — the horrors awaiting you deeper in the wild."
+                        "What erupts here will soon take shape — the horrors awaiting you deeper in the wild."
                 )
         ));
 
@@ -191,10 +191,10 @@ public class GameLoader {
 
         fixedLevels.put(15, createSpecificLevel(
                 15,
-                "The Acid and Rock",
+                "The fire and Rock",
                 "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
                 "Solid strength and shifting sludge",
-                buildEnemyGroup(Slime::new,(_) -> new GolemBoss(3),Slime::new),
+                buildEnemyGroup((_) -> new GolemBoss(3),(_) -> new DragonBoss(3)),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallHealthPotion(),
@@ -235,7 +235,7 @@ public class GameLoader {
                 "The Rage of rock and flame",
                 "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
                 "The final ascent begins. Fire and stone guard the path to destiny.",
-                buildEnemyGroup((_) -> new GolemBoss(5),(_) -> new DragonBoss(5)),
+                buildEnemyGroup((_) -> new Varoth(15)),
                 buildLoot(
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.smallHealthPotion(),
