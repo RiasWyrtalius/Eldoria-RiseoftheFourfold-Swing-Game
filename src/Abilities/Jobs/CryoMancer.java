@@ -23,7 +23,7 @@ public class CryoMancer extends JobClass {
     private static final String IDLE_PATH = "/Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png";
 
     public CryoMancer(){
-        super("CryoMancer", description, "MAGE_ICE-IDLE",0,30);
+        super("CryoMancer", description, "MAGE_ICE-IDLE",20,35);
     }
 
     @Override
@@ -98,13 +98,13 @@ public class CryoMancer extends JobClass {
         };
 
         Skill IceSpike = new Skill(
-                "Ice Spike", "Unleashes spikes from the ground", 25, 30,
+                "Ice Spike", "Unleashes spikes from the ground", 20, 30,
                 SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 iceSpikeLogic
         );
 
         Skill FrostBite = new Skill(
-                "Frost Bite", "Unleashes cold Air to enemy", 10, 15,
+                "Frost Bite", "Unleashes cold Air to enemy", 15, 15,
                 SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 frostBiteLogic
         );

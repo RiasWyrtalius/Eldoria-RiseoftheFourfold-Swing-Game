@@ -16,7 +16,6 @@ import Resource.Animation.AssetManager;
 import java.util.List;
 
 public class Rogue extends JobClass{
-        //TODO: add to Class: CharacterSelection, IDLE_PATH, DESC, WAITING ON ANIMATIONS
         public static final String description = "A shadow in the night, the Rogue moves with silent precision and deadly intent. Master of stealth and deception, she strikes from the shadows before vanishing without a trace. Agile and cunning, she excels at disabling traps, picking locks, and exploiting enemy weaknesses. Her loyalty lies with the mission—and her own code.";
         private static final String IDLE_PATH = "/Assets/Animations/Heroes/Rogue/Idle/sprite_%d.png";
         public Rogue() {
@@ -112,13 +111,13 @@ public class Rogue extends JobClass{
             };
 
             Skill Assassinate = new Skill(
-                    "Assassinate", "Single-target physical", 0, 40,
+                    "Assassinate", "Single-target physical", 25, 30,
                     SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                     assassinateLogic
             );
 
             Skill CloneAttack = new Skill(
-                    "Clone Attack", "Multi-target clone spell", 50, 30,
+                    "Clone Attack", "Multi-target clone spell", 35, 30,
                     SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.AOE_ALL_TARGETS,TargetCondition.ALIVE,
                     cloneAttackLogic
             );

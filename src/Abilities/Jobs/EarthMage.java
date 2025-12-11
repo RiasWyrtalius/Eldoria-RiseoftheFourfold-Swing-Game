@@ -23,7 +23,7 @@ public class EarthMage extends JobClass {
     public static final String IDLE_PATH = "/Assets/Animations/Heroes/Mage-Earth/Idle/sprite_%d.png";
 
     public EarthMage(){
-        super("EarthMage", description,"MAGE_EARTH-IDLE",0,30);
+        super("EarthMage", description,"MAGE_EARTH-IDLE",25,35);
     }
 
     @Override
@@ -121,19 +121,19 @@ public class EarthMage extends JobClass {
         };
 
         Skill EarthAttack = new Skill(
-                "Earth Attack", "Multi-target Earth spell", 60, 50,
+                "Earth Attack", "Multi-target Earth spell", 35, 40,
                 SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
                 earthAttackLogic
         );
 
         Skill EarthquakeSpell = new Skill(
-                "Earthquake Spell", "Multi-targeted Earth spell", 50, 55,
+                "Earthquake Spell", "Multi-targeted Earth spell", 45, 45,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
                 earthquakeSpellLogic
         );
 
         Skill StoneHail = new Skill(
-                "Stone Hail", "Single-target Earth spell", 15, 20,
+                "Stone Hail", "Single-target Earth spell", 10, 20,
                 SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 stoneHailLogic
         );

@@ -6,16 +6,13 @@ import Characters.Base.Enemy;
 import Characters.Base.Hero;
 import Characters.Enemies.*;
 import Characters.Party;
-import Core.GameManager;
 import Core.Story.StorySlide;
 import Resource.Audio.AudioManager;
 import Core.Utils.LogManager;
 import Core.Utils.LogFormat;
 import Items.*;
 
-import javax.swing.*;
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 import UI.Views.BattleInterface;
 

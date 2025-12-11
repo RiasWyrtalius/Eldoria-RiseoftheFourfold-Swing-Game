@@ -21,13 +21,13 @@ public class GolemBoss extends Boss {
     public GolemBoss(int level){
         this(
                 "Golem",
-                ScalingLogic.calculateStat(level,125,30,0.1),
-                ScalingLogic.calculateStat(level,20,8,0.05),
-                ScalingLogic.calculateStat(level,300,50,0.2),
+                ScalingLogic.calculateStat(level,250,30,0.1),
+                ScalingLogic.calculateStat(level,22,8,0.05),
+                ScalingLogic.calculateStat(level,80,50,0.2),
                 level,
                 "Boss"
                 ,ScalingLogic.calculateStat(level,200,30,0.1),
-                (int)(2.5));
+                1.5);
     }
     public GolemBoss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
         super(name, initialHealth, baseAtk, maxMana, level, type, rewardXP, healthMultiplier, "GOLEM_BOSS-IDLE", "boss of the level");
@@ -109,7 +109,7 @@ public class GolemBoss extends Boss {
         };
 
         Skill devastatingStrike = new Skill(
-                "Golem Devastating Strike", "Massive AOE damage", 50, 0,
+                "Golem Devastating Strike", "Massive AOE damage", 40, 0,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
                 devastatingStrikeLogic
         );

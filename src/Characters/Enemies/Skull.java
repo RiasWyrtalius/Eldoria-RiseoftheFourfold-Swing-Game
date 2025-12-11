@@ -24,7 +24,7 @@ public class Skull extends Enemy {
     public Skull(int level) {
         super(
                 "Skeletal Skull",
-                ScalingLogic.calculateStat(level, 30, 20, 0.1),
+                ScalingLogic.calculateStat(level, 40, 20, 0.1),
                 ScalingLogic.calculateStat(level, 10, 5, 0.05),
                 0,
                 level,

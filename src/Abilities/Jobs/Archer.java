@@ -111,7 +111,7 @@ public class Archer extends JobClass {
         );
 
         Skill HeavyArrow = new Skill(
-                "Heavy Arrow", "Single-target heavy long ranged attack", 30, 40,
+                "Heavy Arrow", "Single-target heavy long ranged attack", 20, 30,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 heavyArrowLogic
         );

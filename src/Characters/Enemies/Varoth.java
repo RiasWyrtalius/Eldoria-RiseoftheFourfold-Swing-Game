@@ -19,14 +19,15 @@ public class Varoth extends Boss {
     public Varoth(){this(1);}
 
     public Varoth(int level){
-        this(
+        this( //    HP / DMG / MP / XP GAIN
                 "Varoth",
                 ScalingLogic.calculateStat(level,500,20,0.1),
-                ScalingLogic.calculateStat(level,50,15,0.05),
-                ScalingLogic.calculateStat(level,400,50,0.2),
+                ScalingLogic.calculateStat(level,25,15,0.05),
+                ScalingLogic.calculateStat(level,400,15,0.1),
                 level,"Boss"
-                ,ScalingLogic.calculateStat(level,500,30,0.09),
-                (int)(1.6));
+                ,ScalingLogic.calculateStat(level,200,30,0.09),
+                1.2
+        );
     }
     public Varoth(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
         super(

@@ -115,17 +115,17 @@ public class Cleric extends JobClass {
                 healSelfLogic
         );
         Skill HealGroup = new Skill(
-                "Group Heal", "Healing their teammate", 40, 20,
+                "Group Heal", "Healing their teammate", 30, 15,
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
                 healGroupLogic
         );
         Skill BashStaff = new Skill(
-                "Bash Staff", "Healing their teammate", 0, 10,
+                "Bash Staff", "Healing their teammate", 10, 10,
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 bashLogic
         );
         Skill Revive = new Skill(
-                "Revive", "Revive their teammate", 40, 0,
+                "Revive", "Revive their teammate", 35, 0,
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.DEAD,
                 reviveLogic
         );

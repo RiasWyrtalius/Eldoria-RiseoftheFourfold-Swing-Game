@@ -21,12 +21,12 @@ public class DragonBoss extends Boss {
     public DragonBoss(int level){
         this(
                 "Baby Dragon",
-                ScalingLogic.calculateStat(level,200,30,0.1),
-                ScalingLogic.calculateStat(level,20,8,0.05),
+                ScalingLogic.calculateStat(level,300,40,0.1),
+                ScalingLogic.calculateStat(level,25,8,0.05),
                 ScalingLogic.calculateStat(level,300,50,0.2),
                 level,"Boss"
                 ,ScalingLogic.calculateStat(level,250,30,0.09),
-                (int)(1.6));
+                1.0);
     }
     public DragonBoss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
         super(

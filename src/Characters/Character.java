@@ -367,7 +367,7 @@ public abstract class Character {
 
     public void processTurnEffects() {
         if (activeStatusEffects.isEmpty()) return;
-        // just discovered u can use this to safely remove   items while looping
+        // just discovered u can use this to safely remove   items while looping "w <3" - charlz
         // so we dont gotta do like i = 0, needs java 24 tho
         Iterator<StatusEffect> iterator = activeStatusEffects.iterator();
         while (iterator.hasNext()) {

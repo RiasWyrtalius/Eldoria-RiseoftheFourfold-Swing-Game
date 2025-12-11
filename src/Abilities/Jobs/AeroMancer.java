@@ -22,7 +22,7 @@ public class AeroMancer extends JobClass {
     private static final String IDLE_PATH = "/Assets/Animations/Heroes/Mage-Wind/Idle/sprite_%d.png";
 
     public AeroMancer(){
-        super("AeroMancer", description,"MAGE_WIND-IDLE",0,30);
+        super("AeroMancer", description,"MAGE_WIND-IDLE",15,40);
     }
 
     @Override
@@ -119,18 +119,18 @@ public class AeroMancer extends JobClass {
         };
 
         Skill WindSlash = new Skill(
-                "Wind Slash", "A slash compressed wind", 20, 25,
+                "Wind Slash", "A slash compressed wind", 10, 25,
                 SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 windSlashLogic
         );
 
         Skill WindPierce = new Skill(
-                "Wind Pierce", "Single-target Sharp Wind spell", 15, 20,
+                "Wind Pierce", "Single-target Sharp Wind spell", 20, 20,
                 SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.AOE_TWO_TARGETS, TargetCondition.ALIVE,
                 windPierceLogic
         );
         Skill WindTornado = new Skill(
-                "Wind Tornado", "Multi-target Wind spell", 40, 40,
+                "Wind Tornado", "Multi-target Wind spell", 35, 30,
                 SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
                 windTornadoLogic
         );

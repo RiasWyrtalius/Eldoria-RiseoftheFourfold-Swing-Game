@@ -101,7 +101,7 @@ public class Warrior extends JobClass {
         );
 
         Skill SwordSlash = new Skill(
-                "Sword Slash", "Single-target Sword Slash", 0, 30,
+                "Sword Slash", "Single-target Sword Slash", 10, 30,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 swordSlashLogic
         );
