@@ -125,6 +125,7 @@ public class GameLoader {
                 postCutsceneLevel5
         ));
         // =========================================================
+
         List<StorySlide> preCutsceneLevel10 = new ArrayList<>();
         preCutsceneLevel10.add(new StorySlide(
                 "/Assets/Images/CutsceneImages/Floor10/Floor10_c1pre.png",
@@ -166,9 +167,10 @@ public class GameLoader {
                 preCutsceneLevel10,
                 postCutsceneLevel10
         ));
+
         // =========================================================
         List<StorySlide> preCutsceneLevel15 = new ArrayList<>();
-        preCutsceneLevel10.add(new StorySlide(
+        preCutsceneLevel15.add(new StorySlide(
                 "/Assets/Images/CutsceneImages/Floor15/Floor15_c1pre.png",
                 List.of(
                         "The ground that once trembled now swells and splits — corruption rising in sludge and stone."
