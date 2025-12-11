@@ -101,15 +101,15 @@ public class Hero extends Character {
             int mpGained = this.maxMana - prevMana;
 
             if (hpGained > 0) {
-                LogManager.log(this.name + " max health increased from " + prevHealth + " to " + this.maxHealth + "!", LogFormat.HIGHLIGHT_BUFF);
+                LogManager.log(this.name + " max health increased from " + prevHealth + " to " + this.maxHealth + "!", LogFormat.HP);
                 this.receiveHealing(hpGained, null);
             }
             if (mpGained > 0) {
-                LogManager.log(this.name + " max mana increased from " + prevMana + " to " + this.maxMana + "!\n", LogFormat.HIGHLIGHT_BUFF);
+                LogManager.log(this.name + " max mana increased from " + prevMana + " to " + this.maxMana + "!", LogFormat.MP);
                 this.receiveMana(mpGained, null);
             }
         } else { // dead & not milestone
-            LogManager.log(this.name + " reached Level " + this.level + "!", LogFormat.HIGHLIGHT_BUFF);
+            LogManager.log(this.name + " reached Level " + this.level + "!", LogFormat.XP_GAIN);
         }
     }
 

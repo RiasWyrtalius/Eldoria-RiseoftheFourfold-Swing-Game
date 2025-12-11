@@ -328,7 +328,7 @@ public class BattleController {
 
         List<Item> loot = currentLevel.possibleItemDrops();
         if (!loot.isEmpty()) {
-            LogManager.log("Loot found!", LogFormat.LOOT);
+            //LogManager.log("Loot found!", LogFormat.LOOT);
             for (Item item : loot) {
 
 
