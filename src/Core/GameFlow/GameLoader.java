@@ -92,7 +92,7 @@ public class GameLoader {
         fixedLevels.put(5, createSpecificLevel(
                 5,
                 "The Coven",
-                "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
+                "/Assets/Images/Backgrounds/Level_BG/Volcano_Biome/sprite_0.png",
                 "Whispers spread through the forest. A hunter stalks the same darkness you fight.",
                 buildEnemyGroup(Vampire::new, Vampire::new),
                 buildLoot(
@@ -125,7 +125,7 @@ public class GameLoader {
         fixedLevels.put(10, createSpecificLevel(
                 10,
                 "The Critters and Fangs",
-                "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
+                "/Assets/Images/Backgrounds/Level_BG/Snow_Biome/sprite_0.png",
                 "The brood gathers.",
                 buildEnemyGroup(Vampire::new, Spider::new, Spider::new, Vampire::new),
                 buildLoot(
@@ -158,7 +158,7 @@ public class GameLoader {
         fixedLevels.put(15, createSpecificLevel(
                 15,
                 "The Fire and Rock",
-                "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
+                "/Assets/Images/Backgrounds/dungeon_entrance.png",
                 "Solid strength and shifting sludge",
                 buildEnemyGroup((_) -> new GolemBoss(3), (_) -> new DragonBoss(3)),
                 buildLoot(
@@ -190,7 +190,7 @@ public class GameLoader {
         fixedLevels.put(20, createSpecificLevel(
                 20,
                 "Rage of Rock and Flame",
-                "/Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png",
+                "/Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png",
                 "The final ascent begins. Fire and stone guard the path to destiny.",
                 buildEnemyGroup((_) -> new Varoth(15)),
                 buildLoot(
@@ -378,8 +378,8 @@ public class GameLoader {
 
     private String getBackgroundForLevel(int levelNum) {
         List<String> bg_List = new ArrayList<>();
-        bg_List.add("Assets/Images/Backgrounds/Level_BG/sample.jpg");
         bg_List.add("Assets/Images/Backgrounds/Level_BG/Forest_Biome/sprite_0.png");
+        bg_List.add("Assets/Images/Backgrounds/Level_BG/Volcano_Biome/sprite_0.png");
         bg_List.add("Assets/Images/Backgrounds/Level_BG/Snow_Biome/sprite_0.png");
         bg_List.add("Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png");
 

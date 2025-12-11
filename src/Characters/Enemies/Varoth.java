@@ -54,6 +54,12 @@ public class Varoth extends Boss {
                 7, 100, 100 , 200,
                 AnimationLoopType.ONE_CYCLE
         );
+        AssetManager.getInstance().registerAnimation(
+                "VAROTH_AOE",
+                "Assets/Animations/Enemies/Boss/Varoth/Effects/AOE_Attack/sprite_%d.png",
+                5, 100, 100 , 200,
+                AnimationLoopType.ONE_CYCLE
+        );
     }
 
     @Override
@@ -110,19 +116,37 @@ public class Varoth extends Boss {
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 devastatingStrikeLogic
         );
+        SkillLogicConsumer aoeLogic = (controller, self, user, targets, onSkillComplete) -> {
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,(int)(baseAtk * 1.25),0.2,0.2);
+
+            LogManager.log(self.getActionLog(user, "unleashes a Void Blast on", targets), LogFormat.ENEMY_ACTION);
+            for(Character target : targets) {
+                VisualEffectsManager.getInstance().playAnimationOnCharacter("VAROTH_AOE", target, () -> {
+                    target.receiveDamage(calculateDamage, user, self, onSkillComplete);
+                    if (onSkillComplete != null) onSkillComplete.run();
+                }, true);
+            }
+        };
+
+        Skill AOE = new Skill(
+                "Void Blast", "Attacks multiple enemies", 50, 0,
+                SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
+                aoeLogic
+        );
 
         SkillLogicConsumer doNothingLogic = (controller, self, user, targets, onSkillComplete) -> {
 
         };
 
         Skill DoNothing = new Skill(
-                "Void Slash", "Attacks using the void damage", 0, 0,
+                "Nothing", "Does nothing", 0, 0,
                 SkillType.UTILITY, SkillAction.PHYSICAL, TargetType.NO_TARGETS, TargetCondition.ALIVE,
                 doNothingLogic
         );
 
         skills.add(basicAttack);
         skills.add(devastatingStrike);
+        skills.add(AOE);
         skills.add(DoNothing);
     }
 
@@ -143,10 +167,13 @@ public class Varoth extends Boss {
     public void makeAttack(BattleController controller, List<Character> targets, Runnable onSkillComplete) {
         Skill basicAttack = skills.get(0);
         Skill devastatingStrike = skills.get(1);
+        Skill AOE = skills.get(2);
 
         if (this.getMana() >= devastatingStrike.getManaCost()) {
             devastatingStrike.execute(controller, this, targets, onSkillComplete);
-        } else {
+        } else if (this.getMana() >= AOE.getManaCost()) {
+            AOE.execute(controller, this, targets, onSkillComplete);
+        }else {
             basicAttack.execute(controller, this, targets, onSkillComplete);
         }
     }
