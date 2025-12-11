@@ -113,6 +113,29 @@ public class Hero extends Character {
         }
     }
 
+    public void reviveFromMapMilestone() {
+        if (!this.isAlive) { // kung patay nya recover ra 50% stats
+            this.isAlive = true;
+            this.health = this.maxHealth / 2;
+            this.mana = this.maxMana / 2;
+
+            LogManager.log(this.name + " has been REVIVED by reaching a Milestone Floor!", LogFormat.HIGHLIGHT_BUFF);
+            VisualEffectsManager.getInstance().showFloatingText(this, "REVIVED!", Color.CYAN);
+        } else {
+            int hpBonus = (int) (this.maxHealth * 0.25);
+            int mpBonus = (int) (this.maxMana * 0.25);
+
+            if (hpBonus < 1) hpBonus = 1;
+            if (mpBonus < 1) mpBonus = 1;
+
+            this.receiveHealing(hpBonus, null);
+            this.receiveMana(mpBonus, null);
+
+            LogManager.log(this.name + " rests at the milestone and recovers resources.", LogFormat.HIGHLIGHT_BUFF);
+            VisualEffectsManager.getInstance().showFloatingText(this, "+25%!", Color.CYAN);
+        }
+    }
+
     private boolean isReviveMilestone(int level) { return level % 5 == 0; }
 
     public void regenerateTurnResources() {
