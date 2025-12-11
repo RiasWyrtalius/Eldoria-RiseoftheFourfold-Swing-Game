@@ -11,6 +11,7 @@ import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import Resource.Audio.AudioManager;
 import UI.Components.IconLoader;
+import UI.SceneManager;
 import UI.Views.BattleInterface;
 import UI.Views.CharacterSelection;
 import UI.Views.MainMenu;
@@ -22,15 +23,16 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class GameManager {
-    private JFrame gameWindow;
-    private MainMenu mainMenuView;
-
     private static final GameManager INSTANCE = new GameManager();
 
     private BattleController battleController;
-    private GameLoader gameLoader;
+    private final GameLoader gameLoader;
     private Party heroParty;
-    private BattleInterface mainView;
+
+    private JFrame gameWindow;
+    private MainMenu mainMenuView;
+    private StoryView storyView;
+    private BattleInterface battleView;
 
     private GameManager() {
         this.gameLoader = new GameLoader();
@@ -40,42 +42,61 @@ public class GameManager {
         return INSTANCE;
     }
 
+
+    /**
+     * Called after a party has been created (either new or loaded).
+     * This method generates the campaign and transitions the UI to the first battle.
+     */
+    public void startGameLoop() {
+        SceneManager.getInstance().transitionTo(battleView);
+
+        // link Infrastructure
+        LogManager.initialize(battleView.getGameLogPanelTextPane(), battleView.getGameLogHighlightPanelTextPane());
+        VisualEffectsManager.getInstance().setMainView(battleView);
+
+
+        // generate campaign
+        long seed = System.currentTimeMillis();
+        gameLoader.generateCampaign(seed, 20);
+
+        // start level 1
+        loadNextLevel();
+    }
+
     public void startApplication() {
         // run all UI initialization safely on the swing thread
         // cuz swing     runs on a separate thread for some reason lol
         SwingUtilities.invokeLater(() -> {
-            this.gameWindow = new JFrame("Elordia: Rise of the Fourfold");
+            gameWindow = new JFrame("Elordia: Rise of the Fourfold");
             IconLoader.setIcons(gameWindow);
             gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             gameWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-            showMainMenu();
+            SceneManager.getInstance().initialize(gameWindow);
+
+            // preload all views!!!
+            mainMenuView = new MainMenu(this);
+            storyView = new StoryView();
+            battleView = new BattleInterface();
+
+            transitionToMainMenu();
+
+            gameWindow.setVisible(true);
         });
     }
 
-    public void showMainMenu() {
-        if (mainMenuView == null) {
-            mainMenuView = new MainMenu(this);
-        }
+    public void transitionToMainMenu() {
+        LogManager.log("Transitioning to main menu.");
+        AudioManager.getInstance().stopMusic();
 
-        // Swap the content to the menu panel
-        gameWindow.setContentPane(mainMenuView);
-        gameWindow.revalidate();
-        gameWindow.repaint();
-        gameWindow.setVisible(true);
+        SceneManager.getInstance().transitionTo(mainMenuView);
     }
 
-    public void loadMainMenu() {
-        Resource.Audio.AudioManager.getInstance().stopMusic();
+    public void transitionToBattleView() {
+        SceneManager.getInstance().transitionTo(battleView);
 
-        this.mainMenuView = new MainMenu(this);
-
-        if (gameWindow != null) {
-            gameWindow.setContentPane(mainMenuView);
-            gameWindow.revalidate();
-            gameWindow.repaint();
-            gameWindow.setVisible(true);
-        }
+        LogManager.initialize(battleView.getGameLogPanelTextPane(), battleView.getGameLogHighlightPanelTextPane());
+        VisualEffectsManager.getInstance().setMainView(battleView);
     }
 
     public void loadSavedGame() {
@@ -83,55 +104,60 @@ public class GameManager {
 
         if (state == null) {
             LogManager.log("Failed to load save file.", LogFormat.SYSTEM_ERROR);
-
             JOptionPane.showMessageDialog(
-                    gameWindow,
+                    battleView,
                     "Could not load the save file. It may be corrupted.",
                     "Load Error",
                     JOptionPane.ERROR_MESSAGE
             );
 
-            showMainMenu();
+            transitionToMainMenu();
             return;
         }
 
         LogManager.log("Save file loaded...", LogFormat.SYSTEM);
 
-        // setup battle view
-        mainView = new BattleInterface();
-        gameWindow.setContentPane(mainView);
-        gameWindow.revalidate();
-        gameWindow.repaint();
+        SceneManager.getInstance().transitionTo(battleView);
 
-        gameLoader.setBattleInterface(mainView);
+        LogManager.initialize(battleView.getGameLogPanelTextPane(), battleView.getGameLogHighlightPanelTextPane());
+        VisualEffectsManager.getInstance().setMainView(battleView);
 
-        // re link infrastructure
-        LogManager.initialize(mainView.getGameLogPanelTextPane(), mainView.getGameLogHighlightPanelTextPane());
-        VisualEffectsManager.getInstance().setMainView(mainView);
-
-        // reload party
+        // load game state
         this.heroParty = gameLoader.loadPartyFromSave(state);
-        gameLoader.generateCampaign(state.seed, 20); // Regenerate same campaign
+        gameLoader.generateCampaign(state.seed, 20);
 
-        // skip done levels
         for (int i = 0; i < state.levelsCompleted; i++) {
             gameLoader.loadNextLevel();
         }
 
-        // start game from savepoint
+        // Start from save point
         loadNextLevel();
     }
 
-    public void startNewGame(JFrame currentWindow) {
-        this.gameWindow = currentWindow;
-
+    public void startNewGame() {
         List<StorySlide> introScript = GameLoader.loadIntroSequence();
+        StoryView storyView = new StoryView();
 
-        AudioManager audio = AudioManager.getInstance();
-        audio.registerSound("STORYVIEW", "Assets/Audio/SFX/StoryView/storyview_bgm.wav");
-        audio.playMusic("STORYVIEW");
+        SceneManager.getInstance().transitionTo(storyView);
+        AudioManager.getInstance().playMusic("STORYVIEW");
 
-        playStorySequence(introScript, null);
+        storyView.startSequence(introScript, this::initializeGameplay);
+    }
+
+    private void initializeGameplay() {
+        // Create an empty party to be filled by the player
+        this.heroParty = GameLoader.createInitialParty("Adventurers");
+
+        BiConsumer<Hero, String> onCharacterPicked = (selectedHero, partyName) -> {
+            this.heroParty.addPartyMember(selectedHero);
+            if (partyName != null && !partyName.isEmpty()) {
+                this.heroParty.setPartyName(partyName);
+            }
+            SceneManager.getInstance().goBack(); // close selection overlay
+            startGameLoop();
+        };
+
+        showCharacterSelectionScreen(CharacterSelectionMode.CREATE_NEW_PARTY, onCharacterPicked);
     }
 
     /**
@@ -139,15 +165,30 @@ public class GameManager {
      * @param slides
      * @param onFinished
      */
-    public void playStorySequence(List<StorySlide> slides, Runnable onFinished) {
-        Resource.Audio.AudioManager.getInstance().stopMusic();
+    public void playStorySequence(List<StorySlide> slides, Runnable onFinished, boolean isOverlay) {
+        if (slides == null || slides.isEmpty()) {
+            if (onFinished != null) onFinished.run();
+            return;
+        }
 
         StoryView storyView = new StoryView();
-        gameWindow.setContentPane(storyView);
-        gameWindow.revalidate();
-        gameWindow.repaint();
 
-        storyView.startSequence(slides, onFinished);
+        Runnable finalCallback = () -> {
+            if (isOverlay) {
+                SceneManager.getInstance().goBack(); // Close the overlay
+            }
+            if (onFinished != null) {
+                onFinished.run();
+            }
+        };
+
+        if (isOverlay) {
+            SceneManager.getInstance().showOverlay(storyView);
+        } else {
+            SceneManager.getInstance().transitionTo(storyView);
+        }
+
+        storyView.startSequence(slides, finalCallback);
     }
 
     public void loadNextLevel() {
@@ -158,13 +199,17 @@ public class GameManager {
             Resource.Audio.AudioManager.getInstance().stopMusic();
             Resource.Audio.AudioManager.getInstance().playMusic("VICTORY_MUSIC_1");
 
-            if (mainView != null) {
-                mainView.showCampaignVictoryScreen();
+            if (battleView != null) {
+                battleView.showCampaignVictoryScreen();
             }
             return;
         }
 
         LogManager.log("Entering Level " + nextLevel.levelNumber(), LogFormat.SYSTEM);
+
+        if (battleController != null) saveCurrentGame();
+
+        if (battleController != null) saveCurrentGame();
 
         if (nextLevel.levelNumber() % 5 == 0) {
             LogManager.log("Milestone Floor Reached! The party's determination restores them.", LogFormat.HIGHLIGHT_BUFF);
@@ -175,25 +220,19 @@ public class GameManager {
                 }
             }
         }
-        // ================================================================
 
         List<StorySlide> preLevelCutscene = nextLevel.preLevelCutscene();
         if (preLevelCutscene != null && !preLevelCutscene.isEmpty()) {
             playStorySequence(preLevelCutscene, () -> {
                 setupBattle(nextLevel);
-            });
+            }, true);
         } else {
             setupBattle(nextLevel);
         }
     }
 
-    public void setupBattle(Level level) {
-        // ensure fresh view
-        if (mainView == null) mainView = new BattleInterface();
-
-        switchToBattleView();
-
-        mainView.setBattleBackground(level.battleBackground());
+    private void setupBattle(Level level) {
+        battleView.setBattleBackground(level.battleBackground());
 
         String musicKey = level.musicKey();
         if (musicKey != null) {
@@ -201,22 +240,10 @@ public class GameManager {
         }
 
         Party enemyParty = level.buildEnemyParty();
-
         this.battleController = new BattleController(heroParty, enemyParty, level);
 
-        battleController.setMainView(mainView);
-        mainView.linkControllerAndData(battleController);
-
-        LogManager.log("Creating save point...");
-        saveCurrentGame();
-    }
-
-    public void switchToBattleView() {
-        if (mainView == null || gameWindow == null) return;
-
-        gameWindow.setContentPane(mainView);
-        gameWindow.revalidate();
-        gameWindow.repaint();
+        battleController.setMainView(battleView);
+        battleView.linkControllerAndData(battleController);
     }
 
     public void saveCurrentGame() {
@@ -239,41 +266,9 @@ public class GameManager {
         SaveManager.saveGame(currentState);
     }
 
-    // TODO: character summoning
-//    public void onCharacterSummon() {
-//
-//    }
-
-    /**
-     * Called after a party has been created (either new or loaded).
-     * This method generates the campaign and transitions the UI to the first battle.
-     */
-    public void startGameLoop() {
-        mainView = new BattleInterface();
-        gameWindow.setContentPane(mainView);
-        gameWindow.revalidate();
-        gameWindow.repaint();
-
-        gameLoader.setBattleInterface(mainView);
-
-        LogManager.initialize(mainView.getGameLogPanelTextPane(), mainView.getGameLogHighlightPanelTextPane());
-        VisualEffectsManager.getInstance().setMainView(mainView);
-
-        long seed = System.currentTimeMillis();
-        gameLoader.generateCampaign(seed, 20);
-
-        loadNextLevel();
-    }
-
     public void showCharacterSelectionScreen(CharacterSelectionMode mode, BiConsumer<Hero, String> onCharacterPicked) {
         CharacterSelection selectionView = new CharacterSelection(mode, onCharacterPicked);
-
-        JLayeredPane layeredPane = gameWindow.getLayeredPane();
-        selectionView.setBounds(0, 0, gameWindow.getWidth(), gameWindow.getHeight());
-        layeredPane.add(selectionView, JLayeredPane.POPUP_LAYER);
-
-        gameWindow.revalidate();
-        gameWindow.repaint();
+        SceneManager.getInstance().showOverlay(selectionView);
     }
 
     public void createPartyFromSelection(Hero selectedHero, String partyName) {
@@ -282,21 +277,9 @@ public class GameManager {
         LogManager.log(selectedHero.getName() + " begins their adventure!", LogFormat.PLAYER_JOIN);
     }
 
-    public void closeOverlay() {
-        if (gameWindow == null) return;
-
-        JLayeredPane layeredPane = gameWindow.getLayeredPane();
-        Component[] comps = layeredPane.getComponentsInLayer(JLayeredPane.POPUP_LAYER);
-        for (Component c : comps) {
-            if (c instanceof CharacterSelection) {
-                layeredPane.remove(c);
-            }
-        }
-        gameWindow.revalidate();
-        gameWindow.repaint();
-    }
 
     public Party getHeroParty() {
         return heroParty;
     }
+
 }

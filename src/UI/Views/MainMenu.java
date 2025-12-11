@@ -45,9 +45,6 @@ public class MainMenu extends JPanel {
         }
 
         AudioManager audio = AudioManager.getInstance();
-        audio.registerSound("MAIN-THEME", "/Assets/Audio/SFX/MainUI/mainMenu_bgm.wav");
-        audio.registerSound("BUTTON_HOVER", "/Assets/Audio/SFX/MainUI/button_hover.wav");
-        audio.registerSound("BUTTON_SELECT", "/Assets/Audio/SFX/MainUI/button_select.wav");
         audio.playMusic("MAIN-THEME");
 
         createUIComponents();
@@ -101,11 +98,6 @@ public class MainMenu extends JPanel {
         exitButton.addActionListener(e -> {
             audio.playSound("BUTTON_SELECT");
             AudioManager.getInstance().stopMusic();
-            Timer exitTimer = new Timer(500, evt -> {
-                System.out.println("...Exiting Application");
-                System.exit(0);
-            });
-            // stop timers before killing JVM for some reason
             VisualEffectsManager.getInstance().stopAllTimers();
             System.exit(0);
         });
@@ -113,8 +105,7 @@ public class MainMenu extends JPanel {
         startButton.addActionListener(e -> {
             audio.playSound("BUTTON_SELECT");
             AudioManager.getInstance().stopMusic();
-            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            manager.startNewGame(parentFrame);
+            manager.startNewGame();
         });
     }
 

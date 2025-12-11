@@ -73,7 +73,7 @@ public class BattleInterface extends JPanel {
     private JPopupMenu targetConfirmMenu = new JPopupMenu();
 
     private JButton endTurnButton;
-    private JButton descendButton;
+//    private JButton descendButton;
     private JPanel heroPanel;
     private JPanel infoPanel;
     private JPanel enemyPanel;
@@ -147,13 +147,13 @@ public class BattleInterface extends JPanel {
                 refreshUI();
             });
         }
-        if (descendButton != null) {
-            descendButton.addActionListener(e -> {
-                resetSelectionState();
-                descendPanel.setVisible(false);
-                GameManager.getInstance().loadNextLevel();
-            });
-        }
+//        if (descendButton != null) {
+//            descendButton.addActionListener(e -> {
+//                resetSelectionState();
+//                descendPanel.setVisible(false);
+//                GameManager.getInstance().loadNextLevel();
+//            });
+//        }
         battlePanel.addMouseListener(new MouseListener() {
             @Override public void mouseClicked(MouseEvent e) { resetSelectionState();}
             @Override public void mousePressed(MouseEvent e) {}
@@ -268,7 +268,7 @@ public class BattleInterface extends JPanel {
             sb.append("Your journey ends on Floor ").append(battleController.getLevelNumber()).append(".");
             summary.setSummaryData("DEFEAT", sb.toString());
             summary.configureButton("Return to Title", () -> {
-                GameManager.getInstance().loadMainMenu();
+                GameManager.getInstance().transitionToMainMenu();
             });
         }
 

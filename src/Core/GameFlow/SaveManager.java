@@ -6,7 +6,7 @@ import Core.Utils.LogManager;
 import java.io.*;
 
 public class SaveManager {
-    private static final String SAVE_FILE_PATH = "elordia_gay.dat";
+    private static final String SAVE_FILE_PATH = "elordia_save.dat";
 
     private SaveManager() {}
 

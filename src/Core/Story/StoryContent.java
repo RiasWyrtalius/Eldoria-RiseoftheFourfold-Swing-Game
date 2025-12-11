@@ -99,7 +99,6 @@ public class StoryContent {
                     // Logic to trigger character selection
                     BiConsumer<Hero, String> onCharacterPicked = (selectedHero, partyName) -> {
                         GameManager.getInstance().createPartyFromSelection(selectedHero, partyName);
-                        GameManager.getInstance().closeOverlay();
                         GameManager.getInstance().startGameLoop();
                     };
 

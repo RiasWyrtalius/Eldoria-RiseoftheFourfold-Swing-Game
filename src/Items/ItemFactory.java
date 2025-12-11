@@ -6,6 +6,7 @@ import Core.Battle.TargetCondition;
 import Core.Battle.TargetType;
 import Core.GameFlow.CharacterSelectionMode;
 import Core.GameManager;
+import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 
 import java.util.HashMap;
@@ -102,8 +103,11 @@ public class ItemFactory {
                 (item, user, targets, onItemComplete) -> {
                     BiConsumer<Hero, String> onCharacterPicked = (selectedHero, partyName) -> {
                         Party heroParty = GameManager.getInstance().getHeroParty();
-                        heroParty.addPartyMember(selectedHero);
-                        GameManager.getInstance().closeOverlay();
+                        if (heroParty.getPartyMembers().size() < 4) {
+                            heroParty.addPartyMember(selectedHero);
+                        } else {
+                            LogManager.log("Party is full! " + selectedHero.getName() + " could not join.");
+                        }
 
                         // Signal item completion after selection is done
                         if (onItemComplete != null) onItemComplete.run();

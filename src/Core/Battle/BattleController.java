@@ -249,7 +249,7 @@ public class BattleController {
 
     private void executeTurnCleanUp() {
         LogManager.log("┌──── ∘°❉ - ❉°∘ ────┐", LogFormat.TURN_INDICATOR);
-        LogManager.log("│     Turn Recovery     │", LogFormat.TURN_INDICATOR);
+        LogManager.log("│   Turn Recovery   │", LogFormat.TURN_INDICATOR);
         LogManager.log("└──── °∘❉ - ❉∘° ────┘", LogFormat.TURN_INDICATOR);
 
         List<Character> allCharacters = new ArrayList<>();
@@ -278,7 +278,6 @@ public class BattleController {
         isBattleActive = false;
         setCurrentPhase(BattlePhase.BATTLE_ENDED);
 
-
         if (checkLose() && checkWin()) {
             finalResult = BattleResult.TIE;
         } else if (checkWin()) {
@@ -288,10 +287,10 @@ public class BattleController {
             List<StorySlide> postLevelCutscene = this.currentLevel.postLevelCutscene();
             if (postLevelCutscene != null && !postLevelCutscene.isEmpty()) {
                 GameManager.getInstance().playStorySequence(postLevelCutscene, () -> {
-                    GameManager.getInstance().switchToBattleView();
+                    GameManager.getInstance().transitionToBattleView();
                     resetTurnReadiness();
                     processVictoryRewards();
-                });
+                }, true);
             } else {
                 resetTurnReadiness();
                 processVictoryRewards();

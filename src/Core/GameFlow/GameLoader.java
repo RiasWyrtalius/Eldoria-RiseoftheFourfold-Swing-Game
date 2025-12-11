@@ -393,6 +393,10 @@ public class GameLoader {
 
     public void finishCampaign() {
         LogManager.log("You have cleared all stages!", LogFormat.VICTORY);
+        am.registerSound("MAIN-THEME", "/Assets/Audio/SFX/MainUI/mainMenu_bgm.wav");
+        am.registerSound("BUTTON_HOVER", "/Assets/Audio/SFX/MainUI/button_hover.wav");
+        am.registerSound("BUTTON_SELECT", "/Assets/Audio/SFX/MainUI/button_select.wav");
+        am.registerSound("STORYVIEW", "Assets/Audio/SFX/StoryView/storyview_bgm.wav");
     }
 
     public long getCurrentSeed() {
