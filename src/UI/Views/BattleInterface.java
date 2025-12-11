@@ -478,20 +478,16 @@ public class BattleInterface extends JPanel {
     public void showCampaignVictoryScreen() {
         JRootPane root = SwingUtilities.getRootPane(this);
         if (root == null) return;
-
         JLayeredPane layeredPane = root.getLayeredPane();
-
         VictoryPanel victoryOverlay = new VictoryPanel(e -> {
-            // TODO: Add logic here to load the Core.Main Menu
-            System.out.println("Returning to title...");
-            System.exit(0);
+            Resource.Audio.AudioManager.getInstance().stopMusic();
+            VisualEffectsManager.getInstance().stopAllTimers();
+            layeredPane.remove((Component) ((JButton)e.getSource()).getParent().getParent());
+            layeredPane.repaint();
+            GameManager.getInstance().transitionToMainMenu();
         });
-
-        // Size it to match the window
         victoryOverlay.setBounds(0, 0, root.getWidth(), root.getHeight());
-
         layeredPane.add(victoryOverlay, JLayeredPane.MODAL_LAYER);
-
         layeredPane.revalidate();
         layeredPane.repaint();
     }
