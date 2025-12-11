@@ -87,23 +87,33 @@ public class Hero extends Character {
 
         recalculateStats();
 
-        int hpGained = this.maxHealth - prevHealth;
-        int mpGained = this.maxMana - prevMana;
+        boolean isMilestone = isReviveMilestone(this.level);
 
-        LogManager.log(this.name + " reached Level " + this.level + "!", LogFormat.HIGHLIGHT_BUFF);
+        if (!this.isAlive && isMilestone) {
+            this.isAlive = true;
+            this.health = this.maxHealth / 2;
+            this.mana = this.maxMana;
 
-        // Log gains only if they happened
-        if (hpGained > 0) {
-            LogManager.log(this.name + " max health increased from " + prevHealth + " to " + this.maxHealth + "!", LogFormat.HIGHLIGHT_BUFF);
+            LogManager.log(this.name + " has been REVIVED by reaching level " + this.level + "!", LogFormat.HIGHLIGHT_BUFF);
+            VisualEffectsManager.getInstance().showFloatingText(this, "REVIVED!", Color.CYAN);
+        } else if (this.isAlive) {
+            int hpGained = this.maxHealth - prevHealth;
+            int mpGained = this.maxMana - prevMana;
+
+            if (hpGained > 0) {
+                LogManager.log(this.name + " max health increased from " + prevHealth + " to " + this.maxHealth + "!", LogFormat.HIGHLIGHT_BUFF);
+                this.receiveHealing(hpGained, null);
+            }
+            if (mpGained > 0) {
+                LogManager.log(this.name + " max mana increased from " + prevMana + " to " + this.maxMana + "!", LogFormat.HIGHLIGHT_BUFF);
+                this.receiveMana(mpGained, null);
+            }
+        } else { // dead & not milestone
+            LogManager.log(this.name + " reached Level " + this.level + "!", LogFormat.HIGHLIGHT_BUFF);
         }
-        if (mpGained > 0) {
-            LogManager.log(this.name + " max mana increased from " + prevMana + " to " + this.maxMana + "!", LogFormat.HIGHLIGHT_BUFF);
-        }
-
-        this.receiveHealing(hpGained, null);
-        this.receiveMana(mpGained, null);
     }
 
+    private boolean isReviveMilestone(int level) { return level % 5 == 0; }
 
     public void regenerateTurnResources() {
         if (!isAlive) { return; }

@@ -96,7 +96,7 @@ public class Paladin extends JobClass {
         };
 
         SkillLogicConsumer holyStrikeLogic = (controller, self, user, targets, onSkillComplete) -> {
-            int dmg = ScalingLogic.calculatePhysicalDamage(user,300,2.5,0.04);
+            int dmg = ScalingLogic.calculatePhysicalDamage(user,30,2.5,0.04);
             LogManager.log(self.getActionLog(user, "Strikes", targets), LogFormat.HERO_ACTION);
             Character target = targets.get(0);
             Runnable afterAnimation = () -> {
