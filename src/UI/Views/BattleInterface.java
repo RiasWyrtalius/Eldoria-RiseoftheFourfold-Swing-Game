@@ -237,7 +237,7 @@ public class BattleInterface extends JPanel {
             java.util.List<Items.Item> items = battleController.getEarnedItems();
 
             if (!items.isEmpty()) {
-                sb.append("--- LOOT ACQUIRED ---\n");
+                sb.append("LOOT ACQUIRED\n");
 
                 Map<String, Integer> itemCounts = new LinkedHashMap<>();
 
