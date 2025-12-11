@@ -279,7 +279,7 @@ public class BattleInterface extends JPanel {
         glassOverlay.setOpaque(false);
         glassOverlay.addMouseListener(new java.awt.event.MouseAdapter() {});
         JPanel summaryBox = summary.getPanel();
-        summaryBox.setPreferredSize(new Dimension(400, 300));
+        summaryBox.setPreferredSize(new Dimension(400, 500));
         summaryBox.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 100), 1));
         glassOverlay.add(summaryBox);
         root.setGlassPane(glassOverlay);
