@@ -290,7 +290,7 @@ public class BattleController {
                     processVictoryRewards();
                     AudioManager.getInstance().playSound("VICTORY_MUSIC_1");
                     finalResult = BattleResult.VICTORY;
-                }, true);
+                });
             } else {
                 resetTurnReadiness();
                 processVictoryRewards();
@@ -328,7 +328,7 @@ public class BattleController {
 
         List<Item> loot = currentLevel.possibleItemDrops();
         if (!loot.isEmpty()) {
-            LogManager.log("Loot found!", LogFormat.LOOT);
+            //LogManager.log("Loot found!", LogFormat.LOOT);
             for (Item item : loot) {
 
 
