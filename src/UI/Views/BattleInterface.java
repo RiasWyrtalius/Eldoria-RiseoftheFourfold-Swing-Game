@@ -57,7 +57,6 @@ public class BattleInterface extends JPanel {
     private JScrollPane CharacterInspector_JSP;
     private JTextPane inspectorText;
 
-    //NEW ADDITIONS
         private AnimatedStatBar inspector_HpBar;
         private AnimatedStatBar inspector_MpBar;
         private AnimatedStatBar inspector_XPBar;
@@ -83,9 +82,6 @@ public class BattleInterface extends JPanel {
     private JSplitPane SplitPane_2;
 
     public BattleInterface() {
-
-        //just to stop the storyview bgm
-        AudioManager.getInstance().stopMusic();
 
         if (battlePanel != null) {
             battlePanel.addComponentListener(new java.awt.event.ComponentAdapter() {

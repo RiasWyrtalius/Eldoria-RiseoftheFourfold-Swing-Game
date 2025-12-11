@@ -139,8 +139,9 @@ public class GameManager {
      * @param onFinished
      */
     public void playStorySequence(List<StorySlide> slides, Runnable onFinished) {
-        StoryView storyView = new StoryView();
+        Resource.Audio.AudioManager.getInstance().stopMusic();
 
+        StoryView storyView = new StoryView();
         gameWindow.setContentPane(storyView);
         gameWindow.revalidate();
         gameWindow.repaint();
@@ -153,6 +154,9 @@ public class GameManager {
 
         if (nextLevel == null) {
             gameLoader.finishCampaign(); // Logs the victory
+
+            Resource.Audio.AudioManager.getInstance().stopMusic();
+            Resource.Audio.AudioManager.getInstance().playMusic("VICTORY_MUSIC_1");
 
             if (mainView != null) {
                 mainView.showCampaignVictoryScreen();
@@ -180,6 +184,11 @@ public class GameManager {
         switchToBattleView();
 
         mainView.setBattleBackground(level.battleBackground());
+
+        String musicKey = level.musicKey();
+        if (musicKey != null) {
+            Resource.Audio.AudioManager.getInstance().playMusic(musicKey);
+        }
 
         Party enemyParty = level.buildEnemyParty();
 
