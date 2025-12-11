@@ -52,10 +52,10 @@ public class BattleController {
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
-                LogManager.logHighlight("BATTLE", LogFormat.BATTLE_HEADER, LogFormat.SIZE_HEADER, false);
+                LogManager.logHighlight("BATTLE", LogFormat.BATTLE_HEADER, LogFormat.SIZE_HEADER, LogManager.CUSTOM_FONT_FAMILY, false);
                 Thread.sleep(500);
                 LogManager.clearHighlight();
-                LogManager.logHighlight("START", LogFormat.BATTLE_HEADER, LogFormat.SIZE_HEADER, false);
+                LogManager.logHighlight("START", LogFormat.BATTLE_HEADER, LogFormat.SIZE_HEADER, LogManager.CUSTOM_FONT_FAMILY, false);
                 Thread.sleep(500);
                 LogManager.clearHighlight();
 
