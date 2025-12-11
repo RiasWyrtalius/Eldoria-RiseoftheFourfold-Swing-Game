@@ -122,8 +122,8 @@ public class Hero extends Character {
             LogManager.log(this.name + " has been REVIVED by reaching a Milestone Floor!", LogFormat.HIGHLIGHT_BUFF);
             VisualEffectsManager.getInstance().showFloatingText(this, "REVIVED!", Color.CYAN);
         } else {
-            int hpBonus = (int) (this.maxHealth * 0.25);
-            int mpBonus = (int) (this.maxMana * 0.25);
+            int hpBonus = (int) (this.maxHealth * 0.20);
+            int mpBonus = (int) (this.maxMana * 0.20);
 
             if (hpBonus < 1) hpBonus = 1;
             if (mpBonus < 1) mpBonus = 1;
@@ -136,7 +136,7 @@ public class Hero extends Character {
         }
     }
 
-    private boolean isReviveMilestone(int level) { return level % 5 == 0; }
+    private boolean isReviveMilestone(int level) { return level % 10 == 0; }
 
     public void regenerateTurnResources() {
         if (!isAlive) { return; }
