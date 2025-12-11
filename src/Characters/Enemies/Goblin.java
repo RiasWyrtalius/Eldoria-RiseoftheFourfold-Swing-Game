@@ -58,7 +58,7 @@ public class Goblin extends Enemy {
     @Override
     protected void initializeSkills() {
         SkillLogicConsumer skirmishLogic = (controller, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,baseAtk,0.2,0.1);
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,this.baseAtk,0.2,0.1);
 
             Character target = Dice.getInstance().pickRandom(targets);
             LogManager.log(self.getActionLog(user, self.getSkillAction().getActionVerb(), targets), LogFormat.ENEMY_ACTION);
@@ -73,8 +73,8 @@ public class Goblin extends Enemy {
         };
 
         SkillLogicConsumer throwCoinsLogic = (controller, self, user, targets, onSkillComplete) -> {
-            int coins = Dice.getInstance().roll(1, 5);
-            int baseDamage = ScalingLogic.calculatePhysicalDamage(user, baseAtk, 0.2, 0.1);
+            int coins = Dice.getInstance().roll(1, 3);
+            int baseDamage = ScalingLogic.calculatePhysicalDamage(user, this.baseAtk, 0.2, 0.1);
             int calculateDamage = (int)(baseDamage * Math.sqrt(coins));
 
             Character target = Dice.getInstance().pickRandom(targets);
