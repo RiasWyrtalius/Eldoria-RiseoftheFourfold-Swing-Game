@@ -67,12 +67,12 @@ public class AssetManager {
             Image scaledImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
             scaledIcon = new ImageIcon(scaledImg);
             imageCache.put(cachedKey, scaledIcon);
-            LogManager.log("AssetManager: retrieving cached " + cachedKey, LogFormat.SYSTEM);
+            LogManager.log("(Asset) : retrieving cached " + cachedKey, LogFormat.SYSTEM);
 
         } catch (Exception e) {
             // This will print the error and generate the Red "X" box
             System.err.println("Failed to load: " + key); // Print to console so you can see why
-            LogManager.log("AssetManager ERROR: Failed to load/scale image '" + key + "'. Using fallback Icon", LogFormat.SYSTEM);
+            LogManager.log("(Asset) : Failed to load/scale image '" + key + "'. Using fallback Icon", LogFormat.SYSTEM_ERROR);
             scaledIcon = createFallbackIcon(width, height);
             imageCache.put(cachedKey, scaledIcon);
         }
