@@ -369,6 +369,10 @@ public class GameLoader {
         am.registerSound("VICTORY_MUSIC_1", "/Assets/Audio/SFX/victory_sound_1.wav");
         am.registerSound("BGM_FOREST", "/Assets/Audio/SFX/BattleBGM/battle_bgm.wav");
         am.registerSound("BGM_BOSS", "/Assets/Audio/SFX/BattleBGM/battleboss_bgm.wav");
+        am.registerSound("MAIN-THEME", "/Assets/Audio/SFX/MainUI/mainMenu_bgm.wav");
+        am.registerSound("BUTTON_HOVER", "/Assets/Audio/SFX/MainUI/button_hover.wav");
+        am.registerSound("BUTTON_SELECT", "/Assets/Audio/SFX/MainUI/button_select.wav");
+        am.registerSound("STORYVIEW", "Assets/Audio/SFX/StoryView/storyview_bgm.wav");
     }
 
     private String getMusicForLevel(int levelNum) {
@@ -393,10 +397,6 @@ public class GameLoader {
 
     public void finishCampaign() {
         LogManager.log("You have cleared all stages!", LogFormat.VICTORY);
-        am.registerSound("MAIN-THEME", "/Assets/Audio/SFX/MainUI/mainMenu_bgm.wav");
-        am.registerSound("BUTTON_HOVER", "/Assets/Audio/SFX/MainUI/button_hover.wav");
-        am.registerSound("BUTTON_SELECT", "/Assets/Audio/SFX/MainUI/button_select.wav");
-        am.registerSound("STORYVIEW", "Assets/Audio/SFX/StoryView/storyview_bgm.wav");
     }
 
     public long getCurrentSeed() {

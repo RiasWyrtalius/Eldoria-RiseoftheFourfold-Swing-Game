@@ -88,7 +88,7 @@ public class GameManager {
     public void transitionToMainMenu() {
         LogManager.log("Transitioning to main menu.");
         AudioManager.getInstance().stopMusic();
-
+        AudioManager.getInstance().playMusic("MAIN-THEME");
         SceneManager.getInstance().transitionTo(mainMenuView);
     }
 
