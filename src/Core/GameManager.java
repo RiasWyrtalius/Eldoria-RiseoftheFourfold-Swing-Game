@@ -1,6 +1,7 @@
 package Core;
 
 import Characters.Base.Hero;
+import Characters.Character;
 import Characters.Party;
 import Core.Battle.BattleController;
 import Core.GameFlow.*;
@@ -65,7 +66,7 @@ public class GameManager {
     }
 
     public void loadMainMenu() {
-        Resource.Audio.AudioManager.getInstance().stopMusic(); //for battle music if implemented.
+        Resource.Audio.AudioManager.getInstance().stopMusic();
 
         this.mainMenuView = new MainMenu(this);
 
@@ -153,8 +154,7 @@ public class GameManager {
         Level nextLevel = gameLoader.loadNextLevel();
 
         if (nextLevel == null) {
-            gameLoader.finishCampaign(); // Logs the victory
-
+            gameLoader.finishCampaign();
             Resource.Audio.AudioManager.getInstance().stopMusic();
             Resource.Audio.AudioManager.getInstance().playMusic("VICTORY_MUSIC_1");
 
@@ -166,7 +166,17 @@ public class GameManager {
 
         LogManager.log("Entering Level " + nextLevel.levelNumber(), LogFormat.SYSTEM);
 
-        // check for prelevel story
+        if (nextLevel.levelNumber() % 5 == 0) {
+            LogManager.log("Milestone Floor Reached! The party's determination restores them.", LogFormat.HIGHLIGHT_BUFF);
+
+            for (Characters.Character member : heroParty.getPartyMembers()) {
+                if (member instanceof Hero) {
+                    ((Hero) member).reviveFromMapMilestone();
+                }
+            }
+        }
+        // ================================================================
+
         List<StorySlide> preLevelCutscene = nextLevel.preLevelCutscene();
         if (preLevelCutscene != null && !preLevelCutscene.isEmpty()) {
             playStorySequence(preLevelCutscene, () -> {
