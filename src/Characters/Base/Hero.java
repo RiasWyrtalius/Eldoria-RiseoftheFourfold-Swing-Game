@@ -66,7 +66,7 @@ public class Hero extends Character {
     }
 
     public void gainXP(int amount) {
-        LogManager.log(getName() + " gains " + amount + "XP!", LogFormat.XP_GAIN);
+        LogManager.log("(EXP) : " + getName() + " gains " + amount + " xp!", LogFormat.XP_GAIN);
         XP += amount;
 
         while (XP >= requiredXP) {
@@ -105,7 +105,7 @@ public class Hero extends Character {
                 this.receiveHealing(hpGained, null);
             }
             if (mpGained > 0) {
-                LogManager.log(this.name + " max mana increased from " + prevMana + " to " + this.maxMana + "!", LogFormat.HIGHLIGHT_BUFF);
+                LogManager.log(this.name + " max mana increased from " + prevMana + " to " + this.maxMana + "!\n", LogFormat.HIGHLIGHT_BUFF);
                 this.receiveMana(mpGained, null);
             }
         } else { // dead & not milestone

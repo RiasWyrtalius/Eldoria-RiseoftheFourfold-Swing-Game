@@ -78,7 +78,7 @@ public abstract class Character {
                 LogManager.log(this.name + " takes " + finalDamage + " damage.");
                 VisualEffectsManager.getInstance().showFloatingText(this, "-" + finalDamage + "HP", LogFormat.DAMAGE_TAKEN);
             } else {
-                LogManager.log(this.name + " reaction mitigated damage!", LogFormat.HIGHLIGHT_DODGE);
+                LogManager.log("(DODGE) : " + this.name + " reaction mitigated damage!", LogFormat.HIGHLIGHT_DODGE);
             }
 
             int potentialHealth = this.health - finalDamage;
@@ -203,7 +203,7 @@ public abstract class Character {
 
     protected void onDefeat(Character attacker) {
         if (attacker == null) return;
-        LogManager.log(this.name + " is killed by " + attacker.getName() + "!", LogFormat.ENEMY_ACTION);
+        LogManager.log("(ENEMY) : " + this.name + " is killed by " + attacker.getName() + "!", LogFormat.ENEMY_ACTION);
     }
 
     public boolean canCast(int manaCost) {
@@ -348,7 +348,7 @@ public abstract class Character {
     public void applyStatusEffect(StatusEffect effect) {
         for (StatusEffect existingEffect : activeStatusEffects) {
             if (existingEffect.getName().equalsIgnoreCase(effect.getName())) {
-                LogManager.log(this.name + "'s" + effect.getName() + " duration is extended.", LogFormat.SYSTEM);
+                LogManager.log("(EFFECT) : " + this.name + "'s" + effect.getName() + " duration is extended.", LogFormat.SYSTEM);
                 existingEffect.setDuration(existingEffect.getDuration() + effect.getDuration());
             }
         }
@@ -356,12 +356,12 @@ public abstract class Character {
 
         Color color = (effect.getType() == StatusEffectType.BUFF) ? LogFormat.HIGHLIGHT_BUFF : LogFormat.HIGHLIGHT_DEBUFF;
 
-        LogManager.log(this.name + " is afflicted with " + effect.getName() + "!", color);
+        LogManager.log("(EFFECT) : " + this.name + " is afflicted with " + effect.getName() + "!", color);
     }
 
     public void removeStatusEffect(StatusEffect effect) {
         if (activeStatusEffects.remove(effect)) {
-            LogManager.log(this.name + " has been cleansed from " + effect.getName() + "!", LogFormat.DEFEAT);
+            LogManager.log("(EFFECT) : " + this.name + " has been cleansed from " + effect.getName() + "!", LogFormat.DEFEAT);
         }
     }
 
@@ -374,7 +374,7 @@ public abstract class Character {
             StatusEffect effect = iterator.next();
             effect.tick(this);
             if (effect.getDuration() <= 0) {
-                LogManager.log(effect.getName() + " wore off of " + this.name + ".", LogFormat.SYSTEM);
+                LogManager.log("(EFFECT) : " + effect.getName() + " wore off of " + this.name + ".", LogFormat.SYSTEM);
                 iterator.remove();
             }
         }

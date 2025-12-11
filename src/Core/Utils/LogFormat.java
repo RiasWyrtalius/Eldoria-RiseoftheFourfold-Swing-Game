@@ -63,6 +63,12 @@ public class LogFormat {
     public static final Color HIGHLIGHT_DEBUFF  = new Color(148, 0, 211);   // Violet
     public static final Color LOOT = new Color(255, 223, 0);
 
+    // UI & SELECTION STATES
+    public static final Color UI_SKILL_SELECT = new Color(0, 255, 255);
+    public static final Color UI_ITEM_SELECT  = new Color(139, 69, 19);
+    public static final Color UI_TARGET_SELECT = new Color(178, 34, 34);
+    public static final Color UI_ACTIVE_HERO = new Color(0, 0, 205);
+
     // GAME STATES
     public static final Color HIGHLIGHT_LEVELUP = new Color(255, 0, 255);   // Magenta
     public static final Color HIGHLIGHT_VICTORY = new Color(159, 132, 10);   // Pure Gold

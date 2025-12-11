@@ -1,4 +1,5 @@
 package UI.Views;
+import Core.Utils.LogFormat;
 import Core.Visuals.VisualEffectsManager;
 import UI.Components.*;
 
@@ -172,8 +173,8 @@ public class BattleInterface extends JPanel {
         enemyPartyLabel.setText(battleController.getEnemyParty().getPartyName());
 
         if (activeHero != null && selectedSkill != null) {
-            LogManager.log("Active Hero: " + activeHero.getName());
-            LogManager.log("Selected Skill: " + selectedSkill.getName());
+            LogManager.log("(HERO) Active Hero: " + activeHero.getName(), LogFormat.UI_ACTIVE_HERO);
+            LogManager.log("(SKILL) Selected Skill: " + selectedSkill.getName(), LogFormat.UI_SKILL_SELECT);
         }
 
         setPartyUI(battleController.getHeroParty().getPartyMembers(), heroPartyPanels);
@@ -509,7 +510,7 @@ public class BattleInterface extends JPanel {
                 (selectedItem != null && selectedItem.getTargetType() == TargetType.AOE_ALL_TARGETS);
 
         if (requiresTargets && !isAutoTarget && selectedTargets.isEmpty()) {
-            LogManager.log("Cannot confirm: No targets selected.");
+            LogManager.log("Cannot confirm: No targets selected.", LogFormat.UI_TARGET_SELECT);
             return;
         }
 
@@ -542,7 +543,7 @@ public class BattleInterface extends JPanel {
 
             refreshUI();
         } else {
-            LogManager.log(clickedHero.getName() + " is unable to act.");
+            LogManager.log(clickedHero.getName() + " is unable to act.", LogFormat.SYSTEM_ERROR);
         }
     }
 
@@ -560,12 +561,12 @@ public class BattleInterface extends JPanel {
             return;
         }
 
-        LogManager.log("Select a target for " + skill.getName());
+        LogManager.log("(SKILL) : Select a target for " + skill.getName(), LogFormat.UI_SKILL_SELECT);
         refreshUI();
     }
 
     public void onItemSelect(Item item) {
-        LogManager.log("ITEM SELECTED: " + item.getName());
+        LogManager.log("(ITEM) : ITEM SELECTED: " + item.getName(), LogFormat.UI_ITEM_SELECT);
         this.currentMode = BattleUIMode.ITEM_SELECT;
 
         this.selectedSkill = null;
@@ -598,7 +599,7 @@ public class BattleInterface extends JPanel {
         // manual targetting
         this.currentMode = BattleUIMode.TARGET_SELECT;
 
-        LogManager.log("Select up to " + type.getMaxTargets() + " target(s).");
+        LogManager.log("Select up to " + type.getMaxTargets() + " target(s).", LogFormat.UI_TARGET_SELECT);
         refreshUI();
     }
 
@@ -674,7 +675,7 @@ public class BattleInterface extends JPanel {
         cancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LogManager.log(finalActionType + " selection cancelled");
+                LogManager.log(finalActionType + " selection cancelled", LogFormat.UI_TARGET_SELECT);
                 resetSelectionState();
             }
         });
