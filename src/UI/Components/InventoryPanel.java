@@ -21,7 +21,7 @@ public class InventoryPanel extends JPanel {
     private static final Color FONT_COLOR = Color.BLACK;
     private static final Color BACKGROUND_COLOR = Color.WHITE;
 
-    private static final Font FONT_ITEM = new Font("Georgia", Font.PLAIN, 16);
+    private static final Font FONT_ITEM = new Font("JetBrains Mono", Font.PLAIN, 14);
 
     private JList<Item> itemList;
     private DefaultListModel<Item> listModel;
