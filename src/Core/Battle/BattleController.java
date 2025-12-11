@@ -281,8 +281,6 @@ public class BattleController {
         if (checkLose() && checkWin()) {
             finalResult = BattleResult.TIE;
         } else if (checkWin()) {
-            finalResult = BattleResult.VICTORY;
-            AudioManager.getInstance().playSound("VICTORY_MUSIC_1");
 
             List<StorySlide> postLevelCutscene = this.currentLevel.postLevelCutscene();
             if (postLevelCutscene != null && !postLevelCutscene.isEmpty()) {
@@ -290,10 +288,14 @@ public class BattleController {
                     GameManager.getInstance().transitionToBattleView();
                     resetTurnReadiness();
                     processVictoryRewards();
+                    AudioManager.getInstance().playSound("VICTORY_MUSIC_1");
+                    finalResult = BattleResult.VICTORY;
                 }, true);
             } else {
                 resetTurnReadiness();
                 processVictoryRewards();
+                finalResult = BattleResult.VICTORY;
+                AudioManager.getInstance().playSound("VICTORY_MUSIC_1");
             }
         } else if (checkLose()) {
             finalResult = BattleResult.DEFEAT;

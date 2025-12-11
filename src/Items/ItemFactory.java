@@ -8,6 +8,7 @@ import Core.GameFlow.CharacterSelectionMode;
 import Core.GameManager;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
+import UI.SceneManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -108,7 +109,7 @@ public class ItemFactory {
                         } else {
                             LogManager.log("Party is full! " + selectedHero.getName() + " could not join.");
                         }
-
+                        SceneManager.getInstance().closeAllOverlays();
                         // Signal item completion after selection is done
                         if (onItemComplete != null) onItemComplete.run();
                     };
