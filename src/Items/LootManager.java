@@ -43,26 +43,32 @@ public class LootManager {
 
     public List<Item> generateLoot(Random rng, int level) {
         List<Item> drops = new ArrayList<>();
-
-        // 40% chance to get any loot
-        if (rng.nextDouble() > 0.40) {
-            return drops;
-        }
-
-        // determine rarity based on level
+        // Always guarantee at least one drop
         Rarity selectedRarity = rollRarity(rng, level);
-        //  matched rarities will be put into the pool yay
         List<Supplier<Item>> pool = masterLootList.get(selectedRarity);
         if (pool != null && !pool.isEmpty()) {
             Item item = pool.get(rng.nextInt(pool.size())).get();
             drops.add(item);
         } else {
+            // fallback to common if pool is empty
             Supplier<Item> fallback = masterLootList.get(Rarity.COMMON).getFirst();
             drops.add(fallback.get());
         }
-
+        // Bonus rolls: +1 every 5 levels (up to 4 at level 20)
+        int bonusRolls = level / 5;
+        for (int i = 0; i < bonusRolls; i++) {
+            if (rng.nextDouble() < 0.35) { // 35% chance per bonus roll
+                Rarity extraRarity = rollRarity(rng, level);
+                List<Supplier<Item>> extraPool = masterLootList.get(extraRarity);
+                if (extraPool != null && !extraPool.isEmpty()) {
+                    Item extraItem = extraPool.get(rng.nextInt(extraPool.size())).get();
+                    drops.add(extraItem);
+                }
+            }
+        }
         return drops;
     }
+
 
 
     /**
