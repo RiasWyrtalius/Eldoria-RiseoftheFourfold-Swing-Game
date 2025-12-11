@@ -72,20 +72,19 @@ public class LootManager {
      * I'll just leave it to flurger
      */
     private Rarity rollRarity(Random rng, int level) {
-            Map<Rarity, Integer> weights = new HashMap<>();
+        Map<Rarity, Integer> weights = new HashMap<>();
 
-        // Base Weights (Level 1)
-        // Common: 1000, Uncommon: 100, Rare: 10, Epic: 1...
+        // Adjusted Weights
+        // COMMON starts high but decreases as level rises
+        // UNCOMMON and higher scale faster to catch up
 
-        // Base + (Level * Multiplier)
-
-        weights.put(Rarity.COMMON,      100000); // Always constant, becomes relatively smaller as others grow
-        weights.put(Rarity.UNCOMMON,    100 + (level * 20));
-        weights.put(Rarity.RARE,        50  + (level * 10));
-        weights.put(Rarity.SUPERIOR,    10  + (level * 5));
-        weights.put(Rarity.EPIC,        (level > 10) ? (level * 3) : 0); // Only after lvl 10
-        weights.put(Rarity.LEGENDARY,   (level > 20) ? (level * 2) : 0); // Only after lvl 20
-        weights.put(Rarity.MYTHIC,      (level > 50) ? (level * 2) : 0); // Only after lvl 50
+        weights.put(Rarity.COMMON,    Math.max(1000 - (level * 10), 100)); // starts 1000, fades to 100
+        weights.put(Rarity.UNCOMMON,  200 + (level * 50));                 // grows quickly
+        weights.put(Rarity.RARE,      100 + (level * 25));                 // steady growth
+        weights.put(Rarity.SUPERIOR,  50  + (level * 15));                 // slower but consistent
+        weights.put(Rarity.EPIC,      (level > 10) ? (level * 10) : 0);    // unlocks after lvl 10
+        weights.put(Rarity.LEGENDARY, (level > 20) ? (level * 5)  : 0);    // unlocks after lvl 20
+        weights.put(Rarity.MYTHIC,    (level > 50) ? (level * 3)  : 0);    // unlocks after lvl 50
 
         // weighted random selection
         int totalWeight = 0;
@@ -101,6 +100,7 @@ public class LootManager {
             }
         }
 
-        return Rarity.COMMON; // default
+        return Rarity.COMMON; // fallback
     }
+
 }
