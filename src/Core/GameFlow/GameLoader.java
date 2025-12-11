@@ -99,6 +99,7 @@ public class GameLoader {
                         ItemFactory.smallHealthPotion(),
                         ItemFactory.mediumHealthPotion(),
                         ItemFactory.splashHealthPotion(),
+                        ItemFactory.splashManaPotion(),
                         ItemFactory.summoningScroll()
                 ),
                 preCutsceneLevel5,
