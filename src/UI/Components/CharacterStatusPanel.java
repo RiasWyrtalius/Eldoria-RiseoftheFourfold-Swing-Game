@@ -1,7 +1,6 @@
     package UI.Components;
 
     import Characters.Character;
-    import Core.GameFlow.CharacterSelectionMode;
     import Core.Visuals.VisualAsset;
     import Core.Visuals.VisualEffectsManager;
     import Resource.Animation.AssetManager;
@@ -12,6 +11,7 @@
     import java.awt.*;
     import java.awt.event.MouseAdapter;
     import java.awt.event.MouseEvent;
+    import Characters.Enemies.Varoth;
 
     public class CharacterStatusPanel extends JPanel {
         private Character character;
@@ -22,7 +22,8 @@
         private final JLabel overlayDisplayLabel;
         private final JLabel iconDisplayLabel;
 
-        private static final int ICON_SIZE = 100;
+        private static final int ICON_SIZE = 100; //standard
+        private static final int BOSS_ICON_SIZE = 250;
 
         private JPanel iconPanel;
 
@@ -90,6 +91,16 @@
                 return;
             }
 
+            int currentSize = ICON_SIZE;
+
+            if (character instanceof Varoth) {
+                currentSize = BOSS_ICON_SIZE;
+            }
+            iconPanel.setPreferredSize(new Dimension(currentSize, currentSize));
+            iconDisplayLabel.setBounds(0, 0, currentSize, currentSize);
+            overlayDisplayLabel.setBounds(0, 0, currentSize, currentSize);
+            this.revalidate();
+            this.repaint();
 
             if (!character.isAlive()) {
                 hpBar.setVisible(false);

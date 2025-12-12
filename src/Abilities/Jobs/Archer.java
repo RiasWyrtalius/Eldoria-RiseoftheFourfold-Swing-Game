@@ -97,10 +97,21 @@ public class Archer extends JobClass {
         SkillLogicConsumer heavyArrowLogic = (_, self, user, targets, onSkillComplete) -> {
             int dmg = ScalingLogic.calculatePhysicalDamage(user, 35, 3.0, 0.05);
             Character target = targets.getFirst();
-            LogManager.log(self.getActionLog(user, "Pulls their bow the hardest they can to release", targets), LogFormat.HERO_ACTION);
+            LogManager.log(self.getActionLog(user, "They pull their bow as hard as they can and release", targets), LogFormat.HERO_ACTION);
             VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW", user, () -> {
                 target.receiveDamage(dmg, user, self, onSkillComplete);
                 target.applyStatusEffect(StatusEffectFactory.stun(2));
+            }, true);
+        };
+
+        SkillLogicConsumer StormshotBarrageLogic = (controller, self, user, targets, onSkillComplete) -> {
+            int dmg = ScalingLogic.calculatePhysicalDamage(user, 35, 2.5, 0.05);
+            LogManager.log(self.getActionLog(user, "", targets), LogFormat.HERO_ACTION);
+            VisualEffectsManager.getInstance().playAnimation("ARCHER_SHOOT_ARROW-Rapid", user, () -> {
+                for (Character target : targets) {
+                    target.applyStatusEffect(StatusEffectFactory.stun(2));
+                }
+                controller.applyGroupDamage(user, self, targets, dmg, onSkillComplete);
             }, true);
         };
 
@@ -116,7 +127,13 @@ public class Archer extends JobClass {
                 heavyArrowLogic
         );
 
-        return List.of(RapidFire,HeavyArrow);
+        Skill StormshotBarrage = new Skill(
+                "Stormshot Barrage", "Multi-target long ranged attack", 30, 40,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.AOE_FOUR_TARGETS, TargetCondition.ALIVE,
+                StormshotBarrageLogic
+        );
+
+        return List.of(RapidFire,HeavyArrow, StormshotBarrage);
     }
     //TEMPORARY
     @Override public String getPreviewImagePath() { return IDLE_PATH; }

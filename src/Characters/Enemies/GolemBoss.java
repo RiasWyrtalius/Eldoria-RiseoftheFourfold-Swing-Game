@@ -38,13 +38,13 @@ public class GolemBoss extends Boss {
         AssetManager.getInstance().registerAnimation(
                 "GOLEM_BOSS-IDLE",
                 "Assets/Animations/Enemies/Boss/Golem/Idle/sprite_%d.png",
-                3, 100, 100 , 320,
+                3, 150, 100 , 320,
                 AnimationLoopType.INFINITE
         );
         AssetManager.getInstance().registerAnimation(
                 "GOLEM_BOSS-ATTACK",
                 "Assets/Animations/Enemies/Boss/Golem/Effects/Attack/sprite_%d.png",
-                4, 100, 100 , 320,
+                4, 150, 100 , 320,
                 AnimationLoopType.ONE_CYCLE
         );
     }

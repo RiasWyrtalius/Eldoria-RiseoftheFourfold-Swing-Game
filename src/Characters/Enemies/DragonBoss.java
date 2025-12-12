@@ -38,13 +38,13 @@ public class DragonBoss extends Boss {
         AssetManager.getInstance().registerAnimation(
                 "DRAGON_BOSS-IDLE",
                 "Assets/Animations/Enemies/Boss/Dragon/Idle/sprite_%d.png",
-                3, 100, 100 , 320,
+                3, 120, 100 , 320,
                 AnimationLoopType.INFINITE
         );
         AssetManager.getInstance().registerAnimation(
                 "FIREBALL",
                 "Assets/Animations/Heroes/Mage-Fire/Effects/FireBall/sprite_%d.png",
-                6, 100, 100 , 200,
+                6, 120, 100 , 200,
                 AnimationLoopType.ONE_CYCLE
         );
     }

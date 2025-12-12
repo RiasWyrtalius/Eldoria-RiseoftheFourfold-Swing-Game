@@ -39,25 +39,25 @@ public class Varoth extends Boss {
         AssetManager.getInstance().registerAnimation(
                 "VAROTH-IDLE",
                 "Assets/Animations/Enemies/Boss/Varoth/Idle/sprite_%d.png",
-                3, 100, 100 , 320,
+                3, 250, 250 , 320,
                 AnimationLoopType.INFINITE
         );
         AssetManager.getInstance().registerAnimation(
                 "VOID_SLASH",
                 "Assets/Animations/Enemies/Boss/Varoth/Effects/Basic_Attack/sprite_%d.png",
-                4, 100, 100 , 200,
+                4, 200, 200 , 200,
                 AnimationLoopType.ONE_CYCLE
         );
         AssetManager.getInstance().registerAnimation(
                 "CONSUME",
                 "Assets/Animations/Enemies/Boss/Varoth/Effects/Ultimate/sprite_%d.png",
-                7, 100, 100 , 200,
+                7, 200, 200 , 200,
                 AnimationLoopType.ONE_CYCLE
         );
         AssetManager.getInstance().registerAnimation(
                 "VAROTH_AOE",
                 "Assets/Animations/Enemies/Boss/Varoth/Effects/AOE_Attack/sprite_%d.png",
-                5, 100, 100 , 200,
+                5, 200, 200 , 200,
                 AnimationLoopType.ONE_CYCLE
         );
     }
