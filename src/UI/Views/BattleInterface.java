@@ -528,7 +528,10 @@ public class BattleInterface extends JPanel {
             resetSelectionState();
             refreshUI();
         } else {
+            LogManager.log("Action failed.", LogFormat.SYSTEM_ERROR);
             hideTargetConfirmMenu();
+            resetSelectionState();
+            refreshUI();
         }
     }
 

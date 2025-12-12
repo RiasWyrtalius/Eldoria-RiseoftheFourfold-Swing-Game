@@ -350,6 +350,7 @@ public abstract class Character {
             if (existingEffect.getName().equalsIgnoreCase(effect.getName())) {
                 LogManager.log("(EFFECT) : " + this.name + "'s" + effect.getName() + " duration is extended.", LogFormat.SYSTEM);
                 existingEffect.setDuration(existingEffect.getDuration() + effect.getDuration());
+                return;
             }
         }
         activeStatusEffects.add(effect);
@@ -363,6 +364,15 @@ public abstract class Character {
         if (activeStatusEffects.remove(effect)) {
             LogManager.log("(EFFECT) : " + this.name + " has been cleansed from " + effect.getName() + "!", LogFormat.DEFEAT);
         }
+    }
+
+    public boolean hasStatusEffect(String effectName) {
+        for (StatusEffect effect : activeStatusEffects) {
+            if (effect.getName().equalsIgnoreCase(effectName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void processTurnEffects() {

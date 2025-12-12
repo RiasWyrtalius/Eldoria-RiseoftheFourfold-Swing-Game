@@ -21,8 +21,8 @@ public class DragonBoss extends Boss {
     public DragonBoss(int level){
         this(
                 "Baby Dragon",
-                ScalingLogic.calculateStat(level,300,40,0.1),
-                ScalingLogic.calculateStat(level,25,8,0.05),
+                ScalingLogic.calculateStat(level,300,35,0.1),
+                ScalingLogic.calculateStat(level,15,2,0.05),
                 ScalingLogic.calculateStat(level,300,50,0.2),
                 level,"Boss"
                 ,ScalingLogic.calculateStat(level,250,30,0.09),
@@ -85,7 +85,7 @@ public class DragonBoss extends Boss {
         );
 
         SkillLogicConsumer devastatingStrikeLogic = (controller, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,(int)(baseAtk * 1.25),0.2,0.2);
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user,(int)(baseAtk * 0.6),0.2,0.2);
 
             LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogFormat.ENEMY_ACTION);
 
@@ -126,7 +126,9 @@ public class DragonBoss extends Boss {
         Skill basicAttack = skills.get(0);
         Skill devastatingStrike = skills.get(1);
 
-        if (this.getMana() >= devastatingStrike.getManaCost()) {
+        boolean useAOE = (this.getMana() >= devastatingStrike.getManaCost()) && (Math.random() < 0.4);
+
+        if (useAOE) {
             devastatingStrike.execute(controller, this, targets, onSkillComplete);
         } else {
             basicAttack.execute(controller, this, targets, onSkillComplete);

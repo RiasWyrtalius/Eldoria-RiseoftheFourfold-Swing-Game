@@ -57,4 +57,8 @@ public class StatusEffectFactory {
         };
         return new StatusEffect("Mana Recovery", duration, logic, StatusEffectType.BUFF);
     }
+
+    public static StatusEffect sanctuary(int duration) {
+        return new StatusEffect("Sanctuary", duration, (c) -> {}, StatusEffectType.BUFF);
+    }
 }

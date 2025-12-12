@@ -142,14 +142,14 @@ public class Hero extends Character {
         if (!isAlive) { return; }
 
         if (getHealth() < getMaxHealth()) {
-            int passiveHP = (int) (getMaxHealth() * 0.005);
+            int passiveHP = (int) (getMaxHealth() * 0.07);
             if (passiveHP < 1) passiveHP = 1;
 
             this.receiveHealing(passiveHP, null);
         }
 
         if (getMana() < getMaxMana()) {
-            int passiveMana = (int) (getMaxMana() * 0.003); // 3% max MP
+            int passiveMana = (int) (getMaxMana() * 0.04);
             if (passiveMana < 5) passiveMana = 5; //incase it's lower.
             this.receiveMana(passiveMana, null);
         }

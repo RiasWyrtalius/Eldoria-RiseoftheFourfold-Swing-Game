@@ -200,6 +200,7 @@ public class BattleController {
     private void processNextEnemy(List<Character> enemies, int index) {
         if (checkLose()) {
             endBattle();
+            return;
         }
 
         if (index >= enemies.size()) {
@@ -213,10 +214,25 @@ public class BattleController {
             processNextEnemy(enemies, index + 1);
         };
 
-        // execute the attack
-        List<Character> validTargets = heroParty.getAliveMembers();
-        if (validTargets == null || validTargets.isEmpty()) {
-            onEnemyPhaseComplete(); // no targets left oop
+        List<Character> aliveMembers = heroParty.getAliveMembers();
+        List<Character> validTargets = new ArrayList<>();
+
+        for (Character hero : aliveMembers) {
+            if (!hero.hasStatusEffect("Sanctuary")) {
+                validTargets.add(hero);
+            }
+        }
+
+        if (validTargets.isEmpty()) {
+            LogManager.log(enemyChar.getName() + " sees no vulnerable targets and hesitates.", LogFormat.ENEMY_ACTION);
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500);
+                    onCurrentEnemyFinished.run();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
             return;
         }
 

@@ -1,5 +1,6 @@
 package Items;
 
+import Abilities.StatusEffectFactory;
 import Characters.Base.Hero;
 import Characters.Party;
 import Core.Battle.TargetCondition;
@@ -9,10 +10,10 @@ import Core.GameManager;
 import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import UI.SceneManager;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import Characters.Character;
 
 // flyweight class
 public class ItemFactory {
@@ -104,9 +105,11 @@ public class ItemFactory {
                 Rarity.EPIC,
                 (item, user, targets, onItemComplete) -> {
                     if (!targets.isEmpty()) {
-                        VisualEffectsManager.getInstance().reviveEffect(targets.getFirst());
-                        int hp = (int)(targets.getFirst().getMaxHealth() * .20);
-                        targets.getFirst().revive(hp, user);
+                        Character target = targets.getFirst();
+                        VisualEffectsManager.getInstance().reviveEffect(target);
+                        int hp = (int)(target.getMaxHealth() * .20);
+                        target.revive(hp, user);
+                        target.applyStatusEffect(StatusEffectFactory.sanctuary(2));
                     }
                     if (onItemComplete != null) onItemComplete.run();
                 }

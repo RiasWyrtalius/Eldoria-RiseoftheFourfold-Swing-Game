@@ -169,9 +169,11 @@ public class Varoth extends Boss {
         Skill devastatingStrike = skills.get(1);
         Skill AOE = skills.get(2);
 
+        boolean useAOE = (this.getMana() >= devastatingStrike.getManaCost()) && (Math.random() < 0.4);
+
         if (this.getMana() >= devastatingStrike.getManaCost()) {
             devastatingStrike.execute(controller, this, targets, onSkillComplete);
-        } else if (this.getMana() >= AOE.getManaCost()) {
+        } else if (useAOE) {
             AOE.execute(controller, this, targets, onSkillComplete);
         }else {
             basicAttack.execute(controller, this, targets, onSkillComplete);

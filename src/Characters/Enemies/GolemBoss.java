@@ -21,8 +21,8 @@ public class GolemBoss extends Boss {
     public GolemBoss(int level){
         this(
                 "Golem",
-                ScalingLogic.calculateStat(level,250,30,0.1),
-                ScalingLogic.calculateStat(level,22,8,0.05),
+                ScalingLogic.calculateStat(level,350,40,0.1),
+                ScalingLogic.calculateStat(level,10,1,0.05),
                 ScalingLogic.calculateStat(level,80,50,0.2),
                 level,
                 "Boss"
@@ -54,7 +54,7 @@ public class GolemBoss extends Boss {
 
         // --- BASIC ATTACK (Single Target) ---
         SkillLogicConsumer basicAttackLogic = (controller, self, user, targets, onSkillComplete) -> {
-            // Find weakest target
+            // Find the weakest target
             Character weakTarget = null;
             int lowHP = Integer.MAX_VALUE;
             for (Character c : targets) {
@@ -68,7 +68,7 @@ public class GolemBoss extends Boss {
             }
 
             if (weakTarget != null) {
-                int calculateDamage = user.getBaseAtk();
+                int calculateDamage = ScalingLogic.calculatePhysicalDamage(user, (int)(baseAtk * 0.8), 0.2, 0.1);
                 LogManager.log(self.getActionLog(user, "focuses on and strikes", List.of(weakTarget)), LogFormat.ENEMY_ACTION);
 
                 // Define what happens after the animation
@@ -95,7 +95,7 @@ public class GolemBoss extends Boss {
         );
 
         SkillLogicConsumer devastatingStrikeLogic = (controller, self, user, targets, onSkillComplete) -> {
-            int calculateDamage = (int) (user.getBaseAtk() * 1.5);
+            int calculateDamage = ScalingLogic.calculatePhysicalDamage(user, (int)(baseAtk * 0.6), 0.2, 0.2);
 
             LogManager.log(self.getActionLog(user, "unleashes a DEVASTATING STRIKE on", targets), LogFormat.ENEMY_ACTION);
             Runnable afterAllAnimations = () -> {
@@ -136,7 +136,9 @@ public class GolemBoss extends Boss {
         Skill basicAttack = skills.get(0);
         Skill devastatingStrike = skills.get(1);
 
-        if (this.getMana() >= devastatingStrike.getManaCost()) {
+        boolean useAOE = (this.getMana() >= devastatingStrike.getManaCost()) && (Math.random() < 0.4);
+
+        if (useAOE) {
             devastatingStrike.execute(controller, this, targets, onSkillComplete);
         } else {
             basicAttack.execute(controller, this, targets, onSkillComplete);

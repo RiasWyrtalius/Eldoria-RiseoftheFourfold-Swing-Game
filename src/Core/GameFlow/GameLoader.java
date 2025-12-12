@@ -161,7 +161,7 @@ public class GameLoader {
                 "The Fire and Rock",
                 "/Assets/Images/Backgrounds/Level_BG/Dungeon_Biome/sprite_0.png",
                 "Stops you at the entrance",
-                buildEnemyGroup((_) -> new GolemBoss(10), (_) -> new DragonBoss(10)),
+                buildEnemyGroup((_) -> new GolemBoss(15), (_) -> new DragonBoss(15)),
                 buildLoot(
                         ItemFactory.mediumHealthPotion(),
                         ItemFactory.mediumManaPotion(),

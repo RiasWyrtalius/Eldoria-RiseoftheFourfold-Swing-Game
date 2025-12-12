@@ -93,6 +93,8 @@ public class Cleric extends JobClass {
                 target.revive(revive_health, user);
                 target.setMana(reset_mana);
 
+                target.applyStatusEffect(StatusEffectFactory.sanctuary(2));
+
                 if (onSkillComplete != null) {
                     onSkillComplete.run();
                 }
