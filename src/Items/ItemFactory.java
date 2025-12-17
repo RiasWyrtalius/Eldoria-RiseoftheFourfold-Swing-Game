@@ -107,8 +107,13 @@ public class ItemFactory {
                     if (!targets.isEmpty()) {
                         Character target = targets.getFirst();
                         VisualEffectsManager.getInstance().reviveEffect(target);
-                        int hp = (int)(target.getMaxHealth() * .20);
+
+                        int hp = (int)(target.getMaxHealth() * 0.25);
                         target.revive(hp, user);
+
+                        int mp = (int)(target.getMaxMana() * 0.25);
+                        target.receiveMana(mp, user); // idk if it works
+
                         target.applyStatusEffect(StatusEffectFactory.sanctuary(2));
                     }
                     if (onItemComplete != null) onItemComplete.run();
