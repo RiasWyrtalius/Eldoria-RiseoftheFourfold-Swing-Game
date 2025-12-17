@@ -300,6 +300,7 @@ public class BattleController {
 
             List<StorySlide> postLevelCutscene = this.currentLevel.postLevelCutscene();
             if (postLevelCutscene != null && !postLevelCutscene.isEmpty()) {
+                AudioManager.getInstance().stopMusic();
                 GameManager.getInstance().playStorySequence(postLevelCutscene, () -> {
                     GameManager.getInstance().transitionToBattleView();
                     resetTurnReadiness();

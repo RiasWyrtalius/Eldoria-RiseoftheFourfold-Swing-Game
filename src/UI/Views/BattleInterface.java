@@ -11,8 +11,6 @@ import Core.GameManager;
 import Core.Utils.LogManager;
 import Items.Inventory;
 import Items.Item;
-import Resource.Audio.AudioManager;
-import UI.Components.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,7 +20,6 @@ import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
-import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -32,7 +29,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.JTextPane;
 import javax.swing.text.*;
 import java.awt.Color;
-import Core.GameFlow.VictoryPanel;
 
 // TODO: DESCEND calls battle controller->game manager for next battle
 public class BattleInterface extends JPanel {
@@ -82,6 +78,11 @@ public class BattleInterface extends JPanel {
     private JSplitPane SplitPane_1;
     private JSplitPane SplitPane_2;
 
+    private int lastDividerLocation = -1;
+    private int lastLogDividerLocation = -1;
+    private JButton toggleSideBarButton;
+    private JButton toggleLogButton;
+
     public BattleInterface() {
 
         if (battlePanel != null) {
@@ -120,6 +121,7 @@ public class BattleInterface extends JPanel {
             });
             SplitPane_2.setBackground(new Color(44, 44, 44));
             SplitPane_2.setDividerSize(10);
+            SplitPane_2.setOneTouchExpandable(false);
         }
 
         setupInspector();
@@ -148,13 +150,51 @@ public class BattleInterface extends JPanel {
                 refreshUI();
             });
         }
-//        if (descendButton != null) {
-//            descendButton.addActionListener(e -> {
-//                resetSelectionState();
-//                descendPanel.setVisible(false);
-//                GameManager.getInstance().loadNextLevel();
-//            });
-//        }
+
+        if (toggleSideBarButton != null) {
+            toggleSideBarButton.addActionListener(e -> {
+                Component leftPanel = SplitPane_2.getLeftComponent();
+                boolean isVisible = leftPanel.isVisible();
+
+                if (isVisible) { // HIDE
+                    lastDividerLocation = SplitPane_2.getDividerLocation();
+                    leftPanel.setVisible(false);
+                    toggleSideBarButton.setText(">>");
+                } else { // SHOW
+                    leftPanel.setVisible(true);
+
+                    if (lastDividerLocation > 0) {
+                        SplitPane_2.setDividerLocation(lastDividerLocation);
+                    } else {
+                        SplitPane_2.setDividerLocation(0.3);
+                    }
+                    toggleSideBarButton.setText("<<");
+                }
+            });
+        }
+
+        if (toggleLogButton != null) {
+            toggleLogButton.addActionListener(e->{
+                Component logPanel = SplitPane_1.getBottomComponent();
+                boolean isVisible = logPanel.isVisible();
+
+                if (isVisible) {
+                    lastLogDividerLocation = SplitPane_1.getDividerLocation();
+                    logPanel.setVisible(false);
+                    toggleLogButton.setText("Show Logs");
+                } else {
+                    logPanel.setVisible(true);
+                    SplitPane_1.setDividerSize(10);
+                    if (lastLogDividerLocation > 0) {
+                        SplitPane_1.setDividerLocation(lastLogDividerLocation);
+                    } else {
+                        SplitPane_1.setDividerLocation(0.75);
+                    }
+                    toggleLogButton.setText("Hide Logs");
+                }
+            });
+        }
+
         battlePanel.addMouseListener(new MouseListener() {
             @Override public void mouseClicked(MouseEvent e) { resetSelectionState();}
             @Override public void mousePressed(MouseEvent e) {}
@@ -195,11 +235,17 @@ public class BattleInterface extends JPanel {
 //        LogManager.log("current mode: " + currentMode.toString());
         BattlePhase phase = battleController.getCurrentPhase();
 
+        boolean isBattleActive = (phase != BattlePhase.BATTLE_ENDED);
         boolean isPlayerTurn = (phase == BattlePhase.HERO_ACTION_WAIT);
-        endTurnButton.setEnabled(isPlayerTurn);
-        boolean canUseItems = isPlayerTurn && (currentMode == BattleUIMode.HERO_SELECT);
+
+
+        if (endTurnButton != null) {
+            endTurnButton.setVisible(isBattleActive);
+            endTurnButton.setEnabled(isPlayerTurn);
+        }
 
         if (inventoryPanel != null) {
+            boolean canUseItems = isPlayerTurn && (currentMode == BattleUIMode.HERO_SELECT);
             inventoryPanel.setEnabled(canUseItems);
         }
 
