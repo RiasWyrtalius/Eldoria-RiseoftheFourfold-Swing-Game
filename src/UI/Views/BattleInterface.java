@@ -908,7 +908,7 @@ public class BattleInterface extends JPanel {
             statsContainer.add(inspector_HpBar);
             statsContainer.add(inspector_MpBar);
             statsContainer.add(inspector_DefBar);
-            
+
             inspectorText.setCaretPosition(doc.getLength());
             inspectorText.insertComponent(statsContainer);
 

@@ -38,6 +38,7 @@ public class CharacterSelection extends JPanel {
     private JLabel classLabel;
     private AnimatedStatBar hpBar;
     private AnimatedStatBar mpBar;
+    private AnimatedStatBar defBar;
 
     private StatsRenderer statsRenderer;
     private List<CharacterDisplayData> characterList;
@@ -116,12 +117,15 @@ public class CharacterSelection extends JPanel {
 
         hpBar = new AnimatedStatBar(500, new Color(220, 50, 50), "HP: ");
         mpBar = new AnimatedStatBar(300, new Color(50, 150, 255), "MP: ");
+        defBar = new AnimatedStatBar(100, new Color(121, 121, 121), "MP: ");
 
         //ensures it doesnt stretch
         hpBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
         mpBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        defBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
         hpBar.setAlignmentX(Component.LEFT_ALIGNMENT);
         mpBar.setAlignmentX(Component.LEFT_ALIGNMENT);
+        defBar.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         if (textField1 != null) {
             textField1.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
@@ -139,6 +143,8 @@ public class CharacterSelection extends JPanel {
             barsPanel.add(hpBar);
             barsPanel.add(Box.createVerticalStrut(5));
             barsPanel.add(mpBar);
+            barsPanel.add(Box.createVerticalStrut(5));
+            barsPanel.add(defBar);
         }
     }
 
@@ -178,6 +184,7 @@ public class CharacterSelection extends JPanel {
 
             hpBar.setValue(myHero.getMaxHealth());
             mpBar.setValue(myHero.getMaxMana());
+            defBar.setValue(myHero.getMaxDefense());
 
             updateAnimation(myHero);
         }
@@ -250,7 +257,6 @@ public class CharacterSelection extends JPanel {
         nextButton.addActionListener(e -> {
             currentIndex++;
             textField1.setText("");
-            textField2.setText("");
             if (currentIndex >= characterList.size()) currentIndex = 0;
             updateView();
         });
@@ -258,7 +264,6 @@ public class CharacterSelection extends JPanel {
         previousButton.addActionListener(e -> {
             currentIndex--;
             textField1.setText("");
-            textField2.setText("");
             if (currentIndex < 0) currentIndex = characterList.size() - 1;
             updateView();
         });
