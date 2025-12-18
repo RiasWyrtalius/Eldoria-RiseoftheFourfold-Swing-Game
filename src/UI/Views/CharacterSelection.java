@@ -117,7 +117,7 @@ public class CharacterSelection extends JPanel {
 
         hpBar = new AnimatedStatBar(500, new Color(220, 50, 50), "HP: ");
         mpBar = new AnimatedStatBar(300, new Color(50, 150, 255), "MP: ");
-        defBar = new AnimatedStatBar(100, new Color(121, 121, 121), "MP: ");
+        defBar = new AnimatedStatBar(100, new Color(121, 121, 121), "DEF: ");
 
         //ensures it doesnt stretch
         hpBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
