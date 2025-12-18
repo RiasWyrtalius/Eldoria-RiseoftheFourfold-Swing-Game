@@ -22,7 +22,7 @@ public class Paladin extends JobClass {
     private static boolean hasRevived = false;
 
     public Paladin() {
-        super("Paladin", description, "PALADIN_IDLE", 30, 20);
+        super("Paladin", description, "PALADIN_IDLE", 30, 20, 5);
     }
 
     @Override

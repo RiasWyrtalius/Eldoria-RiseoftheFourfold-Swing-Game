@@ -23,7 +23,7 @@ public class CryoMancer extends JobClass {
     private static final String IDLE_PATH = "/Assets/Animations/Heroes/Mage-Ice/Idle/sprite_%d.png";
 
     public CryoMancer(){
-        super("CryoMancer", description, "MAGE_ICE-IDLE",20,35);
+        super("CryoMancer", description, "MAGE_ICE-IDLE",20,35,0);
     }
 
     @Override

@@ -26,6 +26,7 @@ public class Spider extends Enemy {
                 "Demon Spider",
                 ScalingLogic.calculateStat(level,35, 20, 0.1),
                 ScalingLogic.calculateStat(level,10, 10, 0.05),
+                ScalingLogic.calculateStat(level,3, 1, 0.05),
                 0,
                 level,
                 "Slime",

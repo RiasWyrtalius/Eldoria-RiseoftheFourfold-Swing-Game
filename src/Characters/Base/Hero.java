@@ -20,33 +20,30 @@ public class Hero extends Character {
     protected double growthRate;
     protected JobClass job;
 
-    public Hero(String name, int baseHealth, int baseAtk, int baseMana, int xp, int level, JobClass job) {
-        super(name, baseHealth, baseAtk, baseMana, level);
+    public Hero(String name, int baseHealth, int baseAtk, int baseDefense, int baseMana, int xp, int level, JobClass job) {
+        super(name, baseHealth, baseAtk, baseDefense, baseMana, level);
         this.job = job;
-
+        this.baseMaxHealth = baseHealth;
+        this.baseMaxMana = baseMana;
+        this.baseMaxDefense = baseDefense;
         this.XP = xp;
-
         this.baseXP = 100;
-
         // is this a constant?
         this.growthRate = 1.15;
         this.requiredXP = (int)(baseXP * Math.pow(growthRate,this.level - 1));
-
         recalculateStats();
-
         // necessary for new characters
         this.health = maxHealth;
         this.mana = maxMana;
-
         this.reactions.addAll(job.createReactions());
     }
 
-    public Hero(String name, int baseHealth, int baseAtk, int maxMana, int level, JobClass job) {
-        this(name, baseHealth, baseAtk, maxMana, 0, level, job);
+    public Hero(String name, int baseHealth, int baseAtk, int baseDefense, int maxMana, int level, JobClass job) {
+        this(name, baseHealth, baseAtk, baseDefense, maxMana, 0, level, job);
     }
 
-    public Hero(String name, int health, int baseAtk, int maxMana, JobClass job) {
-        this(name, health, baseAtk, maxMana, 1, job);
+    public Hero(String name, int health, int baseAtk, int baseDefense,int maxMana, JobClass job) {
+        this(name, health, baseAtk, baseDefense, maxMana, 1, job);
     }
 
     private void recalculateStats() {
@@ -62,6 +59,13 @@ public class Hero extends Character {
                 this.baseMaxMana + job.getMpBonus(),
                 job.getMpFlat(),
                 job.getMpGrowth()
+        );
+
+        this.baseDefense = ScalingLogic.calculateStat(
+                this.level,
+                this.baseMaxDefense + job.getDefBonus(),
+                job.getDefFlat(),
+                job.getDefGrowth()
         );
     }
 

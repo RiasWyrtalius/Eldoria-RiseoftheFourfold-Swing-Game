@@ -57,6 +57,7 @@ public class BattleInterface extends JPanel {
         private AnimatedStatBar inspector_HpBar;
         private AnimatedStatBar inspector_MpBar;
         private AnimatedStatBar inspector_XPBar;
+        private AnimatedStatBar inspector_DefBar;
 
     private final Map<Character, CharacterStatusPanel> characterToPanelMap = new HashMap<>();
 
@@ -323,13 +324,36 @@ public class BattleInterface extends JPanel {
 
         JPanel glassOverlay = new JPanel(new GridBagLayout());
         glassOverlay.setOpaque(false);
-        glassOverlay.addMouseListener(new java.awt.event.MouseAdapter() {});
+
+        java.awt.event.MouseAdapter blocker = new java.awt.event.MouseAdapter() {
+            @Override public void mouseClicked(MouseEvent e) { e.consume(); }
+            @Override public void mousePressed(MouseEvent e) { e.consume(); }
+            @Override public void mouseReleased(MouseEvent e) { e.consume(); }
+            @Override public void mouseEntered(MouseEvent e) { e.consume(); }
+            @Override public void mouseExited(MouseEvent e) { e.consume(); }
+            @Override public void mouseDragged(MouseEvent e) { e.consume(); }
+            @Override public void mouseMoved(MouseEvent e) { e.consume(); }
+        };
+
+        glassOverlay.addMouseListener(blocker);
+        glassOverlay.addMouseMotionListener(blocker);
+
+        glassOverlay.setFocusable(true);
+        glassOverlay.requestFocusInWindow();
+        glassOverlay.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override public void keyPressed(java.awt.event.KeyEvent e) { e.consume(); }
+            @Override public void keyTyped(java.awt.event.KeyEvent e) { e.consume(); }
+        });
+
         JPanel summaryBox = summary.getPanel();
         summaryBox.setPreferredSize(new Dimension(400, 500));
         summaryBox.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 100), 1));
+
         glassOverlay.add(summaryBox);
+
         root.setGlassPane(glassOverlay);
         glassOverlay.setVisible(true);
+        glassOverlay.requestFocus(); // Force focus capture
     }
 
     private void setPartyUI(List<Character> party, List<JPanel> setupPanel) {
@@ -776,6 +800,7 @@ public class BattleInterface extends JPanel {
         return menu;
     }
 
+    //TODO: add defense stat bar
     private void setupInspector() {
         inspectorText = new JTextPane();
         inspectorText.setEditable(false);
@@ -785,10 +810,12 @@ public class BattleInterface extends JPanel {
         inspector_XPBar = new AnimatedStatBar(100, Color.YELLOW, "XP: ");
         inspector_HpBar = new AnimatedStatBar(100, Color.GREEN, "HP:");
         inspector_MpBar = new AnimatedStatBar(100, new Color(100, 149, 237), "MP:");
+        inspector_DefBar = new AnimatedStatBar(100, Color.GRAY, "DEF: ");
 
         inspector_XPBar.setPreferredSize(new Dimension(180, 15));
         inspector_HpBar.setPreferredSize(new Dimension(180, 25));
         inspector_MpBar.setPreferredSize(new Dimension(180, 25));
+        inspector_DefBar.setPreferredSize(new Dimension(180, 25));
 
         if (CharacterInspector_JSP != null) {
             CharacterInspector_JSP.setViewportView(inspectorText);
@@ -804,9 +831,10 @@ public class BattleInterface extends JPanel {
         //no character selected
         if (c == null) { return; }
 
+        inspector_XPBar.setVisible(true);
         inspector_HpBar.setVisible(true);
         inspector_MpBar.setVisible(true);
-        inspector_XPBar.setVisible(true);
+        inspector_DefBar.setVisible(true);
 
         if (c instanceof Hero) {
             Hero h = (Hero)c;
@@ -819,6 +847,9 @@ public class BattleInterface extends JPanel {
 
         inspector_MpBar.setMaxValue(c.getMaxMana());
         inspector_MpBar.setValue(c.getMana());
+
+        inspector_DefBar.setMaxValue(c.getDefense());
+        inspector_DefBar.setValue(c.getDefense());
 
         StyledDocument doc = inspectorText.getStyledDocument();
 
@@ -853,7 +884,7 @@ public class BattleInterface extends JPanel {
         StyleConstants.setForeground(defaultStyle, Color.BLACK);
 
         SimpleAttributeSet spacerStyle = new SimpleAttributeSet();
-        StyleConstants.setFontSize(spacerStyle, 10);
+        StyleConstants.setFontSize(spacerStyle, 3);
 
         try {
             //NAME & CLASS
@@ -866,22 +897,20 @@ public class BattleInterface extends JPanel {
             doc.insertString(doc.getLength(), "LVL: " + c.getLevel() + "\n", levelStyle);
 
             //XP, HP, & MANA
+            JPanel statsContainer = new JPanel();
+            statsContainer.setLayout(new BoxLayout(statsContainer, BoxLayout.Y_AXIS));
+            statsContainer.setOpaque(false);
+
+            // 2. Add the bars to the container
             if (c instanceof Hero) {
-                Hero h = (Hero) c;
-                inspector_XPBar.setMaxValue(h.getRequiredXP());
-                inspector_XPBar.setValue(h.getXP());
+                statsContainer.add(inspector_XPBar);
             }
-
+            statsContainer.add(inspector_HpBar);
+            statsContainer.add(inspector_MpBar);
+            statsContainer.add(inspector_DefBar);
+            
             inspectorText.setCaretPosition(doc.getLength());
-            inspectorText.insertComponent(inspector_XPBar);
-            doc.insertString(doc.getLength(), "\n", spacerStyle);
-
-            inspectorText.setCaretPosition(doc.getLength());
-            inspectorText.insertComponent(inspector_HpBar);
-            //doc.insertString(doc.getLength(), "\n", spacerStyle);
-
-            inspectorText.setCaretPosition(doc.getLength());
-            inspectorText.insertComponent(inspector_MpBar);
+            inspectorText.insertComponent(statsContainer);
 
             //SKILLS
             doc.insertString(doc.getLength(), "\n\n[ SKILLS ]\n", skillStyle);

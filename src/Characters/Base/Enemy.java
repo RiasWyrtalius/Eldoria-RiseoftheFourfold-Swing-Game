@@ -18,8 +18,8 @@ public abstract class Enemy extends Character {
     protected String description;
     protected String idleImageKey;
 
-    public Enemy(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, String description, String idleImageKey) {
-        super(name, initialHealth, baseAtk, maxMana, level);
+    public Enemy(String name, int initialHealth, int baseAtk, int baseDefense ,int maxMana, int level, String type, int rewardXP, String description, String idleImageKey) {
+        super(name, initialHealth, baseAtk, baseDefense, maxMana, level);
         this.skills = new ArrayList<>();
         this.type = type;
         this.rewardXP = rewardXP;
@@ -29,8 +29,8 @@ public abstract class Enemy extends Character {
         initializeSkills();
     }
 
-    public Enemy(String name, int health, int baseAtk, int maxMana, String type, int rewardXP, String description, String idleImageKey) {
-        this(name, health, baseAtk, maxMana, 1, type, rewardXP, description, idleImageKey);
+    public Enemy(String name, int health, int baseAtk, int baseDefense, int maxMana, String type, int rewardXP, String description, String idleImageKey) {
+        this(name, health, baseAtk, baseDefense, maxMana, 1, type, rewardXP, description, idleImageKey);
     }
 
     protected abstract void registerAssets();

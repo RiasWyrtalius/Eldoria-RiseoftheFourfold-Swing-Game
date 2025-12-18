@@ -23,7 +23,7 @@ public class Archer extends JobClass {
     private static final String IDLE_PATH = "/Assets/Animations/Heroes/Archer/Idle/sprite_%d.png";
 
     public Archer(){
-        super("Archer", description, "ARCHER_IDLE",0,30);
+        super("Archer", description, "ARCHER_IDLE",0,30,1);
     }
 
     @Override

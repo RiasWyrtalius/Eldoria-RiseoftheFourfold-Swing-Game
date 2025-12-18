@@ -10,15 +10,20 @@ public abstract class JobClass {
     private final List<Skill> skills;
     private List<ReactionSkill> reactions;
 
-    // --- BASE STAT MODIFIERS ---
-    private final int hpBonus;      // One-time boost at creation
-    private final int mpBonus;    // One-time boost at creation
+    // --- BASE STAT MODIFIERS --- // One-time boost at creation
+    private final int hpBonus;
+    private final int mpBonus;
+    private final int defBonus;
 
     // --- PER-LEVEL SCALING CONSTANTS ---
     private final int hpFlat;       // Flat HP per level
     private final double hpGrowth;  // % HP per level
+
     private final int mpFlat;       // Flat MP per level
     private final double mpGrowth;  // % MP per level
+
+    private final int defFlat;
+    private final double defGrowth;
 
     // Visuals
     private final String idleImageKey;
@@ -26,9 +31,11 @@ public abstract class JobClass {
     public JobClass(
             String name, String description,
             String idleImageKey,
-            int hpBonus, int mpBonus,
+            int hpBonus, int mpBonus, int defBonus,
             int hpFlat, double hpGrowth,
-            int mpFlat, double mpGrowth) {
+            int mpFlat, double mpGrowth,
+            int defFlat, double defGrowth) {
+
         this.name = name;
         this.description = description;
         this.idleImageKey = idleImageKey;
@@ -36,12 +43,17 @@ public abstract class JobClass {
         // Base Stats
         this.hpBonus = hpBonus;
         this.mpBonus = mpBonus;
+        this.defBonus = defBonus;
 
         // Scaling Stats
         this.hpFlat = hpFlat;
         this.hpGrowth = hpGrowth;
+
         this.mpFlat = mpFlat;
         this.mpGrowth = mpGrowth;
+
+        this.defFlat = defFlat;
+        this.defGrowth = defGrowth;
 
         // Initialize Abilities
         this.skills = createSkills();
@@ -51,12 +63,20 @@ public abstract class JobClass {
         registerAssets();
     }
 
-    public JobClass(String name, String description, String idleImageKey, int hpBonus, int mpBonus) {
-        this(name, description, idleImageKey, hpBonus, mpBonus, 4, 0.05, 2, 0.009);
+    public JobClass(String name, String description, String idleImageKey, int hpBonus, int mpBonus, int defBonus) {
+        this(name, description, idleImageKey,
+                hpBonus, mpBonus, defBonus,
+                4, 0.05,
+                2, 0.009,
+                1, 0.02);
+
+        //HP: +4 Flat, +5%
+        //MP: +2 Flat, +0.9%
+        //DEF: +1 Flat, +2%
     }
     
     public JobClass(String name, String description, String idleImageKey) {
-        this(name, description, idleImageKey, 0, 0);
+        this(name, description, idleImageKey, 0, 0, 0);
     }
 
     public abstract List<ReactionSkill> createReactions();
@@ -83,24 +103,31 @@ public abstract class JobClass {
     public int getMpBonus() {
         return mpBonus;
     }
+    public int getDefBonus() { return defBonus; }
     public String getDescription() {
         return description;
     }
     public List<ReactionSkill> getReactions() {
         return reactions;
     }
+
     public int getHpFlat() {
         return hpFlat;
     }
     public double getHpGrowth() {
         return hpGrowth;
     }
+
     public int getMpFlat() {
         return mpFlat;
     }
     public double getMpGrowth() {
         return mpGrowth;
     }
+
+    public int getDefFlat() { return defFlat; }
+    public double getDefGrowth() { return defGrowth; }
+
     public String getPreviewImagePath() { return ""; }
     public String getIdleImageKey() { return this.idleImageKey; }
 

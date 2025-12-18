@@ -8,12 +8,13 @@ import java.util.List;
 public abstract class Boss extends Enemy {
     protected double healthMultiplier;
 
-    public Boss(String name, int baseHealth, int baseAtk, int maxMana, int level, String type, int rewardXP,
+    public Boss(String name, int baseHealth, int baseAtk, int baseDefense, int maxMana, int level, String type, int rewardXP,
                 double healthMultiplier, String idleImageKey, String desc) {
         super(
                 name,
                 (int)(baseHealth * healthMultiplier),
                 baseAtk,
+                baseDefense,
                 maxMana,
                 level,
                 type,

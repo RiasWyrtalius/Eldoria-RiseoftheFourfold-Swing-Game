@@ -26,29 +26,34 @@ public abstract class Character {
     protected int maxHealth;
     protected int maxMana;
 
+    protected int baseDefense;
+    protected int baseMaxDefense;
+
     protected boolean isAlive = true;
     protected boolean isExhausted = false;
 
     protected List<ReactionSkill> reactions = new ArrayList<>();
     protected List<StatusEffect> activeStatusEffects = new ArrayList<>();
 
-    public Character(String name, int baseHealth, int baseAtk, int baseMana, int level) {
+    public Character(String name, int baseHealth, int baseAtk, int baseDefense, int baseMana, int level) {
         this.name = name;
-
-        this.baseMaxHealth = baseHealth;
-        this.baseMaxMana = baseMana;
+        this.level = level;
         this.baseAtk = baseAtk;
 
-        this.level = level;
-
+        this.baseMaxHealth = baseHealth;
         this.maxHealth = baseHealth;
-        this.maxMana = baseMana;
         this.health = maxHealth;
+
+        this.baseMaxMana = baseMana;
+        this.maxMana = baseMana;
         this.mana = maxMana;
+
+        this.baseDefense = baseDefense;
+        this.baseMaxDefense = baseDefense;
     }
 
-    public Character(String name, int baseHealth, int baseAtk, int maxMana) {
-        this(name, baseHealth, baseAtk, maxMana, 1);
+    public Character(String name, int baseHealth, int baseAtk, int baseDefense, int maxMana) {
+        this(name, baseHealth, baseAtk, baseDefense, maxMana, 1);
     }
 
     /**
@@ -68,6 +73,8 @@ public abstract class Character {
      * called by skill logic, reaction logic, effect logic and item logic
      */
     public void receiveDamage(int rawDamage, Character attacker, Skill incomingSkill, Runnable onDamageResolved) {
+
+        int mitigatedDamage = applyDefense(rawDamage);
 
         // This is the final callback after ALL reactions are done.
         Consumer<ReactionResult> afterReactionsCallback = (finalResult) -> {
@@ -100,7 +107,7 @@ public abstract class Character {
             }
         };
 
-        processDamageReactions(attacker, incomingSkill, rawDamage, afterReactionsCallback);
+        processDamageReactions(attacker, incomingSkill, mitigatedDamage, afterReactionsCallback);
     }
 
     protected void processFatalReactions(Character attacker, Skill incomingSkill, Consumer<Boolean> onComplete) {
@@ -281,6 +288,12 @@ public abstract class Character {
         }
     }
 
+    protected int applyDefense(int rawDamage) {
+        int mitigation = this.baseDefense / 2;
+        int finalDmg = rawDamage - mitigation;
+        return Math.max(1, finalDmg);
+    }
+
     private void reviveState(Character source) {
         this.isAlive = true;
 
@@ -298,7 +311,6 @@ public abstract class Character {
 
     public void setMaxHealth(int maxHealth){this.maxHealth = maxHealth;}
     public void setMaxMana(int maxMana){this.maxMana = maxMana;}
-
     public void addReaction(ReactionSkill reaction) {
         this.reactions.add(reaction);
     }
@@ -423,6 +435,8 @@ public abstract class Character {
     public int getBaseMaxMana() {
         return baseMaxMana;
     }
+    public int getDefense() { return baseDefense; }
+    public int getMaxDefense() { return baseMaxDefense; }
     public void setExhausted(boolean exhausted) {
         isExhausted = exhausted;
     }

@@ -20,7 +20,7 @@ public class Cleric extends JobClass {
     private static final String IDLE_PATH = "/Assets/Animations/Heroes/Cleric/Idle/sprite_%d.png";
 
     public Cleric() {
-        super("Cleric", description, "CLERIC_IDLE", 20, 40);
+        super("Cleric", description, "CLERIC_IDLE", 20, 40,2);
     }
 
     @Override

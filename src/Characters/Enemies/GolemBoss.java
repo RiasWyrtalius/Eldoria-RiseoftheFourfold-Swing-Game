@@ -18,19 +18,21 @@ import java.util.List;
 public class GolemBoss extends Boss {
     public GolemBoss(){this(1);}
 
+    //TODO: add defense field to Boss class
     public GolemBoss(int level){
-        this(
+        this(   // HP / ATK / DEF / MANA
                 "Golem",
                 ScalingLogic.calculateStat(level,350,40,0.1),
                 ScalingLogic.calculateStat(level,10,1,0.05),
+                ScalingLogic.calculateStat(level,2,5,0.1),
                 ScalingLogic.calculateStat(level,80,50,0.2),
                 level,
                 "Boss"
                 ,ScalingLogic.calculateStat(level,200,30,0.1),
                 1.5);
     }
-    public GolemBoss(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
-        super(name, initialHealth, baseAtk, maxMana, level, type, rewardXP, healthMultiplier, "GOLEM_BOSS-IDLE", "boss of the level");
+    public GolemBoss(String name, int initialHealth, int baseAtk, int baseDefense, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
+        super(name, initialHealth, baseAtk, baseDefense, maxMana, level, type, rewardXP, healthMultiplier, "GOLEM_BOSS-IDLE", "boss of the level");
     }
 
     @Override

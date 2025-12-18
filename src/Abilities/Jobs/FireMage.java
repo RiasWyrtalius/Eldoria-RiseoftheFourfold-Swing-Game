@@ -22,7 +22,7 @@ public class FireMage extends JobClass {
     public static final String IDLE_PATH = "/Assets/Animations/Heroes/Mage-Fire/Idle/sprite_%d.png";
 
     public FireMage() {
-        super("FireMage", description, "MAGE_IDLE",15,35);
+        super("FireMage", description, "MAGE_IDLE",15,35,0);
     }
 
     @Override

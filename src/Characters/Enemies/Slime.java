@@ -26,6 +26,7 @@ public class Slime extends Enemy {
                 "Demon Slime",
                 ScalingLogic.calculateStat(level,55, 15, 0.1),
                 ScalingLogic.calculateStat(level,8, 5, 0.2),
+                ScalingLogic.calculateStat(level, 2, 1, 0.05),
                 0,
                 level,
                 "Slime",

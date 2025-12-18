@@ -18,20 +18,22 @@ import java.util.List;
 public class Varoth extends Boss {
     public Varoth(){this(1);}
 
+    //TODO: add defense field to Boss class
     public Varoth(int level){
-        this( //    HP / DMG / MP / XP GAIN
+        this(   // HP / ATK / DEF / MANA
                 "Varoth",
                 ScalingLogic.calculateStat(level,500,20,0.1),
                 ScalingLogic.calculateStat(level,25,15,0.05),
+                ScalingLogic.calculateStat(level,25,5,0.1),
                 ScalingLogic.calculateStat(level,400,15,0.1),
                 level,"Boss"
                 ,ScalingLogic.calculateStat(level,200,30,0.09),
                 1.2
         );
     }
-    public Varoth(String name, int initialHealth, int baseAtk, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
+    public Varoth(String name, int initialHealth, int baseAtk, int baseDefense, int maxMana, int level, String type, int rewardXP, double healthMultiplier) {
         super(
-                name, initialHealth, baseAtk, maxMana, level, type, rewardXP,  healthMultiplier, "VAROTH-IDLE", "Demon King");
+                name, initialHealth, baseAtk, baseDefense, maxMana, level, type, rewardXP,  healthMultiplier, "VAROTH-IDLE", "Demon King");
     }
 
     @Override
