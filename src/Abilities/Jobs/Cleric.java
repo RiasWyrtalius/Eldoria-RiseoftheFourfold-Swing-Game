@@ -122,8 +122,8 @@ public class Cleric extends JobClass {
                 healGroupLogic
         );
         Skill BashStaff = new Skill(
-                "Bash Staff", "Healing their teammate", 10, 10,
-                SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
+                "Bash Staff", "Bashes enemy with holy staff", 0, 10,
+                SkillType.HEAL, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 bashLogic
         );
         Skill Revive = new Skill(
