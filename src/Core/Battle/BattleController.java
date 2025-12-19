@@ -16,6 +16,7 @@ import Items.Inventory;
 import Items.Item;
 import UI.Views.BattleInterface;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,12 @@ public class BattleController {
 
                 VisualEffectsManager.getInstance().resumeAllAnimations();
 
-                setCurrentPhase(BattlePhase.HERO_ACTION_WAIT);
+                SwingUtilities.invokeLater(() -> {
+                    setCurrentPhase(BattlePhase.HERO_ACTION_WAIT);
+                    if (mainView != null) mainView.refreshUI();
+
+                    checkAndAutoSkipHeroPhase();
+                });
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -84,6 +90,13 @@ public class BattleController {
     private void resetTurnReadiness() {
         heroParty.setPartyExhaustion(false);
         enemyParty.setPartyExhaustion(false);
+
+        for (Character hero : heroParty.getAliveMembers()) {
+            if (hero.isImmobilized()) {
+                hero.setExhausted(true);
+                LogManager.log(hero.getName() + " is frozen and skips their action!", LogFormat.SYSTEM);
+            }
+        }
     }
 
     public boolean executeActionFromUI(Hero hero, Skill skill, List<Character> targets) {
@@ -180,6 +193,21 @@ public class BattleController {
             this.mainView.refreshUI();
     }
 
+    private void checkAndAutoSkipHeroPhase() {
+        if (heroParty.isAllMembersExhausted()) {
+            LogManager.log("All heroes are incapacitated! Skipping Hero Phase...", LogFormat.SYSTEM);
+
+            new Thread(() -> {
+                try { Thread.sleep(1200); } catch (InterruptedException ignored) {}
+                SwingUtilities.invokeLater(() -> {
+                    if (isBattleActive) {
+                        advanceTurnCycle(false);
+                    }
+                });
+            }).start();
+        }
+    }
+
     private void executeEnemyPhase() {
         LogManager.log("┌──── ∘°❉ - ❉°∘ ────┐", LogFormat.TURN_INDICATOR); //legit unnecessary fanciness..
         LogManager.log("│   ENEMY PHASE   │", LogFormat.TURN_INDICATOR); // the right amount of fanciness :D
@@ -214,6 +242,15 @@ public class BattleController {
             processNextEnemy(enemies, index + 1);
         };
 
+        if (enemyChar.isImmobilized()) {
+            LogManager.log(enemyChar.getName() + " is frozen solid and cannot move!", LogFormat.SYSTEM);
+            new Thread(() -> {
+                try { Thread.sleep(600); } catch (Exception ignored) {}
+                onCurrentEnemyFinished.run();
+            }).start();
+            return;
+        }
+
         List<Character> aliveMembers = heroParty.getAliveMembers();
         List<Character> validTargets = new ArrayList<>();
 
@@ -246,8 +283,8 @@ public class BattleController {
     }
 
     private void onEnemyPhaseComplete() {
-        executeTurnCleanUp();
         resetTurnReadiness();
+        executeTurnCleanUp();
 
         turnCounter++;
 
@@ -261,6 +298,8 @@ public class BattleController {
         LogManager.log("TURN " + turnCounter + " BEGINS", LogFormat.TURN_INDICATOR);
 
         if (this.mainView != null) this.mainView.refreshUI();
+
+        checkAndAutoSkipHeroPhase();
     }
 
     private void executeTurnCleanUp() {

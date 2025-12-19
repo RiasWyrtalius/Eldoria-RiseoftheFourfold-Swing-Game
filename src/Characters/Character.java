@@ -405,6 +405,17 @@ public abstract class Character {
     public boolean isExhausted() {
         return isExhausted;
     }
+    public boolean hasStatus(String statusName) {
+        for (StatusEffect effect : activeStatusEffects) {
+            if (effect.getName().equalsIgnoreCase(statusName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isImmobilized() {
+        return hasStatus("Stun") || hasStatus("Freeze") || hasStatus("Sleep");
+    }
 
     // =============== PUBLIC GETTERS AND SETTERS ===============
     public int getMaxHealth() {

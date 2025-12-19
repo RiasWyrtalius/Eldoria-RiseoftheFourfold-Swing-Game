@@ -47,6 +47,12 @@ public class CryoMancer extends JobClass {
                 5, 100, 100 , 200,
                 AnimationLoopType.ONE_CYCLE
         );
+        AssetManager.getInstance().registerAnimation(
+                "FLASHFROST",
+                "Assets/Animations/Heroes/Mage-Ice/Effects/Flash_Frost/sprite_%d.png",
+                5, 100, 100 , 200,
+                AnimationLoopType.ONE_CYCLE
+        );
     }
 
     @Override
@@ -97,19 +103,44 @@ public class CryoMancer extends JobClass {
             }, true);
         };
 
+        SkillLogicConsumer flashFrostLogic = (_, self, user, targets, onSkillComplete) -> {
+            int calculateDamage = ScalingLogic.calculateMagicalDamage(user,10,1.1,0.02);
+            LogManager.log(user.getName() + " releases a Flash Frost across the battlefield!", LogFormat.HERO_ACTION);
+            VisualEffectsManager.getInstance().playGroupAnimation("FLASHFROST", targets, () -> {
+                for (Character target : targets) {
+                    target.applyStatusEffect(StatusEffectFactory.afreeze(1, 2));
+                    target.receiveDamage(calculateDamage, user, self, null);
+                }
+
+                // Final turn completion after everyone is processed
+                if (onSkillComplete != null) {
+                    onSkillComplete.run();
+                }
+            }, true);
+        };
+
         Skill IceSpike = new Skill(
-                "Ice Spike", "Unleashes spikes from the ground", 20, 30,
+                "Ice Spike", "Unleashes spikes from the ground",
+                20, 30,
                 SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 iceSpikeLogic
         );
 
         Skill FrostBite = new Skill(
-                "Frost Bite", "Unleashes cold Air to enemy", 15, 15,
+                "Frost Bite", "Unleashes cold Air to enemy",
+                15, 15,
                 SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 frostBiteLogic
         );
 
-        return List.of(IceSpike,FrostBite);
+        Skill FlashFrost = new Skill(
+                "Flash Frost", "Freezes all enemies for 1 turn with a blast of absolute zero air.",
+                45, 50,
+                SkillType.DAMAGE, SkillAction.MAGICAL, TargetType.AOE_ALL_TARGETS, TargetCondition.ALIVE,
+                flashFrostLogic
+        );
+
+        return List.of(IceSpike, FrostBite, FlashFrost);
     }
 
     @Override public String getPreviewImagePath() { return IDLE_PATH; }

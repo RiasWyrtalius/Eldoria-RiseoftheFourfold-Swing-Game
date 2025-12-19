@@ -42,7 +42,13 @@ public class Paladin extends JobClass {
         AssetManager.getInstance().registerAnimation(
                 "PALADIN_HOLY-STRIKE",
                 "/Assets/Animations/Heroes/Paladin/Effects/Holy_Strike/sprite_%d.png",
-                4, 100, 100 , 300,
+                4, 125, 125, 300,
+                AnimationLoopType.ONE_CYCLE
+        );
+        AssetManager.getInstance().registerAnimation(
+                "PALADIN_LAY-ON-HANDS",
+                "/Assets/Animations/Heroes/Paladin/Effects/Lay_on_Hands/sprite_%d.png",
+                4, 125, 125, 300,
                 AnimationLoopType.ONE_CYCLE
         );
     }
@@ -107,18 +113,42 @@ public class Paladin extends JobClass {
             VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_HOLY-STRIKE", target, afterAnimation, true);
         };
 
+        SkillLogicConsumer layOnHandsLogic = (controller, self, user, targets, onSkillComplete) -> {
+            Character target = targets.get(0);
+            int hpSacrifice = (int) (user.getHealth() * 0.30);
+            int baseDmg = ScalingLogic.calculatePhysicalDamage(user, 40, 2.5, 0.05);
+            int sacrificeBonus = hpSacrifice * 2; // Every 1 HP sacrificed deals 2 extra damage
+            int totalDmg = baseDmg + sacrificeBonus;
+
+            LogManager.log(user.getName() + " sacrifices their life force to purge " + target.getName() + "!", LogFormat.HERO_ACTION);
+
+            Runnable afterAnimation = () -> {
+                VisualEffectsManager.getInstance().restoreCharacterVisual(user);
+                user.receiveDamage(hpSacrifice, null, null, null);
+                target.receiveDamage(totalDmg, user, self, onSkillComplete);
+            };
+
+            VisualEffectsManager.getInstance().hideCharacterVisual(user);
+            VisualEffectsManager.getInstance().playAnimationOnCharacter("PALADIN_LAY-ON-HANDS", target, afterAnimation, true);
+        };
+
         Skill HealSelf = new Skill(
-                "Self Heal", "Selfish Healing for themself", 15, 20,
+                "Self Heal", "Selfish Healing for themself", 12, 20,
                 SkillType.HEAL, SkillAction.MAGICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 healSelfLogic
         );
         Skill HolyStrike = new Skill(
-                "Holy Strike", "Righteousness as a Sword Strike", 20, 30,
+                "Holy Strike", "Righteousness as a Sword Strike", 15, 30,
                 SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
                 holyStrikeLogic
         );
+        Skill LayOnHands = new Skill(
+                "Lay on Hands", "Sacrifice 30% Current HP to deal massive Holy Damage", 40, 50,
+                SkillType.DAMAGE, SkillAction.PHYSICAL, TargetType.SINGLE_TARGET, TargetCondition.ALIVE,
+                layOnHandsLogic
+        );
 
-        return List.of(HolyStrike,HealSelf);
+        return List.of(HolyStrike, HealSelf, LayOnHands);
 
     }
 

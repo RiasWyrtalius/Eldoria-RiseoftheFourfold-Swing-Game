@@ -48,7 +48,7 @@ public class Cleric extends JobClass {
     public List<Skill> createSkills() {
         SkillLogicConsumer healSelfLogic = (_, self, user, targets, onSkillComplete) -> {
             LogManager.log(self.getActionLog(user, "heals", targets), LogFormat.HERO_ACTION);
-            int heal = ScalingLogic.calculateStat(user.getLevel(), 35, 30, 0.05);
+            int heal = ScalingLogic.calculateStat(user.getLevel(), 35, 15, 0.05);
 
             VisualEffectsManager.getInstance().playAnimation("CLERIC_HEAL", user, () -> {
                 // This runs AFTER the heal animation

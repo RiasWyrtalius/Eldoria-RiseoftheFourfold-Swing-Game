@@ -19,11 +19,21 @@ public class StatusEffectFactory {
     public static StatusEffect freeze(int damage, int duration) {
         StatusEffect.TickEffect logic = (target) -> {
             // TODO: add special effects
-            LogManager.log(target.getName() + " is frost Bitten for " + damage + " damage!", LogFormat.HIGHLIGHT_DEBUFF);
+            LogManager.log(target.getName() + " has frost bite for " + damage + " damage!", LogFormat.HIGHLIGHT_DEBUFF);
             target.receiveDamage(damage, null, null, null);
+        };
+        return new StatusEffect("Frost Bite", duration, logic, StatusEffectType.DEBUFF);
+    }
+
+    public static StatusEffect afreeze(int damage, int duration) {
+        StatusEffect.TickEffect logic = (target) -> {
+            LogManager.log(target.getName() + " is frozen solid and takes " + damage + " frost damage!", LogFormat.HIGHLIGHT_DEBUFF);
+            target.receiveDamage(damage, null, null, null);
+            Core.Visuals.VisualEffectsManager.getInstance().applyStatusTint(null, "FREEZE_TINT", new Color(0, 150, 255));
         };
         return new StatusEffect("Freeze", duration, logic, StatusEffectType.DEBUFF);
     }
+
     public static StatusEffect bleed(int damage, int duration) {
         StatusEffect.TickEffect logic = (target) -> {
             // TODO: add special effects
