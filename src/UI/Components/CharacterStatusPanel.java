@@ -4,7 +4,7 @@
     import Core.Visuals.VisualAsset;
     import Core.Visuals.VisualEffectsManager;
     import Resource.Animation.AssetManager;
-    import UI.Views.BattleInterface;
+    import UI.Views.BattleView;
 
     import javax.swing.*;
     import javax.swing.plaf.basic.BasicProgressBarUI;
@@ -27,7 +27,7 @@
 
         private JPanel iconPanel;
 
-        public CharacterStatusPanel(BattleInterface parentInterface) {
+        public CharacterStatusPanel(BattleView parentInterface) {
             this.setOpaque(false);
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

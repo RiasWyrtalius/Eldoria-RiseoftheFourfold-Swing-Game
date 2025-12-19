@@ -1,7 +1,6 @@
 package Core;
 
 import Characters.Base.Hero;
-import Characters.Character;
 import Characters.Party;
 import Core.Battle.BattleController;
 import Core.GameFlow.*;
@@ -12,13 +11,12 @@ import Core.Visuals.VisualEffectsManager;
 import Resource.Audio.AudioManager;
 import UI.Components.IconLoader;
 import UI.SceneManager;
-import UI.Views.BattleInterface;
+import UI.Views.BattleView;
 import UI.Views.CharacterSelection;
 import UI.Views.MainMenu;
 import UI.Views.StoryView;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -31,7 +29,7 @@ public class GameManager {
 
     private JFrame gameWindow;
     private MainMenu mainMenuView;
-    private BattleInterface battleView;
+    private BattleView battleView;
 
     private GameManager() {
         this.gameLoader = new GameLoader();
@@ -75,7 +73,7 @@ public class GameManager {
 
             // preload all views!!!
             mainMenuView = new MainMenu(this);
-            battleView = new BattleInterface();
+            battleView = new BattleView();
             LogManager.initialize(battleView.getGameLogPanelTextPane(), battleView.getGameLogHighlightPanelTextPane());
 
             transitionToMainMenu();

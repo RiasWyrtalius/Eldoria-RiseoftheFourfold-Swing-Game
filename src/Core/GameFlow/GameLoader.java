@@ -11,7 +11,7 @@ import Resource.Audio.AudioManager;
 import Core.Utils.LogManager;
 import Core.Utils.LogFormat;
 import Items.*;
-import UI.Views.BattleInterface;
+import UI.Views.BattleView;
 import Core.Story.StoryContent;
 
 import java.util.*;
@@ -24,7 +24,7 @@ public class GameLoader {
     private final Queue<Level> campaignQueue;
     private long currentSeed;
     private final List<EnemySpawnRule> allEnemyTypes = new ArrayList<>();
-    private BattleInterface battleInterface;
+    private BattleView battleView;
 
     public GameLoader() {
         this.campaignQueue = new LinkedList<>();
@@ -404,7 +404,7 @@ public class GameLoader {
         return currentSeed;
     }
 
-    public void setBattleInterface(BattleInterface battleInterface) {
-        this.battleInterface = battleInterface;
+    public void setBattleInterface(BattleView battleView) {
+        this.battleView = battleView;
     }
 }

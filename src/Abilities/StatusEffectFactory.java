@@ -2,6 +2,7 @@ package Abilities;
 
 import Core.Utils.LogFormat;
 import Core.Utils.LogManager;
+import Core.Visuals.VisualEffectsManager;
 
 import java.awt.*;
 
@@ -12,6 +13,8 @@ public class StatusEffectFactory {
         StatusEffect.TickEffect logic = (target) -> {
             // TODO: add special effects
             LogManager.log(target.getName() + " is scorched for " + damage + " damage!", LogFormat.HIGHLIGHT_DEBUFF);
+            // TODO: make status effects highlights more standardized
+            VisualEffectsManager.getInstance().showFloatingText(target, "SCORCH", new Color(255, 82, 55));
             target.receiveDamage(damage, null, null, null);
         };
         return new StatusEffect("Burn", duration, logic, StatusEffectType.DEBUFF);
@@ -20,6 +23,7 @@ public class StatusEffectFactory {
         StatusEffect.TickEffect logic = (target) -> {
             // TODO: add special effects
             LogManager.log(target.getName() + " has frost bite for " + damage + " damage!", LogFormat.HIGHLIGHT_DEBUFF);
+            VisualEffectsManager.getInstance().showFloatingText(target, "FROZEN", Color.blue);
             target.receiveDamage(damage, null, null, null);
         };
         return new StatusEffect("Frost Bite", duration, logic, StatusEffectType.DEBUFF);
@@ -38,6 +42,7 @@ public class StatusEffectFactory {
         StatusEffect.TickEffect logic = (target) -> {
             // TODO: add special effects
             LogManager.log(target.getName() + " is bleeds for " + damage + " damage!", LogFormat.HIGHLIGHT_DEBUFF);
+            VisualEffectsManager.getInstance().showFloatingText(target, "BLEED", new Color(255, 0, 0));
             target.receiveDamage(damage, null, null, null);
         };
         return new StatusEffect("Bleed", duration, logic, StatusEffectType.DEBUFF);
@@ -46,6 +51,7 @@ public class StatusEffectFactory {
     public static StatusEffect stun(int duration) {
         StatusEffect.TickEffect logic = (target) -> {
             LogManager.log(target.getName() + " is stunned and cannot act!", LogFormat.HIGHLIGHT_DEBUFF);
+            VisualEffectsManager.getInstance().showFloatingText(target, "STUNNED", new Color(255, 207, 0));
             // battle controller will check for stun and skip the turn
         };
         return new StatusEffect("Stun", duration, logic, StatusEffectType.DEBUFF);
@@ -68,6 +74,7 @@ public class StatusEffectFactory {
         return new StatusEffect("Mana Recovery", duration, logic, StatusEffectType.BUFF);
     }
 
+    // TODO: add sanctuary visual effect
     public static StatusEffect sanctuary(int duration) {
         return new StatusEffect("Sanctuary", duration, (c) -> {}, StatusEffectType.BUFF);
     }

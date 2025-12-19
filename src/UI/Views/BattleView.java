@@ -31,7 +31,7 @@ import javax.swing.text.*;
 import java.awt.Color;
 
 // TODO: DESCEND calls battle controller->game manager for next battle
-public class BattleInterface extends JPanel {
+public class BattleView extends JPanel {
     private BattleController battleController;
 
     private JPanel contentPanel;
@@ -84,7 +84,7 @@ public class BattleInterface extends JPanel {
     private JButton toggleSideBarButton;
     private JButton toggleLogButton;
 
-    public BattleInterface() {
+    public BattleView() {
 
         if (battlePanel != null) {
             battlePanel.addComponentListener(new java.awt.event.ComponentAdapter() {

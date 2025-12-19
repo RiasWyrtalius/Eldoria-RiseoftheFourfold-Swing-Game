@@ -14,7 +14,7 @@ import Core.Utils.LogManager;
 import Core.Visuals.VisualEffectsManager;
 import Items.Inventory;
 import Items.Item;
-import UI.Views.BattleInterface;
+import UI.Views.BattleView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BattleController {
-    private BattleInterface mainView;
+    private BattleView mainView;
     private final Party heroParty;
     private final Party enemyParty;
     private int turnCounter;
@@ -433,7 +433,7 @@ public class BattleController {
     }
 
     // =============== PUBLIC SETTERS AND GETTERS FOR UI ===============
-    public void setMainView(BattleInterface mainView) {
+    public void setMainView(BattleView mainView) {
         this.mainView = mainView;
     }
 

@@ -6,7 +6,7 @@ import Resource.Animation.Animation;
 import Resource.Animation.AssetManager;
 import UI.Components.CharacterStatusPanel;
 import UI.Components.OutlinedLabel;
-import UI.Views.BattleInterface;
+import UI.Views.BattleView;
 
 import Characters.Character;
 import javax.swing.*;
@@ -33,7 +33,7 @@ public class VisualEffectsManager {
 
     private boolean isGlobalPaused = false;
 
-    private BattleInterface mainView;
+    private BattleView mainView;
 
     private VisualEffectsManager() {}
 
@@ -273,7 +273,7 @@ public class VisualEffectsManager {
 
     public JLabel getDisplayComponent(Character character) {
         if (mainView == null) {
-            LogManager.log("ERROR: VEM is not linked to BattleInterface (mainView is null).", LogFormat.SYSTEM_ERROR);
+            LogManager.log("ERROR: VEM is not linked to BattleView (mainView is null).", LogFormat.SYSTEM_ERROR);
             return null;
         }
 
@@ -288,7 +288,7 @@ public class VisualEffectsManager {
 
     public JLabel getOverlayComponent(Character character) {
         if (mainView == null) {
-            LogManager.log("ERROR: VEM is not linked to BattleInterface (mainView is null).", LogFormat.SYSTEM_ERROR);
+            LogManager.log("ERROR: VEM is not linked to BattleView (mainView is null).", LogFormat.SYSTEM_ERROR);
             return null;
         }
 
@@ -565,7 +565,7 @@ public class VisualEffectsManager {
         return timer;
     }
 
-    public void setMainView(BattleInterface mainView) {
+    public void setMainView(BattleView mainView) {
         this.mainView = mainView;
     }
 }
