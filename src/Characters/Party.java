@@ -60,7 +60,7 @@ public class Party {
 
     public List<Character> getAliveMembers() {
         if (this.partyMembers.isEmpty())
-            return null;
+            return new ArrayList<>(); // Return empty list, not null
 
         List<Character> aliveMembers = this.partyMembers.stream()
                 .filter(Character::isAlive)

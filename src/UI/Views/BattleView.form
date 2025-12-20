@@ -239,7 +239,7 @@
                           </component>
                         </children>
                       </grid>
-                      <grid id="1955f" binding="infoPanel" layout-manager="GridLayoutManager" row-count="7" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                      <grid id="1955f" binding="infoPanel" layout-manager="GridLayoutManager" row-count="8" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
                           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -252,15 +252,17 @@
                           <font/>
                         </border>
                         <children>
-                          <component id="434ae" class="javax.swing.JButton" binding="endTurnButton">
+                          <component id="434ae" class="javax.swing.JButton" binding="endTurnButton" custom-create="true">
                             <constraints>
-                              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <background color="-12490271"/>
-                              <font name="JetBrains Mono Light" size="14"/>
+                              <background color="-16777216"/>
+                              <enabled value="false"/>
+                              <font/>
                               <foreground color="-1"/>
-                              <text value="END TURN"/>
+                              <hideActionText value="true"/>
+                              <text value="End Turn"/>
                             </properties>
                           </component>
                           <vspacer id="ce8f9">
@@ -273,14 +275,34 @@
                               <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                             </constraints>
                           </vspacer>
-                          <grid id="3dcc9" binding="descendPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="3dcc9" binding="descendPanel" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                             </constraints>
-                            <properties/>
+                            <properties>
+                              <opaque value="false"/>
+                              <visible value="false"/>
+                            </properties>
                             <border type="none"/>
-                            <children/>
+                            <children>
+                              <component id="bb3c1" class="javax.swing.JLabel" binding="textLabel">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text value="Proceed to next floor?"/>
+                                </properties>
+                              </component>
+                              <component id="f85fd" class="javax.swing.JButton" binding="descendButton" custom-create="true" default-binding="true">
+                                <constraints>
+                                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text value="Descend"/>
+                                </properties>
+                              </component>
+                            </children>
                           </grid>
                           <component id="e9af" class="javax.swing.JTextPane" binding="GameLogHighlightPanelTextPane">
                             <constraints>
@@ -308,7 +330,7 @@
                           </component>
                           <vspacer id="94458">
                             <constraints>
-                              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
                                 <preferred-size width="-1" height="20"/>
                               </grid>
                             </constraints>

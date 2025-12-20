@@ -29,7 +29,10 @@ import javax.swing.JTextPane;
 import javax.swing.text.*;
 import java.awt.Color;
 
-// TODO: DESCEND calls battle controller->game manager for next battle
+/**
+ * HANDLES THE WHOLE BATTLE VIEW, SUPER COUPLED WITH BATTLE CONTROLLER FR
+ * IF IT AINT BROKE, DON'T FIX IT CUZ IM TIRED OF MY SKILL ISSUE
+ */
 public class BattleView extends JPanel {
     private BattleController battleController;
 
@@ -76,7 +79,6 @@ public class BattleView extends JPanel {
     private JPopupMenu targetConfirmMenu = new JPopupMenu();
 
     private JButton endTurnButton;
-    //    private JButton descendButton;
     private JPanel heroPanel;
     private JPanel infoPanel;
     private JPanel enemyPanel;
@@ -88,6 +90,8 @@ public class BattleView extends JPanel {
     private int lastLogDividerLocation = -1;
     private JButton toggleSideBarButton;
     private JButton toggleLogButton;
+    private JButton descendButton;
+    private JLabel textLabel;
 
     public BattleView() {
 
@@ -165,6 +169,12 @@ public class BattleView extends JPanel {
             });
         }
 
+        if (descendButton != null) {
+            descendButton.addActionListener(e -> {
+                SceneManager.getInstance().transitionTo(this);
+                GameManager.getInstance().loadNextLevel();
+            });
+        }
         if (toggleSideBarButton != null) {
             toggleSideBarButton.addActionListener(e -> {
                 Component leftPanel = SplitPane_2.getLeftComponent();
@@ -265,39 +275,47 @@ public class BattleView extends JPanel {
     private void updateControls() {
         BattlePhase phase = battleController.getCurrentPhase();
 
-        boolean isBattleActive = (phase != BattlePhase.BATTLE_ENDED);
         boolean isPlayerTurn = (phase == BattlePhase.HERO_ACTION_WAIT);
+        boolean isRecuperating = (phase == BattlePhase.RECUPERATION);
 
         if (endTurnButton != null) {
-            endTurnButton.setVisible(isBattleActive);
             endTurnButton.setEnabled(isPlayerTurn);
         }
 
         if (inventoryPanel != null) {
-            boolean canUseItems = isPlayerTurn && (currentMode == BattleUIMode.HERO_SELECT);
+            boolean canUseItems = (isPlayerTurn || isRecuperating) &&
+                    (currentMode == BattleUIMode.HERO_SELECT);
             inventoryPanel.setEnabled(canUseItems);
         }
 
         if (phase == BattlePhase.BATTLE_ENDED) {
-            // TODO: set battleOutcome JLabel to victory, or tie
             BattleResult result = battleController.getFinalResult();
-            endTurnButton.setVisible(false);
+            if (endTurnButton != null) endTurnButton.setVisible(false);
 
             if (result == BattleResult.VICTORY || result == BattleResult.DEFEAT) {
                 showSummaryScreen(result);
             }
 
-            if (descendPanel != null) descendPanel.setVisible(false);
-
             if (result == BattleResult.VICTORY) {
                 showSummaryScreen(result);
             }
-        } else {
-            endTurnButton.setVisible(true);
-            descendPanel.setVisible(false);
+        } else if (phase == BattlePhase.RECUPERATION) {
+            if (descendPanel != null) descendPanel.setVisible(true);
+            if (endTurnButton != null) endTurnButton.setVisible(false);
+            } else {
+            if (endTurnButton != null) {
+                endTurnButton.setVisible(true);
+            }
+            if (descendPanel != null) descendPanel.setVisible(false);
         }
+
     }
 
+    /**
+     * handles state of summary screen
+     *
+     * @param result
+     */
     private void showSummaryScreen(BattleResult result) {
         if (currentMode == BattleUIMode.IDLE) return;
         currentMode = BattleUIMode.IDLE; // Lock logic
@@ -335,27 +353,35 @@ public class BattleView extends JPanel {
             }
 
             summary.setSummaryData("VICTORY!", sb.toString());
-            summary.configureButton("Descend", () -> {
+            summary.configFirstButton("Recuperate", () -> {
+                SceneManager.getInstance().goBack();
+                battleController.startRecuperation();
+            });
+            summary.configSecondButton("Descend", () -> {
                 SceneManager.getInstance().transitionTo(this);
                 GameManager.getInstance().loadNextLevel();
+            });
+            summary.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    SceneManager.getInstance().goBack();
+                    battleController.startRecuperation();
+                }
             });
 
         } else if (result == BattleResult.DEFEAT) {
             sb.append("The party has fallen.\n\n");
             sb.append("Your journey ends on Floor ").append(battleController.getLevelNumber()).append(".");
             summary.setSummaryData("DEFEAT", sb.toString());
-            summary.configureButton("Return to Title", () -> {
+            summary.configFirstButton("Retry", () -> {
+                GameManager.getInstance().loadSavedGame();
+            });
+            summary.configSecondButton("Return to Title", () -> {
                 GameManager.getInstance().transitionToMainMenu();
             });
+            // disable clickouts
+            summary.addMouseListener(new MouseAdapter() {});
         }
-
-        summary.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                SceneManager.getInstance().goBack();
-
-            }
-        });
         SceneManager.getInstance().showOverlay(summary);
     }
 
@@ -388,6 +414,9 @@ public class BattleView extends JPanel {
         enemyPartyPanel2 = new CharacterStatusPanel(this);
         enemyPartyPanel3 = new CharacterStatusPanel(this);
         enemyPartyPanel4 = new CharacterStatusPanel(this);
+
+        descendButton = new StyledButton("Descend");
+        endTurnButton = new StyledButton("End Turn");
     }
 
     private void updateTargetHighlights(TargetCondition condition) {

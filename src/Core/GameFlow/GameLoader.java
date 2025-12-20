@@ -7,6 +7,7 @@ import Characters.Base.Hero;
 import Characters.Enemies.*;
 import Characters.Party;
 import Core.Story.StorySlide;
+import Resource.Animation.AssetManager;
 import Resource.Audio.AudioManager;
 import Core.Utils.LogManager;
 import Core.Utils.LogFormat;
@@ -24,10 +25,10 @@ public class GameLoader {
     private final Queue<Level> campaignQueue;
     private long currentSeed;
     private final List<EnemySpawnRule> allEnemyTypes = new ArrayList<>();
-    private BattleView battleView;
 
     public GameLoader() {
         this.campaignQueue = new LinkedList<>();
+        registerFonts();
         registerAudioAssets();
         initializeAllEnemyTypes();
     }
@@ -377,6 +378,11 @@ public class GameLoader {
         am.registerSound("STORYVIEW", "Assets/Audio/SFX/StoryView/storyview_bgm.wav");
     }
 
+    private void registerFonts() {
+        AssetManager am = AssetManager.getInstance();
+        am.registerFont("Vecna", "/Assets/Fonts/vecna.ttf");
+    }
+
     private String getMusicForLevel(int levelNum) {
         if (levelNum == 15 || levelNum == 20) return "BGM_BOSS";
         return "BGM_FOREST";
@@ -403,9 +409,5 @@ public class GameLoader {
 
     public long getCurrentSeed() {
         return currentSeed;
-    }
-
-    public void setBattleInterface(BattleView battleView) {
-        this.battleView = battleView;
     }
 }

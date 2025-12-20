@@ -7,6 +7,7 @@ import Characters.Character;
 import Characters.Party;
 import Core.GameManager;
 import Core.Story.StorySlide;
+import Resource.Animation.AssetManager;
 import Resource.Audio.AudioManager;
 import Core.GameFlow.Level;
 import Core.Utils.LogFormat;
@@ -26,7 +27,11 @@ public class BattleController {
     private final Party heroParty;
     private final Party enemyParty;
     private int turnCounter;
+
     private boolean isBattleActive;
+
+    private boolean rewardsClaimed = false;
+
     private BattlePhase currentPhase = BattlePhase.IDLE; // Default stat)e
     private BattleResult finalResult = BattleResult.NONE;
     private final Level currentLevel;
@@ -45,7 +50,7 @@ public class BattleController {
         this.currentLevel = currentLevel;
 
         resetTurnReadiness();
-//        VisualEffectsManager.getInstance().pauseAllAnimations();
+        VisualEffectsManager.getInstance().pauseAllAnimations();
         runBattleIntro();
     }
 
@@ -71,6 +76,11 @@ public class BattleController {
                     if (mainView != null) mainView.refreshUI();
 
                     checkAndAutoSkipHeroPhase();
+
+                    String musicKey = this.currentLevel.musicKey();
+                    if (musicKey != null) {
+                        Resource.Audio.AudioManager.getInstance().playMusic(musicKey);
+                    }
                 });
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -81,7 +91,10 @@ public class BattleController {
     public boolean checkWin() {
         return enemyParty.isAllMembersDead();
     }
-    public boolean checkLose() { return heroParty.isAllMembersDead(); }
+
+    public boolean checkLose() {
+        return heroParty.isAllMembersDead();
+    }
 
     public boolean isBattleOver() {
         return checkWin() || checkLose();
@@ -91,16 +104,21 @@ public class BattleController {
         heroParty.setPartyExhaustion(false);
         enemyParty.setPartyExhaustion(false);
 
-        for (Character hero : heroParty.getAliveMembers()) {
-            if (hero.isImmobilized()) {
-                hero.setExhausted(true);
-                LogManager.log(hero.getName() + " is frozen and skips their action!", LogFormat.SYSTEM);
+        List<Character> aliveHeroes = heroParty.getAliveMembers();
+        if (aliveHeroes != null) {
+            for (Character hero : aliveHeroes) {
+                if (hero.isImmobilized()) {
+                    hero.setExhausted(true);
+                    LogManager.log(hero.getName() + " is frozen and skips their action!", LogFormat.SYSTEM);
+                }
             }
         }
     }
 
     public boolean executeActionFromUI(Hero hero, Skill skill, List<Character> targets) {
-        if (!isBattleActive || !hero.isAlive() || hero.isExhausted()) {
+        boolean isRecuperating = (currentPhase == BattlePhase.RECUPERATION);
+
+        if ((!isBattleActive && !isRecuperating) || !hero.isAlive()) {
             LogManager.log(hero.getName() + " cannot act right now.");
             return false;
         }
@@ -123,11 +141,24 @@ public class BattleController {
         }
 
         Runnable onSkillComplete = () -> {
-            advanceTurnCycle(false);
+            if (isRecuperating) {
+                boolean enemiesAlive = enemyParty.getPartyMembers().stream().anyMatch(Character::isAlive);
+
+                if (enemiesAlive) {
+                    resumeBattle();
+                } else {
+                    if (this.mainView != null) this.mainView.refreshUI();
+                }
+            } else {
+                advanceTurnCycle(false);
+            }
         };
 
         hero.useSkill(this, skill, finalTargets, onSkillComplete);
-        hero.setExhausted(true);
+
+        if (!isRecuperating) {
+            hero.setExhausted(true);
+        }
 
         if (this.mainView != null)
             this.mainView.refreshUI();
@@ -137,13 +168,14 @@ public class BattleController {
 
 
     public boolean executeItemActionFromUI(Item item, List<Character> targets) {
-        if (!isBattleActive) {
-            LogManager.log("cannot use item right now.");
+        boolean isRecuperating = (currentPhase == BattlePhase.RECUPERATION);
+
+        if (!isBattleActive && !isRecuperating) {
+            LogManager.log("Cannot use item right now.");
             return false;
         }
 
         Inventory inventory = heroParty.getInventory();
-
         if (!inventory.consumeItem(item.getName())) {
             LogManager.log("You have no " + item.getName() + " left!", LogFormat.ENEMY_ACTION);
             return false;
@@ -153,8 +185,17 @@ public class BattleController {
 
         Runnable onItemComplete = () -> {
             LogManager.log("Item used. Turn Cycle Advancing...");
-            mainView.refreshUI();
-            advanceTurnCycle(true);
+            if (isRecuperating) {
+                boolean enemiesAlive = enemyParty.getPartyMembers().stream().anyMatch(Character::isAlive);
+
+                if (enemiesAlive) {
+                    resumeBattle();
+                } else {
+                    if (mainView != null) mainView.refreshUI();
+                }
+            } else {
+                advanceTurnCycle(true);
+            }
         };
 
         LogManager.log("Party used " + item.getName() + "!", LogFormat.PLAYER_JOIN);
@@ -171,6 +212,7 @@ public class BattleController {
 
     /**
      * controls the flow of the battle
+     *
      * @param manualOverride
      */
     public void advanceTurnCycle(boolean manualOverride) {
@@ -198,7 +240,10 @@ public class BattleController {
             LogManager.log("All heroes are incapacitated! Skipping Hero Phase...", LogFormat.SYSTEM);
 
             new Thread(() -> {
-                try { Thread.sleep(1200); } catch (InterruptedException ignored) {}
+                try {
+                    Thread.sleep(1200);
+                } catch (InterruptedException ignored) {
+                }
                 SwingUtilities.invokeLater(() -> {
                     if (isBattleActive) {
                         advanceTurnCycle(false);
@@ -222,11 +267,12 @@ public class BattleController {
     /**
      * TODO: find a way to make this randomized
      * Recursive helper in order to handle enemy ai one by one instead of all at once
+     *
      * @param enemies
      * @param index
      */
     private void processNextEnemy(List<Character> enemies, int index) {
-        if (checkLose()) {
+        if (isBattleOver()) {
             endBattle();
             return;
         }
@@ -239,14 +285,21 @@ public class BattleController {
         Character enemyChar = enemies.get(index);
 
         Runnable onCurrentEnemyFinished = () -> {
-            processNextEnemy(enemies, index + 1);
+            if (checkLose()) {
+                endBattle();
+            } else {
+                processNextEnemy(enemies, index + 1);
+            }
         };
 
         // TODO: verify if works cuz this looks random
         if (enemyChar.isImmobilized()) {
             LogManager.log(enemyChar.getName() + " is frozen solid and cannot move!", LogFormat.SYSTEM);
             new Thread(() -> {
-                try { Thread.sleep(600); } catch (Exception ignored) {}
+                try {
+                    Thread.sleep(600);
+                } catch (Exception ignored) {
+                }
                 onCurrentEnemyFinished.run();
             }).start();
             return;
@@ -284,15 +337,16 @@ public class BattleController {
     }
 
     private void onEnemyPhaseComplete() {
+
         resetTurnReadiness();
         executeTurnCleanUp();
 
-        turnCounter++;
-
-        if(isBattleOver()) {
+        if (isBattleOver()) {
             endBattle();
             return;
         }
+        turnCounter++;
+
 
         setCurrentPhase(BattlePhase.HERO_ACTION_WAIT);
         LogManager.log("");
@@ -330,9 +384,21 @@ public class BattleController {
     public void endBattle() {
         if (!isBattleActive) return; // additional safety check
 
-        resetTurnReadiness();
+        if (checkWin() && rewardsClaimed) {
+            LogManager.log("Threat neutralized. Returning to recuperation.", LogFormat.SYSTEM);
+
+            // Go straight back to the state where "Descend" is visible.
+            isBattleActive = false;
+            startRecuperation();
+            return;
+        }
+
         isBattleActive = false;
         setCurrentPhase(BattlePhase.BATTLE_ENDED);
+
+        VisualEffectsManager.getInstance().stopAllTimers();
+
+        resetTurnReadiness();
 
         if (checkLose() && checkWin()) {
             finalResult = BattleResult.TIE;
@@ -364,6 +430,11 @@ public class BattleController {
     }
 
     private void processVictoryRewards() {
+        if (rewardsClaimed) {
+            LogManager.log("Rewards already claimed for this stage.", LogFormat.SYSTEM);
+            return;
+        }
+
         LogManager.log("┌──── ∘°❉ - ❉°∘ ────┐", LogFormat.TURN_INDICATOR);
         LogManager.log("│    STAGE CLEAR   │", LogFormat.TURN_INDICATOR);
         LogManager.log("└──── °∘❉ - ❉∘° ────┘", LogFormat.TURN_INDICATOR);
@@ -397,16 +468,46 @@ public class BattleController {
         } else {
             LogManager.log("No items found.");
         }
+
+        rewardsClaimed = true;
+    }
+
+    /**
+     * Called when the user closes the Victory Summary but hasn't descended yet.
+     */
+    public void startRecuperation() {
+        setCurrentPhase(BattlePhase.RECUPERATION);
+        LogManager.logHighlight("The battlefield is quiet. Time to recuperate.", LogFormat.SYSTEM, true);
+
+        if (mainView != null) mainView.refreshUI();
+    }
+
+    /**
+     * Called when an enemy is revived during Recuperation.
+     * Re-activates the battle state, locks navigation, and resumes combat.
+     */
+    public void resumeBattle() {
+        LogManager.logHighlight("HOSTILES DETECTED! The battle resumes!", LogFormat.BATTLE_HEADER, false);
+
+        this.isBattleActive = true;
+        this.currentPhase = BattlePhase.HERO_ACTION_WAIT;
+        this.finalResult = BattleResult.NONE; // Reset victory state
+
+        runBattleIntro();
+
+        if (mainView != null) {
+            mainView.refreshUI();
+        }
     }
 
     /**
      * Applies damage to a list of targets asynchronously and runs a final callback
      * only after ALL damage (and reaction animations) have been resolved.
      *
-     * @param user           The attacker.
-     * @param skill          The skill being used.
-     * @param targets        The list of characters to damage.
-     * @param damage         The amount of damage to apply to each.
+     * @param user                The attacker.
+     * @param skill               The skill being used.
+     * @param targets             The list of characters to damage.
+     * @param damage              The amount of damage to apply to each.
      * @param onAllDamageResolved The final callback to run.
      */
     public void applyGroupDamage(Character user, Skill skill, List<Character> targets, int damage, Runnable onAllDamageResolved) {
@@ -468,5 +569,9 @@ public class BattleController {
 
     public List<Item> getEarnedItems() {
         return earnedItems;
+    }
+
+    public boolean isRewardsClaimed() {
+        return rewardsClaimed;
     }
 }

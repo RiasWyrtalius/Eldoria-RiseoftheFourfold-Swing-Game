@@ -31,6 +31,13 @@ public class SceneManager {
 
         this.fader = new ScreenFader();
         gameWindow.setGlassPane(fader);
+
+        gameWindow.addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                resizeOverlays();
+            }
+        });
     }
 
     // scene management
@@ -77,6 +84,26 @@ public class SceneManager {
 
         gameWindow.revalidate();
         gameWindow.repaint();
+    }
+
+    private void resizeOverlays() {
+        if (gameWindow == null) return;
+
+        // Use ContentPane size to ensure we fit inside window borders
+        Dimension newSize = gameWindow.getContentPane().getSize();
+        Rectangle bounds = new Rectangle(0, 0, newSize.width, newSize.height);
+
+        for (JPanel overlay : overlayStack) {
+            overlay.setBounds(bounds);
+            overlay.revalidate();
+        }
+
+        if (fader != null) {
+            fader.setBounds(bounds);
+            fader.revalidate();
+        }
+
+        layeredPane.repaint();
     }
 
     public void goBack() {

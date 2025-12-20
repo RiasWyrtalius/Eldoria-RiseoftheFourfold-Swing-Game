@@ -7,6 +7,8 @@ import Core.Visuals.VisualAsset;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,10 +21,12 @@ public class AssetManager {
     private static final AssetManager INSTANCE = new AssetManager();
     private final Map<String, Animation> animationRepository;
     private final Map<String, ImageIcon> imageCache;
+    private final Map<String, Font> fontCache;
 
     private AssetManager() {
         imageCache = new HashMap<>();
         animationRepository = new HashMap<>();
+        fontCache = new HashMap<>();
     }
 
     public static AssetManager getInstance() {
@@ -135,9 +139,33 @@ public class AssetManager {
         return frames;
     }
 
-    // TODO: preloading assets, do it after file handling
-    public void preLoad() {
-        // call getImage() for all known assets
+    /**
+     * Register TTF font from resources under a unique ID
+     * @param fontID
+     * @param basePath file path to resource ex. "/Assets/Fonts/vecna.ttf""
+     */
+    public void registerFont(String fontID, String basePath) {
+        if (fontCache.containsKey(fontID)) {
+            LogManager.log("Animation ID: " + fontID + " is already registered.", LogFormat.SYSTEM);
+            return;
+        }
+
+        try (InputStream is = getClass().getResourceAsStream(basePath)) {
+            if (is == null) {
+                throw new IOException("Font resource not found: " + basePath);
+            }
+
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(font);
+
+            fontCache.put(fontID, font);
+            LogManager.log("Registered font: " + fontID, LogFormat.SYSTEM);
+        } catch (Exception e) {
+            LogManager.log("Error loading font: " + fontID + ": " + e.getMessage());
+            fontCache.put(fontID, new Font("Serif", Font.BOLD, 12));
+        }
     }
 
     // =============== PUBLIC GETTERS FOR UI ===============
@@ -156,5 +184,21 @@ public class AssetManager {
      */
     public VisualAsset getVisualAssetData(String visualId) {
         return new VisualAsset(visualId, isAnimation(visualId));
+    }
+
+    /**
+     * Retrives registered font derived from specific size
+     * @param fontID
+     * @param size
+     * @return
+     */
+    public Font getFont(String fontID, float size) {
+        Font font = fontCache.get(fontID);
+        if (font != null) {
+            return font.deriveFont(size);
+        }
+
+        LogManager.log("Warning font ID [" + fontID + "] not found! Using fallback.", LogFormat.SYSTEM_WARNING);
+        return fontCache.get("Serif").deriveFont(size);
     }
 }

@@ -1,6 +1,7 @@
 package UI.Views;
 
-import UI.SceneManager;
+import Resource.Animation.AssetManager;
+import UI.Components.StyledButton;
 
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
@@ -8,20 +9,17 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.InputStream;
 
 public class BattleSummary extends JPanel {
     private JPanel panel;
     private JTextPane summaryPanel;
     private JLabel resultLabel;
-    private JButton descendButton;
+    private JButton firstButton;
+    private JButton secondButton;
     private JLabel textLabel;
 
     private final Font titleFont;
     private final Font bodyFont;
-    private final Font buttonFont;
 
     public BattleSummary() {
         this.setLayout(new GridBagLayout());
@@ -31,9 +29,8 @@ public class BattleSummary extends JPanel {
         // Block input to underlying layers
 //        this.addMouseListener(new MouseAdapter() {}); NO MORE
 
-        titleFont = getVecnaFont(42f);
-        bodyFont = getVecnaFont(18f);
-        buttonFont = getVecnaFont(24f);
+        titleFont = AssetManager.getInstance().getFont("Vecna", 42f);
+        bodyFont =  AssetManager.getInstance().getFont("Vecna",18f);
 
         if (panel == null) createUIComponents();
 
@@ -50,8 +47,6 @@ public class BattleSummary extends JPanel {
             textLabel.setForeground(new Color(200, 200, 200));
             textLabel.setHorizontalAlignment(SwingConstants.CENTER);
         }
-
-        styleRPGButton(descendButton);
 
         this.add(panel);
     }
@@ -81,9 +76,8 @@ public class BattleSummary extends JPanel {
                 g2.drawRoundRect(8, 8, w - 16, h - 16, 20, 20);
             }
         };
-        panel.setPreferredSize(new Dimension(600, 500));
-        panel.setMinimumSize(new Dimension(600, 500));
-        panel.setOpaque(false);
+        firstButton = new StyledButton("Descend");
+        secondButton = new StyledButton("Recuperate");
     }
 
     @Override
@@ -106,16 +100,31 @@ public class BattleSummary extends JPanel {
         centerText(summaryPanel);
     }
 
-    public void configureButton(String buttonText, Runnable action) {
-        if (descendButton == null) return;
+    public void configFirstButton(String buttonText, Runnable action) {
+        if (firstButton == null) return;
 
-        descendButton.setText(buttonText);
+        firstButton.setText(buttonText);
 
-        for (ActionListener al : descendButton.getActionListeners()) {
-            descendButton.removeActionListener(al);
+        for (ActionListener al : firstButton.getActionListeners()) {
+            firstButton.removeActionListener(al);
         }
 
-        descendButton.addActionListener(e -> {
+        firstButton.addActionListener(e -> {
+            UI.SceneManager.getInstance().goBack();
+            if (action != null) action.run();
+        });
+    }
+
+    public void configSecondButton(String buttonText, Runnable action) {
+        if (secondButton == null) return;
+
+        secondButton.setText(buttonText);
+
+        for (ActionListener al : secondButton.getActionListeners()) {
+            secondButton.removeActionListener(al);
+        }
+
+        secondButton.addActionListener(e -> {
             UI.SceneManager.getInstance().goBack();
             if (action != null) action.run();
         });
@@ -126,44 +135,5 @@ public class BattleSummary extends JPanel {
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
-    }
-
-    private void styleRPGButton(JButton btn) {
-        if (btn == null) return;
-        btn.setFont(buttonFont);
-        btn.setForeground(Color.WHITE);
-        btn.setBackground(new Color(40, 40, 40));
-        btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 200, 200), 2),
-                BorderFactory.createEmptyBorder(5, 20, 5, 20)
-        ));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        btn.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent evt) {
-                btn.setBackground(new Color(80, 80, 80));
-                btn.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(255, 215, 0), 2),
-                        BorderFactory.createEmptyBorder(5, 20, 5, 20)
-                ));
-            }
-            public void mouseExited(MouseEvent evt) {
-                btn.setBackground(new Color(40, 40, 40));
-                btn.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(200, 200, 200), 2),
-                        BorderFactory.createEmptyBorder(5, 20, 5, 20)
-                ));
-            }
-        });
-    }
-
-    private Font getVecnaFont(float size) {
-        try (InputStream is = getClass().getResourceAsStream("/Assets/Fonts/vecna.ttf")) {
-            if (is == null) return new Font("Serif", Font.BOLD, (int)size);
-            return Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(size);
-        } catch (Exception e) {
-            return new Font("Serif", Font.BOLD, (int)size);
-        }
     }
 }

@@ -176,8 +176,8 @@ public class GameManager {
 
         if (nextLevel == null) {
             gameLoader.finishCampaign();
-            Resource.Audio.AudioManager.getInstance().stopMusic();
-            Resource.Audio.AudioManager.getInstance().playMusic("VICTORY_MUSIC_1");
+            AudioManager.getInstance().stopMusic();
+            AudioManager.getInstance().playMusic("VICTORY_MUSIC_1");
 
             if (battleView != null) {
                 battleView.showCampaignVictoryScreen();
@@ -186,8 +186,6 @@ public class GameManager {
         }
 
         LogManager.log("Entering Level " + nextLevel.levelNumber(), LogFormat.SYSTEM);
-
-        if (battleController != null) saveCurrentGame();
 
         if (nextLevel.levelNumber() % 5 == 0) {
             LogManager.log("Milestone Floor Reached! The party's determination restores them.", LogFormat.HIGHLIGHT_BUFF);
@@ -208,15 +206,12 @@ public class GameManager {
         } else {
             setupBattle(nextLevel);
         }
+
+        saveCurrentGame();
     }
 
     private void setupBattle(Level level) {
         battleView.setBattleBackground(level.battleBackground());
-
-        String musicKey = level.musicKey();
-        if (musicKey != null) {
-            Resource.Audio.AudioManager.getInstance().playMusic(musicKey);
-        }
 
         Party enemyParty = level.buildEnemyParty();
         this.battleController = new BattleController(heroParty, enemyParty, level);
