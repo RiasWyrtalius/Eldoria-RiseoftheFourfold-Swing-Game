@@ -20,12 +20,13 @@ public class Hero extends Character {
     protected double growthRate;
     protected JobClass job;
 
-    public Hero(String name, int baseHealth, int baseAtk, int baseDefense, int baseMana, int xp, int level, JobClass job) {
-        super(name, baseHealth, baseAtk, baseDefense, baseMana, level);
+    public Hero(String name, int baseHealth, int baseAtk, int baseDef, int baseMana, int xp, int level, JobClass job) {
+        super(name, baseHealth, baseAtk, baseDef, baseMana, level);
         this.job = job;
         this.baseMaxHealth = baseHealth;
         this.baseMaxMana = baseMana;
-        this.baseMaxDefense = baseDefense;
+        this.baseDef = baseDef;
+        this.baseMaxDefense = baseDef;
         this.XP = xp;
         this.baseXP = 100;
         // is this a constant?
@@ -38,12 +39,12 @@ public class Hero extends Character {
         this.reactions.addAll(job.createReactions());
     }
 
-    public Hero(String name, int baseHealth, int baseAtk, int baseDefense, int maxMana, int level, JobClass job) {
-        this(name, baseHealth, baseAtk, baseDefense, maxMana, 0, level, job);
+    public Hero(String name, int baseHealth, int baseAtk, int baseDef, int maxMana, int level, JobClass job) {
+        this(name, baseHealth, baseAtk, baseDef, maxMana, 0, level, job);
     }
 
-    public Hero(String name, int health, int baseAtk, int baseDefense,int maxMana, JobClass job) {
-        this(name, health, baseAtk, baseDefense, maxMana, 1, job);
+    public Hero(String name, int health, int baseAtk, int baseDef,int maxMana, JobClass job) {
+        this(name, health, baseAtk, baseDef, maxMana, 1, job);
     }
 
     private void recalculateStats() {
@@ -61,7 +62,7 @@ public class Hero extends Character {
                 job.getMpGrowth()
         );
 
-        this.baseDefense = ScalingLogic.calculateStat(
+        this.baseDef = ScalingLogic.calculateStat(
                 this.level,
                 this.baseMaxDefense + job.getDefBonus(),
                 job.getDefFlat(),

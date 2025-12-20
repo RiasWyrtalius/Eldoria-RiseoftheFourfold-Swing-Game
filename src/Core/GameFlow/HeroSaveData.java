@@ -21,6 +21,7 @@ public class HeroSaveData implements Serializable {
     public int baseHP;
     public int baseMP;
     public int baseAtk;
+    public int baseDef;
 
     public HeroSaveData(Hero hero) {
         this.name = hero.getName();
@@ -33,6 +34,7 @@ public class HeroSaveData implements Serializable {
 
         this.baseHP = hero.getBaseMaxHealth();
         this.baseAtk = hero.getBaseAtk();
+        this.baseDef = hero.getBaseDef();
         this.baseMP = hero.getBaseMaxMana();
     }
 }

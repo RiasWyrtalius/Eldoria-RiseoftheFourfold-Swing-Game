@@ -1,4 +1,5 @@
 package UI.Views;
+
 import Core.Utils.LogFormat;
 import Core.Visuals.VisualEffectsManager;
 import UI.Components.*;
@@ -11,12 +12,10 @@ import Core.GameManager;
 import Core.Utils.LogManager;
 import Items.Inventory;
 import Items.Item;
+import UI.SceneManager;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
@@ -41,9 +40,15 @@ public class BattleView extends JPanel {
     private JPanel inventoryPanel;
 
     private JLabel heroPartyLabel;
-        private JPanel heroPartyPanel1; private JPanel heroPartyPanel2; private JPanel heroPartyPanel3; private JPanel heroPartyPanel4;
+    private JPanel heroPartyPanel1;
+    private JPanel heroPartyPanel2;
+    private JPanel heroPartyPanel3;
+    private JPanel heroPartyPanel4;
     private JLabel enemyPartyLabel;
-        private JPanel enemyPartyPanel1; private JPanel enemyPartyPanel2; private JPanel enemyPartyPanel3; private JPanel enemyPartyPanel4;
+    private JPanel enemyPartyPanel1;
+    private JPanel enemyPartyPanel2;
+    private JPanel enemyPartyPanel3;
+    private JPanel enemyPartyPanel4;
 
     private JPanel descendPanel;
 
@@ -54,10 +59,10 @@ public class BattleView extends JPanel {
     private JScrollPane CharacterInspector_JSP;
     private JTextPane inspectorText;
 
-        private AnimatedStatBar inspector_HpBar;
-        private AnimatedStatBar inspector_MpBar;
-        private AnimatedStatBar inspector_XPBar;
-        private AnimatedStatBar inspector_DefBar;
+    private AnimatedStatBar inspector_HpBar;
+    private AnimatedStatBar inspector_MpBar;
+    private AnimatedStatBar inspector_XPBar;
+    private AnimatedStatBar inspector_DefBar;
 
     private final Map<Character, CharacterStatusPanel> characterToPanelMap = new HashMap<>();
 
@@ -71,7 +76,7 @@ public class BattleView extends JPanel {
     private JPopupMenu targetConfirmMenu = new JPopupMenu();
 
     private JButton endTurnButton;
-//    private JButton descendButton;
+    //    private JButton descendButton;
     private JPanel heroPanel;
     private JPanel infoPanel;
     private JPanel enemyPanel;
@@ -107,7 +112,11 @@ public class BattleView extends JPanel {
             SplitPane_1.setUI(new BasicSplitPaneUI() {
                 @Override
                 public BasicSplitPaneDivider createDefaultDivider() {
-                    return new BasicSplitPaneDivider(this) { @Override public void setBorder(Border b) {} };
+                    return new BasicSplitPaneDivider(this) {
+                        @Override
+                        public void setBorder(Border b) {
+                        }
+                    };
                 }
             });
             SplitPane_1.setBackground(new Color(44, 44, 44));
@@ -117,7 +126,11 @@ public class BattleView extends JPanel {
             SplitPane_2.setUI(new BasicSplitPaneUI() {
                 @Override
                 public BasicSplitPaneDivider createDefaultDivider() {
-                    return new BasicSplitPaneDivider(this) { @Override public void setBorder(Border b) {} };
+                    return new BasicSplitPaneDivider(this) {
+                        @Override
+                        public void setBorder(Border b) {
+                        }
+                    };
                 }
             });
             SplitPane_2.setBackground(new Color(44, 44, 44));
@@ -175,7 +188,7 @@ public class BattleView extends JPanel {
         }
 
         if (toggleLogButton != null) {
-            toggleLogButton.addActionListener(e->{
+            toggleLogButton.addActionListener(e -> {
                 Component logPanel = SplitPane_1.getBottomComponent();
                 boolean isVisible = logPanel.isVisible();
 
@@ -196,12 +209,11 @@ public class BattleView extends JPanel {
             });
         }
 
-        battlePanel.addMouseListener(new MouseListener() {
-            @Override public void mouseClicked(MouseEvent e) { resetSelectionState();}
-            @Override public void mousePressed(MouseEvent e) {}
-            @Override public void mouseReleased(MouseEvent e) {}
-            @Override public void mouseEntered(MouseEvent e) {}
-            @Override public void mouseExited(MouseEvent e) {}
+        battlePanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                resetSelectionState();
+            }
         });
     }
 
@@ -216,6 +228,24 @@ public class BattleView extends JPanel {
         if (activeHero != null && selectedSkill != null) {
             LogManager.log("(HERO) Active Hero: " + activeHero.getName(), LogFormat.UI_ACTIVE_HERO);
             LogManager.log("(SKILL) Selected Skill: " + selectedSkill.getName(), LogFormat.UI_SKILL_SELECT);
+        }
+
+        if (currentMode == BattleUIMode.TARGET_SELECT) {
+            TargetCondition condition = null;
+            if (selectedSkill != null) condition = selectedSkill.getTargetCondition();
+            else if (selectedItem != null) condition = selectedItem.getTargetCondition();
+
+            if (condition != null) {
+                updateTargetHighlights(condition);
+            }
+
+            // Re-apply Red Selection Overlay for selected targets
+            for (Character target : selectedTargets) {
+                CharacterStatusPanel panel = getCharacterPanel(target);
+                if (panel != null) {
+                    panel.setSelectionOverlay(true);
+                }
+            }
         }
 
         setPartyUI(battleController.getHeroParty().getPartyMembers(), heroPartyPanels);
@@ -233,12 +263,10 @@ public class BattleView extends JPanel {
     }
 
     private void updateControls() {
-//        LogManager.log("current mode: " + currentMode.toString());
         BattlePhase phase = battleController.getCurrentPhase();
 
         boolean isBattleActive = (phase != BattlePhase.BATTLE_ENDED);
         boolean isPlayerTurn = (phase == BattlePhase.HERO_ACTION_WAIT);
-
 
         if (endTurnButton != null) {
             endTurnButton.setVisible(isBattleActive);
@@ -261,7 +289,7 @@ public class BattleView extends JPanel {
 
             if (descendPanel != null) descendPanel.setVisible(false);
 
-            if (result == BattleResult.VICTORY){
+            if (result == BattleResult.VICTORY) {
                 showSummaryScreen(result);
             }
         } else {
@@ -308,6 +336,7 @@ public class BattleView extends JPanel {
 
             summary.setSummaryData("VICTORY!", sb.toString());
             summary.configureButton("Descend", () -> {
+                SceneManager.getInstance().transitionTo(this);
                 GameManager.getInstance().loadNextLevel();
             });
 
@@ -320,46 +349,20 @@ public class BattleView extends JPanel {
             });
         }
 
-        JRootPane root = SwingUtilities.getRootPane(this);
+        summary.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SceneManager.getInstance().goBack();
 
-        JPanel glassOverlay = new JPanel(new GridBagLayout());
-        glassOverlay.setOpaque(false);
-
-        java.awt.event.MouseAdapter blocker = new java.awt.event.MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) { e.consume(); }
-            @Override public void mousePressed(MouseEvent e) { e.consume(); }
-            @Override public void mouseReleased(MouseEvent e) { e.consume(); }
-            @Override public void mouseEntered(MouseEvent e) { e.consume(); }
-            @Override public void mouseExited(MouseEvent e) { e.consume(); }
-            @Override public void mouseDragged(MouseEvent e) { e.consume(); }
-            @Override public void mouseMoved(MouseEvent e) { e.consume(); }
-        };
-
-        glassOverlay.addMouseListener(blocker);
-        glassOverlay.addMouseMotionListener(blocker);
-
-        glassOverlay.setFocusable(true);
-        glassOverlay.requestFocusInWindow();
-        glassOverlay.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override public void keyPressed(java.awt.event.KeyEvent e) { e.consume(); }
-            @Override public void keyTyped(java.awt.event.KeyEvent e) { e.consume(); }
+            }
         });
-
-        JPanel summaryBox = summary.getPanel();
-        summaryBox.setPreferredSize(new Dimension(400, 500));
-        summaryBox.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 100), 1));
-
-        glassOverlay.add(summaryBox);
-
-        root.setGlassPane(glassOverlay);
-        glassOverlay.setVisible(true);
-        glassOverlay.requestFocus(); // Force focus capture
+        SceneManager.getInstance().showOverlay(summary);
     }
 
     private void setPartyUI(List<Character> party, List<JPanel> setupPanel) {
         // call set character data for each party
         for (int i = 0; i < setupPanel.size(); i++) {
-            CharacterStatusPanel panel = (CharacterStatusPanel)setupPanel.get(i);
+            CharacterStatusPanel panel = (CharacterStatusPanel) setupPanel.get(i);
             if (i < party.size()) {
                 Character character = party.get(i);
                 characterToPanelMap.put(character, panel);
@@ -374,7 +377,7 @@ public class BattleView extends JPanel {
         battlePanel = new BackgroundPanel();
         inventoryPanel = new InventoryPanel();
 
-        ((InventoryPanel)inventoryPanel).setOnItemSelected(this::onItemSelect);
+        ((InventoryPanel) inventoryPanel).setOnItemSelected(this::onItemSelect);
 
         heroPartyPanel1 = new CharacterStatusPanel(this);
         heroPartyPanel2 = new CharacterStatusPanel(this);
@@ -424,7 +427,7 @@ public class BattleView extends JPanel {
             case HERO_SELECT:
 //                LogManager.log("SELECT HERO");
                 if (clickedCharacter instanceof Hero) {
-                    Hero hero = (Hero)clickedCharacter;
+                    Hero hero = (Hero) clickedCharacter;
                     if (hero.isAlive() && !hero.isExhausted()) {
                         onHeroSelect(hero);
                     } else {
@@ -465,8 +468,7 @@ public class BattleView extends JPanel {
                     selectedTargets.remove(clickedCharacter);
                     panel.setSelectionOverlay(false);
 //                    LogManager.log("Deselected " + clickedCharacter.getName());
-                }
-                else {
+                } else {
                     // check selection limit
                     if (selectedTargets.size() < typeRule.getMaxTargets()) {
                         selectedTargets.add(clickedCharacter);
@@ -547,20 +549,12 @@ public class BattleView extends JPanel {
     }
 
     public void showCampaignVictoryScreen() {
-        JRootPane root = SwingUtilities.getRootPane(this);
-        if (root == null) return;
-        JLayeredPane layeredPane = root.getLayeredPane();
         VictoryPanel victoryOverlay = new VictoryPanel(e -> {
             Resource.Audio.AudioManager.getInstance().stopMusic();
             VisualEffectsManager.getInstance().stopAllTimers();
-            layeredPane.remove((Component) ((JButton)e.getSource()).getParent().getParent());
-            layeredPane.repaint();
             GameManager.getInstance().transitionToMainMenu();
         });
-        victoryOverlay.setBounds(0, 0, root.getWidth(), root.getHeight());
-        layeredPane.add(victoryOverlay, JLayeredPane.MODAL_LAYER);
-        layeredPane.revalidate();
-        layeredPane.repaint();
+        SceneManager.getInstance().showOverlay(victoryOverlay);
     }
 
     private void clearAllSelectionOverlays() {
@@ -588,8 +582,7 @@ public class BattleView extends JPanel {
 
         if (selectedSkill != null) {
             actionSuccess = battleController.executeActionFromUI(activeHero, selectedSkill, selectedTargets);
-        }
-        else if (selectedItem != null) {
+        } else if (selectedItem != null) {
             actionSuccess = battleController.executeItemActionFromUI(selectedItem, selectedTargets);
         }
 
@@ -698,12 +691,18 @@ public class BattleView extends JPanel {
 
         CharacterStatusPanel activePanel = null;
         for (JPanel panel : heroPartyPanels) {
-            CharacterStatusPanel statusPanel = (CharacterStatusPanel)panel;
-            if (statusPanel.getCharacter() == character) { activePanel = statusPanel; break; }
+            CharacterStatusPanel statusPanel = (CharacterStatusPanel) panel;
+            if (statusPanel.getCharacter() == character) {
+                activePanel = statusPanel;
+                break;
+            }
         }
         for (JPanel panel : enemyPartyPanels) {
-            CharacterStatusPanel statusPanel = (CharacterStatusPanel)panel;
-            if (statusPanel.getCharacter() == character) { activePanel = statusPanel; break; }
+            CharacterStatusPanel statusPanel = (CharacterStatusPanel) panel;
+            if (statusPanel.getCharacter() == character) {
+                activePanel = statusPanel;
+                break;
+            }
         }
 
         if (activePanel != null) {
@@ -718,9 +717,12 @@ public class BattleView extends JPanel {
 
         menu.addPopupMenuListener(new PopupMenuListener() {
             @Override
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+            }
+
             @Override
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+            }
 
             @Override
             public void popupMenuCanceled(PopupMenuEvent e) {
@@ -763,8 +765,11 @@ public class BattleView extends JPanel {
 
         CharacterStatusPanel activePanel = null;
         for (JPanel panel : heroPartyPanels) {
-            CharacterStatusPanel statusPanel = (CharacterStatusPanel)panel;
-             if (statusPanel.getCharacter() == hero) { activePanel = statusPanel; break; }
+            CharacterStatusPanel statusPanel = (CharacterStatusPanel) panel;
+            if (statusPanel.getCharacter() == hero) {
+                activePanel = statusPanel;
+                break;
+            }
         }
 
         if (activePanel != null) {
@@ -781,10 +786,13 @@ public class BattleView extends JPanel {
 
         menu.addPopupMenuListener(new PopupMenuListener() {
             @Override
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+            }
+
             @Override
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
             }
+
             @Override
             public void popupMenuCanceled(PopupMenuEvent e) {
                 if (selectedTargets.isEmpty())
@@ -829,7 +837,9 @@ public class BattleView extends JPanel {
         inspectorText.setText("");
 
         //no character selected
-        if (c == null) { return; }
+        if (c == null) {
+            return;
+        }
 
         inspector_XPBar.setVisible(true);
         inspector_HpBar.setVisible(true);
@@ -837,7 +847,7 @@ public class BattleView extends JPanel {
         inspector_DefBar.setVisible(true);
 
         if (c instanceof Hero) {
-            Hero h = (Hero)c;
+            Hero h = (Hero) c;
             inspector_XPBar.setMaxValue(h.getRequiredXP());
             inspector_XPBar.setValue(h.getXP());
         }
@@ -848,8 +858,8 @@ public class BattleView extends JPanel {
         inspector_MpBar.setMaxValue(c.getMaxMana());
         inspector_MpBar.setValue(c.getMana());
 
-        inspector_DefBar.setMaxValue(c.getDefense());
-        inspector_DefBar.setValue(c.getDefense());
+        inspector_DefBar.setMaxValue(c.getBaseDef());
+        inspector_DefBar.setValue(c.getBaseDef());
 
         StyledDocument doc = inspectorText.getStyledDocument();
 
@@ -949,7 +959,7 @@ public class BattleView extends JPanel {
 
     public void setBattleBackground(String imageKey) {
         if (battlePanel != null) {
-            ((BackgroundPanel)battlePanel).setBackgroundImage(imageKey);
+            ((BackgroundPanel) battlePanel).setBackgroundImage(imageKey);
         }
     }
 }

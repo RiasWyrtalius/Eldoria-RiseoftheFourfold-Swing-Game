@@ -26,8 +26,8 @@ public abstract class Character {
     protected int maxHealth;
     protected int maxMana;
 
-    protected int baseDefense;
-    protected int baseMaxDefense;
+    protected int baseDef;
+    protected int baseMaxDefense; // TODO: WHY
 
     protected boolean isAlive = true;
     protected boolean isExhausted = false;
@@ -35,7 +35,7 @@ public abstract class Character {
     protected List<ReactionSkill> reactions = new ArrayList<>();
     protected List<StatusEffect> activeStatusEffects = new ArrayList<>();
 
-    public Character(String name, int baseHealth, int baseAtk, int baseDefense, int baseMana, int level) {
+    public Character(String name, int baseHealth, int baseAtk, int baseDef, int baseMana, int level) {
         this.name = name;
         this.level = level;
         this.baseAtk = baseAtk;
@@ -48,12 +48,12 @@ public abstract class Character {
         this.maxMana = baseMana;
         this.mana = maxMana;
 
-        this.baseDefense = baseDefense;
-        this.baseMaxDefense = baseDefense;
+        this.baseDef = baseDef;
+        this.baseMaxDefense = baseDef;
     }
 
-    public Character(String name, int baseHealth, int baseAtk, int baseDefense, int maxMana) {
-        this(name, baseHealth, baseAtk, baseDefense, maxMana, 1);
+    public Character(String name, int baseHealth, int baseAtk, int baseDef, int maxMana) {
+        this(name, baseHealth, baseAtk, baseDef, maxMana, 1);
     }
 
     /**
@@ -289,7 +289,7 @@ public abstract class Character {
     }
 
     protected int applyDefense(int rawDamage) {
-        int mitigation = this.baseDefense / 2;
+        int mitigation = this.baseDef / 2;
         int finalDmg = rawDamage - mitigation;
         return Math.max(1, finalDmg);
     }
@@ -314,48 +314,6 @@ public abstract class Character {
     public void addReaction(ReactionSkill reaction) {
         this.reactions.add(reaction);
     }
-
-//    protected int processReactions(ReactionTrigger trigger, Character source, Skill skill, int inputVal, Consumer<Integer> onComplete) {
-//
-//        int currentValue = inputVal;
-//
-//        if (trigger == ReactionTrigger.ON_RECEIVE_DAMAGE) {
-//            VisualEffectsManager.getInstance().flashDamage(this);
-//        }
-//
-//        for (ReactionSkill reaction : reactions) {
-//            if (reaction.trigger() != trigger) continue;
-//
-//            int result = reaction.logic().tryReact(this, source, skill, currentValue, onComplete);
-//
-//            if (result != -1) {
-//
-//                switch (trigger) {
-//                    case ON_RECEIVE_DAMAGE:
-//                    case ON_RECEIVE_HEAL:
-//                    case ON_RECEIVE_MANA:
-//                        currentValue = result;
-//                        // If 0 then optionally stop processing further reactions
-//                        if (currentValue <= 0) {
-//                            return 0;
-//                        }
-//                        break;
-//                    case ON_FATAL_DAMAGE:
-//                        return 1; // 1 = True (Saved)
-//
-//                    case ON_REVIVE:
-//                        // side effects only
-//                        break;
-//                }
-//            }
-//        }
-//
-//        // Default returns if loops finish without short-circuiting
-//        if (trigger == ReactionTrigger.ON_FATAL_DAMAGE) return 0;
-//
-//        return currentValue;
-//    }
-
 
     public void applyStatusEffect(StatusEffect effect) {
         for (StatusEffect existingEffect : activeStatusEffects) {
@@ -446,7 +404,7 @@ public abstract class Character {
     public int getBaseMaxMana() {
         return baseMaxMana;
     }
-    public int getDefense() { return baseDefense; }
+    public int getBaseDef() { return baseDef; }
     public int getMaxDefense() { return baseMaxDefense; }
     public void setExhausted(boolean exhausted) {
         isExhausted = exhausted;

@@ -323,6 +323,7 @@ public class GameLoader {
                     data.name,
                     data.baseHP,
                     data.baseAtk,
+                    data.baseDef,
                     data.baseMP,
                     data.level,
                     job

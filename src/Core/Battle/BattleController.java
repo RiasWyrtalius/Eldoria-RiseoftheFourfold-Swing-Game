@@ -242,6 +242,7 @@ public class BattleController {
             processNextEnemy(enemies, index + 1);
         };
 
+        // TODO: verify if works cuz this looks random
         if (enemyChar.isImmobilized()) {
             LogManager.log(enemyChar.getName() + " is frozen solid and cannot move!", LogFormat.SYSTEM);
             new Thread(() -> {
